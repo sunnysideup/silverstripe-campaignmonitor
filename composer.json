@@ -1,5 +1,5 @@
 {
-	"name": "silverstripe/campaignmonitor",
+	"name": "sunnysideup/campaignmonitor",
 	"type": "silverstripe-module",
 	"description": "connect with campaign monitor",
 	"homepage": "http://www.silverstripe-webdevelopment.com",
