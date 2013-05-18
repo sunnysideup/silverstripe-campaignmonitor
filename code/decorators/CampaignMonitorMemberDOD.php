@@ -8,7 +8,6 @@
 
 class CampaignMonitorMemberDOD extends DataObjectDecorator {
 
-
 	protected static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 		function set_campaign_monitor_signup_fieldname($s) {self::$campaign_monitor_signup_fieldname = $s;}
 		function get_campaign_monitor_signup_fieldname() {return self::$campaign_monitor_signup_fieldname;}
@@ -23,9 +22,6 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
 			return $field;
 		}
 		return null;
-	}
-
-	function extraStatics() {
 	}
 
 	function onBeforeWrite() {
@@ -80,7 +76,7 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
 							$userIsDeleted = $CMWrapper->subscriberIsDeleted($this->owner->Email);
 							if((!$userIsSubscribed && $userIsSubscribed != "?") && (!$userIsUnsubscribed || $userIsUnsubscribed =! "?") &&(!$userIsDeleted || !$userIsDeleted )) {
 								if (!$CMWrapper->subscriberAdd($this->owner->Email, $this->owner->getName())) {
-									//NEED TO IMPLEMENT: http://www.campaignmonitor.com/api/method/client-getsuppressionlist/									
+									//NEED TO IMPLEMENT: http://www.campaignmonitor.com/api/method/client-getsuppressionlist/
 									//user_error(_t('CampaignMonitorMemberDOD.GETCMSMESSAGESUBSATTEMPTFAILED', 'Subscribe attempt failed: ') .$this->owner->Email.", ". $CMWrapper->lastErrorMessage, E_USER_WARNING);
 								}
 							}
