@@ -6,15 +6,15 @@
  *
  **/
 
-class CampaignMonitorMemberDOD extends DataObjectDecorator {
+class CampaignMonitorMemberDOD extends DataExtension {
 
 	protected static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 		function set_campaign_monitor_signup_fieldname($s) {self::$campaign_monitor_signup_fieldname = $s;}
 		function get_campaign_monitor_signup_fieldname() {return self::$campaign_monitor_signup_fieldname;}
 
 	static function get_signup_field() {
-		$lists = DataObject::get("CampaignMonitorSignupPage", $where = "ReadyToReceiveSubscribtions = 1");
-		if($lists) {
+		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
+		if($lists->count()) {
 			$field = new CheckboxSetField(self::get_campaign_monitor_signup_fieldname(), _t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up"), $lists->toDropDownMap("ID", "ListTitle"));
 			if($m = Member::currentUser()) {
 				$field->setDefaultItems($m->CampaignMonitorSubscriptionsPageIdList());
@@ -28,7 +28,7 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
 		parent::onBeforeWrite();
 		if(isset($_REQUEST[self::get_campaign_monitor_signup_fieldname()]) && count($_REQUEST[self::get_campaign_monitor_signup_fieldname()])) {
 			$listsToSignupFor = $_REQUEST[self::get_campaign_monitor_signup_fieldname()];
-			$lists = DataObject::get("CampaignMonitorSignupPage", $where = "ReadyToReceiveSubscribtions = 1");
+			$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
 			foreach($lists as $page) {
 				if(isset($_REQUEST[self::get_campaign_monitor_signup_fieldname()][$page->ID])) {
 					$this->addCampaignMonitorList($page);
@@ -47,8 +47,8 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
 	}
 
 	protected function synchroniseCMDatabase() {
-		$lists = DataObject::get("CampaignMonitorSignupPage", "ReadyToReceiveSubscribtions = 1");
-		if($lists) {
+		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
+		if($lists->count()) {
 			foreach($lists as $list) {
 
 				if($list->GroupID) {
@@ -90,7 +90,7 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
   public function addCampaignMonitorList($page, $alsoSynchroniseCMDatabase = false, $params = array()) {
     //internal database
 		if($page->GroupID) {
-			if($gp = DataObject::get_by_id("Group", $page->GroupID)) {
+			if($gp = Group::get()->byID($page->GroupID)) {
 				$groups = $this->owner->Groups();
 				if($groups) {
 					$this->owner->Groups()->add($gp);
@@ -105,7 +105,7 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
   public function removeCampaignMonitorList($page, $alsoSynchroniseCMDatabase = false, $params = array()) {
     //internal database
 		if($page->GroupID) {
-			if($gp = DataObject::get_by_id("Group", $page->GroupID)) {
+			if($gp = Group::get()->byID($page->GroupID)) {
 				$groups = $this->owner->Groups();
 				if($groups) {
 					$this->owner->Groups()->remove($gp);
@@ -122,8 +122,11 @@ class CampaignMonitorMemberDOD extends DataObjectDecorator {
 		if($set = $this->owner->Groups()) {
 			$idList = $set->getIdList();
 			if(is_array($idList) && count($idList)) {
-				$pages = DataObject::get("CampaignMonitorSignupPage", "GroupID IN(".implode(",", $idList).") AND ReadyToReceiveSubscribtions = 1");
-				if($pages) {
+				$pages = CampaignMonitorSignupPage::get()->filter(array(
+					"GroupID" => $idList,
+					"ReadyToReceiveSubscribtions" => 1
+				));
+				if($pages->count()) {
 					foreach($pages as $page) {
 						$array[$page->ID] = $page->ID;
 					}

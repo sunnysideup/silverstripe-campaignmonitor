@@ -20,6 +20,6 @@
 <% if CampaignMonitorCampaigns %>
 <h2>Previous Campaigns</h2>
 <ul>
-<% control CampaignMonitorCampaigns %><li>$SentDate, $Subject</li><% end_control %>
+<% loop CampaignMonitorCampaigns %><li>$SentDate, $Subject</li><% end_loop %>
 </ul>
 <% end_if %>
