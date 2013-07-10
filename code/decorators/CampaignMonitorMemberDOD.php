@@ -15,7 +15,11 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	static function get_signup_field() {
 		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
 		if($lists->count()) {
-			$field = new CheckboxSetField(self::get_campaign_monitor_signup_fieldname(), _t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up"), $lists->toDropDownMap("ID", "ListTitle"));
+			$field = new CheckboxSetField(
+				self::get_campaign_monitor_signup_fieldname(),
+				_t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up"),
+				$lists->map("ID", "ListTitle")
+			);
 			if($m = Member::currentUser()) {
 				$field->setDefaultItems($m->CampaignMonitorSubscriptionsPageIdList());
 			}
