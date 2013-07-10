@@ -10,7 +10,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 
 	protected static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 		function set_campaign_monitor_signup_fieldname($s) {self::$campaign_monitor_signup_fieldname = $s;}
-		function get_campaign_monitor_signup_fieldname() {return self::$campaign_monitor_signup_fieldname;}
+	public static function get_campaign_monitor_signup_fieldname() {return self::$campaign_monitor_signup_fieldname;}
 
 	static function get_signup_field() {
 		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
