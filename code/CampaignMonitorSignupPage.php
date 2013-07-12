@@ -6,9 +6,9 @@
  */
 class CampaignMonitorSignupPage extends Page {
 
-	static $icon = "campaignmonitor/images/treeicons/CampaignMonitorSignupPage";
+	private static $icon = "campaignmonitor/images/treeicons/CampaignMonitorSignupPage";
 
-	static $db = array(
+	private static $db = array(
     'ListID' => 'Varchar(32)',
     'ListTitle' => 'Varchar(55)',
 		'ThankYouMessage' => 'HTMLText',
@@ -26,17 +26,17 @@ class CampaignMonitorSignupPage extends Page {
 		'ReadyToReceiveSubscribtions' => 'Boolean'
 	);
 
-	static $has_one = array(
+	private static $has_one = array(
 		"Group" => "Group"
 	);
 
-	static $has_many = array(
+	private static $has_many = array(
 		"CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
 	);
 
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab('Root.CreateNewMailOut', new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'.CampaignMonitorWrapper::get_campaign_monitor_url().'">Campaign Monitor</a> site.</p>'));
+		$fields->addFieldToTab('Root.CreateNewMailOut', new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'));
 		$fields->addFieldToTab('Root.Content', new Tab("MustComplete"), "Main");
 		$fields->addFieldToTab('Root.MustComplete', new LiteralField('ListIDExplanation', '<p>The way this works is that each sign-up page needs to be associated with a campaign monitor subscription list.</p>'));
 		$fields->addFieldToTab('Root.MustComplete', new DropdownField('ListID', 'Related List from Campaign Monitor - this must be selected', $this->makeDropdownListFromLists()));

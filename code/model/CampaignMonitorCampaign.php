@@ -8,7 +8,7 @@
 
 class CampaignMonitorCampaign extends DataObject {
 
-	public static $db = array(
+	private static $db = array(
 		"CampaignID" => "Varchar(40)",
 		"Subject" => "Varchar(255)",
 		"Name" => "Varchar(255)",
@@ -16,23 +16,23 @@ class CampaignMonitorCampaign extends DataObject {
 		"TotalRecipients" => "Int"
 	);
 
-	public static $has_one = array(
+	private static $has_one = array(
 		"Parent" => "CampaignMonitorSignupPage"
 	);
 
-	public static $searchable_fields = array(
+	private static $searchable_fields = array(
 		"Title" => "PartialMatchFilter"
 	);
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		"Subject" => "Subject",
 		"SentDate" => "Sent Date"
 	);
 
-	public static $singular_name = "Campaigns";
+	private static $singular_name = "Campaigns";
 
-	public static $plural_name = "Campaign";
+	private static $plural_name = "Campaign";
 
-	public static $default_sort = "SentDate DESC";
+	private static $default_sort = "SentDate DESC";
 
 }
 

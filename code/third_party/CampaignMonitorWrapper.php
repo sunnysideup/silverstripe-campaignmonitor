@@ -18,22 +18,14 @@
 class CampaignMonitorWrapper extends Object {
 
 	//basic basics
-	protected static $cm = null;
-	public static function set_cm($v) {self::$cm = $v;}
-	public static function get_cm() {return self::$cm;}
+	private static $cm = null;
 
-	protected static $campaign_monitor_url = "http://yourcompany.createsend.com/";
-	public static function set_campaign_monitor_url($v) {self::$campaign_monitor_url = $v;}
-	public static function get_campaign_monitor_url() {return self::$campaign_monitor_url;}
+	private static $campaign_monitor_url = "http://yourcompany.createsend.com/";
 
 	//basic configs
-	protected static $api_key = '';
-	public static function set_api_key($v) {self::$api_key = $v;}
-	public static function get_api_key() {return self::$api_key;}
+	private static $api_key = '';
 
-	protected static $client_ID = '';
-	public static function set_client_ID($v) {self::$client_ID = $v;}
-	public static function get_client_ID() {return self::$client_ID;}
+	private static $client_ID = '';
 
 	protected $list_group_membership = array();
 	public static function add_list_group_membership($name, $code) {

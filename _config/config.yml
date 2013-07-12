@@ -1,0 +1,12 @@
+##############################
+## MUST SET!!!!!!!!
+##############################
+
+CampaignMonitorWrapper:
+  campaign_monitor_url: ""
+  api_key: "" # (see http://yourcompany.createsend.com/admin/account/)
+  client_ID: ""
+
+Member:
+  extensions:
+    - CampaignMonitorMemberDOD

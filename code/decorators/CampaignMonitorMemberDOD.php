@@ -8,15 +8,13 @@
 
 class CampaignMonitorMemberDOD extends DataExtension {
 
-	protected static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
-		function set_campaign_monitor_signup_fieldname($s) {self::$campaign_monitor_signup_fieldname = $s;}
-	public static function get_campaign_monitor_signup_fieldname() {return self::$campaign_monitor_signup_fieldname;}
+	private static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 
 	static function get_signup_field() {
 		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
 		if($lists->count()) {
 			$field = new CheckboxSetField(
-				self::get_campaign_monitor_signup_fieldname(),
+				Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname"),
 				_t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up"),
 				$lists->map("ID", "ListTitle")
 			);
@@ -30,11 +28,11 @@ class CampaignMonitorMemberDOD extends DataExtension {
 
 	function onBeforeWrite() {
 		parent::onBeforeWrite();
-		if(isset($_REQUEST[self::get_campaign_monitor_signup_fieldname()]) && count($_REQUEST[self::get_campaign_monitor_signup_fieldname()])) {
-			$listsToSignupFor = $_REQUEST[self::get_campaign_monitor_signup_fieldname()];
+		if(isset($_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")]) && count($_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")])) {
+			$listsToSignupFor = $_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")];
 			$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
 			foreach($lists as $page) {
-				if(isset($_REQUEST[self::get_campaign_monitor_signup_fieldname()][$page->ID])) {
+				if(isset($_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")][$page->ID])) {
 					$this->addCampaignMonitorList($page);
 				}
 				else {

@@ -1,0 +1,8 @@
+############################
+# START CAMPAIGN MONITOR
+############################
+
+CampaignMonitorMemberDOD:
+  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
+
+
