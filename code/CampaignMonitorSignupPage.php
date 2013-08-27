@@ -14,11 +14,9 @@ class CampaignMonitorSignupPage extends Page {
 		'ThankYouMessage' => 'HTMLText',
 		'AlternativeTitle' => 'Varchar(255)',
 		'AlternativeMenuTitle' => 'Varchar(255)',
-		'AlternativeMetaTitle' => 'Varchar(255)',
 		'SadToSeeYouGoMessage' => 'HTMLText',
 		'SadToSeeYouGoTitle' => 'Varchar(255)',
 		'SadToSeeYouGoMenuTitle' => 'Varchar(255)',
-		'SadToSeeYouGoMetaTitle' => 'Varchar(255)',
 		'SignUpHeader' => 'Varchar(100)',
 		'SignUpIntro' => 'HTMLText',
 		'SignUpButtonLabel' => 'Varchar(20)',
@@ -50,11 +48,10 @@ class CampaignMonitorSignupPage extends Page {
 		$fields->addFieldToTab('Root.StartForm', new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)'));
 		$fields->addFieldToTab('Root.ThankYou', new TextField('AlternativeTitle', 'Title'));
 		$fields->addFieldToTab('Root.ThankYou', new TextField('AlternativeMenuTitle', 'Menu Title'));
-		$fields->addFieldToTab('Root.ThankYou', new TextField('AlternativeMetaTitle', 'Meta Title'));
 		$fields->addFieldToTab('Root.ThankYou', new HtmlEditorField('ThankYouMessage', 'Thank you message after submitting form'));
 		$fields->addFieldToTab('Root.SadToSeeYouGo', new TextField('SadToSeeYouGoTitle', 'AlternativeTitle'));
 		$fields->addFieldToTab('Root.SadToSeeYouGo', new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'));
-		$fields->addFieldToTab('Root.SadToSeeYouGo', new TextField('SadToSeeYouGoMetaTitle', 'Meta Title'));
+
 		$fields->addFieldToTab('Root.SadToSeeYouGo', new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form'));
 		$fields->addFieldToTab('Root.OldNewsletters', new CheckboxField('ShowOldNewsletters', 'Show old newsletters?'));
 		return $fields;
@@ -167,7 +164,7 @@ class CampaignMonitorSignupPage extends Page {
 			if(is_array($campaigns)) {
 				foreach($campaigns as $campaign) {
 					if(!CampaignMonitorCampaign::get()->filter(array(
-						$campaign["CampaignID"],
+						"CampaignID" => $campaign["CampaignID"],
 						"ParentID" => $this->ID
 					))->count()) {
 						$CampaignMonitorCampaign = new CampaignMonitorCampaign();
@@ -363,16 +360,17 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 
 	function thankyou() {
 		$this->showThankYouMessage = true; // TODO: what does this var do???
-		if($this->AlternativeTitle) {$this->MetaTitle = $this->AlternativeTitle;}
-		if($this->AlternativeMenuTitle) {$this->MetaTitle = $this->AlternativeMenuTitle;}
-		if($this->AlternativeMetaTitle) {$this->MetaTitle = $this->AlternativeMetaTitle;}
+		$this->Title = $this->AlternativeTitle;
+		$this->MenuTitle = $this->AlternativeMenuTitle;
+		$this->Content = $this->ThankYouMessage;
 		return array();
 	}
+
 	function sadtoseeyougo() {
 		$this->showSadToSeeYouGoMessage = true;
-		if($this->SadToSeeYouGoTitle) {$this->MetaTitle = $this->SadToSeeYouGoTitle;}
-		if($this->SadToSeeYouGoMenuTitle) {$this->MetaTitle = $this->SadToSeeYouGoMenuTitle;}
-		if($this->SadToSeeYouGoMetaTitle) {$this->MetaTitle = $this->SadToSeeYouGoMetaTitle;}
+		$this->Title = $this->SadToSeeYouGoTitle;
+		$this->MenuTitle = $this->SadToSeeYouGoMenuTitle;
+		$this->Content = $this->SadToSeeYouGoMessage;
 		return array();
 	}
 
