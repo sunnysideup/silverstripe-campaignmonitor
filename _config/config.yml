@@ -1,3 +1,6 @@
 Member:
   extensions:
     - CampaignMonitorMemberDOD
+
+CampaignMonitorMemberDOD:
+  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"

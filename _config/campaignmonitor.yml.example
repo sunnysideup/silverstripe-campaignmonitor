@@ -3,14 +3,10 @@
 ############################
 
 CampaignMonitorWrapper:
-  campaign_monitor_url: ""
   # (see http://yourcompany.createsend.com/admin/account/)
+  campaign_monitor_url: ""
   api_key: ""
   client_ID: ""
-
-
-CampaignMonitorMemberDOD:
-  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
 
 ############################
 # END CAMPAIGN MONITOR

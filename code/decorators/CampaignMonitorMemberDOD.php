@@ -10,7 +10,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 
 	private static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 
-	static function get_signup_field() {
+	public static function get_signup_field() {
 		$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
 		if($lists->count()) {
 			$field = new CheckboxSetField(
@@ -27,7 +27,6 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	}
 
 	function onBeforeWrite() {
-		parent::onBeforeWrite();
 		if(isset($_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")]) && count($_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")])) {
 			$listsToSignupFor = $_REQUEST[Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname")];
 			$lists = CampaignMonitorSignupPage::get()->filter(array("ReadyToReceiveSubscribtions" => 1));
@@ -44,7 +43,6 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	}
 
 	function onAfterWrite() {
-		parent::onAfterWrite();
 		$this->synchroniseCMDatabase();
 	}
 
