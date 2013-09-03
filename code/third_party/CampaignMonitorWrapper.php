@@ -87,9 +87,9 @@ class CampaignMonitorWrapper extends Object {
 
 	function __construct() {
 		require_once(dirname(__FILE__) . '/CMBase.php');
-		//if (!Config::inst->get("CampaignMonitorWrapper", "api_key")) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSAGENOAPIKEYINCONFIG', "You need to set an $api_key in your config."), E_USER_WARNING);}
-		//if (!Config::inst->get("CampaignMonitorWrapper", "client_id")) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSAGENOCLIENTIDINCONFIG', "You need to set an $client_ID in your config."), E_USER_WARNING);}
-		self::$cm = new CampaignMonitor(Config::inst->get("CampaignMonitorWrapper", "api_key"), Config::inst->get("CampaignMonitorWrapper", "client_ID"));
+		//if (!Config::inst()->get("CampaignMonitorWrapper", "api_key")) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSAGENOAPIKEYINCONFIG', "You need to set an $api_key in your config."), E_USER_WARNING);}
+		//if (!Config::inst()->get("CampaignMonitorWrapper", "client_id")) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSAGENOCLIENTIDINCONFIG', "You need to set an $client_ID in your config."), E_USER_WARNING);}
+		self::$cm = new CampaignMonitor(Config::inst()->get("CampaignMonitorWrapper", "api_key"), Config::inst()->get("CampaignMonitorWrapper", "client_ID"));
 	}
 
 	// -------------------- CAMPAIGN SECTION --------------------
@@ -107,7 +107,7 @@ class CampaignMonitorWrapper extends Object {
 		$subcriberListIDArray = array('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
 	) {
 		return self::$cm->campaignCreate(
-			Config::inst->get("CampaignMonitorWrapper", "client_ID"),
+			Config::inst()->get("CampaignMonitorWrapper", "client_ID"),
 			$campaignName,
 			$subject,
 			$fromName,
@@ -163,7 +163,7 @@ class CampaignMonitorWrapper extends Object {
 	}
 
 	public function clientGetCampaigns() {
-		$campaigns = self::$cm->clientGetCampaigns( Config::inst->get("CampaignMonitorWrapper", "client_ID"));
+		$campaigns = self::$cm->clientGetCampaigns( Config::inst()->get("CampaignMonitorWrapper", "client_ID"));
 		if(is_array($campaigns) && isset($campaigns["anyType"]["Campaign"])) {
 			if(!isset($campaigns["anyType"]["Campaign"][0])) {
 				return Array(0 => $campaigns["anyType"]["Campaign"]);
@@ -176,11 +176,11 @@ class CampaignMonitorWrapper extends Object {
 	}
 
 	public function clientGetDetail() {
-		return self::$cm->clientGetDetail( Config::inst->get("CampaignMonitorWrapper", "client_ID") );
+		return self::$cm->clientGetDetail( Config::inst()->get("CampaignMonitorWrapper", "client_ID") );
 	}
 
 	public function clientGetLists() {
-		$lists = self::$cm->clientGetLists( Config::inst->get("CampaignMonitorWrapper", "client_ID") );
+		$lists = self::$cm->clientGetLists( Config::inst()->get("CampaignMonitorWrapper", "client_ID") );
 		if(is_array($lists) && isset($lists["anyType"]["List"])) {
 			if(!isset($lists["anyType"]["List"][0])) {
 				return Array(0 => $lists["anyType"]["List"]);
@@ -198,11 +198,11 @@ class CampaignMonitorWrapper extends Object {
 	}
 
 	public function clientGetSuppressionList(){
-		return self::$cm->clientGetSuppressionList(Config::inst->get("CampaignMonitorWrapper", "client_ID") );
+		return self::$cm->clientGetSuppressionList(Config::inst()->get("CampaignMonitorWrapper", "client_ID") );
 	}
 
 	public function clientGetTemplates(){
-		return self::$cm->clientGetTemplates( Config::inst->get("CampaignMonitorWrapper", "client_ID") );
+		return self::$cm->clientGetTemplates( Config::inst()->get("CampaignMonitorWrapper", "client_ID") );
 	}
 
 	public function clientUpdateAccessAndBilling(
@@ -215,18 +215,18 @@ class CampaignMonitorWrapper extends Object {
 		$costPerRecipient = '3',
 		$designAndSpamTestFee = '10'
 	) {
-		return self::$cm->clientUpdateAccessAndBilling( Config::inst->get("CampaignMonitorWrapper", "client_ID"), $accessLevel, $username, $password, $billingType, $currency, $deliveryFee, $costPerRecipient, $designAndSpamTestFee );
+		return self::$cm->clientUpdateAccessAndBilling( Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $accessLevel, $username, $password, $billingType, $currency, $deliveryFee, $costPerRecipient, $designAndSpamTestFee );
 	}
 
 	public function clientUpdateBasics($companyName = 'Created From API',$contactName = 'Joe Smith',$emailAddress = 'joe@domain.com',$country = 'United States of America',$timeZone = '(GMT-05:00) Eastern Time (US & Canada)') {
-		return self::$cm->clientUpdateBasics( Config::inst->get("CampaignMonitorWrapper", "client_ID"), $companyName, $contactName, $emailAddress, $country, $timeZone );
+		return self::$cm->clientUpdateBasics( Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $companyName, $contactName, $emailAddress, $country, $timeZone );
 	}
 
 
 	// -------------------- LIST SECTION --------------------
 
 	public function listCreate($listTitle = 'Updated API Created List',$unsubscribePage = '',$confirmOptIn = 'false',$confirmationSuccessPage = '') {
-		return self::$cm->listCreate( Config::inst->get("CampaignMonitorWrapper", "client_ID"), $listTitle, $unsubscribePage, $confirmOptIn, $confirmationSuccessPage );
+		return self::$cm->listCreate( Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $listTitle, $unsubscribePage, $confirmOptIn, $confirmationSuccessPage );
 	}
 
 	public function listDelete() {
@@ -281,14 +281,14 @@ class CampaignMonitorWrapper extends Object {
 
 	public function subscribersGetUnsubscribed() {
 		if(!$this->listID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSLISTID', 'You need to set a listID for this function to work.'), E_USER_WARNING);}
-		$tempCM = new CampaignMonitor(Config::inst->get("CampaignMonitorWrapper", "api_key"), Config::inst->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
+		$tempCM = new CampaignMonitor(Config::inst()->get("CampaignMonitorWrapper", "api_key"), Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
 		return $tempCM->subscribersGetUnsubscribed(1, $this->listID);
 	}
 	// -------------------- SUBSCRIBER SECTION --------------------
 
 	public function subscriberAdd($subscriberEmail, $subscriberName) {
 		if(!$this->listID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSLISTID', 'You need to set a listID for this function to work.'), E_USER_WARNING);}
-		$tempCM = new CampaignMonitor(Config::inst->get("CampaignMonitorWrapper", "api_key"), Config::inst->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID);
+		$tempCM = new CampaignMonitor(Config::inst()->get("CampaignMonitorWrapper", "api_key"), Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID);
 		//
 		//passing email address, name.
     $result = $tempCM->subscriberAdd($subscriberEmail, $subscriberName);
@@ -310,7 +310,7 @@ class CampaignMonitorWrapper extends Object {
 	public function subscriberAddWithCustomFields($subscriberEmail, $subscriberName, $params) {
 		if(!$this->campaignID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSAGENOCAMPAIGNID', 'You need to set a campaignID for this function to work.'), E_USER_WARNING);}
 		if(!$this->listID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSLISTID', 'You need to set a listID for this function to work.'), E_USER_WARNING);}
-		$tempCM = new CampaignMonitor(Config::inst->get("CampaignMonitorWrapper", "api_key"), Config::inst->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
+		$tempCM = new CampaignMonitor(Config::inst()->get("CampaignMonitorWrapper", "api_key"), Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
 		//
 		//passing email address, name and custom fields. Custom fields should be added as an array as shown here with the Interests and Dog fields.
 		//Multi-option field values are added as an array within this, as demonstrated for the Interests field.
@@ -330,7 +330,7 @@ class CampaignMonitorWrapper extends Object {
 
 	public function subscriberUnsubscribe($subscriberEmail) {
 		if(!$this->listID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSLISTID', 'You need to set a listID for this function to work.'), E_USER_WARNING);}
-		$TEMPcm = new CampaignMonitor(Config::inst->get("CampaignMonitorWrapper", "api_key"), Config::inst->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
+		$TEMPcm = new CampaignMonitor(Config::inst()->get("CampaignMonitorWrapper", "api_key"), Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $this->campaignID, $this->listID );
 		$result = $TEMPcm->subscriberUnsubscribe($subscriberEmail);
     $this->lastErrorMessage = $result['Result']['Message'];
 		return $result['Result']['Code'] == 0;
@@ -447,8 +447,8 @@ class CampaignMonitorWrapper extends Object {
 		//This method returns the details of a particular subscriber, including email address, name, active/inactive status and all custom field data. If a subscriber with that email address does not exist in that list, an empty record is returned.
 		if(!$this->listID) {user_error(_t('CampaignMonitorWrapper.GETCMSMESSLISTID', 'You need to set a listID for this function to work.'), E_USER_WARNING);}
 		$TEMPcm = new CampaignMonitor(
-			Config::inst->get("CampaignMonitorWrapper", "api_key"),
-			Config::inst->get("CampaignMonitorWrapper", "client_ID"),
+			Config::inst()->get("CampaignMonitorWrapper", "api_key"),
+			Config::inst()->get("CampaignMonitorWrapper", "client_ID"),
 			null,
 			$this->listID
 		);
@@ -468,7 +468,7 @@ class CampaignMonitorWrapper extends Object {
 		$zipURL = "http://notarealdomain.com/templates/test/images.zip",
 		$screenshotURL = "http://notarealdomain.com/templates/test/screenshot.jpg"
 	) {
-		return self::$cm->templateCreate(Config::inst->get("CampaignMonitorWrapper", "client_ID"), $templateName, $htmlURL, $zipURL, $screenshotURL);
+		return self::$cm->templateCreate(Config::inst()->get("CampaignMonitorWrapper", "client_ID"), $templateName, $htmlURL, $zipURL, $screenshotURL);
 	}
 
 	public function templateDelete() {
