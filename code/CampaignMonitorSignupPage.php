@@ -222,6 +222,17 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 
 	protected $email = '';
 
+	private static $allowed_actions = array(
+		"subscribe",
+		"unsubscribe",
+		"thankyou",
+		"sadtoseeyougo",
+		"preloademail",
+		"test" => "ADMIN",
+		"resetoldcampaigns" => "CMS_ACCESS_CMSMain"
+	);
+
+
 	function init() {
 		parent::init();
 		Requirements::themedCSS("CampaignMonitorSignupPage");
