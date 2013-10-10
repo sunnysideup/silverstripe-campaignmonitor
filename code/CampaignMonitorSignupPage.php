@@ -223,6 +223,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	protected $email = '';
 
 	private static $allowed_actions = array(
+		"FormHTML",
 		"subscribe",
 		"unsubscribe",
 		"thankyou",
