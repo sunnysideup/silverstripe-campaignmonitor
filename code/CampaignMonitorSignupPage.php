@@ -308,7 +308,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			$member = Member::currentUser();
 			$memberAlreadyLoggedIn = false;
 			if(!$member) {
-				if($existingMember = Member::get()->filter(array("Email" => $data["Email"]))) {
+				if($existingMember = Member::get()->filter(array("Email" => $data["Email"]))->First()) {
 					$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address"), 'warning');
 					$this->redirectBack();
 					return;
