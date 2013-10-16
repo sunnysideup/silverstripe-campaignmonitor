@@ -86,7 +86,7 @@ class CampaignMonitorSignupPage extends Page {
 	*
 	**/
 
-	static function CampaignMonitorStarterForm($controller) {
+	public static function CampaignMonitorStarterForm($controller) {
 		$page = CampaignMonitorSignupPage::get()->First();
 
 		if(!$page || !$page->ListID) {
