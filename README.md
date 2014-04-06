@@ -1,28 +1,45 @@
 ###############################################
-CampaignMonitor Module
-Pre 0.1 proof of concept
+Campaign Monitor Module
 ###############################################
+
+Connects a Silverstripe Website with the Campaign Monitor
+API.
+
+Also see: https://github.com/tractorcow/silverstripe-campaignmonitor
+This is a completely separate module, but it may be better than
+this one. I may look at merging the two.
+
 
 Developer
 -----------------------------------------------
 Nicolaas Francken [at] sunnysideup.co.nz
 
+
 Requirements
 -----------------------------------------------
-SilverStripe 2.3.0 or greater.
+see composer.json
+
 
 Documentation
 -----------------------------------------------
-see:
- http://silverstripe-webdevelopment.com/campaignmonitor
+Please contact author for more details.
+
+Any bug reports and/or feature requests will be
+looked at in detail
+
+We are also very happy to provide personalised support
+for this module in exchange for a small donation.
+
 
 Installation Instructions
 -----------------------------------------------
+
 1. Find out how to add modules to SS and add module as per usual.
-2. copy configurations from this module's _config.php file
-into mysite/_config.php file and edit settings as required.
-NB. the idea is not to edit the module at all, but instead customise
-it from your mysite folder, so that you can upgrade the module without redoing the settings.
+
+2. Review configs and add entries to mysite/_config/config.yml
+(or similar) as necessary.
+In the _config/ folder of this module
+you should to find some examples of config options (if any).
 
 
 Synchronisation options
