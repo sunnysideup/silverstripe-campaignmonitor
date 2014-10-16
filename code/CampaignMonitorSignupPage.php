@@ -12,8 +12,8 @@ class CampaignMonitorSignupPage extends Page {
     'ListID' => 'Varchar(32)',
     'ListTitle' => 'Varchar(55)',
 		'ThankYouMessage' => 'HTMLText',
-		'AlternativeTitle' => 'Varchar(255)',
-		'AlternativeMenuTitle' => 'Varchar(255)',
+		'AlternativeTitle' => 'Varchar(255)', //thank you title
+		'AlternativeMenuTitle' => 'Varchar(255)', //thank you menu title
 		'SadToSeeYouGoMessage' => 'HTMLText',
 		'SadToSeeYouGoTitle' => 'Varchar(255)',
 		'SadToSeeYouGoMenuTitle' => 'Varchar(255)',
@@ -86,7 +86,7 @@ class CampaignMonitorSignupPage extends Page {
 	*
 	**/
 
-	public static function CampaignMonitorStarterForm($controller) {
+	public static function campaign_monitor_starter_form($controller) {
 		$page = CampaignMonitorSignupPage::get()->First();
 
 		if(!$page || !$page->ListID) {
