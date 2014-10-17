@@ -4,9 +4,14 @@
 
 CampaignMonitorWrapper:
   # (see http://yourcompany.createsend.com/admin/account/)
-  campaign_monitor_url: ""
+  ### REQUIRED ###
+  client_id: ""
+  ### OPTION 1: API KEY ###
   api_key: ""
-  client_ID: ""
+  ### OPTION 2: OAUTH ###
+  client_secret: ""
+  redirect_uri: ""
+  code: ""
 
 ############################
 # END CAMPAIGN MONITOR

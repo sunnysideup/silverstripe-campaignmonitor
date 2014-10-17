@@ -12,3 +12,5 @@
 //===================---------------- START campaignmonitor MODULE ----------------===================
 
 //===================---------------- END campaignmonitor MODULE ----------------===================
+
+define('SS_CAMPAIGNMONITOR_DIR', 'campaignmonitor');
