@@ -8,6 +8,14 @@ class CampaignMonitorAPIConnector extends Object {
 
 	/**
 	 * REQUIRED!
+	 * this is the CM url for logging in.
+	 * which can be used by the client.
+	 * @var String
+	 */
+	private static $campaign_monitor_url = "";
+
+	/**
+	 * REQUIRED!
 	 * @var String
 	 */
 	private static $client_id = "";
@@ -459,6 +467,68 @@ class CampaignMonitorAPIConnector extends Object {
 	}
 
 	/**
+	 * Gets all unconfirmed subscribers added since the given date
+	 *
+	 * @param Int $listID
+	 * @param string $daysAgo The date to start getting subscribers from
+	 * @param int $page The page number to get
+	 * @param int $pageSize The number of records per page
+	 * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
+	 * @param string $sortDirection ('ASC', 'DESC')
+	 *
+	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+	 * {
+	 *     'ResultsOrderedBy' => The field the results are ordered by
+	 *     'OrderDirection' => The order direction
+	 *     'PageNumber' => The page number for the result set
+	 *     'PageSize' => The page size used
+	 *     'RecordsOnThisPage' => The number of records returned
+	 *     'TotalNumberOfRecords' => The total number of records available
+	 *     'NumberOfPages' => The total number of pages for this collection
+	 *     'Results' => array(
+	 *         {
+	 *             'EmailAddress' => The email address of the subscriber
+	 *             'Name' => The name of the subscriber
+	 *             'Date' => The date that the subscriber was added to the list
+	 *             'State' => The current state of the subscriber, will be 'Unconfirmed'
+	 *             'CustomFields' => array (
+	 *                 {
+	 *                     'Key' => The personalisation tag of the custom field
+	 *                     'Value' => The value of the custom field for this subscriber
+	 *                 }
+	 *             )
+	 *         }
+	 *     )
+	 * }
+	 */
+	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+		//require_once '../../csrest_lists.php';
+		$wrap = new CS_REST_Lists($listID, $this->getAuth());
+		$result = $wrap->get_unconfirmed_subscribers(
+			date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+			$page,
+			$pageSize,
+			$sortByField,
+			$sortDirection
+		);
+		if($this->debug) {
+			echo "Result of GET /api/v3.1/lists/{ID}/unconfirmed\n<br />";
+			if($result->was_successful()) {
+				echo "Got subscribers\n<br /><pre>";
+				var_dump($result->response);
+			}
+			else {
+				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
+				var_dump($result->response);
+			}
+			echo '</pre>';
+		}
+		else {
+			$this->prepareReponse($result);
+		}
+	}
+
+	/**
 	 * Gets all bounced subscribers who have bounced out since the given date
 	 *
 	 * @param Int $listID
@@ -520,68 +590,6 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 	}
 
-
-	/**
-	 * Gets all unconfirmed subscribers added since the given date
-	 *
-	 * @param Int $listID
-	 * @param string $daysAgo The date to start getting subscribers from
-	 * @param int $page The page number to get
-	 * @param int $pageSize The number of records per page
-	 * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
-	 * @param string $sortDirection ('ASC', 'DESC')
-	 *
-	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form
-	 * {
-	 *     'ResultsOrderedBy' => The field the results are ordered by
-	 *     'OrderDirection' => The order direction
-	 *     'PageNumber' => The page number for the result set
-	 *     'PageSize' => The page size used
-	 *     'RecordsOnThisPage' => The number of records returned
-	 *     'TotalNumberOfRecords' => The total number of records available
-	 *     'NumberOfPages' => The total number of pages for this collection
-	 *     'Results' => array(
-	 *         {
-	 *             'EmailAddress' => The email address of the subscriber
-	 *             'Name' => The name of the subscriber
-	 *             'Date' => The date that the subscriber was added to the list
-	 *             'State' => The current state of the subscriber, will be 'Unconfirmed'
-	 *             'CustomFields' => array (
-	 *                 {
-	 *                     'Key' => The personalisation tag of the custom field
-	 *                     'Value' => The value of the custom field for this subscriber
-	 *                 }
-	 *             )
-	 *         }
-	 *     )
-	 * }
-	 */
-	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
-		//require_once '../../csrest_lists.php';
-		$wrap = new CS_REST_Lists($listID, $this->getAuth());
-		$result = $wrap->get_unconfirmed_subscribers(
-			date('Y-m-d', strtotime('-'.$daysAgo.' days')),
-			$page,
-			$pageSize,
-			$sortByField,
-			$sortDirection
-		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/unconfirmed\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscribers\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			$this->prepareReponse($result);
-		}
-	}
 
 	/**
 	 * Gets all unsubscribed subscribers who have unsubscribed since the given date
@@ -754,7 +762,82 @@ class CampaignMonitorAPIConnector extends Object {
 
 	function getClicks(){user_error("This method is still to be implemented, see samples for an example");}
 
-	function getEmailClientUsage(){user_error("This method is still to be implemented, see samples for an example");}
+	/**
+	 * Gets a summary of all campaign reporting statistics
+	 *
+	 * @param int $campaignID
+	 *
+	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+	 * {
+	 *     'Recipients' => The total recipients of the campaign
+	 *     'TotalOpened' => The total number of opens recorded
+	 *     'Clicks' => The total number of recorded clicks
+	 *     'Unsubscribed' => The number of recipients who unsubscribed
+	 *     'Bounced' => The number of recipients who bounced
+	 *     'UniqueOpened' => The number of recipients who opened
+	 *     'WebVersionURL' => The url of the web version of the campaign
+	 *     'WebVersionTextURL' => The url of the web version of the text version of the campaign
+	 *     'WorldviewURL' => The public Worldview URL for the campaign
+	 *     'Forwards' => The number of times the campaign has been forwarded to a friend
+	 *     'Likes' => The number of times the campaign has been 'liked' on Facebook
+	 *     'Mentions' => The number of times the campaign has been tweeted about
+	 *     'SpamComplaints' => The number of recipients who marked the campaign as spam
+	 * }
+	 */
+	function getSummary($campaignID){
+		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+		$result = $wrap->get_summary();
+		if($this->debug) {
+			echo "Result of GET /api/v3.1/campaigns/{id}/summary\n<br />";
+			if($result->was_successful()) {
+				echo "Got summary\n<br /><pre>";
+				var_dump($result->response);
+			}
+			else {
+				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
+				var_dump($result->response);
+			}
+			echo '</pre>';
+		}
+		else {
+			$this->prepareReponse($result);
+		}
+	}
+
+	/**
+	 * Gets the email clients that subscribers used to open the campaign
+	 *
+	 * @param Int $campaignID
+	 *
+	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+	 * array(
+	 *     {
+	 *         Client => The email client name
+	 *         Version => The email client version
+	 *         Percentage => The percentage of subscribers who used this email client
+	 *         Subscribers => The actual number of subscribers who used this email client
+	 *     }
+	 * )
+	 */
+	function getEmailClientUsage($campaignID){
+		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+		$result = $wrap->get_email_client_usage();
+		if($this->debug) {
+			echo "Result of GET /api/v3.1/campaigns/{id}/emailclientusage\n<br />";
+			if($result->was_successful()) {
+				echo "Got email client usage\n<br /><pre>";
+				var_dump($result->response);
+			}
+			else {
+				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
+				var_dump($result->response);
+			}
+			echo '</pre>';
+		}
+		else {
+			$this->prepareReponse($result);
+		}
+	}
 
 	function getListsAndSegments(){user_error("This method is still to be implemented, see samples for an example");}
 
@@ -763,8 +846,6 @@ class CampaignMonitorAPIConnector extends Object {
 	function getRecipients(){user_error("This method is still to be implemented, see samples for an example");}
 
 	function getSpam(){user_error("This method is still to be implemented, see samples for an example");}
-
-	function getSummary(){user_error("This method is still to be implemented, see samples for an example");}
 
 	/**
 	 * Gets all unsubscribes recorded for a campaign since the provided date
@@ -826,6 +907,22 @@ class CampaignMonitorAPIConnector extends Object {
 
 	/*******************************************************
 	 * user
+	 *
+	 * states:
+	 *
+	 * Active – Someone who is on a list and will receive any emails sent to that list.
+	 *
+	 * Unconfirmed – The individual signed up to a confirmed opt-in list
+	 * but has not clicked the link in the verification email sent to them.
+	 *
+	 * Unsubscribed – The subscriber has removed themselves from a list, or lists,
+	 * via an unsubscribe link or form.
+	 * You can also change a subscriber's status to unsubscribed through your account.
+	 *
+	 * Bounced – This describes an email address that campaigns cannot be delivered to,
+	 * which can happen for a number of reasons.
+	 *
+	 * Deleted – Means the subscriber has been deleted from a list through your account.
 	 *
 	 *******************************************************/
 
@@ -1071,6 +1168,65 @@ class CampaignMonitorAPIConnector extends Object {
 		else {
 			return $this->prepareReponse($result);
 		}
+	}
+
+	/**
+	 * Is this user part of this list at all?
+	 *
+	 * @param Int $listID
+	 * @param Member | String $member
+	 *
+	 * @return Boolean
+	 */
+	public function getSubscriberExistsForThisList($listID, $member) {
+		if($member instanceof Member) {
+			$member = $member->Email;
+		}
+		$outcome = $this->getSubscriber($listID, $member);
+		if($outcome && isset($outcome["State"])) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Can we send e-mails to this person in the future for this list?
+	 *
+	 * @param Int $listID
+	 * @param Member | String $member
+	 *
+	 * @return Boolean
+	 */
+	public function getSubscriberCanReceiveEmailsForThisList($listID, $member) {
+		if($member instanceof Member) {
+			$member = $member->Email;
+		}
+		$outcome = $this->getSubscriber($listID, $member);
+		if($outcome && isset($outcome["State"])) {
+			if($outcome["State"] == "Active" || $outcome == "Bounced") {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * This e-mail / user has been banned from a list.
+	 *
+	 * @param Int $listID
+	 * @param Member | String $member
+	 *
+	 * @return Boolean
+	 */
+	public function getSubscriberCanNoLongerReceiveEmailsForThisList($listID, $member) {
+		$subscriberExistsForThisList = $this->getSubscriberExistsForThisList($listID, $member);
+		$subscriberCanReceiveEmailsForThisList = $this->getSubscriberCanReceiveEmailsForThisList($listID, $member);
+		if($subscriberExistsForThisList){
+			if(!$subscriberCanReceiveEmailsForThisList) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

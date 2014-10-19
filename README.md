@@ -5,8 +5,8 @@ Connects a Silverstripe Website with the Campaign Monitor
 API.
 
 Also see https://github.com/tractorcow/silverstripe-campaignmonitor.
-This is a completely separate module, but it may be better than
-this one. I may look at merging the two.
+This is a completely separate module, but it may be better suited
+to your needs than this one.
 
 
 Developer
@@ -41,24 +41,22 @@ In the _config/ folder of this module
 you can usually find some examples of config options (if any).
 
 
-Synchronisation options
+further setup
 -----------------------------------------------
 
---- MUST DO FIRST ---
+MUST DO FIRST
 
-1. create list on CM
+1. create list on Campaign Monitor
 
-2. identify list as THE list for synchronisation
-(there could be more than one list)
+2. create a sign up page in the CMS and link it to the list on Campaign Monitor
 
-3. group on silverstripe that represents that list in CM
+AVAILABLE FEATURES
+
+1. set up sign-up page for Campaign Monitor list.
+
+2. create "starter" form for sign-up page... (people enter their e-mail and click to go to subscribe page)
+
+3. lots of API calls can be made through simple CampaignMonitorAPIConnector class.
 
 
---- WHAT CAN BE DONE ---
 
-1. subscribe: member is added to group and added to CM list
-
-2. unsubscribe: member is removed from list and unsubscribed from CM list
-
-3. synchronise: group membership is emptied and all members on CM list
-who are also Members in SilverStripe will be added to group in SilverStripe

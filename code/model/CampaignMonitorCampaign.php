@@ -13,15 +13,19 @@ class CampaignMonitorCampaign extends DataObject {
 		"Subject" => "Varchar(255)",
 		"Name" => "Varchar(255)",
 		"SentDate" => "SS_Datetime",
-		"TotalRecipients" => "Int"
+		"WebVersionURL" => "Varchar(255)",
+    "WebVersionTextURL" => "Varchar(255)",
+    "Hide" => "Boolean"
 	);
 
-	private static $has_one = array(
-		"Parent" => "CampaignMonitorSignupPage"
+	private static $many_many = array(
+		"Pages" => "CampaignMonitorSignupPage"
 	);
 
 	private static $searchable_fields = array(
-		"Title" => "PartialMatchFilter"
+		"Title" => "PartialMatchFilter",
+		"Subject" => "PartialMatchFilter",
+		"Hide" => "ExactMatch"
 	);
 	private static $summary_fields = array(
 		"Subject" => "Subject",
@@ -32,7 +36,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $plural_name = "Campaign";
 
-	private static $default_sort = "SentDate DESC";
+	private static $default_sort = "Hide ASC, SentDate DESC";
 
 }
 
