@@ -50,13 +50,13 @@ class CampaignMonitorAPIConnector extends Object {
 	 *
 	 * @var Boolean
 	 */
-	protected $debug = true;
+	protected $debug = false;
 
 	/**
 	 *
 	 * @var Boolean
 	 */
-	protected $allowCaching = true;
+	protected $allowCaching = false;
 
 	/**
 	 *
@@ -157,6 +157,7 @@ class CampaignMonitorAPIConnector extends Object {
 			return $result->response;
 		}
 		else {
+
 			$this->httpStatusCode = $result->http_status_code;
 			return null;
 		}
@@ -188,7 +189,7 @@ class CampaignMonitorAPIConnector extends Object {
 			if(!$value) {
 				return null;
 			}
-			return unserialize($data);
+			return unserialize($value);
 		}
 	}
 
@@ -246,7 +247,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -279,7 +280,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -337,7 +338,7 @@ class CampaignMonitorAPIConnector extends Object {
 			}
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -362,7 +363,7 @@ class CampaignMonitorAPIConnector extends Object {
 			}
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -400,7 +401,7 @@ class CampaignMonitorAPIConnector extends Object {
 			}
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -439,7 +440,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+	public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_active_subscribers(
@@ -462,7 +463,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -501,7 +502,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_unconfirmed_subscribers(
@@ -524,7 +525,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -563,7 +564,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+	public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_bounced_subscribers(
@@ -586,7 +587,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -626,7 +627,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+	public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_unsubscribed_subscribers(
@@ -649,7 +650,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -694,7 +695,7 @@ class CampaignMonitorAPIConnector extends Object {
 			}
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -748,7 +749,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -800,7 +801,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -835,7 +836,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 
@@ -899,7 +900,7 @@ class CampaignMonitorAPIConnector extends Object {
 			echo '</pre>';
 		}
 		else {
-			$this->prepareReponse($result);
+			return $this->prepareReponse($result);
 		}
 	}
 

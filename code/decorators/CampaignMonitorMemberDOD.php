@@ -43,8 +43,8 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 * @return FormField
 	 */
 	public function getSignupField($listPage = null, $fieldName = "", $fieldTitle = "") {
-		if(is_numeric($listPage)) {
-			$listPage = CampaignMonitorSubscriptionsPage::get()->filter(array("ListID" => $listPage))->first();
+		if(!is_object($listPage)) {
+			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		$field = null;
 		if(!$fieldName) {
@@ -83,7 +83,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 					$fieldTitle,
 					$array
 				);
-				$field->setDefaultItems($this->owner->CampaignMonitorSubscriptionsPageIdList());
+				$field->setDefaultItems($this->owner->CampaignMonitorSignupPageIDs());
 			}
 		}
 		if(!$field) {
@@ -111,7 +111,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	/**
 	 * add to Group
 	 * add to CM database...
-	 * @param CampaignMonitorSubscriptionsPage | Int $listPage
+	 * @param CampaignMonitorSignupPage | Int $listPage
 	 * @param array $customFields
 	 * @return Boolean - returns true on success
 	 */
@@ -119,7 +119,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 		$api = $this->getCMAPI();
 		$outcome = 0;
 		if(is_numeric($listPage)) {
-			$listPage = CampaignMonitorSubscriptionsPage::get()->filter(array("ListID" => $listPage))->first();
+			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		//internal database
 		if($listPage->GroupID) {
@@ -146,14 +146,14 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 *
 	 * remove from Group
 	 * remove from CM database...
-	 * @param CampaignMonitorSubscriptionsPage | Int $listPage
+	 * @param CampaignMonitorSignupPage | Int $listPage
 	 * @return boolean returns true if successful.
 	 */
 	public function removeCampaignMonitorList($listPage) {
 		$api = $this->getCMAPI();
 		$outcome = 0;
 		if(is_numeric($listPage)) {
-			$listPage = CampaignMonitorSubscriptionsPage::get()->filter(array("ListID" => $listPage))->first();
+			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		if($listPage->GroupID) {
 			if($gp = Group::get()->byID($listPage->GroupID)) {
@@ -181,7 +181,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 *
 	 * @return Array
 	 */
-	public function CampaignMonitorSubscriptionsPageIdList() {
+	public function CampaignMonitorSignupPageIDs() {
 		$api = $this->getCMAPI();
 		$lists = $api->getListsForEmail($this->owner);
 		$array = Array();

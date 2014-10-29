@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 
 
@@ -14,37 +14,42 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 		$this->verbose = $b;
 	}
 
+	/**
+	 * @param SS_HTTP_Request
+	 * standard method
+	 */
 	function run($request) {
-		$api = $this->getAPI();
+		$api = CampaignMonitorAPIConnector::create();
+		$api->init();
 		$campaigns = $api->getCampaigns();
 		if(is_array($campaigns)) {
 			foreach($campaigns as $campaign) {
-				if($campaign["SentDate"]) {
+				if($campaign->SentDate) {
 					if(!CampaignMonitorCampaign::get()->filter(array(
 						"CampaignID" => $campaign["CampaignID"]
 					))->count()) {
 						$campaignMonitorCampaign = new CampaignMonitorCampaign();
-						$campaignMonitorCampaign->CampaignID = $campaign["CampaignID"];
-						$campaignMonitorCampaign->Subject = $campaign["Subject"];
-						$campaignMonitorCampaign->Name = $campaign["Name"];
-						$campaignMonitorCampaign->SentDate = $campaign["SentDate"];
-						$campaignMonitorCampaign->WebVersionURL = $campaign["WebVersionURL"];
-						$campaignMonitorCampaign->WebVersionTextURL = $campaign["WebVersionTextURL"];
+						$campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
+						$campaignMonitorCampaign->Subject = $campaign->Subject;
+						$campaignMonitorCampaign->Name = $campaign->Name;
+						$campaignMonitorCampaign->SentDate = $campaign->SentDate;
+						$campaignMonitorCampaign->WebVersionURL = $campaign->WebVersionURL;
+						$campaignMonitorCampaign->WebVersionTextURL = $campaign->WebVersionTextURL;
 						//$CampaignMonitorCampaign->ParentID = $this->ID;
 						$campaignMonitorCampaign->write();
 						if($this->verbose) {
-							DB::alteration_message("Adding ".$campaign["Subject"]." sent ".$campaign["SentDate"], "created");
+							DB::alteration_message("Adding ".$campaign->Subject." sent ".$campaign->SentDate, "created");
 						}
 					}
 					else {
 						if($this->verbose) {
-							DB::alteration_message("already added ".$campaign["Subject"], "edited");
+							DB::alteration_message("already added ".$campaign->Subject, "edited");
 						}
 					}
 				}
 				else {
 					if($this->verbose) {
-						DB::alteration_message("not adding ".$campaign["Subject"]." because it has not been sent yet..., "edited");
+						DB::alteration_message("not adding ".$campaign->Subject." because it has not been sent yet...", "edited");
 					}
 				}
 			}
@@ -58,3 +63,4 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 			DB::alteration_message("<hr /><hr /><hr />Completed", "edited");
 		}
 	}
+}

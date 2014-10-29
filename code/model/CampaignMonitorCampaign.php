@@ -18,6 +18,11 @@ class CampaignMonitorCampaign extends DataObject {
     "Hide" => "Boolean"
 	);
 
+	private static $indexes = array(
+		"CampaignID" => true,
+		"Hide" => true
+	);
+
 	private static $many_many = array(
 		"Pages" => "CampaignMonitorSignupPage"
 	);
