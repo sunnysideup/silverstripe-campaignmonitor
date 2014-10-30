@@ -69,8 +69,18 @@ class CampaignMonitorAPIConnector extends Object {
 	 *
 	 * must be called to use this API.
 	 */
-	function init(){
+	public function init(){
 		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
+		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+	}
+
+	/**
+	 * turn debug on or off
+	 *
+	 * @param Boolean
+	 */
+	public function setDebug($b){
+		$this->debug = $b;
 	}
 
 	/**
@@ -118,9 +128,9 @@ class CampaignMonitorAPIConnector extends Object {
 					//$expires_in = $result->response->expires_in;
 					# Save $access_token, $expires_in, and $refresh_token.
 					if($this->debug) {
-						echo "access token: ".$result->response->access_token."\n";
-						echo "expires in (seconds): ".$result->response->expires_in."\n";
-						echo "refresh token: ".$result->response->refresh_token."\n";
+						 "access token: ".$result->response->access_token."\n";
+						 "expires in (seconds): ".$result->response->expires_in."\n";
+						 "refresh token: ".$result->response->refresh_token."\n";
 					}
 				}
 				else {
@@ -134,8 +144,8 @@ class CampaignMonitorAPIConnector extends Object {
 						'refresh_token' => $new_refresh_token
 					);
 					if($this->debug) {
-						echo 'An error occurred:\n';
-						echo $result->response->error.': '.$result->response->error_description."\n";
+						 'An error occurred:\n';
+						 $result->response->error.': '.$result->response->error_description."\n";
 					}
 				}
 			}
@@ -149,7 +159,20 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param CS_REST_Wrapper_Result
 	 * @return Mixed | Null
 	 */
-	protected function prepareReponse($result) {
+	protected function returnResult($result, $apiCall, $description) {
+		if($this->debug) {
+			echo "<h1>$description ( $apiCall ) ...</h1>";
+			if($result->was_successful()) {
+				echo "<h2>SUCCESS</h2>";
+			}
+			else {
+				echo "<h2>FAILURE: ".$result->http_status_code."</h2>";
+			}
+			echo "<pre>";
+			print_r($result);
+			echo "</pre>";
+			echo "<hr /><hr /><hr />";
+		}
 		if($result->was_successful()) {
 			if(!$result->response) {
 				return true;
@@ -157,7 +180,6 @@ class CampaignMonitorAPIConnector extends Object {
 			return $result->response;
 		}
 		else {
-
 			$this->httpStatusCode = $result->http_status_code;
 			return null;
 		}
@@ -168,7 +190,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 * This can be handy for debuging purposes.
 	 * @return Int
 	 */
-	protected function getHttpStatusCode(){
+	public function getHttpStatusCode(){
 		return $this->httpStatusCode;
 	}
 
@@ -234,21 +256,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_clients.php';
 		$wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
 		$result = $wrap->get_campaigns();
-		if($this->debug) {
-			echo "Result of /api/v3.1/clients/{id}/campaigns\n<br />";
-			if($result->was_successful()) {
-				echo "Got campaigns\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/clients/{id}/campaigns",
+			"Got campaigns"
+		);
 	}
 
 	public function getDrafts(){user_error("This method is still to be implemented, see samples for an example");}
@@ -267,21 +279,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_clients.php';
 		$wrap = new CS_REST_Clients($this->Config()->get("client_id"),$this->getAuth());
 		$result = $wrap->get_lists();
-		if($this->debug) {
-			echo "Result of /api/v3.1/clients/{id}/lists\n<br />";
-			if($result->was_successful()) {
-				echo "Got lists\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/clients/{id}/lists",
+			"Got Lists"
+		);
 	}
 
 	public function getScheduled(){user_error("This method is still to be implemented, see samples for an example");}
@@ -326,20 +328,11 @@ class CampaignMonitorAPIConnector extends Object {
 				'UnsubscribeSetting' => $unsubscribeSetting
 			)
 		);
-		if($this->debug) {
-			echo "Result of POST /api/v3.1/lists/{clientID}\n<br />";
-			if($result->was_successful()) {
-				echo "Created with ID\n<br />".$result->response;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"POST /api/v3.1/lists/{clientID}",
+			"Created with ID"
+		);
 	}
 
 	/**
@@ -351,20 +344,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->delete();
-		if($this->debug) {
-			echo "Result of DELETE /api/v3.1/lists/{ID}\n<br />";
-			if($result->was_successful()) {
-				echo "Deleted with code\n<br />".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"DELETE /api/v3.1/lists/{ID}",
+			"Deleted with code"
+		);
 	}
 
 	/**
@@ -389,20 +373,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get();
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}\n<br />";
-			if($result->was_successful()) {
-				echo "Got list details\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}",
+			"Got list details"
+		);
 	}
 
 	/**
@@ -440,7 +415,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
+	public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_active_subscribers(
@@ -450,21 +425,11 @@ class CampaignMonitorAPIConnector extends Object {
 			$sortByField,
 			$sortDirection
 		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/active\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscribers\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/active",
+			"Got subscribers"
+		);
 	}
 
 	/**
@@ -502,7 +467,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
+	public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_unconfirmed_subscribers(
@@ -512,21 +477,11 @@ class CampaignMonitorAPIConnector extends Object {
 			$sortByField,
 			$sortDirection
 		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/unconfirmed\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscribers\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/unconfirmed",
+			"Got subscribers"
+		);
 	}
 
 	/**
@@ -564,7 +519,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
+	public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_bounced_subscribers(
@@ -574,21 +529,12 @@ class CampaignMonitorAPIConnector extends Object {
 			$sortByField,
 			$sortDirection
 		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/bounced\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscribers\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/bounced",
+			"Got subscribers"
+		);
+
 	}
 
 
@@ -627,7 +573,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 100, $sortByField = "DATE", $sortDirection = "DESC"){
+	public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC"){
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_unsubscribed_subscribers(
@@ -637,21 +583,11 @@ class CampaignMonitorAPIConnector extends Object {
 			$sortByField,
 			$sortDirection
 		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/unsubscribed\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscribers\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/unsubscribed",
+			"Got subscribers"
+		);
 	}
 
 	/**
@@ -683,20 +619,11 @@ class CampaignMonitorAPIConnector extends Object {
 			'AddUnsubscribesToSuppList' => $addUnsubscribesToSuppList,
 			'ScrubActiveWithSuppList' => $scrubActiveWithSuppList
 		));
-		if($this->debug) {
-			echo "Result of PUT /api/v3.1/lists/{ID}\n<br />";
-			if($result->was_successful()) {
-				echo "Updated with code\n<br />".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"PUT /api/v3.1/lists/{ID}",
+			"Updated with code"
+		);
 	}
 
 	/**
@@ -736,21 +663,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_lists.php';
 		$wrap = new CS_REST_Lists($listID, $this->getAuth());
 		$result = $wrap->get_stats();
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/lists/{ID}/stats\n<br />";
-			if($result->was_successful()) {
-				echo "Got list stats\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/stats",
+			"Gost Lists Stats"
+		);
 	}
 
 
@@ -788,21 +705,11 @@ class CampaignMonitorAPIConnector extends Object {
 	function getSummary($campaignID){
 		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
 		$result = $wrap->get_summary();
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/campaigns/{id}/summary\n<br />";
-			if($result->was_successful()) {
-				echo "Got summary\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/campaigns/{id}/summary",
+			"Gost Summary"
+		);
 	}
 
 	/**
@@ -823,21 +730,11 @@ class CampaignMonitorAPIConnector extends Object {
 	function getEmailClientUsage($campaignID){
 		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
 		$result = $wrap->get_email_client_usage();
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/campaigns/{id}/emailclientusage\n<br />";
-			if($result->was_successful()) {
-				echo "Got email client usage\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/campaigns/{id}/emailclientusage",
+			"Got email client usage"
+		);
 	}
 
 	function getListsAndSegments(){user_error("This method is still to be implemented, see samples for an example");}
@@ -877,7 +774,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 *     )
 	 * }
 	 */
-	public function getUnsubscribes($campaignID, $daysAgo = 3650, $page =1, $pageSize = 10000, $sortByField = "EMAIL", $sortDirection = "ASC"){
+	public function getUnsubscribes($campaignID, $daysAgo = 3650, $page =1, $pageSize = 999, $sortByField = "EMAIL", $sortDirection = "ASC"){
 		//require_once '../../csrest_campaigns.php';
 		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
 		$result = $wrap->get_unsubscribes(
@@ -887,21 +784,11 @@ class CampaignMonitorAPIConnector extends Object {
 			$sortByField,
 			$sortDirection
 		);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/campaigns/{id}/unsubscribes\n<br />";
-			if($result->was_successful()) {
-				echo "Got unsubscribes\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/campaigns/{id}/unsubscribes",
+			"Got unsubscribes"
+		);
 	}
 
 
@@ -951,16 +838,11 @@ class CampaignMonitorAPIConnector extends Object {
 		$wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
 		$result = $wrap->get_lists_for_email($member);
 		if($this->debug) {
-			echo "Result of /api/v3.1/clients/{id}/listsforemail\n<br />";
-			if($result->was_successful()) {
-				echo "Got lists to which email address ".$email." is subscribed\n<br /><pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
+			return $this->returnResult(
+				$result,
+				"/api/v3.1/clients/{id}/listsforemail",
+				"Got lists to which email address ".$member." is subscribed"
+			);
 		}
 		else {
 			return $this->prepareReponse($result);
@@ -992,20 +874,11 @@ class CampaignMonitorAPIConnector extends Object {
 				'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders
 			)
 		);
-		if($this->debug) {
-			echo "Result of POST /api/v3.1/subscribers/{list id}.{format}\n<br />";
-			if($result->was_successful()) {
-				echo "Subscribed with code ".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"POST /api/v3.1/subscribers/{list id}.{format}",
+			"Subscribed with code ..."
+		);
 	}
 
 	/**
@@ -1038,20 +911,11 @@ class CampaignMonitorAPIConnector extends Object {
 				'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
 			)
 		);
-		if($this->debug) {
-			echo "Result of PUT /api/v3.1/subscribers/{list id}.{format}?email={email}\n<br />";
-			if($result->was_successful()) {
-				echo "Subscribed with code ".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"PUT /api/v3.1/subscribers/{list id}.{format}?email={email}",
+			"Subscribed with code ..."
+		);
 	}
 
 	/**
@@ -1085,37 +949,16 @@ class CampaignMonitorAPIConnector extends Object {
 			$queueSubscriptionBasedAutoResponders,
 			$restartSubscriptionBasedAutoResponders
 		);
-		if($this->debug) {
-			echo "Result of POST /api/v3.1/subscribers/{list id}/import.{format}\n<br />";
-			if($result->was_successful()) {
-				echo "Subscribed with results <pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-				if($result->response->ResultData->TotalExistingSubscribers > 0) {
-					echo 'Updated '.$result->response->ResultData->TotalExistingSubscribers.' existing subscribers in the list';
-				}
-				else if($result->response->ResultData->TotalNewSubscribers > 0) {
-					echo 'Added '.$result->response->ResultData->TotalNewSubscribers.' to the list';
-				}
-				else if(count($result->response->ResultData->DuplicateEmailsInSubmission) > 0) {
-					echo $result->response->ResultData->DuplicateEmailsInSubmission.' were duplicated in the provided array.';
-				}
-				echo 'The following emails failed to import correctly.<pre>';
-				var_dump($result->response->ResultData->FailureDetails);
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"POST /api/v3.1/subscribers/{list id}/import.{format}",
+			"review details ..."
+		);
 	}
 
 	/**
 	 * @param Int $listID
-	 * @param Member | String $member
+	 * @param Member | String $member - email address or Member Object
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
@@ -1125,20 +968,11 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->delete($member);
-		if($this->debug) {
-			echo "Result of DELETE /api/v3.1/subscribers/{list id}.{format}?email={emailAddress}\n<br />";
-			if($result->was_successful()) {
-				echo "Unsubscribed with code ".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"DELETE /api/v3.1/subscribers/{list id}.{format}?email={emailAddress}",
+			"Unsubscribed with code  ..."
+		);
 	}
 
 	/**
@@ -1155,20 +989,11 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->unsubscribe($member);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/subscribers/{list id}/unsubscribe.{format}\n<br />";
-			if($result->was_successful()) {
-				echo "Unsubscribed with code ".$result->http_status_code;
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-				echo '</pre>';
-			}
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/subscribers/{list id}/unsubscribe.{format}",
+			"Unsubscribed with code  ..."
+		);
 	}
 
 	/**
@@ -1184,8 +1009,14 @@ class CampaignMonitorAPIConnector extends Object {
 			$member = $member->Email;
 		}
 		$outcome = $this->getSubscriber($listID, $member);
-		if($outcome && isset($outcome["State"])) {
+		if($outcome && isset($outcome->State)) {
+			if($this->debug) {
+				echo "<h3>Subscriber Exists For This List</h3>";
+			}
 			return true;
+		}
+		if($this->debug) {
+			echo "<h3>Subscriber does *** NOT *** Exist For This List</h3>";
 		}
 		return false;
 	}
@@ -1203,10 +1034,16 @@ class CampaignMonitorAPIConnector extends Object {
 			$member = $member->Email;
 		}
 		$outcome = $this->getSubscriber($listID, $member);
-		if($outcome && isset($outcome["State"])) {
-			if($outcome["State"] == "Active" || $outcome == "Bounced") {
+		if($outcome && isset($outcome->State)) {
+			if($outcome->State == "Active" || $outcome == "Bounced") {
+				if($this->debug) {
+					echo "<h3>Subscriber Can Receive Emails For This List</h3>";
+				}
 				return true;
 			}
+		}
+		if($this->debug) {
+			echo "<h3>Subscriber Can *** NOT *** Receive Emails For This List</h3>";
 		}
 		return false;
 	}
@@ -1224,8 +1061,14 @@ class CampaignMonitorAPIConnector extends Object {
 		$subscriberCanReceiveEmailsForThisList = $this->getSubscriberCanReceiveEmailsForThisList($listID, $member);
 		if($subscriberExistsForThisList){
 			if(!$subscriberCanReceiveEmailsForThisList) {
+				if($this->debug) {
+					echo "<h3>Subscriber Can No Longer Receive Emails For This List</h3>";
+				}
 				return true;
 			}
+		}
+		if($this->debug) {
+			echo "<h3>Subscriber Can *** STILL *** Receive Emails For This List</h3>";
 		}
 		return false;
 	}
@@ -1257,21 +1100,11 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->get($member);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/subscribers/{list id}.{format}?email={email}\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscriber <pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/subscribers/{list id}.{format}?email={email}",
+			"got subscriber"
+		);
 	}
 
 	/**
@@ -1301,21 +1134,330 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->get_history($member);
-		if($this->debug) {
-			echo "Result of GET /api/v3.1/subscribers/{list id}/history.{format}?email={email}\n<br />";
-			if($result->was_successful()) {
-				echo "Got subscriber history <pre>";
-				var_dump($result->response);
-			}
-			else {
-				echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
-				var_dump($result->response);
-			}
-			echo '</pre>';
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/subscribers/{list id}/history.{format}?email={email}",
+			"got subscriber history"
+		);
+	}
+
+}
+
+/**
+ * simple class to see that everything is working ...
+ *
+ *
+ */
+
+
+class CampaignMonitorAPIConnector_Controller extends Controller {
+
+	private static $allowed_actions = array(
+		"testall" => "CMS_ACCESS_CMSMain",
+		"testlists" => "CMS_ACCESS_CMSMain",
+		"testcampaigns" => "CMS_ACCESS_CMSMain",
+		"testsubscribers" => "CMS_ACCESS_CMSMain"
+	);
+
+	/**
+	 * example data
+	 * @var Array
+	 */
+	protected $egData = array(
+		"limit" => 10,
+		"listID" => "",
+		"listIDtoDelete" => "",
+		"campaignID" => "",
+		"listTitle" => "Test List 9",
+		"unsubscribePage" => "http://unsub",
+		"confirmedOptIn" => false,
+		"confirmationSuccessPage" => "http://confirmed",
+		"unsubscribeSetting" => null,
+		"addUnsubscribesToSuppList" => true,
+		"scrubActiveWithSuppList" => true,
+		"oldEmailAddress" => "oldemail@test.nowhere",
+		"newEmailAddress" => "newemail@test.nowhere"
+	);
+
+	/**
+	 * contains API once started
+	 * @var CampaignMonitorAPIConnector
+	 */
+	protected $api = null;
+
+	/**
+	 * should we show as much as possible?
+	 * @var Boolean
+	 */
+	protected $showAll = false;
+
+	function init(){
+		parent::init();
+		increase_time_limit_to(600);
+	}
+
+	/**
+	 * link for controller
+	 * we add baseURL to make it work for all set ups.
+	 * @var String
+	 */
+	function Link($action = null){
+		$link = Director::baseURL()."create-send-test/";
+		if($action) {
+			$link .= $action . "/";
 		}
-		else {
-			return $this->prepareReponse($result);
+		return $link;
+	}
+
+	/**
+	 * run all tests
+	 */
+	function testall(){
+		$this->testlists();
+		$this->testcampaigns();
+		$this->testsubscribers();
+		$this->index();
+		die("<h1>THE END</h1>");
+	}
+
+	function index(){
+		echo "
+			<hr /><hr /><hr /><hr /><hr />
+			<ul>
+				<li><a href=\"".$this->Link("testlists")."\">test lists</a></li>
+				<li><a href=\"".$this->Link("testcampaigns")."\">test campaigns</a></li>
+				<li><a href=\"".$this->Link("testsubscribers")."\">test subscribers</a></li>
+				<li><a href=\"".$this->Link("testall")."\">test all</a></li>
+			</ul>
+			<hr /><hr /><hr /><hr /><hr />
+		";
+	}
+
+	function testlists(){
+		$this->setupTests();
+
+		//create list
+		$result = $this->api->createList(
+			$this->egData["listTitle"],
+			$this->egData["unsubscribePage"],
+			$this->egData["confirmedOptIn"],
+			$this->egData["confirmationSuccessPage"],
+			$this->egData["unsubscribeSetting"]
+		);
+		$this->egData["listIDtoDelete"] = $result;
+
+		//update list
+		$result = $this->api->updateList(
+			$this->egData["listIDtoDelete"],
+			$this->egData["listTitle"]."updated_22",
+			$this->egData["unsubscribePage"]."updated",
+			$this->egData["confirmedOptIn"],
+			$this->egData["confirmationSuccessPage"]."updated",
+			$this->egData["unsubscribeSetting"],
+			$addUnsubscribesToSuppList = true,
+			$scrubActiveWithSuppList = true
+		);
+
+		//delete list
+		if($this->egData["listIDtoDelete"]) {
+			$result = $this->api->deleteList($this->egData["listIDtoDelete"]);
 		}
+
+		//getList
+		$result = $this->api->getList($this->egData["listID"]);
+
+		$result = $this->api->getActiveSubscribers(
+			$this->egData["listID"],
+			$daysAgo = 3650,
+			$page = 1,
+			$pageSize = $this->egData["limit"],
+			$sortByField = "DATE",
+			$sortDirection = "DESC"
+		);
+
+		$result = $this->api->getUnconfirmedSubscribers(
+			$this->egData["listID"],
+			$daysAgo = 3650,
+			$page = 1,
+			$pageSize = $this->egData["limit"],
+			$sortByField = "DATE",
+			$sortDirection = "DESC"
+		);
+
+		$result = $this->api->getBouncedSubscribers(
+			$this->egData["listID"],
+			$daysAgo = 3650,
+			$page = 1,
+			$pageSize = $this->egData["limit"],
+			$sortByField = "DATE",
+			$sortDirection = "DESC"
+		);
+
+		$result = $this->api->getUnsubscribedSubscribers(
+			$this->egData["listID"],
+			$daysAgo = 3650,
+			$page = 1,
+			$pageSize = $this->egData["limit"],
+			$sortByField = "DATE",
+			$sortDirection = "DESC"
+		);
+
+		$result = $this->api->getListStats($this->egData["listID"]);
+
+		echo "<h2>end of list tests</h2>";
+		$this->index();
+	}
+
+	function testcampaigns(){
+		$this->setupTests();
+
+		//campaign summary
+		$result = $this->api->getSummary($this->egData["campaignID"]);
+
+		$result = $this->api->getEmailClientUsage($this->egData["campaignID"]);
+
+		$result = $this->api->getUnsubscribes(
+			$this->egData["campaignID"],
+			$daysAgo = 3650,
+			$page =1,
+			$pageSize = $this->egData["limit"],
+			$sortByField = "EMAIL",
+			$sortDirection = "ASC"
+		);
+		echo "<h2>end of campaign tests</h2>";
+		$this->index();
+
+	}
+
+	function testsubscribers() {
+
+		$this->setupTests();
+
+
+		//create list
+		$result = $this->api->createList(
+			$this->egData["listTitle"]."27",
+			$this->egData["unsubscribePage"],
+			$this->egData["confirmedOptIn"],
+			$this->egData["confirmationSuccessPage"],
+			$this->egData["unsubscribeSetting"]
+		);
+		$this->egData["tempListID"] = $result;
+
+		for($i = 0; $i < 5; $i++) {
+			$member[$i] = new Member();
+			$email = "test_".$i."_".$this->egData["oldEmailAddress"];
+			$member[$i] = Member::get()->filter(array("Email" => $email))->First();
+			if(!$member[$i]) {
+				$member[$i] = new Member();
+				$member[$i]->Email = $email;
+				$member[$i]->FirstName = "First Name $i";
+				$member[$i]->Surname = "Surname $i";
+				$member[$i]->write();
+			}
+			$result = $this->api->addSubscriber(
+				$this->egData["tempListID"],
+				$member[$i],
+				$customFields = array(),
+				$resubscribe = true,
+				$restartSubscriptionBasedAutoResponders = false
+			);
+		}
+
+		$result = $this->api->updateSubscriber(
+			$this->egData["tempListID"],
+			"test_1_.".$this->egData["oldEmailAddress"],
+			$member[1],
+			$customFields = array(),
+			$resubscribe = true,
+			$restartSubscriptionBasedAutoResponders = false
+		);
+
+		/*
+		$result = $this->api->addSubscribers(
+			$this->egData["tempListID"],
+			$membersSet,
+			$customFields = array(),
+			$resubscribe,
+			$queueSubscriptionBasedAutoResponders = false,
+			$restartSubscriptionBasedAutoResponders = false
+		);
+		*/
+
+		$result = $this->api->deleteSubscriber(
+			$this->egData["tempListID"],
+			$member[2]
+		);
+
+		$result = $this->api->unsubscribeSubscriber(
+			$this->egData["tempListID"],
+			$member[3]
+		);
+
+
+		for($i = 0; $i < 5; $i++) {
+
+			$result = $this->api->getSubscriberExistsForThisList(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+
+			$result = $this->api->getListsForEmail($member[$i]);
+
+			$result = $this->api->getSubscriberCanReceiveEmailsForThisList(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+
+			$result = $this->api->getSubscriberCanNoLongerReceiveEmailsForThisList(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+
+			$result = $this->api->getSubscriber(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+
+			$result = $this->api->getHistory(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+			$result = $this->api->deleteSubscriber(
+				$this->egData["tempListID"],
+				$member[$i]
+			);
+			$member[$i]->delete();
+		}
+
+		//delete list
+		if($this->egData["tempListID"]) {
+			$result = $this->api->deleteList($this->egData["tempListID"]);
+		}
+
+		echo "<h2>end of subscriber tests</h2>";
+		$this->index();
+	}
+
+	protected function setupTests(){
+		$this->api = CampaignMonitorAPIConnector::create();
+		$this->api->init();
+
+		if($this->showAll) {
+			$this->api->setDebug(true);
+			$this->egData["limit"] = 100;
+		}
+
+		//getLists
+		$result = $this->api->getLists();
+		$this->egData["listID"] = $result[0]->ListID;
+
+		//getCampaigns
+		$result = $this->api->getCampaigns();
+		$this->egData["campaignID"] = $result[0]->CampaignID;
+
+		$this->api->setDebug(true);
+
 	}
 
 }
