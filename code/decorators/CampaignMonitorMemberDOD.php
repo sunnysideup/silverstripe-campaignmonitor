@@ -58,7 +58,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$optionArray["Unsubscribe"] = _t("CampaignMonitorSignupPage.UNSUBSCRIBE_FROM", "unsubscribe from ")." ".$listPage->getListTitle();
 				if($this->owner->exists()) {
 					$api = $this->getCMAPI();
-					if($api->getSubscriberCanReceiveEmailsForThisList($this->owner)) {
+					if($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
 						$currentSelection = "Unsubscribe";
 					}
 				}

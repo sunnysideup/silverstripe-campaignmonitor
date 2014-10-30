@@ -1149,8 +1149,9 @@ class CampaignMonitorAPIConnector extends Object {
  *
  */
 
+class CampaignMonitorAPIConnector_TestController extends Controller {
 
-class CampaignMonitorAPIConnector_Controller extends Controller {
+	private static $url_segment = "create-send-test";
 
 	private static $allowed_actions = array(
 		"testall" => "CMS_ACCESS_CMSMain",
@@ -1202,7 +1203,7 @@ class CampaignMonitorAPIConnector_Controller extends Controller {
 	 * @var String
 	 */
 	function Link($action = null){
-		$link = Director::baseURL()."create-send-test/";
+		$link = Director::baseURL().$this->Config()->get("url_segment")."/";
 		if($action) {
 			$link .= $action . "/";
 		}

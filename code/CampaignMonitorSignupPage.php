@@ -69,14 +69,19 @@ class CampaignMonitorSignupPage extends Page {
 		else {
 			$groupLink = '<p>No Group has been selected yet.</p>';
 		}
+		$testControllerLink = Injector::inst()->get("CampaignMonitorAPIConnector_TestController")->Link();
+		$campaignExample = CampaignMonitorCampaign::get()->Last();
+		$campaignExampleLink = $this->Link();
+		if($campaignExample) {
+			$campaignExampleLink = $this->Link("viewcampaign/".$campaignExample->CampaignID);
+		}
 		$fields->addFieldToTab('Root.Newsletters',
 			new TabSet('Options',
 				new Tab('MainSettings',
 					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
 					new LiteralField('ListIDExplanation', '<p>The way this works is that each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor - this must be selected', $this->makeDropdownListFromLists()),
-					new LiteralField('GroupLink', $groupLink),
-					new LiteralField("LinkToStats", "<h2>Check out basic <a href=\"".$this->Link("stats")."\">stats and debug information</a></h2>")
+					new LiteralField('GroupLink', $groupLink)
 				),
 				new Tab('PageSettings',
 					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up'),
@@ -102,6 +107,16 @@ class CampaignMonitorSignupPage extends Page {
 					new TextField('SadToSeeYouGoTitle', 'AlternativeTitle'),
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
+				),
+				new Tab('Campaigns',
+					new LiteralField('CampaignExplanation', '<h3>Unfortunately, (newsletter) lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
+					$gridField = new GridField('CampaignMonitorCampaigns', 'Newsletters', $this->CampaignMonitorCampaigns(), GridFieldConfig_RelationEditor::create())
+				),
+				new Tab('Advanced',
+					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
+					new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
+					new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
+					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>')
 				)
 			)
 		);
@@ -477,7 +492,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 */
 	function viewcampaign($request){
 		$campaignID = Convert::raw2sql($request->param("ID"));
-		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID));
+		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
 		if(!$this->campaign) {
 			return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
 		}
@@ -539,13 +554,14 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			$html .= "<h3><a href=\"#\">All Campaigns</a></a></h3><pre>".print_r($api->getCampaigns(), 1)."</pre>";
 			$html .= "<h3><a href=\"#\">All Lists</a></h3><pre>".print_r($api->getLists(), 1)."</pre>";
 			if($this->ListID) {
-				$html .= "<h2>Lists</h2";
+				$html .= "<h2>List</h2";
+				$html .= "<h3><a href=\"#\" id=\"MyListStatsAreHere\">List Stats</a></h3><pre>".print_r($api->getListStats($this->ListID), 1)."</pre>";
 				$html .= "<h3><a href=\"#\">List Details</a></h3><pre>".print_r($api->getList($this->ListID), 1)."</pre>";
 				$html .= "<h3><a href=\"#\">Active Subscribers (latest ones)</a></h3><pre>".print_r($api->getActiveSubscribers($this->ListID), 1)."</pre>";
 				$html .= "<h3><a href=\"#\">Unconfirmed Subscribers (latest ones)</a></h3><pre>".print_r($api->getUnconfirmedSubscribers($this->ListID), 1)."</pre>";
 				$html .= "<h3><a href=\"#\">Bounced Subscribers (latest ones)</a></h3><pre>".print_r($api->getBouncedSubscribers($this->ListID), 1)."</pre>";
 				$html .= "<h3><a href=\"#\">Unsubscribed Subscribers (latest ones)</a></h3><pre>".print_r($api->getUnsubscribedSubscribers($this->ListID), 1)."</pre>";
-				$html .= "<h3><a href=\"#\">List Stats</a></h3><pre>".print_r($api->getListStats($this->ListID), 1)."</pre>";
+
 			}
 			else {
 				$html .= "<h2 style=\"color: red;\">ERROR: No Lists selected</h2";
@@ -611,10 +627,12 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 					jQuery('#CampaignMonitorStats').on(
 						'click',
 						'a',
-						function(){
-							jQuery(this).next('pre').toggleSlide();
+						function(event){
+							event.preventDefault();
+							jQuery(this).parent().next('pre').slideToggle();
 						}
 					);
+					jQuery("#MyListStatsAreHere").click();
 				}
 			);
 

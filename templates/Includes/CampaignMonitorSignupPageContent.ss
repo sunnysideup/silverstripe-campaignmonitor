@@ -4,7 +4,7 @@
 <div id="CampaignMonitorCampaigns">
 <% if HasCampaign %>
 	<% with Campaign %>
-	<iframe src="$WebVersionURL" seamless="seamless" name="CampaignMonitorCampaign"></iframe>
+	<iframe src="$WebVersionURL" seamless="seamless" name="CampaignMonitorCampaign" width="100%" height="900"></iframe>
 	<% end_with %>
 <% end_if %>
 
@@ -17,7 +17,7 @@ $CampaignStats
 <% if PreviousCampaignMonitorCampaigns %>
 	<h2>Previous Messages</h2>
 	<ul>
-	<% loop PreviousCampaignMonitorCampaigns %><li>$SentDate.Nice, $Subject</li><% end_loop %>
+	<% loop PreviousCampaignMonitorCampaigns %><li><a href="$Link">$SentDate.Nice, $Subject</a> - <a href="$WebVersionURL">view online</a></li><% end_loop %>
 	</ul>
 <% end_if %>
 </div>
