@@ -42,6 +42,13 @@ class CampaignMonitorSignupPage extends Page {
 		"CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
 	);
 
+	/**
+	 * If this is false, the class cannot be created in the CMS by anyone including ADMINs.
+	 * This is slightly different from SiteTree::$can_create.
+	 * It allows you to turn of this page in the CMS altogether.
+	 * @var boolean
+	 */
+	private static $can_create = true;
 
 	/**
 	 *
@@ -123,6 +130,16 @@ class CampaignMonitorSignupPage extends Page {
 		return $fields;
 	}
 
+	function canCreate($member = null){
+		if($this->Config()->get("can_create")) {
+			$array = $this->makeDropdownListFromLists();
+			if(count($array)) {
+				return parent::canCreate($member);
+			}
+		}
+		return false;
+	}
+
 	/**
 	 *
 	 * @return CampaignMonitorAPIConnector
@@ -176,20 +193,28 @@ class CampaignMonitorSignupPage extends Page {
 	* @return Form
 	**/
 	public function CampaignMonitorStartForm(Controller $controller, $formName = "CampaignMonitorStarterForm") {
-		if(!$this->ReadyToReceiveSubscribtions()) {
-			//user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
-			return false;
+		if($email = Session::get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
+			return $this->renderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));
 		}
-		$fields = new FieldList(new TextField("Email", "Email"));
-		$actions = new FieldList(new FormAction("campaignmonitorstarterformstartaction", $this->SignUpButtonLabel));
-		$form = new Form(
-			$controller,
-			$formName,
-			$fields,
-			$actions
-		);
-		$form->setFormAction($this->Link("preloademail"));
-		return $form;
+		else {
+			Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+			//Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
+			Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
+			if(!$this->ReadyToReceiveSubscribtions()) {
+				//user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
+				return false;
+			}
+			$fields = new FieldList(new TextField("Email", "Email"));
+			$actions = new FieldList(new FormAction("campaignmonitorstarterformstartaction", $this->SignUpButtonLabel));
+			$form = new Form(
+				$controller,
+				$formName,
+				$fields,
+				$actions
+			);
+			$form->setFormAction($this->Link("preloademail"));
+			return $form;
+		}
 	}
 
 	/**
@@ -341,7 +366,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			);
 			// Create action
 			$actions = new FieldList(
-				new FormAction('subscribe', 'Subscribe')
+				new FormAction('subscribe', _t("CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS", "Update Subscriptions"))
 			);
 			// Create Validators
 			$validator = new RequiredFields('Name', 'Email', 'SubscribeChoice');
@@ -378,8 +403,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			else {
 				$memberAlreadyLoggedIn = true;
 				if($existingMember = Member::get()
-					->filter(array("Email" => Convert::raw2sql($data["Email"])))->First()
+					->filter(array("Email" => Convert::raw2sql($data["Email"])))
 					->exclude(array("ID" => $member->ID))
+					->First()
 				) {
 					$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
 					$this->redirectBack();
@@ -476,6 +502,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			$email = Convert::raw2sql($data["Email"]);
 			if($email) {
 				$this->email = $email;
+				if(Director::is_ajax()) {
+					Session::set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["Email"]);
+					return $this->renderWith("CampaignMonitorStartForm_AjaxResult");
+				}
 			}
 		}
 		else {

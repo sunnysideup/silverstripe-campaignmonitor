@@ -1,0 +1,6 @@
+---
+Name: campaignmonitortest
+---
+Director:
+  rules:
+    'create-send-test//$Action/$ID/$OtherID': 'CampaignMonitorAPIConnector_TestController'
