@@ -1,7 +1,6 @@
 jQuery(document).ready(
 	function() {
 		CampaignMonitorStartForm.init();
-		alert("AA");
 	}
 );
 
@@ -9,6 +8,8 @@ jQuery(document).ready(
 var CampaignMonitorStartForm = {
 
 	formSelector: "Form_CampaignMonitorStarterForm",
+
+	errorMessage: "Sorry, an error occurred. Please try again later. ",
 
 	init:function(){
 		// Attach a submit handler to the form
@@ -23,11 +24,16 @@ var CampaignMonitorStartForm = {
 					email = $form.find( "input[name='Email']" ).val(),
 					url = $form.attr( "action" );
 				// Send the data using post
-				var posting = jQuery.post( url, { SecurityID: securityID, Email: email } );
+				var posting = jQuery.post( url, { SecurityID: securityID, Email: email } )
 				// Put the results in a div
 				posting.done(
 					function( data ) {
 						jQuery( "#" + CampaignMonitorStartForm.formSelector ).parent().empty().append( data );
+					}
+				)
+				.fail(
+					function() {
+						alert( CampaignMonitorStartForm.errorMessage );
 					}
 				);
 			}
