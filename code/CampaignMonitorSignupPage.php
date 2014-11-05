@@ -186,12 +186,14 @@ class CampaignMonitorSignupPage extends Page {
 	}
 
 	/**
-	* you can add this function to other pages to have a form
-	* that starts the basic after which the client needs to complete the rest.
-	*	*
-	* @param Controller $controller
-	* @return Form
-	**/
+	 * you can add this function to other pages to have a form
+	 * that starts the basic after which the client needs to complete the rest.
+	 *
+	 * @param Controller $controller
+	 * @param String $formName
+	 *
+	 * @return Form
+	 */
 	public function CampaignMonitorStartForm(Controller $controller, $formName = "CampaignMonitorStarterForm") {
 		if($email = Session::get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
 			return $this->renderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));

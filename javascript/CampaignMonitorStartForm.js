@@ -17,7 +17,6 @@ var CampaignMonitorStartForm = {
 			function( event ) {
 				// Stop form from submitting normally
 				event.preventDefault();
-				alert("DDD");
 				// Get some values from elements on the page:
 				var $form = jQuery( this ),
 					securityID = $form.find( "input[name='SecurityID']" ).val(),
