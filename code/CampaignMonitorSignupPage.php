@@ -335,7 +335,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		"preloademail" => true,
 		"viewcampaign" => true,
 		"stats" => true,
-		"resetoldcampaigns" => true
+		"resetoldcampaigns" => true,
+		"resetsignup" => true
 	);
 
 	function init() {
@@ -531,6 +532,13 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		return array();
 	}
 
+	/**
+	 *
+	 * @return String
+	 */
+	function Email(){
+		return $this->email;
+	}
 
 	/**
 	 *
@@ -634,6 +642,11 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		else {
 			return false;
 		}
+	}
+
+	function resetsignup(){
+		Session::clear("CampaignMonitorStartForm_AjaxResult_".$this->ID);
+		return array();
 	}
 
 	/**
