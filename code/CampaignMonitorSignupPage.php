@@ -42,13 +42,7 @@ class CampaignMonitorSignupPage extends Page {
 		"CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
 	);
 
-	/**
-	 * If this is false, the class cannot be created in the CMS by anyone including ADMINs.
-	 * This is slightly different from SiteTree::$can_create.
-	 * It allows you to turn of this page in the CMS altogether.
-	 * @var boolean
-	 */
-	private static $can_create = true;
+	private static $description = "Page to suscribe and review newsletter list(s)";
 
 	/**
 	 *
@@ -128,16 +122,6 @@ class CampaignMonitorSignupPage extends Page {
 			)
 		);
 		return $fields;
-	}
-
-	function canCreate($member = null){
-		if($this->Config()->get("can_create")) {
-			$array = $this->makeDropdownListFromLists();
-			if(count($array)) {
-				return parent::canCreate($member);
-			}
-		}
-		return false;
 	}
 
 	/**
