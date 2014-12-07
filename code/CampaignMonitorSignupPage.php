@@ -86,7 +86,7 @@ class CampaignMonitorSignupPage extends Page {
 				),
 				new Tab('PageSettings',
 					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up'),
-					new CheckboxField('ShowOldNewsletters', 'Show old newsletters?')
+					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.')
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
@@ -110,8 +110,8 @@ class CampaignMonitorSignupPage extends Page {
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
 				),
 				new Tab('Campaigns',
-					new LiteralField('CampaignExplanation', '<h3>Unfortunately, (newsletter) lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-					$gridField = new GridField('CampaignMonitorCampaigns', 'Newsletters', $this->CampaignMonitorCampaigns(), GridFieldConfig_RelationEditor::create())
+					new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
+					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->limit(100)->map()->toArray())
 				),
 				new Tab('Advanced',
 					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
@@ -258,6 +258,9 @@ class CampaignMonitorSignupPage extends Page {
 		parent::onAfterWrite();
 		if($this->ShowOldNewsletters) {
 			$this->AddOldCampaigns();
+		}
+		else {
+			$this->CampaignMonitorCampaigns()->removeAll();
 		}
 	}
 
