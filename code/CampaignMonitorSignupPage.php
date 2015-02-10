@@ -50,7 +50,6 @@ class CampaignMonitorSignupPage extends Page {
 	 */
 	protected static $api = null;
 
-
 	public static function get_ready_ones() {
 		$listPages = CampaignMonitorSignupPage::get();
 		$array = array(0 => 0);
