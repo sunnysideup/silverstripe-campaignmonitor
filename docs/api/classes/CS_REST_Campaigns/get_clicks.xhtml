@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pu="http://schema.phpunit.de/coverage/1.0" lang="en">
+  <head>
+    <title>phpDox - Test Method</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml#"/>
+          </li>
+          <li class="separator">
+            <a title="CS_REST_Campaigns" href="../../classes/CS_REST_Campaigns.xhtml">CS_REST_Campaigns</a>
+          </li>
+          <li class="separator">get_clicks</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#parameter">Parameter</a>
+          </li>
+          <li>
+            <a href="#return">Return</a>
+          </li>
+          <li>
+            <a href="../../source/third_party/vendor/campaignmonitor/createsend-php/csrest_campaigns.php.xhtml#line369">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1><small>CS_REST_Campaigns::</small>get_clicks</h1>
+        <h4>Gets all clicks recorded for a campaign since the provided date</h4>
+        <p/>
+        <ul/>
+        <h2 id="signature">Signature</h2>
+        <div class="styled synopsis">
+          <code>public function get_clicks([string
+        $since = '',
+            [int
+        $page_number = NULL,
+            [int
+        $page_size = NULL,
+            [string
+        $order_field = NULL,
+            [string
+        $order_direction = NULL]]]]] )
+            </code>
+        </div>
+        <h2 id="parameterlist">Parameters</h2>
+        <dl class="styled">
+          <dt><code>$since</code>
+                —
+                string</dt>
+          <dd>The date to start getting clicks from</dd>
+          <dt><code>$page_number</code>
+                —
+                int</dt>
+          <dd>The page number to get</dd>
+          <dt><code>$page_size</code>
+                —
+                int</dt>
+          <dd>The number of records per page</dd>
+          <dt><code>$order_field</code>
+                —
+                string</dt>
+          <dd>The field to order the record set by ('EMAIL', 'LIST', 'DATE')</dd>
+          <dt><code>$order_direction</code>
+                —
+                string</dt>
+          <dd>The direction to order the record set ('ASC', 'DESC')</dd>
+        </dl>
+        <h2 id="return">Returns</h2>
+        <dl class="styled">
+          <dt>CS_REST_Wrapper_Result</dt>
+          <dd>A successful response will be an object of the form<br/>{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber who clicked
+            'ListID' =&gt; The list id of the list containing the subscriber
+            'Date' =&gt; The date of the click
+            'IPAddress' =&gt; The ip address where the click originated
+            'URL' =&gt; The url that the subscriber clicked on
+            'Latitude' =&gt; The geocoded latitude from the IP address
+            'Longitude' =&gt; The geocoded longitude from the IP address
+            'City' =&gt; The geocoded city from the IP address
+            'Region' =&gt; The geocoded region from the IP address
+            'CountryCode' =&gt; The geocoded two letter country code from the IP address
+            'CountryName' =&gt; The geocoded full country name from the IP address
+        }
+    )
+}</dd>
+        </dl>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

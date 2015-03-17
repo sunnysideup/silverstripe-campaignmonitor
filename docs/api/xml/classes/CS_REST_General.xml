@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CS_REST_General" namespace="" name="CS_REST_General" abstract="false" final="false" start="10" end="212">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php" file="csrest_general.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/csrest_general.php" size="8783" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="0bfed8bc8376590765750133385e8e9f991ff1f0" relative="third_party/vendor/campaignmonitor/createsend-php/csrest_general.php"/>
+  <docblock>
+    <description compact="Class to access general resources from the create send API."/>
+    <author value="tobyb"/>
+  </docblock>
+  <extends full="CS_REST_Wrapper_Base" namespace="" name="CS_REST_Wrapper_Base"/>
+  <method name="authorize_url" start="24" end="33" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="Get the authorization URL for your application, given the application's Client ID, Client Secret, Redirect URI, Scope, and optional state data."/>
+      <param description="The Client ID of your registered OAuth application." variable="$client_id" type="int"/>
+      <param description="The Redirect URI of your registered OAuth application." variable="$redirect_uri" type="string"/>
+      <param description="The comma-separated permission scope your application requires." variable="$scope" type="string">See http://www.campaignmonitor.com/api/getting-started/#authenticating_with_oauth for details.</param>
+      <param description="Optional state data to be included in the URL." variable="$state" type="string"/>
+      <return description="The authorization URL to which users of your application should be redirected." type="string"/>
+      <access value="public"/>
+    </docblock>
+    <parameter name="client_id" byreference="false" type="{unknown}"/>
+    <parameter name="redirect_uri" byreference="false" type="{unknown}"/>
+    <parameter name="scope" byreference="false" type="{unknown}"/>
+    <parameter name="state" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="exchange_token" start="51" end="67" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="Exchange a provided OAuth code for an OAuth access token, 'expires in' value and refresh token."/>
+      <param description="The Client ID of your registered OAuth application." variable="$client_id" type="int"/>
+      <param description="The Client Secret of your registered OAuth application." variable="$client_secret" type="string"/>
+      <param description="The Redirect URI of your registered OAuth application." variable="$redirect_uri" type="string"/>
+      <param description="The unique OAuth code to be exchanged for an access token." variable="$code" type="string"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'access_token' =&gt; The access token to use for API calls
+    'expires_in' =&gt; The number of seconds until this access token expires
+    'refresh_token' =&gt; The refresh token to refresh the access token once it expires
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+      <access value="public"/>
+    </docblock>
+    <parameter name="client_id" byreference="false" type="{unknown}"/>
+    <parameter name="client_secret" byreference="false" type="{unknown}"/>
+    <parameter name="redirect_uri" byreference="false" type="{unknown}"/>
+    <parameter name="code" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="CS_REST_Wrapper_Base" start="88" end="97" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Constructor."/>
+      <param description="Authentication details to use for API calls." variable="$auth_details" type="array">This array must take one of the following forms:
+       If using OAuth to authenticate:
+       array(
+         'access_token' =&gt; 'your access token',
+         'refresh_token' =&gt; 'your refresh token')
+
+       Or if using an API key:
+       array('api_key' =&gt; 'your api key')</param>
+      <param description="The protocol to use for requests (http|https)" variable="$protocol" type="string"/>
+      <param description="The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE" variable="$debug_level" type="int"/>
+      <param description="The host to send API requests to. There is no need to change this" variable="$host" type="string"/>
+      <param description="The logger to use. Used for dependency injection" variable="$log" type="object">
+        <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+      </param>
+      <param description="serialiser to use. Used for dependency injection" variable="$serialiser" type="object">
+        <type full="The" namespace="" name="The"/>
+      </param>
+      <param description="transport to use. Used for dependency injection" variable="$transport" type="object">
+        <type full="The" namespace="" name="The"/>
+      </param>
+      <access value="public"/>
+    </docblock>
+    <parameter name="auth_details" byreference="false" type="{unknown}"/>
+    <parameter name="protocol" byreference="false" type="string" default="'https'"/>
+    <parameter name="debug_level" byreference="false" type="{unknown}" default="CS_REST_LOG_NONE"/>
+    <parameter name="host" byreference="false" type="string" default="'api.createsend.com'"/>
+    <parameter name="log" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="serialiser" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="transport" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get_timezones" start="105" end="107" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets an array of valid timezones"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array&lt;string&gt;(timezones)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_systemdate" start="117" end="119" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the current date in your accounts timezone"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'SystemDate' =&gt; string The current system date in your accounts timezone
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_countries" start="127" end="129" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets an array of valid countries"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array&lt;string&gt;(countries)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_clients" start="142" end="144" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets an array of clients"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'ClientID' =&gt; The clients API ID,
+        'Name' =&gt; The clients name
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_billing_details" start="154" end="156" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets your billing details."/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'Credits' =&gt; The number of credits belonging to the account
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_administrators" start="170" end="172" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets an array of administrators"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'EmailAddress' =&gt; The administrators email address
+        'Name' =&gt; The administrators name
+        'Status' =&gt; The administrators status
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_primary_contact" start="179" end="181" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Retrieves the email address of the primary contact for this account"/>
+      <return description="a successful response will be an array in the form:" type="object">array('EmailAddress'=&gt; email address of primary contact)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="set_primary_contact" start="189" end="191" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Assigns the primary contact for this account to the administrator with the specified email address"/>
+      <param description="The email address of the administrator designated to be the primary contact" variable="$emailAddress" type="string"/>
+      <return description="a successful response will be an array in the form:" type="object">array('EmailAddress'=&gt; email address of primary contact)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="emailAddress" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="external_session_url" start="209" end="211" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Get a URL which initiates a new external session for the user with the given email.">Full details: http://www.campaignmonitor.com/api/account/#single_sign_on</description>
+      <param description="Options for initiating the external login session." variable="$session_options" type="array">This should be an array of the form:
+       array(
+         'Email' =&gt; 'The email address of the Campaign Monitor user for whom the login session should be created',
+         'Chrome' =&gt; 'Which 'chrome' to display - Must be either "all", "tabs", or "none"',
+         'Url' =&gt; 'The URL to display once logged in. e.g. "/subscribers/"',
+         'IntegratorID' =&gt; 'The Integrator ID. You need to contact Campaign Monitor support to get an Integrator ID.',
+         'ClientID' =&gt; 'The Client ID of the client which should be active once logged in to the Campaign Monitor account.' )</param>
+      <return description="A successful response will be an array of the form:" type="object">array('SessionUrl'=&gt; 'https://external1.createsend.com/cd/create/ABCDEF12/DEADBEEF?url=FEEDDAD1')<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="session_options" byreference="false" type="{unknown}"/>
+  </method>
+  <parent full="CS_REST_Wrapper_Base" namespace="" name="CS_REST_Wrapper_Base">
+    <member name="_protocol" type="{unknown}" visibility="public" line="60">
+      <docblock>
+        <description compact="The protocol to use while accessing the api"/>
+        <var description="http or https" type="string"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_base_route" type="{unknown}" visibility="public" line="67">
+      <docblock>
+        <description compact="The base route of the create send api."/>
+        <var type="string"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_serialiser" type="{unknown}" visibility="public" line="75">
+      <docblock>
+        <description compact="The serialiser to use for serialisation and deserialisation of API request and response data"/>
+        <var description="or CS_REST_XmlSerialiser" type="object">
+          <type full="CS_REST_JsonSerialiser" namespace="" name="CS_REST_JsonSerialiser"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_transport" type="{unknown}" visibility="public" line="82">
+      <docblock>
+        <description compact="The transport to use to send API requests"/>
+        <var description="or CS_REST_SocketTransport or your own custom transport." type="object">
+          <type full="CS_REST_CurlTransport" namespace="" name="CS_REST_CurlTransport"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_log" type="{unknown}" visibility="public" line="89">
+      <docblock>
+        <description compact="The logger to use for debugging of all API requests"/>
+        <var type="object">
+          <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_default_call_options" type="{unknown}" visibility="public" line="105">
+      <docblock>
+        <description compact="The default options to use for each API request.">These can be overridden by passing in an array as the call_options argument
+to a single api request.
+Valid options are:
+
+deserialise boolean:
+    Set this to false if you want to get the raw response.
+    This can be useful if your passing json directly to javascript.
+
+While there are clearly other options there is no need to change them.</description>
+        <var type="array"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <method name="CS_REST_Wrapper_Base" start="130" end="172" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Constructor."/>
+        <param description="Authentication details to use for API calls." variable="$auth_details" type="array">This array must take one of the following forms:
+       If using OAuth to authenticate:
+       array(
+         'access_token' =&gt; 'your access token',
+         'refresh_token' =&gt; 'your refresh token')
+
+       Or if using an API key:
+       array('api_key' =&gt; 'your api key')
+
+       Note that this method will continue to work in the deprecated
+       case when $auth_details is passed in as a string containing an
+       API key.</param>
+        <param description="The protocol to use for requests (http|https)" variable="$protocol" type="string"/>
+        <param description="The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE" variable="$debug_level" type="int"/>
+        <param description="The host to send API requests to. There is no need to change this" variable="$host" type="string"/>
+        <param description="The logger to use. Used for dependency injection" variable="$log" type="object">
+          <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+        </param>
+        <param description="serialiser to use. Used for dependency injection" variable="$serialiser" type="object">
+          <type full="The" namespace="" name="The"/>
+        </param>
+        <param description="transport to use. Used for dependency injection" variable="$transport" type="object">
+          <type full="The" namespace="" name="The"/>
+        </param>
+        <access value="public"/>
+      </docblock>
+      <parameter name="auth_details" byreference="false" type="{unknown}"/>
+      <parameter name="protocol" byreference="false" type="string" default="'https'"/>
+      <parameter name="debug_level" byreference="false" type="{unknown}" default="CS_REST_LOG_NONE"/>
+      <parameter name="host" byreference="false" type="{unknown}" default="CS_HOST"/>
+      <parameter name="log" byreference="false" type="{unknown}" default="NULL"/>
+      <parameter name="serialiser" byreference="false" type="{unknown}" default="NULL"/>
+      <parameter name="transport" byreference="false" type="{unknown}" default="NULL"/>
+      <inline>
+        <comment value="If $auth_details is a string, assume it is an API key" line="140"/>
+      </inline>
+    </method>
+    <method name="refresh_token" start="178" end="209" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Refresh the current OAuth token using the current refresh token."/>
+        <access value="public"/>
+      </docblock>
+    </method>
+    <method name="is_secure" start="215" end="217" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description/>
+        <return description="True if the wrapper is using SSL." type="boolean"/>
+        <access value="public"/>
+      </docblock>
+    </method>
+    <method name="put_request" start="219" end="221" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="post_request" start="223" end="225" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="delete_request" start="227" end="229" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="get_request" start="231" end="233" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="get_request_paged" start="235" end="258" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="page_number" byreference="false" type="{unknown}"/>
+      <parameter name="page_size" byreference="false" type="{unknown}"/>
+      <parameter name="order_field" byreference="false" type="{unknown}"/>
+      <parameter name="order_direction" byreference="false" type="{unknown}"/>
+      <parameter name="join_char" byreference="false" type="string" default="'&amp;'"/>
+    </method>
+    <method name="_call" start="265" end="286" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Internal method to make a general API request based on the provided options"/>
+        <param variable="$call_options"/>
+        <access value="private"/>
+      </docblock>
+      <parameter name="call_options" byreference="false" type="{unknown}"/>
+      <parameter name="method" byreference="false" type="{unknown}"/>
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}" default="NULL"/>
+    </method>
+  </parent>
+</class>

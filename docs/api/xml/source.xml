@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<source xmlns="http://xml.phpdox.net/src">
+  <dir name="/var/www/_modules/campaignmonitor/trunk">
+    <file name="_config.php" size="498" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="e88cd6d9d542e21fc9527955ad3f6e0cbdd0d9b8" xml="tokens/_config.php.xml"/>
+    <dir name="code">
+      <dir name="model">
+        <file name="CampaignMonitorCampaign.php" size="1672" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="4b4183d222165c189f47d4a2688d0b7a81e35c02" xml="tokens/code/model/CampaignMonitorCampaign.php.xml"/>
+      </dir>
+      <file name="CampaignMonitorSignupPage.php" size="21744" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="43e42faa9a91d57cd5fcb230005b97f995004b13" xml="tokens/code/CampaignMonitorSignupPage.php.xml"/>
+      <dir name="api">
+        <file name="CampaignMonitorAPIConnector.php" size="47724" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="cd2d4d9a640456d91298c7f54e31d6e80a09b038" xml="tokens/code/api/CampaignMonitorAPIConnector.php.xml"/>
+      </dir>
+      <dir name="tasks">
+        <file name="CampaignMonitorAddOldCampaigns.php" size="1962" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="1c9b945dc741a46dfa06a5e8068256b72c814b54" xml="tokens/code/tasks/CampaignMonitorAddOldCampaigns.php.xml"/>
+      </dir>
+      <dir name="decorators">
+        <file name="CampaignMonitorGroupDOD.php" size="379" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="b6234ee2fb1b9c1bf7cac64577d5a1847b92d4f8" xml="tokens/code/decorators/CampaignMonitorGroupDOD.php.xml"/>
+        <file name="CampaignMonitorMemberDOD.php" size="5479" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="252b483c256fc78a34a308321f96b147bf771b0f" xml="tokens/code/decorators/CampaignMonitorMemberDOD.php.xml"/>
+      </dir>
+    </dir>
+    <dir name="third_party">
+      <dir name="vendor">
+        <file name="autoload.php" size="183" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="b602aa03965733ff1575010745116427be4ac2d1" xml="tokens/third_party/vendor/autoload.php.xml"/>
+        <dir name="campaignmonitor">
+          <dir name="createsend-php">
+            <dir name="samples">
+              <dir name="template">
+                <file name="delete.php" size="525" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="bd1e9d3409182288c7e0a6fac5e8f555b37befbc" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/template/delete.php.xml"/>
+                <file name="create.php" size="660" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="cb94c13b0e81e89816e40d0c8f4229d45574067e" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/template/create.php.xml"/>
+                <file name="update.php" size="649" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="6049adc91741e23cfbf4e52b31173df5a3a4e986" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/template/update.php.xml"/>
+                <file name="get.php" size="530" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="711371b1bf92d23eda6df5ca3a7212dd7f2b967a" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/template/get.php.xml"/>
+              </dir>
+              <dir name="list">
+                <file name="get_deleted_subscribers.php" size="713" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="a6f0008366401dedf0652c5c261aa6828a0250b1" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_deleted_subscribers.php.xml"/>
+                <file name="activate_webhook.php" size="555" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="5a9fee3ab401788b00fc382e5642b2fcd52c76b7" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/activate_webhook.php.xml"/>
+                <file name="get_segments.php" size="529" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="554e0fd9fc8a597c72e72450f7d4dc96d8ea9251" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_segments.php.xml"/>
+                <file name="list_webhook_receiver.php" size="1063" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="cc989b6fae582b8a2f715442d94037e3f3ab4a62" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/list_webhook_receiver.php.xml"/>
+                <file name="create_webhook.php" size="985" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="18093fec9d14a122c40de47807d02531d0c2b7a2" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/create_webhook.php.xml"/>
+                <file name="deactivate_webhook.php" size="561" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="3a46ec793b341e18a5f8169dd71f3d0e448b59b8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/deactivate_webhook.php.xml"/>
+                <file name="delete.php" size="509" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="c50d1df7ef01e11e37aaad38cfad166813b4cb15" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/delete.php.xml"/>
+                <file name="test_webhook.php" size="514" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="58617cf70b02cde326993220664c91279168ec9f" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/test_webhook.php.xml"/>
+                <file name="create_custom_field.php" size="1008" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="6deb60c44a503eced3d612088d0a948892507ef2" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/create_custom_field.php.xml"/>
+                <file name="get_custom_fields.php" size="538" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="07ce255352ae0585f420917ba380b80a12f0a112" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_custom_fields.php.xml"/>
+                <file name="create.php" size="781" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e84ace12b2fe581b7e9e187eed8c3b320c532f32" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/create.php.xml"/>
+                <file name="delete_webhook.php" size="545" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="92804e4fdf9a67cff37b909e22d06ce66b6a5ec6" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/delete_webhook.php.xml"/>
+                <file name="get_stats.php" size="520" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="24901553655137cf8e3dcf7f119edd570ce6406e" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_stats.php.xml"/>
+                <file name="delete_custom_field.php" size="546" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="9becd30481090de2cc979b2c730d6bd5806a339d" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/delete_custom_field.php.xml"/>
+                <file name="update_field_options.php" size="612" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="f59d34d8d7025e5582a85a6d8feeac6906631627" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/update_field_options.php.xml"/>
+                <file name="get_unconfirmed_subscribers.php" size="718" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="cd83f080fd065284c0971b9b45e6d2a9495e4e50" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_unconfirmed_subscribers.php.xml"/>
+                <file name="update.php" size="848" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b860548715bde0f1f5b0b1d34faf006059950f3e" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/update.php.xml"/>
+                <file name="get_bounced_subscribers.php" size="713" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b301c24c43d3ed69891ac2d61ab68bbeb60fccf1" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_bounced_subscribers.php.xml"/>
+                <file name="get_unsubscribed_subscribers.php" size="728" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e0e423fc87daed8f509488bb23c5c34309776768" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_unsubscribed_subscribers.php.xml"/>
+                <file name="get.php" size="510" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="23449d03da92467010751db7848c2b5fbea8509b" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get.php.xml"/>
+                <file name="get_webhooks.php" size="529" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="61f5b1a29f1d23f1c51f376397bba3c774595802" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_webhooks.php.xml"/>
+                <file name="get_active_subscribers.php" size="708" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="83f09dfe970c15f3e1cce35ad784178aa80cde40" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/get_active_subscribers.php.xml"/>
+                <file name="update_custom_field.php" size="670" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b5d0f8829499419c4afdd7c2d9f8f9ca2999ae26" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/list/update_custom_field.php.xml"/>
+              </dir>
+              <file name="get_countries.php" size="503" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="67f70c9e903cffcf9e208884be1b3410cffe8041" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_countries.php.xml"/>
+              <file name="get_timezones.php" size="503" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ca837581bb06018a938ce803bec4ad0c889d43ac" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_timezones.php.xml"/>
+              <dir name="campaign">
+                <file name="get_clicks.php" size="708" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="07c9987384d07b2f44ec34d2acdbd80cbb19b4fb" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_clicks.php.xml"/>
+                <file name="unschedule.php" size="554" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="85c1628082955f55983b5939ff3db1553b047267" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/unschedule.php.xml"/>
+                <file name="get_unsubscribes.php" size="744" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="1ec3286a2fc274cabd7a2cc1868508b061806c94" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_unsubscribes.php.xml"/>
+                <file name="get_opens.php" size="702" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="55805b1b22c614d9ecfa9631c3a382a50830dc55" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_opens.php.xml"/>
+                <file name="delete.php" size="534" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="65f0aff57bec5c0b50b464c4a349600099124f5c" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/delete.php.xml"/>
+                <file name="get_summary.php" size="558" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="f61f01010bb629b8577985c8a40bc930ef3e78f9" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_summary.php.xml"/>
+                <file name="send.php" size="662" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="e48895ab86fcffb2dd891692bb3b27cc2380b9b5" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/send.php.xml"/>
+                <file name="get_spam.php" size="729" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="0441f10de6249a75a51263ab5ea6d516f82b0321" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_spam.php.xml"/>
+                <file name="create.php" size="966" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="9eae1033303d41f263394ae7b5139ee76b92be20" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/create.php.xml"/>
+                <file name="get_lists_and_segments.php" size="584" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="453a29378589196e2db9b0d8c3bb0dbf9a4cf975" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_lists_and_segments.php.xml"/>
+                <file name="get_recipients.php" size="674" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="afb67b8a754c84d408ec3e0ad91a5999fd1ee914" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_recipients.php.xml"/>
+                <file name="get_bounces.php" size="676" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="2f5fbec6cdded4a9f9d027f1202a4395090af5a5" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_bounces.php.xml"/>
+                <file name="get_email_client_usage.php" size="601" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="5a93841a382f1577c716f48925c20341295bc1b8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/get_email_client_usage.php.xml"/>
+                <file name="create_from_template.php" size="2942" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="9d7b0d9c6aabec41d31fc7174061cc988a2e7d03" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/create_from_template.php.xml"/>
+                <file name="send_preview.php" size="616" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="346b5e47126f8e86e8fe70e94a29c18a4fe099cb" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/campaign/send_preview.php.xml"/>
+              </dir>
+              <file name="get_billing_details.php" size="520" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ee1d0679dd67308e524b77b8461d817ae47cc1b5" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_billing_details.php.xml"/>
+              <file name="external_session_url.php" size="1086" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e812a824a5025201d812a3a2a021aa279a9780b8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/external_session_url.php.xml"/>
+              <dir name="subscriber">
+                <file name="delete.php" size="579" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e787bf32b3cd855ca7c9d0c81b586badfe5b9957" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/delete.php.xml"/>
+                <file name="get_history.php" size="590" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b538f7e2ad0a8f63da4322dac5e3ef3b996774a0" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/get_history.php.xml"/>
+                <file name="import.php" size="2410" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d2b394f6fc443d893e5556879e5f080de0fb3b4c" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/import.php.xml"/>
+                <file name="update.php" size="815" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="24bc5ea29637bc8de35e7170d841cbc16b0d5316" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/update.php.xml"/>
+                <file name="unsubscribe.php" size="572" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e0e0e698022349e1849fbc20e32908087ef9ce15" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/unsubscribe.php.xml"/>
+                <file name="get.php" size="566" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="9b20f04acc82dc520fcac04a52988c2e05ffb87d" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/get.php.xml"/>
+                <file name="add.php" size="1088" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d48bb58229404306b4d0a166ea34eed3830bb778" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/subscriber/add.php.xml"/>
+              </dir>
+              <dir name="authentication">
+                <file name="auth_with_api_key.php" size="440" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="b7b56ad2ed1c4580609b4c1c5fe80c4d8da4938e" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/authentication/auth_with_api_key.php.xml"/>
+                <file name="refresh_token.php" size="653" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="9be6f48c5609b3f980fba2af1f5f159b456494d1" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/authentication/refresh_token.php.xml"/>
+                <file name="exchange_token.php" size="837" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="8edb9cde3c16ef97313edf303b70b1241ea805fa" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/authentication/exchange_token.php.xml"/>
+                <file name="auth_with_oauth.php" size="500" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="38195554dba76cc90878487e70eddf097089d0a4" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/authentication/auth_with_oauth.php.xml"/>
+                <file name="get_authorize_url.php" size="349" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="d97fd8729b16c1d855cb9012aabd502ff2aaabc2" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/authentication/get_authorize_url.php.xml"/>
+              </dir>
+              <file name="get_apikey.php" size="446" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="48394d3d332c69839ec744ee531ec9e561cb43cf" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_apikey.php.xml"/>
+              <file name="get_clients.php" size="498" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d117c2910a72bc1678fb3fd3caa16446efd76941" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_clients.php.xml"/>
+              <dir name="client">
+                <file name="get_suppressionlist.php" size="702" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="61ba554c70868087d25a4e48e1ee3ff25d95b689" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_suppressionlist.php.xml"/>
+                <file name="suppress.php" size="600" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="009c6b2377fe841c7f98abf9466ffd1d2320dd40" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/suppress.php.xml"/>
+                <file name="set_monthly_billing.php" size="669" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="4187868a04c7e86dac9f736c4c9a53119ad931bc" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/set_monthly_billing.php.xml"/>
+                <file name="get_segments.php" size="557" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="e11c8b7024855f8e90476445d4609913027cb522" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_segments.php.xml"/>
+                <file name="get_campaigns.php" size="561" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ada21afdd1d44f7e6d1e56c05ef8e33012fbb9e3" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_campaigns.php.xml"/>
+                <file name="delete.php" size="483" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d7b5682fd70fb19148e82307815ea00caaeb8406" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/delete.php.xml"/>
+                <file name="create.php" size="619" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="1bff99203aec49db4abcf3e6d61d6bfbe3802d54" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/create.php.xml"/>
+                <file name="get_templates.php" size="561" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ead0a75f9a03ae67c221bcfcbae1fff2bcd2bfaf" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_templates.php.xml"/>
+                <file name="get_scheduled.php" size="581" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="5b89dbbf4b0c17bf25c7b531e351f42933b52424" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_scheduled.php.xml"/>
+                <file name="set_payg_billing.php" size="885" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ab8c5adfca096ff4a4cab413e61635a6f2b9122a" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/set_payg_billing.php.xml"/>
+                <file name="transfer_credits.php" size="664" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="397e7f90c7af4c06e6b4fd3e3788e3d192e46d7c" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/transfer_credits.php.xml"/>
+                <file name="unsuppress.php" size="556" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d27c424591ac8ccf1f89f092ca35bfe91d433c56" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/unsuppress.php.xml"/>
+                <file name="get_lists.php" size="545" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="4150f0e0a750079ddf293ee4821e237536586072" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_lists.php.xml"/>
+                <file name="get.php" size="509" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="6a63dfe0a77d7adb9cfd45ad4f044de1fd3ccb5a" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get.php.xml"/>
+                <file name="set_basics.php" size="652" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="ec44a35cd198b455dc066499fd68273e64733a96" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/set_basics.php.xml"/>
+                <file name="get_lists_for_email.php" size="684" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="9626cfa3205b16eeb546fd6951e33c8ece626cae" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_lists_for_email.php.xml"/>
+                <file name="get_drafts.php" size="549" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="d3c7bd2d4491f9260a6a97a835206ca947d94cb8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/client/get_drafts.php.xml"/>
+              </dir>
+              <dir name="segment">
+                <file name="clear_rules.php" size="532" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="cc2eb841d26cbc0f119dce470dc022c3925cafe8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/clear_rules.php.xml"/>
+                <file name="delete.php" size="522" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="587ee237c2851472c8fa8ec69a4661fc72ad5306" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/delete.php.xml"/>
+                <file name="create.php" size="1154" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="f62d751c72f58c56713626fbef4bd49b831508e6" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/create.php.xml"/>
+                <file name="add_rule.php" size="688" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="3a509b8a1f408570fe484dae238109edcfcbaf41" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/add_rule.php.xml"/>
+                <file name="update.php" size="1018" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="487d17deb86aa02cc03e44693c0be973ed154344" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/update.php.xml"/>
+                <file name="get_subscribers.php" size="716" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="6dc21ecf60b81c678e41f42044c1df8adf78f204" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/get_subscribers.php.xml"/>
+                <file name="get.php" size="525" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="785b8295ad71faa763489ee2551a3e9f9421da4a" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/segment/get.php.xml"/>
+              </dir>
+              <file name="get_systemdate.php" size="503" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="95d0506f446858b6ac13d44ffe61f17dfa4eebe8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/samples/get_systemdate.php.xml"/>
+            </dir>
+            <file name="csrest_campaigns.php" size="21334" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="015108d0b3bafd6c3760146a53e064f24955ca36" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_campaigns.php.xml"/>
+            <dir name="tests">
+              <dir name="class_tests">
+                <file name="transport_test.php" size="7203" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="2c2fa2e571bad33d2b767f34488a07b82b525039" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/class_tests/transport_test.php.xml"/>
+                <file name="response_tests.php" size="34199" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="7fcb05459c36338e9092cc02d4b50ec442429a03" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/class_tests/response_tests.php.xml"/>
+              </dir>
+              <file name="all_tests.php" size="882" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="a5e7a24adab95082e7cb1ab1395ce598d2c865e6" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/all_tests.php.xml"/>
+              <file name="csrest_template_test.php" size="2989" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="5585956067c1339db8f91a991a7a83a295079bf5" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_template_test.php.xml"/>
+              <file name="csrest_administrators_test.php" size="3826" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="09ddaf1b3ce95bf6e244212fefcc0e291302568c" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_administrators_test.php.xml"/>
+              <file name="csrest_test.php" size="11019" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="7583d0172eb82a7a8c04bcc64b2cbf29400c8168" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_test.php.xml"/>
+              <file name="csrest_campaigns_test.php" size="12885" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="abeee4d243cf4e0c840450d8903d75b597f710b5" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_campaigns_test.php.xml"/>
+              <file name="csrest_segments_test.php" size="5182" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="5c489540d088ab25bccdeed564924cdb650a588a" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_segments_test.php.xml"/>
+              <file name="csrest_clients_test.php" size="9862" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="db43f667a953ea2ad8a389b266da35339ba38649" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_clients_test.php.xml"/>
+              <file name="csrest_people_test.php" size="3928" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="6f93809c56607b9547fe041bd8d68969d887c5c3" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_people_test.php.xml"/>
+              <file name="csrest_lists_test.php" size="17328" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="6b06ef791508db8b2cd30d61b6800644c14aa5b1" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_lists_test.php.xml"/>
+              <file name="csrest_subscribers_test.php" size="7471" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="d750c55eb5016a938dfce13d774eebebfd477826" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_subscribers_test.php.xml"/>
+            </dir>
+            <file name="csrest_administrators.php" size="4099" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="a2f37b9213fa77fee33aa2d65dc35c702aa3e8f9" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_administrators.php.xml"/>
+            <file name="csrest_clients.php" size="19490" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="80bee149ff4301ff0dc2d1227f97a504a089ed9b" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_clients.php.xml"/>
+            <dir name="class">
+              <file name="services_json.php" size="33267" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="387ca9b4a531ffd7b359f9d187f97c63e34d1c27" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/class/services_json.php.xml"/>
+              <file name="serialisation.php" size="3731" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b033a4ef4c8c578e4d731581b3f6508796f6e147" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/class/serialisation.php.xml"/>
+              <file name="log.php" size="437" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="191a5d13fce424d25e62b85fdc6f2044dadfeb11" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/class/log.php.xml"/>
+              <file name="transport.php" size="12177" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="b2b349e931ccff191d0f539da7cd1c09a8625ef8" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/class/transport.php.xml"/>
+              <file name="base_classes.php" size="10275" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="59c9f1c301b1c614d622676d01fb00eade458118" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/class/base_classes.php.xml"/>
+            </dir>
+            <file name="csrest_lists.php" size="26810" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="8426d99fa00b1075f18d68f0c633a6bd07643fec" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php.xml"/>
+            <file name="csrest_people.php" size="4770" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="0d4f737e0d24dea73ca419e676418136ae42b16e" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_people.php.xml"/>
+            <file name="csrest_segments.php" size="8348" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="2fc798eb8cdfba2e678e907a3ca818ac57f3a503" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_segments.php.xml"/>
+            <file name="csrest_subscribers.php" size="10213" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="8bc963110a72352be189a15644f9bdcf0c24ac7c" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_subscribers.php.xml"/>
+            <file name="csrest_templates.php" size="4560" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="c1d21534acea32d8df8cd15ed2535f8b8e0a71cf" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_templates.php.xml"/>
+            <file name="csrest_general.php" size="8783" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="0bfed8bc8376590765750133385e8e9f991ff1f0" xml="tokens/third_party/vendor/campaignmonitor/createsend-php/csrest_general.php.xml"/>
+          </dir>
+        </dir>
+        <dir name="composer">
+          <file name="autoload_real.php" size="1398" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="3fb59bb586f98abacaceec0cfff7d10b946a5d4a" xml="tokens/third_party/vendor/composer/autoload_real.php.xml"/>
+          <file name="autoload_namespaces.php" size="149" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="3796792e1767d43a67de9843543c72280a7a7a1e" xml="tokens/third_party/vendor/composer/autoload_namespaces.php.xml"/>
+          <file name="ClassLoader.php" size="11669" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="fc59189629ce674c4e9734a06ba8e257c3eb3b72" xml="tokens/third_party/vendor/composer/ClassLoader.php.xml"/>
+          <file name="autoload_psr4.php" size="143" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="5be971353d2ad9a7e465b1b800fe3e78a91f8dd1" xml="tokens/third_party/vendor/composer/autoload_psr4.php.xml"/>
+          <file name="autoload_classmap.php" size="1001" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="b007ac2033b2c0b6f6d04b94ab37931b2b464821" xml="tokens/third_party/vendor/composer/autoload_classmap.php.xml"/>
+        </dir>
+      </dir>
+    </dir>
+  </dir>
+</source>

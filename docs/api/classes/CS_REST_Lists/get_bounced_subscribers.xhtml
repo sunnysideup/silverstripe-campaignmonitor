@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pu="http://schema.phpunit.de/coverage/1.0" lang="en">
+  <head>
+    <title>phpDox - Test Method</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml#"/>
+          </li>
+          <li class="separator">
+            <a title="CS_REST_Lists" href="../../classes/CS_REST_Lists.xhtml">CS_REST_Lists</a>
+          </li>
+          <li class="separator">get_bounced_subscribers</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#parameter">Parameter</a>
+          </li>
+          <li>
+            <a href="#return">Return</a>
+          </li>
+          <li>
+            <a href="../../source/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php.xhtml#line366">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1><small>CS_REST_Lists::</small>get_bounced_subscribers</h1>
+        <h4>Gets all bounced subscribers who have bounced out since the given date</h4>
+        <p/>
+        <ul/>
+        <h2 id="signature">Signature</h2>
+        <div class="styled synopsis">
+          <code>public function get_bounced_subscribers([string
+        $bounced_since = '',
+            [int
+        $page_number = NULL,
+            [int
+        $page_size = NULL,
+            [string
+        $order_field = NULL,
+            [string
+        $order_direction = NULL]]]]] )
+            </code>
+        </div>
+        <h2 id="parameterlist">Parameters</h2>
+        <dl class="styled">
+          <dt><code>$bounced_since</code>
+                —
+                string</dt>
+          <dd/>
+          <dt><code>$page_number</code>
+                —
+                int</dt>
+          <dd>The page number to get</dd>
+          <dt><code>$page_size</code>
+                —
+                int</dt>
+          <dd>The number of records per page</dd>
+          <dt><code>$order_field</code>
+                —
+                string</dt>
+          <dd>The field to order the record set by ('EMAIL', 'NAME', 'DATE')</dd>
+          <dt><code>$order_direction</code>
+                —
+                string</dt>
+          <dd>The direction to order the record set ('ASC', 'DESC')</dd>
+        </dl>
+        <h2 id="return">Returns</h2>
+        <dl class="styled">
+          <dt>CS_REST_Wrapper_Result</dt>
+          <dd>A successful response will be an object of the form<br/>{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber bounced out of the list
+            'State' =&gt; The current state of the subscriber, will be 'Bounced'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}</dd>
+        </dl>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

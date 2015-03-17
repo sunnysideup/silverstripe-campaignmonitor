@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>phpDox - CS_REST_OAuthTestLists</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">CS_REST_OAuthTestLists</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#hierarchy">Hierarchy</a>
+          </li>
+          <li>
+            <a href="#members">Members</a>
+          </li>
+          <li>
+            <a href="#methods">Methods</a>
+          </li>
+          <li>
+            <a href="../source/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_lists_test.php.xhtml#line14">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1 id="introduction"><small>\</small>CS_REST_OAuthTestLists</h1>
+        <h4/>
+        <p/>
+        <h2 id="synopsis">Synopsis</h2>
+        <div class="synopsis">class CS_REST_OAuthTestLists
+                extends <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists.xhtml">CS_REST_TestLists</a>
+            {<br/><ul class="none"><li>// members</li><li>public array <a href="#members">$auth</a>;
+                    </li></ul><ul class="none"><li>// Inherited members from <span title="CS_REST_TestLists">CS_REST_TestLists</span></li><li>public string <a href="#members">$list_id</a>;
+                        </li><li>public <a href="#members">$list_base_route</a>;
+                        </li></ul><ul class="none"><li>// Inherited members from <span title="CS_REST_TestBase">CS_REST_TestBase</span></li><li>public <a href="#members">$mock_log</a>;
+                        </li><li>public <a href="#members">$mock_serialiser</a>;
+                        </li><li>public <a href="#members">$mock_transport</a>;
+                        </li><li>public <a href="#members">$wrapper</a>;
+                        </li><li>public string <a href="#members">$serialisation_type</a>;
+                        </li><li>public string <a href="#members">$transport_type</a>;
+                        </li><li>public <a href="#members">$auth</a>;
+                        </li><li>public string <a href="#members">$protocol</a>;
+                        </li><li>public string <a href="#members">$api_host</a>;
+                        </li><li>public <a href="#members">$log_level</a>;
+                        </li><li>public <a href="#members">$base_route</a>;
+                        </li></ul><ul class="none"><li>// Inherited methods from <span title="CS_REST_TestLists">CS_REST_TestLists</span></li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/set_up_inner.xhtml">set_up_inner</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_without_unsubscribe_setting.xhtml">testcreate_without_unsubscribe_setting</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_with_unsubscribe_setting.xhtml">testcreate_with_unsubscribe_setting</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_without_unsubscribe_setting.xhtml">testupdate_without_unsubscribe_setting</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_with_unsubscribe_setting.xhtml">testupdate_with_unsubscribe_setting</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_with_unsubscribe_setting_and_supp_list_options.xhtml">testupdate_with_unsubscribe_setting_and_supp_list_options</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_custom_field.xhtml">testcreate_custom_field</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_custom_field.xhtml">testupdate_custom_field</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_field_options.xhtml">testupdate_field_options</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete.xhtml">testdelete</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete_custom_field.xhtml">testdelete_custom_field</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_custom_fields.xhtml">testget_custom_fields</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_segments.xhtml">testget_segments</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_active.xhtml">testget_active</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_unconfirmed_subscribers.xhtml">testget_unconfirmed_subscribers</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_bounced.xhtml">testget_bounced</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_unsubscribed.xhtml">testget_unsubscribed</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_deleted.xhtml">testget_deleted</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget.xhtml">testget</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_stats.xhtml">testget_stats</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_webhooks.xhtml">testget_webhooks</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_webhook.xhtml">testcreate_webhook</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testtest_webhook.xhtml">testtest_webhook</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete_webhook.xhtml">testdelete_webhook</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testactivate_webhook.xhtml">testactivate_webhook</a>()
+                        </li><li>public void <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdeeeeactivate_webhook.xhtml">testdeeeeactivate_webhook</a>()
+                        </li></ul><ul class="none"><li>// Inherited methods from <span title="CS_REST_TestBase">CS_REST_TestBase</span></li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/setUp.xhtml">setUp</a>()
+                        </li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/set_up_inner.xhtml">set_up_inner</a>()
+                        </li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/get_call_options.xhtml">get_call_options</a>()
+                        </li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/setup_transport_and_serialisation.xhtml">setup_transport_and_serialisation</a>()
+                        </li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/general_test.xhtml">general_test</a>()
+                        </li><li>public void <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/general_test_with_argument.xhtml">general_test_with_argument</a>()
+                        </li></ul>
+
+            }<br/></div>
+        <h2 id="hierarchy">Hierarchy</h2>
+        <div class="styled">
+          <h4>Extends</h4>
+          <ul>
+            <li>
+              <a href="../classes/CS_REST_TestLists.xhtml">CS_REST_TestLists</a>
+            </li>
+          </ul>
+        </div>
+        <h2 id="members">Members</h2>
+        <div class="styled members">
+          <h4>public</h4>
+          <ul class="members">
+            <li id="api_host">
+              <strong>$api_host</strong>
+            </li>
+            <li id="auth">
+              <strong>$auth</strong>
+            </li>
+            <li id="auth">
+              <strong>$auth</strong>
+            </li>
+            <li id="base_route">
+              <strong>$base_route</strong>
+            </li>
+            <li id="list_base_route">
+              <strong>$list_base_route</strong>
+            </li>
+            <li id="list_id">
+              <strong>$list_id</strong>
+            </li>
+            <li id="log_level">
+              <strong>$log_level</strong>
+            </li>
+            <li id="mock_log">
+              <strong>$mock_log</strong>
+            </li>
+            <li id="mock_serialiser">
+              <strong>$mock_serialiser</strong>
+            </li>
+            <li id="mock_transport">
+              <strong>$mock_transport</strong>
+            </li>
+            <li id="protocol">
+              <strong>$protocol</strong>
+            </li>
+            <li id="serialisation_type">
+              <strong>$serialisation_type</strong>
+            </li>
+            <li id="transport_type">
+              <strong>$transport_type</strong>
+            </li>
+            <li id="wrapper">
+              <strong>$wrapper</strong>
+            </li>
+          </ul>
+        </div>
+        <h2 id="methods">Methods</h2>
+        <div class="styled">
+          <h3>Inherited from <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists.xhtml">CS_REST_TestLists</a></h3>
+          <h4>public</h4>
+          <ul>
+            <li id="set_up_inner">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/set_up_inner.xhtml">set_up_inner()</a>
+            </li>
+            <li id="testactivate_webhook">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testactivate_webhook.xhtml">testactivate_webhook()</a>
+            </li>
+            <li id="testcreate_custom_field">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_custom_field.xhtml">testcreate_custom_field()</a>
+            </li>
+            <li id="testcreate_webhook">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_webhook.xhtml">testcreate_webhook()</a>
+            </li>
+            <li id="testcreate_with_unsubscribe_setting">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_with_unsubscribe_setting.xhtml">testcreate_with_unsubscribe_setting()</a>
+            </li>
+            <li id="testcreate_without_unsubscribe_setting">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testcreate_without_unsubscribe_setting.xhtml">testcreate_without_unsubscribe_setting()</a>
+            </li>
+            <li id="testdeeeeactivate_webhook">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdeeeeactivate_webhook.xhtml">testdeeeeactivate_webhook()</a>
+            </li>
+            <li id="testdelete">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete.xhtml">testdelete()</a>
+            </li>
+            <li id="testdelete_custom_field">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete_custom_field.xhtml">testdelete_custom_field()</a>
+            </li>
+            <li id="testdelete_webhook">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testdelete_webhook.xhtml">testdelete_webhook()</a>
+            </li>
+            <li id="testget">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget.xhtml">testget()</a>
+            </li>
+            <li id="testget_active">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_active.xhtml">testget_active()</a>
+            </li>
+            <li id="testget_bounced">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_bounced.xhtml">testget_bounced()</a>
+            </li>
+            <li id="testget_custom_fields">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_custom_fields.xhtml">testget_custom_fields()</a>
+            </li>
+            <li id="testget_deleted">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_deleted.xhtml">testget_deleted()</a>
+            </li>
+            <li id="testget_segments">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_segments.xhtml">testget_segments()</a>
+            </li>
+            <li id="testget_stats">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_stats.xhtml">testget_stats()</a>
+            </li>
+            <li id="testget_unconfirmed_subscribers">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_unconfirmed_subscribers.xhtml">testget_unconfirmed_subscribers()</a>
+            </li>
+            <li id="testget_unsubscribed">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_unsubscribed.xhtml">testget_unsubscribed()</a>
+            </li>
+            <li id="testget_webhooks">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testget_webhooks.xhtml">testget_webhooks()</a>
+            </li>
+            <li id="testtest_webhook">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testtest_webhook.xhtml">testtest_webhook()</a>
+            </li>
+            <li id="testupdate_custom_field">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_custom_field.xhtml">testupdate_custom_field()</a>
+            </li>
+            <li id="testupdate_field_options">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_field_options.xhtml">testupdate_field_options()</a>
+            </li>
+            <li id="testupdate_with_unsubscribe_setting">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_with_unsubscribe_setting.xhtml">testupdate_with_unsubscribe_setting()</a>
+            </li>
+            <li id="testupdate_with_unsubscribe_setting_and_supp_list_options">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_with_unsubscribe_setting_and_supp_list_options.xhtml">testupdate_with_unsubscribe_setting_and_supp_list_options()</a>
+            </li>
+            <li id="testupdate_without_unsubscribe_setting">
+              <a title="CS_REST_TestLists" href="../classes/CS_REST_TestLists/testupdate_without_unsubscribe_setting.xhtml">testupdate_without_unsubscribe_setting()</a>
+            </li>
+          </ul>
+          <h3>Inherited from <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase.xhtml">CS_REST_TestBase</a></h3>
+          <h4>public</h4>
+          <ul>
+            <li id="general_test">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/general_test.xhtml">general_test()</a>
+            </li>
+            <li id="general_test_with_argument">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/general_test_with_argument.xhtml">general_test_with_argument()</a>
+            </li>
+            <li id="get_call_options">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/get_call_options.xhtml">get_call_options()</a>
+            </li>
+            <li id="setUp">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/setUp.xhtml">setUp()</a>
+            </li>
+            <li id="set_up_inner">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/set_up_inner.xhtml">set_up_inner()</a>
+            </li>
+            <li id="setup_transport_and_serialisation">
+              <a title="CS_REST_TestBase" href="../classes/CS_REST_TestBase/setup_transport_and_serialisation.xhtml">setup_transport_and_serialisation()</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

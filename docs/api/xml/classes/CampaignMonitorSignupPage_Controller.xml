@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage_Controller" namespace="" name="CampaignMonitorSignupPage_Controller" abstract="false" final="false" start="299" end="674">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../code" file="CampaignMonitorSignupPage.php" realpath="/var/www/_modules/campaignmonitor/trunk/code/CampaignMonitorSignupPage.php" size="21744" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="43e42faa9a91d57cd5fcb230005b97f995004b13" relative="code/CampaignMonitorSignupPage.php"/>
+  <extends full="Page_Controller" namespace="" name="Page_Controller"/>
+  <member name="email" type="string" default="''" visibility="protected" line="305">
+    <docblock>
+      <description compact="retains email for processing"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="campaign" type="string" default="''" visibility="protected" line="312">
+    <docblock>
+      <description compact="holder for selected campaign"/>
+      <var description="| CampaignMonitorCampaign" type="object">
+        <type full="Null" namespace="" name="Null"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="allowed_actions" type="array" visibility="private" line="314"/>
+  <method name="init" start="328" end="331" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="SignupForm" start="337" end="374" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="creates a subscription form..."/>
+      <return type="object">
+        <type full="Form" namespace="" name="Form"/>
+      </return>
+    </docblock>
+    <inline>
+      <comment value="Create fields" line="339"/>
+      <comment value="Create action" line="356"/>
+      <comment value="Create Validators" line="360"/>
+    </inline>
+  </method>
+  <method name="subscribe" start="377" end="450" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="data" byreference="false" type="{unknown}"/>
+    <parameter name="form" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="true until proven otherwise." line="379"/>
+    </inline>
+  </method>
+  <method name="unsubscribe" start="455" end="465" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="immediately unsubscribe if you are logged in."/>
+    </docblock>
+    <parameter name="request" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="confirm" start="467" end="472" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="request" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="thankyou" start="474" end="479" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="request" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="sadtoseeyougo" start="481" end="486" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="request" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="preloademail" start="488" end="506" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="request" byreference="false" type="object">
+      <type full="\\SS_HTTPRequest" namespace="\" name="SS_HTTPRequest"/>
+    </parameter>
+  </method>
+  <method name="viewcampaign" start="512" end="519" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="action to show one campaign..."/>
+    </docblock>
+    <parameter name="request" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="Email" start="525" end="527" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="object">
+        <type full="String" namespace="" name="String"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="HasCampaign" start="533" end="535" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="Campaign" start="541" end="543" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return description="| CampaignMonitorCampaign" type="object">
+        <type full="Null" namespace="" name="Null"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="PreviousCampaignMonitorCampaigns" start="551" end="562" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="same as $this-&gt;CampaignMonitorCampaigns() but sorted correctly."/>
+      <return description="of CampaignMonitorCampaigns" type="object">
+        <type full="DataSet" namespace="" name="DataSet"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="stats" start="570" end="604" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="action for admins only to see a whole bunch of stats"/>
+    </docblock>
+    <inline>
+      <comment value="run tests here" line="572"/>
+    </inline>
+  </method>
+  <method name="CampaignStats" start="611" end="631" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="returns a bunch of stats about a campaign IF the user is an admin AND a campaign is selected"/>
+      <return description="(html) | false" type="object">
+        <type full="String" namespace="" name="String"/>
+      </return>
+    </docblock>
+    <inline>
+      <comment value="run tests here" line="614"/>
+    </inline>
+  </method>
+  <method name="resetsignup" start="633" end="636" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="resetoldcampaigns" start="642" end="651" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="removes all campaigns so that they can be re-imported."/>
+    </docblock>
+  </method>
+  <method name="JSHackForPreSections" start="653" end="672" abstract="false" final="false" static="false" visibility="private"/>
+</class>

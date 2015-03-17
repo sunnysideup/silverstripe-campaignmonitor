@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector" abstract="false" final="false" start="7" end="1144">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../code/api" file="CampaignMonitorAPIConnector.php" realpath="/var/www/_modules/campaignmonitor/trunk/code/api/CampaignMonitorAPIConnector.php" size="47724" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="cd2d4d9a640456d91298c7f54e31d6e80a09b038" relative="code/api/CampaignMonitorAPIConnector.php"/>
+  <docblock>
+    <description compact="Main Holder page for Recipes author nicolaas [at] sunnysideup.co.nz"/>
+  </docblock>
+  <extends full="Object" namespace="" name="Object"/>
+  <member name="campaign_monitor_url" type="string" default="&quot;&quot;" visibility="private" line="15">
+    <docblock>
+      <description compact="REQUIRED! this is the CM url for logging in.">which can be used by the client.</description>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="client_id" type="string" default="&quot;&quot;" visibility="private" line="21">
+    <docblock>
+      <description compact="REQUIRED!"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="api_key" type="string" default="&quot;&quot;" visibility="private" line="28">
+    <docblock>
+      <description compact="OPTION 1: API KEY!"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="client_secret" type="string" default="&quot;&quot;" visibility="private" line="35">
+    <docblock>
+      <description compact="OPTION 2: OAUTH OPTION"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="redirect_uri" type="string" default="&quot;&quot;" visibility="private" line="41">
+    <docblock>
+      <description compact="OPTION 2: OAUTH OPTION"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="code" type="string" default="&quot;&quot;" visibility="private" line="47">
+    <docblock>
+      <description compact="OPTION 2: OAUTH OPTION"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="debug" type="{unknown}" default="false" visibility="protected" line="53">
+    <docblock>
+      <description/>
+      <var type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="allowCaching" type="{unknown}" default="false" visibility="protected" line="59">
+    <docblock>
+      <description/>
+      <var type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="httpStatusCode" type="integer" default="0" visibility="protected" line="65">
+    <docblock>
+      <description/>
+      <var type="object">
+        <type full="Int" namespace="" name="Int"/>
+      </var>
+    </docblock>
+  </member>
+  <method name="init" start="72" end="75" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="must be called to use this API."/>
+    </docblock>
+  </method>
+  <method name="setDebug" start="82" end="84" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="turn debug on or off"/>
+      <param type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </param>
+    </docblock>
+    <parameter name="b" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="setAllowCaching" start="90" end="92" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <param type="object" variable="$b">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </param>
+    </docblock>
+    <parameter name="b" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getAllowCaching" start="98" end="100" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="getAuth" start="106" end="155" abstract="false" final="false" static="false" visibility="protected">
+    <docblock>
+      <description compact="provides the Authorisation Array"/>
+      <return type="object">
+        <type full="Array" namespace="" name="Array"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="returnResult" start="162" end="186" abstract="false" final="false" static="false" visibility="protected">
+    <docblock>
+      <description compact="returns the result or NULL in case of an error"/>
+      <param type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </param>
+      <return description="| Null" type="object">
+        <type full="Mixed" namespace="" name="Mixed"/>
+      </return>
+    </docblock>
+    <parameter name="result" byreference="false" type="{unknown}"/>
+    <parameter name="apiCall" byreference="false" type="{unknown}"/>
+    <parameter name="description" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getHttpStatusCode" start="193" end="195" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="returns the HTTP code for the response.">This can be handy for debuging purposes.</description>
+      <return type="object">
+        <type full="Int" namespace="" name="Int"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="getFromCache" start="206" end="216" abstract="false" final="false" static="false" visibility="protected">
+    <docblock>
+      <description/>
+      <param type="object" variable="$name">
+        <type full="String" namespace="" name="String"/>
+      </param>
+      <return type="object">
+        <type full="Mixed" namespace="" name="Mixed"/>
+      </return>
+    </docblock>
+    <parameter name="name" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="saveToCache" start="222" end="230" abstract="false" final="false" static="false" visibility="protected">
+    <docblock>
+      <description/>
+      <param type="object" variable="$unserializedValue">
+        <type full="Mixed" namespace="" name="Mixed"/>
+      </param>
+      <param type="object" variable="$name">
+        <type full="String" namespace="" name="String"/>
+      </param>
+    </docblock>
+    <parameter name="unserializedValue" byreference="false" type="{unknown}"/>
+    <parameter name="name" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getCampaigns" start="255" end="264" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'WebVersionURL' =&gt; The web version url of the campaign
+        'WebVersionTextURL' =&gt; The web version url of the text version of the campaign
+        'CampaignID' =&gt; The id of the campaign
+        'Subject' =&gt; The campaign subject
+        'Name' =&gt; The name of the campaign
+        'FromName' =&gt; The from name for the campaign
+        'FromEmail' =&gt; The from email address for the campaign
+        'ReplyTo' =&gt; The reply to email address for the campaign
+        'SentDate' =&gt; The sent data of the campaign
+        'TotalRecipients' =&gt; The number of recipients of the campaign
+    }<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <inline>
+      <comment value="require_once '../../csrest_clients.php';" line="256"/>
+    </inline>
+  </method>
+  <method name="getDrafts" start="266" end="266" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getLists" start="278" end="287" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all subscriber lists the current client has created"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'ListID' =&gt; The id of the list
+        'Name' =&gt; The name of the list
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <inline>
+      <comment value="require_once '../../csrest_clients.php';" line="279"/>
+    </inline>
+  </method>
+  <method name="getScheduled" start="289" end="289" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSegments" start="291" end="291" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSuppressionlist" start="293" end="293" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getTemplates" start="295" end="295" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="createList" start="315" end="336" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates a new list based on the provided details.">Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional</description>
+      <param description="- he page to redirect subscribers to when they unsubscribeThe list title" type="string" variable="$title"/>
+      <param description="- The page to redirect subscribers to when they unsubscribe" type="string" variable="$unsubscribePage"/>
+      <param description="- Whether this list requires confirmation of subscription" type="boolean" variable="$confirmedOptIn"/>
+      <param description="- The page to redirect subscribers to when they confirm their subscription" type="string" variable="$confirmationSuccessPage"/>
+      <param description="- Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list" type="string" variable="$unsubscribeSetting"/>
+      <return description="A successful response will be the ID of the newly created list" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="title" byreference="false" type="{unknown}"/>
+    <parameter name="unsubscribePage" byreference="false" type="{unknown}"/>
+    <parameter name="confirmedOptIn" byreference="false" type="{unknown}" default="false"/>
+    <parameter name="confirmationSuccessPage" byreference="false" type="{unknown}"/>
+    <parameter name="unsubscribeSetting" byreference="false" type="{unknown}" default="null"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="319"/>
+    </inline>
+  </method>
+  <method name="deleteList" start="343" end="352" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Deletes an existing list from the system"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="344"/>
+    </inline>
+  </method>
+  <method name="getList" start="372" end="381" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the basic details of the current list"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ListID' =&gt; The id of the list
+    'Title' =&gt; The title of the list
+    'UnsubscribePage' =&gt; The page which subscribers are redirected to upon unsubscribing
+    'ConfirmedOptIn' =&gt; Whether the list is Double-Opt In
+    'ConfirmationSuccessPage' =&gt; The page which subscribers are
+        redirected to upon confirming their subscription
+    'UnsubscribeSetting' =&gt; The unsubscribe setting for the list. Will
+        be either CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or
+        CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="373"/>
+    </inline>
+  </method>
+  <method name="getActiveSubscribers" start="418" end="433" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all active subscribers added since the given date"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="The date to start getting subscribers from" type="string" variable="$daysAgo"/>
+      <param description="The page number to get" type="int" variable="$page"/>
+      <param description="The number of records per page" type="int" variable="$pageSize"/>
+      <param description="('EMAIL', 'NAME', 'DATE')" type="string" variable="$sortByField"/>
+      <param description="('ASC', 'DESC')" type="string" variable="$sortDirection"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was added to the list
+            'State' =&gt; The current state of the subscriber, will be 'Active'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="daysAgo" byreference="false" type="integer" default="3650"/>
+    <parameter name="page" byreference="false" type="integer" default="1"/>
+    <parameter name="pageSize" byreference="false" type="integer" default="999"/>
+    <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
+    <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="419"/>
+    </inline>
+  </method>
+  <method name="getUnconfirmedSubscribers" start="470" end="485" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all unconfirmed subscribers added since the given date"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="The date to start getting subscribers from" type="string" variable="$daysAgo"/>
+      <param description="The page number to get" type="int" variable="$page"/>
+      <param description="The number of records per page" type="int" variable="$pageSize"/>
+      <param description="('EMAIL', 'NAME', 'DATE')" type="string" variable="$sortByField"/>
+      <param description="('ASC', 'DESC')" type="string" variable="$sortDirection"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was added to the list
+            'State' =&gt; The current state of the subscriber, will be 'Unconfirmed'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="daysAgo" byreference="false" type="integer" default="3650"/>
+    <parameter name="page" byreference="false" type="integer" default="1"/>
+    <parameter name="pageSize" byreference="false" type="integer" default="999"/>
+    <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
+    <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="471"/>
+    </inline>
+  </method>
+  <method name="getBouncedSubscribers" start="522" end="538" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all bounced subscribers who have bounced out since the given date"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="The date to start getting subscribers from" type="string" variable="$daysAgo"/>
+      <param description="The page number to get" type="int" variable="$page"/>
+      <param description="The number of records per page" type="int" variable="$pageSize"/>
+      <param description="('EMAIL', 'NAME', 'DATE')" type="string" variable="$sortByField"/>
+      <param description="('ASC', 'DESC')" type="string" variable="$sortDirection"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber bounced out of the list
+            'State' =&gt; The current state of the subscriber, will be 'Bounced'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="daysAgo" byreference="false" type="integer" default="3650"/>
+    <parameter name="page" byreference="false" type="integer" default="1"/>
+    <parameter name="pageSize" byreference="false" type="integer" default="999"/>
+    <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
+    <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="523"/>
+    </inline>
+  </method>
+  <method name="getUnsubscribedSubscribers" start="576" end="591" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all unsubscribed subscribers who have unsubscribed since the given date"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="The date to start getting subscribers from" type="string" variable="$daysAgo"/>
+      <param description="The page number to get" type="int" variable="$page"/>
+      <param description="The number of records per page" type="int" variable="$pageSize"/>
+      <param description="('EMAIL', 'NAME', 'DATE')" type="string" variable="$sortByField"/>
+      <param description="('ASC', 'DESC')" type="string" variable="$sortDirection"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was unsubscribed from the list
+            'State' =&gt; The current state of the subscriber, will be 'Unsubscribed'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="daysAgo" byreference="false" type="integer" default="3650"/>
+    <parameter name="page" byreference="false" type="integer" default="1"/>
+    <parameter name="pageSize" byreference="false" type="integer" default="999"/>
+    <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
+    <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="577"/>
+    </inline>
+  </method>
+  <method name="updateList" start="607" end="627" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates the details of an existing list Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional"/>
+      <param description="- he page to redirect subscribers to when they unsubscribeThe list title" type="string" variable="$title"/>
+      <param description="- The page to redirect subscribers to when they unsubscribe" type="string" variable="$unsubscribePage"/>
+      <param description="- Whether this list requires confirmation of subscription" type="boolean" variable="$confirmedOptIn"/>
+      <param description="- The page to redirect subscribers to when they confirm their subscription" type="string" variable="$confirmationSuccessPage"/>
+      <param description="- Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list" type="string" variable="$unsubscribeSetting"/>
+      <param description="-  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list." type="boolean" variable="$addUnsubscribesToSuppList"/>
+      <param description="- When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list." type="boolean" variable="$acrubActiveWithSuppList"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="title" byreference="false" type="{unknown}"/>
+    <parameter name="unsubscribePage" byreference="false" type="{unknown}"/>
+    <parameter name="confirmedOptIn" byreference="false" type="{unknown}" default="false"/>
+    <parameter name="confirmationSuccessPage" byreference="false" type="{unknown}"/>
+    <parameter name="unsubscribeSetting" byreference="false" type="{unknown}"/>
+    <parameter name="addUnsubscribesToSuppList" byreference="false" type="{unknown}" default="true"/>
+    <parameter name="scrubActiveWithSuppList" byreference="false" type="{unknown}" default="true"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="608"/>
+    </inline>
+  </method>
+  <method name="getListStats" start="662" end="671" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets statistics for list subscriptions, deletions, bounces and unsubscriptions"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <return description="A successful response will be an object of the form" type="object">{
+    'TotalActiveSubscribers'
+    'NewActiveSubscribersToday'
+    'NewActiveSubscribersYesterday'
+    'NewActiveSubscribersThisWeek'
+    'NewActiveSubscribersThisMonth'
+    'NewActiveSubscribersThisYeay'
+    'TotalUnsubscribes'
+    'UnsubscribesToday'
+    'UnsubscribesYesterday'
+    'UnsubscribesThisWeek'
+    'UnsubscribesThisMonth'
+    'UnsubscribesThisYear'
+    'TotalDeleted'
+    'DeletedToday'
+    'DeletedYesterday'
+    'DeletedThisWeek'
+    'DeletedThisMonth'
+    'DeletedThisYear'
+    'TotalBounces'
+    'BouncesToday'
+    'BouncesYesterday'
+    'BouncesThisWeek'
+    'BouncesThisMonth'
+    'BouncesThisYear'
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="663"/>
+    </inline>
+  </method>
+  <method name="getBounces" start="679" end="679" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getClicks" start="681" end="681" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSummary" start="705" end="713" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets a summary of all campaign reporting statistics"/>
+      <param type="int" variable="$campaignID"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'Recipients' =&gt; The total recipients of the campaign
+    'TotalOpened' =&gt; The total number of opens recorded
+    'Clicks' =&gt; The total number of recorded clicks
+    'Unsubscribed' =&gt; The number of recipients who unsubscribed
+    'Bounced' =&gt; The number of recipients who bounced
+    'UniqueOpened' =&gt; The number of recipients who opened
+    'WebVersionURL' =&gt; The url of the web version of the campaign
+    'WebVersionTextURL' =&gt; The url of the web version of the text version of the campaign
+    'WorldviewURL' =&gt; The public Worldview URL for the campaign
+    'Forwards' =&gt; The number of times the campaign has been forwarded to a friend
+    'Likes' =&gt; The number of times the campaign has been 'liked' on Facebook
+    'Mentions' =&gt; The number of times the campaign has been tweeted about
+    'SpamComplaints' =&gt; The number of recipients who marked the campaign as spam
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="campaignID" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getEmailClientUsage" start="730" end="738" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the email clients that subscribers used to open the campaign"/>
+      <param type="object" variable="$campaignID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        Client =&gt; The email client name
+        Version =&gt; The email client version
+        Percentage =&gt; The percentage of subscribers who used this email client
+        Subscribers =&gt; The actual number of subscribers who used this email client
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="campaignID" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getListsAndSegments" start="740" end="740" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getOpens" start="742" end="742" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getRecipients" start="744" end="744" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSpam" start="746" end="746" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getUnsubscribes" start="777" end="792" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all unsubscribes recorded for a campaign since the provided date"/>
+      <param description="ID of the Campaign" type="int" variable="$campaignID"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$daysAgo"/>
+      <param description="The page number to get" type="int" variable="$page"/>
+      <param description="The number of records per page" type="int" variable="$pageSize"/>
+      <param description="('EMAIL', 'NAME', 'DATE')" type="string" variable="$sortByField"/>
+      <param description="('ASC', 'DESC')" type="string" variable="$sortDirection"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber who unsubscribed
+            'ListID' =&gt; The list id of the list containing the subscriber
+            'Date' =&gt; The date of the unsubscribe
+            'IPAddress' =&gt; The ip address where the unsubscribe originated
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="campaignID" byreference="false" type="{unknown}"/>
+    <parameter name="daysAgo" byreference="false" type="integer" default="3650"/>
+    <parameter name="page" byreference="false" type="integer" default="1"/>
+    <parameter name="pageSize" byreference="false" type="integer" default="999"/>
+    <parameter name="sortByField" byreference="false" type="string" default="&quot;EMAIL&quot;"/>
+    <parameter name="sortDirection" byreference="false" type="string" default="&quot;ASC&quot;"/>
+    <inline>
+      <comment value="require_once '../../csrest_campaigns.php';" line="778"/>
+    </inline>
+  </method>
+  <method name="getListsForEmail" start="833" end="850" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the lists across a client to which a subscriber with a particular email address belongs."/>
+      <param description="| Member $email Subscriber's email address (or Member)" type="string"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'ListID' =&gt; The id of the list
+        'ListName' =&gt; The name of the list
+        'SubscriberState' =&gt; The state of the subscriber in the list
+        'DateSubscriberAdded' =&gt; The date the subscriber was added
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="require_once '../../csrest_clients.php';" line="837"/>
+    </inline>
+  </method>
+  <method name="addSubscriber" start="865" end="882" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Adds a new subscriber to the specified list"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param type="object" variable="$member">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <param type="object" variable="$customFields">
+        <type full="Array" namespace="" name="Array"/>
+      </param>
+      <param description="The subscriber details to use during creation." type="array" variable="$customFields"/>
+      <param description="Whether we should resubscribe this subscriber if they already exist in the list" type="boolean" variable="$resubscribe"/>
+      <param description="Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list." type="boolean" variable="$RestartSubscriptionBasedAutoResponders"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="object">
+      <type full="\\Member" namespace="\" name="Member"/>
+    </parameter>
+    <parameter name="customFields" byreference="false" type="array"/>
+    <parameter name="resubscribe" byreference="false" type="{unknown}" default="true"/>
+    <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="{unknown}" default="false"/>
+    <inline>
+      <comment value="require_once '../../csrest_subscribers.php';" line="866"/>
+    </inline>
+  </method>
+  <method name="updateSubscriber" start="898" end="919" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates an existing subscriber (email, name, state, or custom fields) in the specified list.">The update is performed even for inactive subscribers, but will return an error in the event of the
+given email not existing in the list.</description>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param type="object" variable="$oldEmailAddress">
+        <type full="String" namespace="" name="String"/>
+      </param>
+      <param type="object" variable="$member">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <param description="The subscriber details to use during creation." type="array" variable="$customFields"/>
+      <param description="Whether we should resubscribe this subscriber if they already exist in the list" type="boolean" variable="$resubscribe"/>
+      <param description="Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list." type="boolean" variable="$RestartSubscriptionBasedAutoResponders"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="oldEmailAddress" byreference="false" type="string" default="&quot;&quot;"/>
+    <parameter name="member" byreference="false" type="object">
+      <type full="\\Member" namespace="\" name="Member"/>
+    </parameter>
+    <parameter name="customFields" byreference="false" type="array"/>
+    <parameter name="resubscribe" byreference="false" type="{unknown}" default="true"/>
+    <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="{unknown}" default="false"/>
+    <inline>
+      <comment value="require_once '../../csrest_subscribers.php';" line="902"/>
+    </inline>
+  </method>
+  <method name="addSubscribers" start="935" end="957" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates an existing subscriber (email, name, state, or custom fields) in the specified list.">The update is performed even for inactive subscribers, but will return an error in the event of the
+given email not existing in the list.</description>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="- list of mebers" type="object" variable="$memberSet">
+        <type full="ArraySet" namespace="" name="ArraySet"/>
+      </param>
+      <param description="The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 =&gt; array( [custom fields here] ), 456 =&gt; array( [custom fields here] ) )" type="array" variable="$customFields"/>
+      <param description="we should resubscribe any existing subscribers" variable="$resubscribe" type="object">
+        <type full="Whether" namespace="" name="Whether"/>
+      </param>
+      <param description="default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour" variable="$queueSubscriptionBasedAutoResponders" type="object">
+        <type full="By" namespace="" name="By"/>
+      </param>
+      <param description="default, subscription based auto responders will not be restarted" variable="$restartSubscriptionBasedAutoResponders" type="object">
+        <type full="By" namespace="" name="By"/>
+      </param>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="membersSet" byreference="false" type="{unknown}"/>
+    <parameter name="customFields" byreference="false" type="array"/>
+    <parameter name="resubscribe" byreference="false" type="{unknown}"/>
+    <parameter name="queueSubscriptionBasedAutoResponders" byreference="false" type="{unknown}" default="false"/>
+    <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="{unknown}" default="false"/>
+    <inline>
+      <comment value="require_once '../../csrest_subscribers.php';" line="936"/>
+    </inline>
+  </method>
+  <method name="deleteSubscriber" start="965" end="976" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member - email address or Member Object" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="unsubscribeSubscriber" start="986" end="997" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Unsubscribes the given subscriber from the current list"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getSubscriberExistsForThisList" start="1007" end="1022" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Is this user part of this list at all?"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getSubscriberCanReceiveEmailsForThisList" start="1032" end="1049" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Can we send e-mails to this person in the future for this list?"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getSubscriberCanNoLongerReceiveEmailsForThisList" start="1059" end="1074" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="This e-mail / user has been banned from a list."/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getSubscriber" start="1097" end="1108" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets a subscriber details, including custom fields"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return description="A successful response will be an object of the form" type="object">{
+    'EmailAddress' =&gt; The subscriber email address
+    'Name' =&gt; The subscribers name
+    'Date' =&gt; The date the subscriber was added to the list
+    'State' =&gt; The current state of the subscriber
+    'CustomFields' =&gt; array(
+        {
+            'Key' =&gt; The custom fields personalisation tag
+            'Value' =&gt; The custom field value for this subscriber
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getHistory" start="1131" end="1142" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets a subscriber details, including custom fields"/>
+      <param type="object" variable="$listID">
+        <type full="Int" namespace="" name="Int"/>
+      </param>
+      <param description="| String $member" type="object">
+        <type full="Member" namespace="" name="Member"/>
+      </param>
+      <return description="A successful response will be an object of the form" type="object">{
+    'EmailAddress' =&gt; The subscriber email address
+    'Name' =&gt; The subscribers name
+    'Date' =&gt; The date the subscriber was added to the list
+    'State' =&gt; The current state of the subscriber
+    'CustomFields' =&gt; array(
+        {
+            'Key' =&gt; The custom fields personalisation tag
+            'Value' =&gt; The custom field value for this subscriber
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="member" byreference="false" type="{unknown}"/>
+  </method>
+</class>

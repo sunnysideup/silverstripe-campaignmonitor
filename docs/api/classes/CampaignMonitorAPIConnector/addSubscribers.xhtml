@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pu="http://schema.phpunit.de/coverage/1.0" lang="en">
+  <head>
+    <title>phpDox - Test Method</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml#"/>
+          </li>
+          <li class="separator">
+            <a title="CampaignMonitorAPIConnector" href="../../classes/CampaignMonitorAPIConnector.xhtml">CampaignMonitorAPIConnector</a>
+          </li>
+          <li class="separator">addSubscribers</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#parameter">Parameter</a>
+          </li>
+          <li>
+            <a href="#return">Return</a>
+          </li>
+          <li>
+            <a href="../../source/code/api/CampaignMonitorAPIConnector.php.xhtml#line935">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1><small>CampaignMonitorAPIConnector::</small>addSubscribers</h1>
+        <h4>Updates an existing subscriber (email, name, state, or custom fields) in the specified list.</h4>
+        <p>The update is performed even for inactive subscribers, but will return an error in the event of the
+given email not existing in the list.</p>
+        <ul/>
+        <h2 id="signature">Signature</h2>
+        <div class="styled synopsis">
+          <code>public function addSubscribers(<a title="Int" href="../../classes/Int.xhtml">Int</a>
+        $listID,
+            [
+        $membersSet = false,
+            [array
+        $customFields = false,
+            [<a title="Whether" href="../../classes/Whether.xhtml">Whether</a>
+        $resubscribe = false,
+            [<a title="By" href="../../classes/By.xhtml">By</a>
+        $queueSubscriptionBasedAutoResponders = false,
+            [<a title="By" href="../../classes/By.xhtml">By</a>
+        $restartSubscriptionBasedAutoResponders = false]]]]] )
+            </code>
+        </div>
+        <h2 id="parameterlist">Parameters</h2>
+        <dl class="styled">
+          <dt><code>$listID</code>
+                —
+                object</dt>
+          <dd><br/><br/><br/>      </dd>
+          <dt><code>$membersSet</code>
+                —
+                </dt>
+          <dd/>
+          <dt><code>$customFields</code>
+                —
+                array</dt>
+          <dd>The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 =&gt; array( [custom fields here] ), 456 =&gt; array( [custom fields here] ) )</dd>
+          <dt><code>$resubscribe</code>
+                —
+                object</dt>
+          <dd>we should resubscribe any existing subscribers<br/><br/><br/>      </dd>
+          <dt><code>$queueSubscriptionBasedAutoResponders</code>
+                —
+                object</dt>
+          <dd>default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour<br/><br/><br/>      </dd>
+          <dt><code>$restartSubscriptionBasedAutoResponders</code>
+                —
+                object</dt>
+          <dd>default, subscription based auto responders will not be restarted<br/><br/><br/>      </dd>
+        </dl>
+        <h2 id="return">Returns</h2>
+        <dl class="styled">
+          <dt>CS_REST_Wrapper_Result</dt>
+          <dd>A successful response will be empty<br/>
+        </dd>
+        </dl>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

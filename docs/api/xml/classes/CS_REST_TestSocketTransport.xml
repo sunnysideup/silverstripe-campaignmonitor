@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CS_REST_TestSocketTransport" namespace="" name="CS_REST_TestSocketTransport" abstract="false" final="false" start="16" end="211">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php/tests/class_tests" file="transport_test.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/tests/class_tests/transport_test.php" size="7203" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="2c2fa2e571bad33d2b767f34488a07b82b525039" relative="third_party/vendor/campaignmonitor/createsend-php/tests/class_tests/transport_test.php"/>
+  <extends full="UnitTestCase" namespace="" name="UnitTestCase"/>
+  <member name="mock_wrapper" type="{unknown}" visibility="public" line="17"/>
+  <member name="mock_log" type="{unknown}" visibility="public" line="18"/>
+  <member name="transport" type="{unknown}" visibility="public" line="20"/>
+  <member name="partial" type="{unknown}" visibility="public" line="21"/>
+  <method name="setUp" start="23" end="30" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_make_call_http" start="32" end="34" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_make_call_https" start="36" end="38" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="make_call_base" start="40" end="89" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="protocol" byreference="false" type="{unknown}"/>
+    <parameter name="port" byreference="false" type="{unknown}"/>
+    <parameter name="domain_prefix" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="test_get_type" start="91" end="93" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_get_status_code_200" start="95" end="104" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_get_status_code_404" start="106" end="114" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_build_request_no_data_or_gzip" start="116" end="136" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_build_request_no_data_with_gzip" start="138" end="159" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_build_request_with_data_no_gzip" start="161" end="184" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="test_build_request_with_data_and_gzip" start="186" end="210" abstract="false" final="false" static="false" visibility="public"/>
+</class>

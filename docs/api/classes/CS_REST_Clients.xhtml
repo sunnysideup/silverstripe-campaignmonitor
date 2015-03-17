@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>phpDox - CS_REST_Clients</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">CS_REST_Clients</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#hierarchy">Hierarchy</a>
+          </li>
+          <li>
+            <a href="#members">Members</a>
+          </li>
+          <li>
+            <a href="#methods">Methods</a>
+          </li>
+          <li>
+            <a href="../source/third_party/vendor/campaignmonitor/createsend-php/csrest_clients.php.xhtml#line11">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1 id="introduction"><small>\</small>CS_REST_Clients</h1>
+        <h4>Class to access a clients resources from the create send API.</h4>
+        <p>This class includes functions to create and edit clients,<br/>along with accessing lists of client specific resources e.g campaigns</p>
+        <ul>
+          <li>Author: tobyb</li>
+        </ul>
+        <h2 id="synopsis">Synopsis</h2>
+        <div class="synopsis">class CS_REST_Clients
+                extends <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base.xhtml">CS_REST_Wrapper_Base</a>
+            {<br/><ul class="none"><li>// members</li><li>public string <a href="#members">$_clients_base_route</a>;
+                    </li></ul><ul class="none"><li>// Inherited members from <span title="CS_REST_Wrapper_Base">CS_REST_Wrapper_Base</span></li><li>public string <a href="#members">$_protocol</a>;
+                        </li><li>public string <a href="#members">$_base_route</a>;
+                        </li><li>public <span title="CS_REST_JsonSerialiser">CS_REST_JsonSerialiser</span> <a href="#members">$_serialiser</a>;
+                        </li><li>public <span title="CS_REST_CurlTransport">CS_REST_CurlTransport</span> <a href="#members">$_transport</a>;
+                        </li><li>public <span title="CS_REST_Log">CS_REST_Log</span> <a href="#members">$_log</a>;
+                        </li><li>public array <a href="#members">$_default_call_options</a>;
+                        </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/CS_REST_Clients.xhtml">CS_REST_Clients</a>()
+                    </li><li>public void <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_client_id.xhtml">set_client_id</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_campaigns.xhtml">get_campaigns</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_scheduled.xhtml">get_scheduled</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_drafts.xhtml">get_drafts</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_lists.xhtml">get_lists</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_lists_for_email.xhtml">get_lists_for_email</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_segments.xhtml">get_segments</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_suppressionlist.xhtml">get_suppressionlist</a>()
+                    </li><li>public void <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/suppress.xhtml">suppress</a>()
+                    </li><li>public void <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/unsuppress.xhtml">unsuppress</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_templates.xhtml">get_templates</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get.xhtml">get</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/delete.xhtml">delete</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/create.xhtml">create</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_basics.xhtml">set_basics</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_payg_billing.xhtml">set_payg_billing</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_monthly_billing.xhtml">set_monthly_billing</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/transfer_credits.xhtml">transfer_credits</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_people.xhtml">get_people</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_primary_contact.xhtml">get_primary_contact</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_primary_contact.xhtml">set_primary_contact</a>()
+                    </li></ul><ul class="none"><li>// Inherited methods from <span title="CS_REST_Wrapper_Base">CS_REST_Wrapper_Base</span></li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/CS_REST_Wrapper_Base.xhtml">CS_REST_Wrapper_Base</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/refresh_token.xhtml">refresh_token</a>()
+                        </li><li>public boolean <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/is_secure.xhtml">is_secure</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/put_request.xhtml">put_request</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/post_request.xhtml">post_request</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/delete_request.xhtml">delete_request</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/get_request.xhtml">get_request</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/get_request_paged.xhtml">get_request_paged</a>()
+                        </li><li>public void <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/_call.xhtml">_call</a>()
+                        </li></ul>
+
+            }<br/></div>
+        <h2 id="hierarchy">Hierarchy</h2>
+        <div class="styled">
+          <h4>Extends</h4>
+          <ul>
+            <li>
+              <a href="../classes/CS_REST_Wrapper_Base.xhtml">CS_REST_Wrapper_Base</a>
+            </li>
+          </ul>
+        </div>
+        <h2 id="members">Members</h2>
+        <div class="styled members">
+          <h4>public</h4>
+          <ul class="members">
+            <li id="_base_route"><strong>$_base_route</strong>
+                —
+                string<br/><span class="indent">The base route of the create send api.</span></li>
+            <li id="_clients_base_route"><strong>$_clients_base_route</strong>
+                —
+                string<br/><span class="indent">The base route of the clients resource.</span></li>
+            <li id="_default_call_options"><strong>$_default_call_options</strong>
+                —
+                array<br/><span class="indent">The default options to use for each API request.</span></li>
+            <li id="_log"><strong>$_log</strong>
+                —
+                <a href="#">CS_REST_Log</a><br/><span class="indent">The logger to use for debugging of all API requests</span></li>
+            <li id="_protocol"><strong>$_protocol</strong>
+                —
+                string<br/><span class="indent">The protocol to use while accessing the api</span></li>
+            <li id="_serialiser"><strong>$_serialiser</strong>
+                —
+                <a href="#">CS_REST_JsonSerialiser</a><br/><span class="indent">The serialiser to use for serialisation and deserialisation of API request and response data</span></li>
+            <li id="_transport"><strong>$_transport</strong>
+                —
+                <a href="#">CS_REST_CurlTransport</a><br/><span class="indent">The transport to use to send API requests</span></li>
+          </ul>
+        </div>
+        <h2 id="methods">Methods</h2>
+        <div class="styled">
+          <h4>public</h4>
+          <ul>
+            <li id="CS_REST_Clients"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/CS_REST_Clients.xhtml">CS_REST_Clients()</a>
+                — Constructor.</li>
+            <li id="create"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/create.xhtml">create()</a>
+                — Creates a new client based on the provided information</li>
+            <li id="delete"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/delete.xhtml">delete()</a>
+                — Deletes an existing client from the system</li>
+            <li id="get"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get.xhtml">get()</a>
+                — Gets all templates the current client has access to</li>
+            <li id="get_campaigns"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_campaigns.xhtml">get_campaigns()</a>
+                — Gets a list of sent campaigns for the current client</li>
+            <li id="get_drafts"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_drafts.xhtml">get_drafts()</a>
+                — Gets a list of draft campaigns for the current client</li>
+            <li id="get_lists"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_lists.xhtml">get_lists()</a>
+                — Gets all subscriber lists the current client has created</li>
+            <li id="get_lists_for_email"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_lists_for_email.xhtml">get_lists_for_email()</a>
+                — Gets the lists across a client to which a subscriber with a particular email address belongs.</li>
+            <li id="get_people"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_people.xhtml">get_people()</a>
+                — returns the people associated with this client.</li>
+            <li id="get_primary_contact"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_primary_contact.xhtml">get_primary_contact()</a>
+                — retrieves the email address of the primary contact for this client</li>
+            <li id="get_scheduled"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_scheduled.xhtml">get_scheduled()</a>
+                — Gets a list of scheduled campaigns for the current client</li>
+            <li id="get_segments"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_segments.xhtml">get_segments()</a>
+                — Gets all list segments the current client has created</li>
+            <li id="get_suppressionlist"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_suppressionlist.xhtml">get_suppressionlist()</a>
+                — Gets all email addresses on the current client's suppression list</li>
+            <li id="get_templates"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/get_templates.xhtml">get_templates()</a>
+                — Gets all templates the current client has access to</li>
+            <li id="set_basics"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_basics.xhtml">set_basics()</a>
+                — Updates the basic information for a client</li>
+            <li id="set_client_id"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_client_id.xhtml">set_client_id()</a>
+                — Change the client id used for calls after construction</li>
+            <li id="set_monthly_billing"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_monthly_billing.xhtml">set_monthly_billing()</a>
+                — Updates the billing details of the current client, setting the client to the monthly billing model For clients not set to pay themselves then the markup percentage field is ignored</li>
+            <li id="set_payg_billing"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_payg_billing.xhtml">set_payg_billing()</a>
+                — Updates the billing details of the current client, setting the client to the payg billing model For clients not set to pay themselves then all fields below ClientPays are ignored All Markup fields are optional</li>
+            <li id="set_primary_contact"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/set_primary_contact.xhtml">set_primary_contact()</a>
+                — assigns the primary contact for this client to the person with the specified email address</li>
+            <li id="suppress"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/suppress.xhtml">suppress()</a>
+                — Adds email addresses to a client's suppression list.</li>
+            <li id="transfer_credits"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/transfer_credits.xhtml">transfer_credits()</a>
+                — Transfer credits to or from this client.</li>
+            <li id="unsuppress"><a title="CS_REST_Clients" href="../classes/CS_REST_Clients/unsuppress.xhtml">unsuppress()</a>
+                — Unsuppresses an email address by removing it from the the client's suppression list.</li>
+          </ul>
+          <h3>Inherited from <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base.xhtml">CS_REST_Wrapper_Base</a></h3>
+          <h4>public</h4>
+          <ul>
+            <li id="CS_REST_Wrapper_Base"><a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/CS_REST_Wrapper_Base.xhtml">CS_REST_Wrapper_Base()</a>
+                — Constructor.</li>
+            <li id="_call"><a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/_call.xhtml">_call()</a>
+                — Internal method to make a general API request based on the provided options</li>
+            <li id="delete_request">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/delete_request.xhtml">delete_request()</a>
+            </li>
+            <li id="get_request">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/get_request.xhtml">get_request()</a>
+            </li>
+            <li id="get_request_paged">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/get_request_paged.xhtml">get_request_paged()</a>
+            </li>
+            <li id="is_secure">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/is_secure.xhtml">is_secure()</a>
+            </li>
+            <li id="post_request">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/post_request.xhtml">post_request()</a>
+            </li>
+            <li id="put_request">
+              <a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/put_request.xhtml">put_request()</a>
+            </li>
+            <li id="refresh_token"><a title="CS_REST_Wrapper_Base" href="../classes/CS_REST_Wrapper_Base/refresh_token.xhtml">refresh_token()</a>
+                — Refresh the current OAuth token using the current refresh token.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

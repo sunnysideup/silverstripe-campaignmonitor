@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CS_REST_Lists" namespace="" name="CS_REST_Lists" abstract="false" final="false" start="25" end="587">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php" file="csrest_lists.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php" size="26810" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="8426d99fa00b1075f18d68f0c633a6bd07643fec" relative="third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php"/>
+  <docblock>
+    <description compact="Class to access a lists resources from the create send API.">This class includes functions to create lists and custom fields,
+along with accessing the subscribers of a specific list</description>
+    <author value="tobyb"/>
+  </docblock>
+  <extends full="CS_REST_Wrapper_Base" namespace="" name="CS_REST_Wrapper_Base"/>
+  <member name="_lists_base_route" type="{unknown}" visibility="public" line="32">
+    <docblock>
+      <description compact="The base route of the lists resource."/>
+      <var type="string"/>
+      <access value="private"/>
+    </docblock>
+  </member>
+  <method name="CS_REST_Lists" start="54" end="66" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Constructor."/>
+      <param description="The list id to access (Ignored for create requests)" variable="$list_id" type="string"/>
+      <param description="Authentication details to use for API calls." variable="$auth_details" type="array">This array must take one of the following forms:
+       If using OAuth to authenticate:
+       array(
+         'access_token' =&gt; 'your access token',
+         'refresh_token' =&gt; 'your refresh token')
+
+       Or if using an API key:
+       array('api_key' =&gt; 'your api key')</param>
+      <param description="The protocol to use for requests (http|https)" variable="$protocol" type="string"/>
+      <param description="The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE" variable="$debug_level" type="int"/>
+      <param description="The host to send API requests to. There is no need to change this" variable="$host" type="string"/>
+      <param description="The logger to use. Used for dependency injection" variable="$log" type="object">
+        <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+      </param>
+      <param description="serialiser to use. Used for dependency injection" variable="$serialiser" type="object">
+        <type full="The" namespace="" name="The"/>
+      </param>
+      <param description="transport to use. Used for dependency injection" variable="$transport" type="object">
+        <type full="The" namespace="" name="The"/>
+      </param>
+      <access value="public"/>
+    </docblock>
+    <parameter name="list_id" byreference="false" type="{unknown}"/>
+    <parameter name="auth_details" byreference="false" type="{unknown}"/>
+    <parameter name="protocol" byreference="false" type="string" default="'https'"/>
+    <parameter name="debug_level" byreference="false" type="{unknown}" default="CS_REST_LOG_NONE"/>
+    <parameter name="host" byreference="false" type="string" default="'api.createsend.com'"/>
+    <parameter name="log" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="serialiser" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="transport" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="set_list_id" start="73" end="75" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Change the list id used for calls after construction"/>
+      <param variable="$list_id"/>
+      <access value="public"/>
+    </docblock>
+    <parameter name="list_id" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="create" start="97" end="99" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates a new list based on the provided details.">Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional</description>
+      <param description="The client to create the campaign for" type="string" variable="$client_id"/>
+      <param description="The list details to use during creation." type="array" variable="$list_details">This array should be of the form
+    array(
+        'Title' =&gt; string The list title
+        'UnsubscribePage' =&gt; string The page to redirect subscribers to when they unsubscribe
+        'ConfirmedOptIn' =&gt; boolean Whether this list requires confirmation of subscription
+        'ConfirmationSuccessPage' =&gt; string The page to redirect subscribers to when
+            they confirm their subscription
+        'UnsubscribeSetting' =&gt; string Unsubscribe setting must be
+            CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or
+            CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.
+            See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
+    )</param>
+      <access value="public"/>
+      <return description="A successful response will be the ID of the newly created list" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="client_id" byreference="false" type="{unknown}"/>
+    <parameter name="list_details" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="update" start="129" end="131" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates the details of an existing list Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional"/>
+      <param description="The client to create the campaign for" type="string" variable="$client_id"/>
+      <param description="The list details to use during creation." type="array" variable="$list_details">This array should be of the form
+    array(
+        'Title' =&gt; string The list title
+        'UnsubscribePage' =&gt; string The page to redirect subscribers to when they unsubscribe
+        'ConfirmedOptIn' =&gt; boolean Whether this list requires confirmation of subscription
+        'ConfirmationSuccessPage' =&gt; string The page to redirect subscribers to when
+            they confirm their subscription
+        'UnsubscribeSetting' =&gt; string Unsubscribe setting must be
+            CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or
+            CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.
+            See the documentation for details: http://www.campaignmonitor.com/api/lists/#updating_a_list
+        'AddUnsubscribesToSuppList' =&gt; boolean When UnsubscribeSetting
+            is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS,
+            whether unsubscribes from this list should be added to the
+            suppression list.
+        'ScrubActiveWithSuppList' =&gt; boolean When UnsubscribeSetting
+            is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS,
+            whether active subscribers should be scrubbed against the
+            suppression list.
+    )</param>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="list_details" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="create_custom_field" start="158" end="160" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates a new custom field for the current list"/>
+      <param description="The details of the new custom field." type="array" variable="$custom_field_details">This array should be of the form
+    array(
+        'FieldName' =&gt; string The name of the new custom field
+        'DataType' =&gt; string The data type of the new custom field
+            This should be one of
+            CS_REST_CUSTOM_FIELD_TYPE_TEXT
+            CS_REST_CUSTOM_FIELD_TYPE_NUMBER
+            CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTONE
+            CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTMANY
+            CS_REST_CUSTOM_FIELD_TYPE_DATE
+            CS_REST_CUSTOM_FIELD_TYPE_COUNTRY
+            CS_REST_CUSTOM_FIELD_TYPE_USSTATE
+        'Options' =&gt; array&lt;string&gt; Valid options for either
+          Multi-Optioned field data type.
+        'VisibleInPreferenceCenter' =&gt; boolean representing whether or
+          not the field should be visible in the subscriber preference
+          center.
+    )</param>
+      <access value="public"/>
+      <return description="A successful response will be the" type="object">personalisation tag of the newly created custom field<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="custom_field_details" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="update_custom_field" start="177" end="180" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates a custom field for the current list"/>
+      <param description="The personalisation tag of the field to update" type="string" variable="$key"/>
+      <param description="The details of the new custom field." type="array" variable="$custom_field_details">This array should be of the form
+    array(
+        'FieldName' =&gt; string The new name for the field
+        'VisibleInPreferenceCenter' =&gt; boolean representing whether or
+          not the field should be visible in the subscriber preference
+          center.
+    )</param>
+      <access value="public"/>
+      <return description="A successful response will be the" type="object">personalisation tag of the updated custom field<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="key" byreference="false" type="{unknown}"/>
+    <parameter name="custom_field_details" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="update_field_options" start="190" end="198" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Updates the optios for the given multi-optioned custom field"/>
+      <param description="The personalisation tag of the field to update" type="string" variable="$key"/>
+      <param description="The set of options to add to the custom field" type="object" variable="$new_options">
+        <type full="array&lt;string&gt;" namespace="" name="array&lt;string&gt;"/>
+      </param>
+      <param description="Whether to remove any existing options not contained in $new_options" type="boolean" variable="$keep_existing"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="key" byreference="false" type="{unknown}"/>
+    <parameter name="new_options" byreference="false" type="{unknown}"/>
+    <parameter name="keep_existing" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="delete" start="205" end="207" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Deletes an existing list from the system"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="delete_custom_field" start="214" end="216" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Deletes an existing custom field from the system"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="key" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="get_custom_fields" start="233" end="235" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets a list of all custom fields defined for the current list"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'FieldName' =&gt; The name of the custom field
+        'Key' =&gt; The personalisation tag of the custom field
+        'DataType' =&gt; The data type of the custom field
+        'FieldOptions' =&gt; Valid options for a multi-optioned custom field
+        'VisibleInPreferenceCenter' =&gt; Boolean representing whether or
+          not the field is visible in the subscriber preference center
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_segments" start="249" end="251" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets a list of all segments defined for the current list"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'ListID' =&gt; The current list id
+        'SegmentID' =&gt; The id of this segment
+        'Title' =&gt; The title of this segment
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_active_subscribers" start="286" end="291" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all active subscribers added since the given date"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$added_since"/>
+      <param description="The page number to get" type="int" variable="$page_number"/>
+      <param description="The number of records per page" type="int" variable="$page_size"/>
+      <param description="The field to order the record set by ('EMAIL', 'NAME', 'DATE')" type="string" variable="$order_field"/>
+      <param description="The direction to order the record set ('ASC', 'DESC')" type="string" variable="$order_direction"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was added to the list
+            'State' =&gt; The current state of the subscriber, will be 'Active'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="added_since" byreference="false" type="string" default="''"/>
+    <parameter name="page_number" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="page_size" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_field" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_direction" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get_unconfirmed_subscribers" start="326" end="331" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all unconfirmed subscribers added since the given date"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$added_since"/>
+      <param description="The page number to get" type="int" variable="$page_number"/>
+      <param description="The number of records per page" type="int" variable="$page_size"/>
+      <param description="The field to order the record set by ('EMAIL', 'NAME', 'DATE')" type="string" variable="$order_field"/>
+      <param description="The direction to order the record set ('ASC', 'DESC')" type="string" variable="$order_direction"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was added to the list
+            'State' =&gt; The current state of the subscriber, will be 'Unconfirmed'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="added_since" byreference="false" type="string" default="''"/>
+    <parameter name="page_number" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="page_size" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_field" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_direction" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get_bounced_subscribers" start="366" end="371" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all bounced subscribers who have bounced out since the given date"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$added_since"/>
+      <param description="The page number to get" type="int" variable="$page_number"/>
+      <param description="The number of records per page" type="int" variable="$page_size"/>
+      <param description="The field to order the record set by ('EMAIL', 'NAME', 'DATE')" type="string" variable="$order_field"/>
+      <param description="The direction to order the record set ('ASC', 'DESC')" type="string" variable="$order_direction"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber bounced out of the list
+            'State' =&gt; The current state of the subscriber, will be 'Bounced'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="bounced_since" byreference="false" type="string" default="''"/>
+    <parameter name="page_number" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="page_size" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_field" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_direction" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get_unsubscribed_subscribers" start="406" end="411" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all unsubscribed subscribers who have unsubscribed since the given date"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$added_since"/>
+      <param description="The page number to get" type="int" variable="$page_number"/>
+      <param description="The number of records per page" type="int" variable="$page_size"/>
+      <param description="The field to order the record set by ('EMAIL', 'NAME', 'DATE')" type="string" variable="$order_field"/>
+      <param description="The direction to order the record set ('ASC', 'DESC')" type="string" variable="$order_direction"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was unsubscribed from the list
+            'State' =&gt; The current state of the subscriber, will be 'Unsubscribed'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="unsubscribed_since" byreference="false" type="string" default="''"/>
+    <parameter name="page_number" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="page_size" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_field" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_direction" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get_deleted_subscribers" start="446" end="451" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets all subscribers who have been deleted since the given date"/>
+      <param description="The date to start getting subscribers from" type="string" variable="$deleted_since"/>
+      <param description="The page number to get" type="int" variable="$page_number"/>
+      <param description="The number of records per page" type="int" variable="$page_size"/>
+      <param description="The field to order the record set by ('EMAIL', 'NAME', 'DATE')" type="string" variable="$order_field"/>
+      <param description="The direction to order the record set ('ASC', 'DESC')" type="string" variable="$order_direction"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ResultsOrderedBy' =&gt; The field the results are ordered by
+    'OrderDirection' =&gt; The order direction
+    'PageNumber' =&gt; The page number for the result set
+    'PageSize' =&gt; The page size used
+    'RecordsOnThisPage' =&gt; The number of records returned
+    'TotalNumberOfRecords' =&gt; The total number of records available
+    'NumberOfPages' =&gt; The total number of pages for this collection
+    'Results' =&gt; array(
+        {
+            'EmailAddress' =&gt; The email address of the subscriber
+            'Name' =&gt; The name of the subscriber
+            'Date' =&gt; The date that the subscriber was deleted from the list
+            'State' =&gt; The current state of the subscriber, will be 'Deleted'
+            'CustomFields' =&gt; array (
+                {
+                    'Key' =&gt; The personalisation tag of the custom field
+                    'Value' =&gt; The value of the custom field for this subscriber
+                }
+            )
+        }
+    )
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+    <parameter name="deleted_since" byreference="false" type="string" default="''"/>
+    <parameter name="page_number" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="page_size" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_field" byreference="false" type="{unknown}" default="NULL"/>
+    <parameter name="order_direction" byreference="false" type="{unknown}" default="NULL"/>
+  </method>
+  <method name="get" start="469" end="471" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the basic details of the current list"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'ListID' =&gt; The id of the list
+    'Title' =&gt; The title of the list
+    'UnsubscribePage' =&gt; The page which subscribers are redirected to upon unsubscribing
+    'ConfirmedOptIn' =&gt; Whether the list is Double-Opt In
+    'ConfirmationSuccessPage' =&gt; The page which subscribers are
+        redirected to upon confirming their subscription
+    'UnsubscribeSetting' =&gt; The unsubscribe setting for the list. Will
+        be either CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or
+        CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_stats" start="504" end="506" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets statistics for list subscriptions, deletions, bounces and unsubscriptions"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">{
+    'TotalActiveSubscribers'
+    'NewActiveSubscribersToday'
+    'NewActiveSubscribersYesterday'
+    'NewActiveSubscribersThisWeek'
+    'NewActiveSubscribersThisMonth'
+    'NewActiveSubscribersThisYeay'
+    'TotalUnsubscribes'
+    'UnsubscribesToday'
+    'UnsubscribesYesterday'
+    'UnsubscribesThisWeek'
+    'UnsubscribesThisMonth'
+    'UnsubscribesThisYear'
+    'TotalDeleted'
+    'DeletedToday'
+    'DeletedYesterday'
+    'DeletedThisWeek'
+    'DeletedThisMonth'
+    'DeletedThisYear'
+    'TotalBounces'
+    'BouncesToday'
+    'BouncesYesterday'
+    'BouncesThisWeek'
+    'BouncesThisMonth'
+    'BouncesThisYear'
+}<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="get_webhooks" start="522" end="524" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Gets the webhooks which are currently subcribed to event on this list"/>
+      <access value="public"/>
+      <return description="A successful response will be an object of the form" type="object">array(
+    {
+        'WebhookID' =&gt; The if of
+        'Events' =&gt; An array of the events this webhook is subscribed to ('Subscribe', 'Update', 'Deactivate')
+        'Url' =&gt; The url the webhook data will be POSTed to
+        'Status' =&gt; The current status of this webhook
+        'PayloadFormat' =&gt; The format in which data will be POSTed
+    }
+)<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
+    </docblock>
+  </method>
+  <method name="create_webhook" start="544" end="546" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates a new webhook based on the provided details"/>
+      <param description="The details of the new webhook" type="array" variable="$webhook">This array should be of the form
+    array(
+        'Events' =&gt; array&lt;string&gt; The events to subscribe to. Valid events are
+            CS_REST_LIST_WEBHOOK_SUBSCRIBE,
+            CS_REST_LIST_WEBHOOK_DEACTIVATE,
+            CS_REST_LIST_WEBHOOK_UPDATE
+        'Url' =&gt; string The url of the page to POST the webhook events to
+        'PayloadFormat' =&gt; The format to use when POSTing webhook event data, either
+            CS_REST_WEBHOOK_FORMAT_JSON or
+            CS_REST_WEBHOOK_FORMAT_XML
+        (xml or json)
+    )</param>
+      <access value="public"/>
+      <return description="A successful response will be the ID of the newly created webhook" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="webhook" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="test_webhook" start="554" end="556" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Sends test events for the given webhook id"/>
+      <param description="The id of the webhook to test" type="string" variable="$webhook_id"/>
+      <access value="public"/>
+      <return description="A successful response will be empty." type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="webhook_id" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="delete_webhook" start="564" end="566" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Deletes an existing webhook from the system"/>
+      <param description="The id of the webhook to delete" type="string" variable="$webhook_id"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="webhook_id" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="activate_webhook" start="574" end="576" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Activates an existing deactivated webhook"/>
+      <param description="The id of the webhook to activate" type="string" variable="$webhook_id"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="webhook_id" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="deactivate_webhook" start="584" end="586" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Deactivates an existing activated webhook"/>
+      <param description="The id of the webhook to deactivate" type="string" variable="$webhook_id"/>
+      <access value="public"/>
+      <return description="A successful response will be empty" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="webhook_id" byreference="false" type="{unknown}"/>
+  </method>
+  <parent full="CS_REST_Wrapper_Base" namespace="" name="CS_REST_Wrapper_Base">
+    <member name="_protocol" type="{unknown}" visibility="public" line="60">
+      <docblock>
+        <description compact="The protocol to use while accessing the api"/>
+        <var description="http or https" type="string"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_base_route" type="{unknown}" visibility="public" line="67">
+      <docblock>
+        <description compact="The base route of the create send api."/>
+        <var type="string"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_serialiser" type="{unknown}" visibility="public" line="75">
+      <docblock>
+        <description compact="The serialiser to use for serialisation and deserialisation of API request and response data"/>
+        <var description="or CS_REST_XmlSerialiser" type="object">
+          <type full="CS_REST_JsonSerialiser" namespace="" name="CS_REST_JsonSerialiser"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_transport" type="{unknown}" visibility="public" line="82">
+      <docblock>
+        <description compact="The transport to use to send API requests"/>
+        <var description="or CS_REST_SocketTransport or your own custom transport." type="object">
+          <type full="CS_REST_CurlTransport" namespace="" name="CS_REST_CurlTransport"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_log" type="{unknown}" visibility="public" line="89">
+      <docblock>
+        <description compact="The logger to use for debugging of all API requests"/>
+        <var type="object">
+          <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+        </var>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <member name="_default_call_options" type="{unknown}" visibility="public" line="105">
+      <docblock>
+        <description compact="The default options to use for each API request.">These can be overridden by passing in an array as the call_options argument
+to a single api request.
+Valid options are:
+
+deserialise boolean:
+    Set this to false if you want to get the raw response.
+    This can be useful if your passing json directly to javascript.
+
+While there are clearly other options there is no need to change them.</description>
+        <var type="array"/>
+        <access value="private"/>
+      </docblock>
+    </member>
+    <method name="CS_REST_Wrapper_Base" start="130" end="172" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Constructor."/>
+        <param description="Authentication details to use for API calls." variable="$auth_details" type="array">This array must take one of the following forms:
+       If using OAuth to authenticate:
+       array(
+         'access_token' =&gt; 'your access token',
+         'refresh_token' =&gt; 'your refresh token')
+
+       Or if using an API key:
+       array('api_key' =&gt; 'your api key')
+
+       Note that this method will continue to work in the deprecated
+       case when $auth_details is passed in as a string containing an
+       API key.</param>
+        <param description="The protocol to use for requests (http|https)" variable="$protocol" type="string"/>
+        <param description="The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE" variable="$debug_level" type="int"/>
+        <param description="The host to send API requests to. There is no need to change this" variable="$host" type="string"/>
+        <param description="The logger to use. Used for dependency injection" variable="$log" type="object">
+          <type full="CS_REST_Log" namespace="" name="CS_REST_Log"/>
+        </param>
+        <param description="serialiser to use. Used for dependency injection" variable="$serialiser" type="object">
+          <type full="The" namespace="" name="The"/>
+        </param>
+        <param description="transport to use. Used for dependency injection" variable="$transport" type="object">
+          <type full="The" namespace="" name="The"/>
+        </param>
+        <access value="public"/>
+      </docblock>
+      <parameter name="auth_details" byreference="false" type="{unknown}"/>
+      <parameter name="protocol" byreference="false" type="string" default="'https'"/>
+      <parameter name="debug_level" byreference="false" type="{unknown}" default="CS_REST_LOG_NONE"/>
+      <parameter name="host" byreference="false" type="{unknown}" default="CS_HOST"/>
+      <parameter name="log" byreference="false" type="{unknown}" default="NULL"/>
+      <parameter name="serialiser" byreference="false" type="{unknown}" default="NULL"/>
+      <parameter name="transport" byreference="false" type="{unknown}" default="NULL"/>
+      <inline>
+        <comment value="If $auth_details is a string, assume it is an API key" line="140"/>
+      </inline>
+    </method>
+    <method name="refresh_token" start="178" end="209" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Refresh the current OAuth token using the current refresh token."/>
+        <access value="public"/>
+      </docblock>
+    </method>
+    <method name="is_secure" start="215" end="217" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description/>
+        <return description="True if the wrapper is using SSL." type="boolean"/>
+        <access value="public"/>
+      </docblock>
+    </method>
+    <method name="put_request" start="219" end="221" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="post_request" start="223" end="225" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="delete_request" start="227" end="229" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="get_request" start="231" end="233" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="array"/>
+    </method>
+    <method name="get_request_paged" start="235" end="258" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="page_number" byreference="false" type="{unknown}"/>
+      <parameter name="page_size" byreference="false" type="{unknown}"/>
+      <parameter name="order_field" byreference="false" type="{unknown}"/>
+      <parameter name="order_direction" byreference="false" type="{unknown}"/>
+      <parameter name="join_char" byreference="false" type="string" default="'&amp;'"/>
+    </method>
+    <method name="_call" start="265" end="286" abstract="false" final="false" static="false" visibility="public">
+      <docblock>
+        <description compact="Internal method to make a general API request based on the provided options"/>
+        <param variable="$call_options"/>
+        <access value="private"/>
+      </docblock>
+      <parameter name="call_options" byreference="false" type="{unknown}"/>
+      <parameter name="method" byreference="false" type="{unknown}"/>
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="data" byreference="false" type="{unknown}" default="NULL"/>
+    </method>
+  </parent>
+</class>

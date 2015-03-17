@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:pu="http://schema.phpunit.de/coverage/1.0" lang="en">
+  <head>
+    <title>phpDox - Test Method</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../../classes.xhtml#"/>
+          </li>
+          <li class="separator">
+            <a title="CS_REST_Campaigns" href="../../classes/CS_REST_Campaigns.xhtml">CS_REST_Campaigns</a>
+          </li>
+          <li class="separator">CS_REST_Campaigns</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#parameter">Parameter</a>
+          </li>
+          <li>
+            <a href="../../source/third_party/vendor/campaignmonitor/createsend-php/csrest_campaigns.php.xhtml#line40">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1><small>CS_REST_Campaigns::</small>CS_REST_Campaigns</h1>
+        <h4>Constructor.</h4>
+        <p/>
+        <ul/>
+        <h2 id="signature">Signature</h2>
+        <div class="styled synopsis">
+          <code>public function CS_REST_Campaigns(string
+        $campaign_id,
+            [array
+        $auth_details = 'https',
+            [string
+        $protocol = 'https',
+            [int
+        $debug_level = CS_REST_LOG_NONE,
+            [string
+        $host = 'api.createsend.com',
+            [<a title="CS_REST_Log" href="../../classes/CS_REST_Log.xhtml">CS_REST_Log</a>
+        $log = NULL,
+            [<a title="The" href="../../classes/The.xhtml">The</a>
+        $serialiser = NULL,
+            [<a title="The" href="../../classes/The.xhtml">The</a>
+        $transport = NULL]]]]]]] )
+            </code>
+        </div>
+        <h2 id="parameterlist">Parameters</h2>
+        <dl class="styled">
+          <dt><code>$campaign_id</code>
+                —
+                string</dt>
+          <dd>The campaign id to access (Ignored for create requests)</dd>
+          <dt><code>$auth_details</code>
+                —
+                array</dt>
+          <dd>Authentication details to use for API calls.<br/>This array must take one of the following forms:<br/>If using OAuth to authenticate:<br/>array(<br/>'access_token' =&gt; 'your access token',<br/>'refresh_token' =&gt; 'your refresh token')<br/><br/>Or if using an API key:<br/>       array('api_key' =&gt; 'your api key')</dd>
+          <dt><code>$protocol</code>
+                —
+                string</dt>
+          <dd>The protocol to use for requests (http|https)</dd>
+          <dt><code>$debug_level</code>
+                —
+                int</dt>
+          <dd>The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE</dd>
+          <dt><code>$host</code>
+                —
+                string</dt>
+          <dd>The host to send API requests to. There is no need to change this</dd>
+          <dt><code>$log</code>
+                —
+                object</dt>
+          <dd>The logger to use. Used for dependency injection<br/><br/><br/>      </dd>
+          <dt><code>$serialiser</code>
+                —
+                object</dt>
+          <dd>serialiser to use. Used for dependency injection<br/><br/><br/>      </dd>
+          <dt><code>$transport</code>
+                —
+                object</dt>
+          <dd>transport to use. Used for dependency injection<br/><br/><br/>      </dd>
+        </dl>
+      </section>
+    </div>
+    <footer>
+      <span/>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CS_REST_Log" namespace="" name="CS_REST_Log" abstract="false" final="false" start="7" end="19">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php/class" file="log.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/class/log.php" size="437" time="2015-03-14T10:22:25+13:00" unixtime="1426281745" sha1="191a5d13fce424d25e62b85fdc6f2044dadfeb11" relative="third_party/vendor/campaignmonitor/createsend-php/class/log.php"/>
+  <member name="_level" type="{unknown}" visibility="public" line="8"/>
+  <method name="CS_REST_Log" start="10" end="12" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="level" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="log_message" start="14" end="18" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="message" byreference="false" type="{unknown}"/>
+    <parameter name="module" byreference="false" type="{unknown}"/>
+    <parameter name="level" byreference="false" type="{unknown}"/>
+  </method>
+</class>

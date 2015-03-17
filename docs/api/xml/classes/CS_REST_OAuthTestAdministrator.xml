@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CS_REST_OAuthTestAdministrator" namespace="" name="CS_REST_OAuthTestAdministrator" abstract="false" final="false" start="14" end="18">
+  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php/tests" file="csrest_administrators_test.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/tests/csrest_administrators_test.php" size="3826" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="09ddaf1b3ce95bf6e244212fefcc0e291302568c" relative="third_party/vendor/campaignmonitor/createsend-php/tests/csrest_administrators_test.php"/>
+  <extends full="CS_REST_TestAdministrator" namespace="" name="CS_REST_TestAdministrator"/>
+  <member name="auth" type="array" visibility="public" line="15"/>
+  <parent full="CS_REST_TestAdministrator" namespace="" name="CS_REST_TestAdministrator">
+    <extends full="CS_REST_TestBase" namespace="" name="CS_REST_TestBase"/>
+    <member name="admins_base_route" type="{unknown}" visibility="public" line="21"/>
+    <method name="set_up_inner" start="23" end="27" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="testadd" start="29" end="41" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="testupdate" start="43" end="71" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="testget" start="73" end="95" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="testdelete" start="98" end="118" abstract="false" final="false" static="false" visibility="public"/>
+  </parent>
+  <parent full="CS_REST_TestBase" namespace="" name="CS_REST_TestBase">
+    <extends full="UnitTestCase" namespace="" name="UnitTestCase"/>
+    <member name="mock_log" type="{unknown}" visibility="public" line="11"/>
+    <member name="mock_serialiser" type="{unknown}" visibility="public" line="12"/>
+    <member name="mock_transport" type="{unknown}" visibility="public" line="13"/>
+    <member name="wrapper" type="{unknown}" visibility="public" line="15"/>
+    <member name="serialisation_type" type="string" default="'mockjson'" visibility="public" line="17"/>
+    <member name="transport_type" type="string" default="'mock_cURL'" visibility="public" line="18"/>
+    <member name="auth" type="{unknown}" default="NULL" visibility="public" line="19"/>
+    <member name="protocol" type="string" default="'hotpotatoes'" visibility="public" line="20"/>
+    <member name="api_host" type="string" default="'api.test.createsend.com'" visibility="public" line="21"/>
+    <member name="log_level" type="{unknown}" default="CS_REST_LOG_NONE" visibility="public" line="22"/>
+    <member name="base_route" type="{unknown}" visibility="public" line="24"/>
+    <method name="setUp" start="26" end="37" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="set_up_inner" start="39" end="42" abstract="false" final="false" static="false" visibility="public"/>
+    <method name="get_call_options" start="44" end="56" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="route" byreference="false" type="{unknown}"/>
+      <parameter name="method" byreference="false" type="string" default="'GET'"/>
+    </method>
+    <method name="setup_transport_and_serialisation" start="58" end="71" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="make_call_result" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="{unknown}"/>
+      <parameter name="deserialise_result" byreference="false" type="{unknown}"/>
+      <parameter name="deserialise_input" byreference="false" type="{unknown}"/>
+      <parameter name="serialise_result" byreference="false" type="{unknown}" default="NULL"/>
+      <parameter name="serialise_input" byreference="false" type="{unknown}" default="NULL"/>
+    </method>
+    <method name="general_test" start="73" end="89" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="wrapper_function" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="{unknown}"/>
+      <parameter name="from_transport" byreference="false" type="{unknown}"/>
+      <parameter name="from_deserialisation" byreference="false" type="{unknown}"/>
+      <parameter name="response_code" byreference="false" type="integer" default="200"/>
+    </method>
+    <method name="general_test_with_argument" start="91" end="113" abstract="false" final="false" static="false" visibility="public">
+      <parameter name="wrapper_function" byreference="false" type="{unknown}"/>
+      <parameter name="function_argument" byreference="false" type="{unknown}"/>
+      <parameter name="call_options" byreference="false" type="{unknown}"/>
+      <parameter name="from_transport" byreference="false" type="{unknown}"/>
+      <parameter name="from_deserialisation" byreference="false" type="{unknown}"/>
+      <parameter name="from_serialisation" byreference="false" type="string" default="'serialised'"/>
+      <parameter name="response_code" byreference="false" type="integer" default="200"/>
+    </method>
+  </parent>
+</class>

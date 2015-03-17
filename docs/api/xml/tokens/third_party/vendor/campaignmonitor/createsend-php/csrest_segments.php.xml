@@ -1,0 +1,961 @@
+<?xml version="1.0"?>
+<source xmlns="http://xml.phpdox.net/token">
+  <file xmlns="http://xml.phpdox.net/src" path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/campaignmonitor/createsend-php" file="csrest_segments.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/campaignmonitor/createsend-php/csrest_segments.php" size="8348" time="2015-03-14T10:22:24+13:00" unixtime="1426281744" sha1="2fc798eb8cdfba2e678e907a3ca818ac57f3a503" relative="third_party/vendor/campaignmonitor/createsend-php/csrest_segments.php"/>
+  <line no="1">
+    <token name="T_OPEN_TAG">&lt;?php</token>
+  </line>
+  <line no="2">
+    <token name="T_REQUIRE_ONCE">require_once</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">dirname</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_FILE">__FILE__</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'/class/base_classes.php'</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="3"/>
+  <line no="4">
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="5">
+    <token name="T_DOC_COMMENT"> * Class to access a segments resources from the create send API.</token>
+  </line>
+  <line no="6">
+    <token name="T_DOC_COMMENT"> * This class includes functions to create and edits segments</token>
+  </line>
+  <line no="7">
+    <token name="T_DOC_COMMENT"> * along with accessing the subscribers of a specific segment</token>
+  </line>
+  <line no="8">
+    <token name="T_DOC_COMMENT"> * @author tobyb</token>
+  </line>
+  <line no="9">
+    <token name="T_DOC_COMMENT"> *</token>
+  </line>
+  <line no="10">
+    <token name="T_DOC_COMMENT"> */</token>
+  </line>
+  <line no="11">
+    <token name="T_CLASS">class</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">CS_REST_Segments</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_EXTENDS">extends</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">CS_REST_Wrapper_Base</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="12"/>
+  <line no="13">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="14">
+    <token name="T_DOC_COMMENT">     * The base route of the lists resource.</token>
+  </line>
+  <line no="15">
+    <token name="T_DOC_COMMENT">     * @var string</token>
+  </line>
+  <line no="16">
+    <token name="T_DOC_COMMENT">     * @access private</token>
+  </line>
+  <line no="17">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="18">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VAR">var</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$_segments_base_route</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="19"/>
+  <line no="20">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="21">
+    <token name="T_DOC_COMMENT">     * Constructor.</token>
+  </line>
+  <line no="22">
+    <token name="T_DOC_COMMENT">     * @param $segment_id string The segment id to access (Ignored for create requests)</token>
+  </line>
+  <line no="23">
+    <token name="T_DOC_COMMENT">     * @param $auth_details array Authentication details to use for API calls.</token>
+  </line>
+  <line no="24">
+    <token name="T_DOC_COMMENT">     *        This array must take one of the following forms:</token>
+  </line>
+  <line no="25">
+    <token name="T_DOC_COMMENT">     *        If using OAuth to authenticate:</token>
+  </line>
+  <line no="26">
+    <token name="T_DOC_COMMENT">     *        array(</token>
+  </line>
+  <line no="27">
+    <token name="T_DOC_COMMENT">     *          'access_token' =&gt; 'your access token',</token>
+  </line>
+  <line no="28">
+    <token name="T_DOC_COMMENT">     *          'refresh_token' =&gt; 'your refresh token')</token>
+  </line>
+  <line no="29">
+    <token name="T_DOC_COMMENT">     *</token>
+  </line>
+  <line no="30">
+    <token name="T_DOC_COMMENT">     *        Or if using an API key:</token>
+  </line>
+  <line no="31">
+    <token name="T_DOC_COMMENT">     *        array('api_key' =&gt; 'your api key')</token>
+  </line>
+  <line no="32">
+    <token name="T_DOC_COMMENT">     * @param $protocol string The protocol to use for requests (http|https)</token>
+  </line>
+  <line no="33">
+    <token name="T_DOC_COMMENT">     * @param $debug_level int The level of debugging required CS_REST_LOG_NONE | CS_REST_LOG_ERROR | CS_REST_LOG_WARNING | CS_REST_LOG_VERBOSE</token>
+  </line>
+  <line no="34">
+    <token name="T_DOC_COMMENT">     * @param $host string The host to send API requests to. There is no need to change this</token>
+  </line>
+  <line no="35">
+    <token name="T_DOC_COMMENT">     * @param $log CS_REST_Log The logger to use. Used for dependency injection</token>
+  </line>
+  <line no="36">
+    <token name="T_DOC_COMMENT">     * @param $serialiser The serialiser to use. Used for dependency injection</token>
+  </line>
+  <line no="37">
+    <token name="T_DOC_COMMENT">     * @param $transport The transport to use. Used for dependency injection</token>
+  </line>
+  <line no="38">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="39">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="40">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">CS_REST_Segments</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+  </line>
+  <line no="41">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$segment_id</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="42">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$auth_details</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="43">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$protocol</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'https'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="44">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$debug_level</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">CS_REST_LOG_NONE</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="45">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$host</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'api.createsend.com'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="46">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$log</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="47">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$serialiser</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="48">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_VARIABLE">$transport</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="49">
+    <token name="T_WHITESPACE">            </token>
+  </line>
+  <line no="50">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">CS_REST_Wrapper_Base</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$auth_details</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$protocol</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$debug_level</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$host</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$log</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$serialiser</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$transport</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="51">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">set_segment_id</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$segment_id</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="52">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="53"/>
+  <line no="54">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="55">
+    <token name="T_DOC_COMMENT">     * Change the segment id used for calls after construction</token>
+  </line>
+  <line no="56">
+    <token name="T_DOC_COMMENT">     * @param $segment_id</token>
+  </line>
+  <line no="57">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="58">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="59">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">set_segment_id</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$segment_id</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="60">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'segments/'</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_VARIABLE">$segment_id</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="61">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="62">
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="63">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="64">
+    <token name="T_DOC_COMMENT">     * Creates a new segment on the given list with the provided details</token>
+  </line>
+  <line no="65">
+    <token name="T_DOC_COMMENT">     * @param int $list_id The list on which to create the segment</token>
+  </line>
+  <line no="66">
+    <token name="T_DOC_COMMENT">     * @param $segment_details The details of the new segment</token>
+  </line>
+  <line no="67">
+    <token name="T_DOC_COMMENT">     *     This should be an array of the form </token>
+  </line>
+  <line no="68">
+    <token name="T_DOC_COMMENT">     *         array(</token>
+  </line>
+  <line no="69">
+    <token name="T_DOC_COMMENT">     *             'Title' =&gt; The title of the new segment</token>
+  </line>
+  <line no="70">
+    <token name="T_DOC_COMMENT">     *             'RuleGroups' =&gt; array(</token>
+  </line>
+  <line no="71">
+    <token name="T_DOC_COMMENT">     *                 array(</token>
+  </line>
+  <line no="72">
+    <token name="T_DOC_COMMENT">     *                     'Rules' =&gt; array(</token>
+  </line>
+  <line no="73">
+    <token name="T_DOC_COMMENT">     *                         array(</token>
+  </line>
+  <line no="74">
+    <token name="T_DOC_COMMENT">     *                             'RuleType' =&gt; The subject of this rule</token>
+  </line>
+  <line no="75">
+    <token name="T_DOC_COMMENT">     *                             'Clause' =&gt; The specific clauses for this rule</token>
+  </line>
+  <line no="76">
+    <token name="T_DOC_COMMENT">     *                         )</token>
+  </line>
+  <line no="77">
+    <token name="T_DOC_COMMENT">     *                     )</token>
+  </line>
+  <line no="78">
+    <token name="T_DOC_COMMENT">     *                 )</token>
+  </line>
+  <line no="79">
+    <token name="T_DOC_COMMENT">     *             )</token>
+  </line>
+  <line no="80">
+    <token name="T_DOC_COMMENT">     *         )</token>
+  </line>
+  <line no="81">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be the ID of the newly created segment</token>
+  </line>
+  <line no="82">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="83">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">create</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$list_id</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$segment_details</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="84">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">post_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'segments/'</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_VARIABLE">$list_id</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.json'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$segment_details</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="85">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="86">
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="87">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="88">
+    <token name="T_DOC_COMMENT">     * Updates the current segment with the provided details. Calls to this route will clear any existing rules</token>
+  </line>
+  <line no="89">
+    <token name="T_DOC_COMMENT">     * @param $segment_details The new details for the segment</token>
+  </line>
+  <line no="90">
+    <token name="T_DOC_COMMENT">     *     This should be an array of the form </token>
+  </line>
+  <line no="91">
+    <token name="T_DOC_COMMENT">     *         array(</token>
+  </line>
+  <line no="92">
+    <token name="T_DOC_COMMENT">     *             'Title' =&gt; The title of the new segment</token>
+  </line>
+  <line no="93">
+    <token name="T_DOC_COMMENT">     *             'RuleGroups' =&gt; array(</token>
+  </line>
+  <line no="94">
+    <token name="T_DOC_COMMENT">     *                 array(</token>
+  </line>
+  <line no="95">
+    <token name="T_DOC_COMMENT">     *                     'Rules' =&gt; array(</token>
+  </line>
+  <line no="96">
+    <token name="T_DOC_COMMENT">     *                         array(</token>
+  </line>
+  <line no="97">
+    <token name="T_DOC_COMMENT">     *                             'RuleType' =&gt; The subject of this rule</token>
+  </line>
+  <line no="98">
+    <token name="T_DOC_COMMENT">     *                             'Clause' =&gt; The specific clauses for this rule</token>
+  </line>
+  <line no="99">
+    <token name="T_DOC_COMMENT">     *                         )</token>
+  </line>
+  <line no="100">
+    <token name="T_DOC_COMMENT">     *                     )</token>
+  </line>
+  <line no="101">
+    <token name="T_DOC_COMMENT">     *                 )</token>
+  </line>
+  <line no="102">
+    <token name="T_DOC_COMMENT">     *             )</token>
+  </line>
+  <line no="103">
+    <token name="T_DOC_COMMENT">     *         )</token>
+  </line>
+  <line no="104">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+  </line>
+  <line no="105">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="106">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">update</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$segment_details</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="107">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">put_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.json'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$segment_details</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="108">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="109">
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="110">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="111">
+    <token name="T_DOC_COMMENT">     * Adds the given rule to the current segment</token>
+  </line>
+  <line no="112">
+    <token name="T_DOC_COMMENT">     * @param $rule The rule to add to the segment</token>
+  </line>
+  <line no="113">
+    <token name="T_DOC_COMMENT">     *     This should be an array of the form</token>
+  </line>
+  <line no="114">
+    <token name="T_DOC_COMMENT">     *         array(</token>
+  </line>
+  <line no="115">
+    <token name="T_DOC_COMMENT">     *             'Rules' =&gt; array(</token>
+  </line>
+  <line no="116">
+    <token name="T_DOC_COMMENT">     *                 array(</token>
+  </line>
+  <line no="117">
+    <token name="T_DOC_COMMENT">     *                     'RuleType' =&gt; The subject of this rule</token>
+  </line>
+  <line no="118">
+    <token name="T_DOC_COMMENT">     *                     'Clause' =&gt; The specific clauses for this rule</token>
+  </line>
+  <line no="119">
+    <token name="T_DOC_COMMENT">     *                 )</token>
+  </line>
+  <line no="120">
+    <token name="T_DOC_COMMENT">     *             )</token>
+  </line>
+  <line no="121">
+    <token name="T_DOC_COMMENT">     *         )</token>
+  </line>
+  <line no="122">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+  </line>
+  <line no="123">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="124">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">add_rulegroup</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$rulegroup</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="125">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">post_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'/rules.json'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$rulegroup</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="126">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="127">
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="128">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="129">
+    <token name="T_DOC_COMMENT">     * Gets the details of the current segment</token>
+  </line>
+  <line no="130">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="131">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+  </line>
+  <line no="132">
+    <token name="T_DOC_COMMENT">     * {</token>
+  </line>
+  <line no="133">
+    <token name="T_DOC_COMMENT">     *     'ActiveSubscribers' =&gt; The number of active subscribers in this segment</token>
+  </line>
+  <line no="134">
+    <token name="T_DOC_COMMENT">     *     'Rules' =&gt; array(</token>
+  </line>
+  <line no="135">
+    <token name="T_DOC_COMMENT">     *         {</token>
+  </line>
+  <line no="136">
+    <token name="T_DOC_COMMENT">     *             'Subject' =&gt; The subject of the rule</token>
+  </line>
+  <line no="137">
+    <token name="T_DOC_COMMENT">     *             'Clauses' =&gt; array&lt;string&gt; The clauses making up this segment rule</token>
+  </line>
+  <line no="138">
+    <token name="T_DOC_COMMENT">     *         }</token>
+  </line>
+  <line no="139">
+    <token name="T_DOC_COMMENT">     *     ),</token>
+  </line>
+  <line no="140">
+    <token name="T_DOC_COMMENT">     *     'ListID' =&gt; The ID of the list on which this segment is applied</token>
+  </line>
+  <line no="141">
+    <token name="T_DOC_COMMENT">     *     'SegmentID' =&gt; The ID of this segment</token>
+  </line>
+  <line no="142">
+    <token name="T_DOC_COMMENT">     *     'Title' =&gt; The title of this segment</token>
+  </line>
+  <line no="143">
+    <token name="T_DOC_COMMENT">     * }</token>
+  </line>
+  <line no="144">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="145">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">get</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="146">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">get_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.json'</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="147">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="148"/>
+  <line no="149">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="150">
+    <token name="T_DOC_COMMENT">     * Deletes an existing segment from the system</token>
+  </line>
+  <line no="151">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="152">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+  </line>
+  <line no="153">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="154">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">delete</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="155">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">delete_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.json'</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="156">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="157"/>
+  <line no="158">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="159">
+    <token name="T_DOC_COMMENT">     * Deletes all rules for the current segment</token>
+  </line>
+  <line no="160">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="161">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+  </line>
+  <line no="162">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="163">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">clear_rules</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="164">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">delete_request</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'/rules.json'</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="165">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="166">
+    <token name="T_WHITESPACE">    </token>
+  </line>
+  <line no="167">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_DOC_COMMENT">/**</token>
+  </line>
+  <line no="168">
+    <token name="T_DOC_COMMENT">     * Gets a paged collection of subscribers which fall into the given segment</token>
+  </line>
+  <line no="169">
+    <token name="T_DOC_COMMENT">     * @param string $subscribed_since The date to start getting subscribers from </token>
+  </line>
+  <line no="170">
+    <token name="T_DOC_COMMENT">     * @param int $page_number The page number to get</token>
+  </line>
+  <line no="171">
+    <token name="T_DOC_COMMENT">     * @param int $page_size The number of records per page</token>
+  </line>
+  <line no="172">
+    <token name="T_DOC_COMMENT">     * @param string $order_field The field to order the record set by ('EMAIL', 'NAME', 'DATE')</token>
+  </line>
+  <line no="173">
+    <token name="T_DOC_COMMENT">     * @param string $order_direction The direction to order the record set ('ASC', 'DESC')</token>
+  </line>
+  <line no="174">
+    <token name="T_DOC_COMMENT">     * @access public</token>
+  </line>
+  <line no="175">
+    <token name="T_DOC_COMMENT">     * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+  </line>
+  <line no="176">
+    <token name="T_DOC_COMMENT">     * {</token>
+  </line>
+  <line no="177">
+    <token name="T_DOC_COMMENT">     *     'ResultsOrderedBy' =&gt; The field the results are ordered by</token>
+  </line>
+  <line no="178">
+    <token name="T_DOC_COMMENT">     *     'OrderDirection' =&gt; The order direction</token>
+  </line>
+  <line no="179">
+    <token name="T_DOC_COMMENT">     *     'PageNumber' =&gt; The page number for the result set</token>
+  </line>
+  <line no="180">
+    <token name="T_DOC_COMMENT">     *     'PageSize' =&gt; The page size used</token>
+  </line>
+  <line no="181">
+    <token name="T_DOC_COMMENT">     *     'RecordsOnThisPage' =&gt; The number of records returned</token>
+  </line>
+  <line no="182">
+    <token name="T_DOC_COMMENT">     *     'TotalNumberOfRecords' =&gt; The total number of records available</token>
+  </line>
+  <line no="183">
+    <token name="T_DOC_COMMENT">     *     'NumberOfPages' =&gt; The total number of pages for this collection</token>
+  </line>
+  <line no="184">
+    <token name="T_DOC_COMMENT">     *     'Results' =&gt; array(</token>
+  </line>
+  <line no="185">
+    <token name="T_DOC_COMMENT">     *         {</token>
+  </line>
+  <line no="186">
+    <token name="T_DOC_COMMENT">     *             'EmailAddress' =&gt; The email address of the subscriber</token>
+  </line>
+  <line no="187">
+    <token name="T_DOC_COMMENT">     *             'Name' =&gt; The name of the subscriber</token>
+  </line>
+  <line no="188">
+    <token name="T_DOC_COMMENT">     *             'Date' =&gt; The date that the subscriber was added to the list</token>
+  </line>
+  <line no="189">
+    <token name="T_DOC_COMMENT">     *             'State' =&gt; The current state of the subscriber, will be 'Active'</token>
+  </line>
+  <line no="190">
+    <token name="T_DOC_COMMENT">     *             'CustomFields' =&gt; array (</token>
+  </line>
+  <line no="191">
+    <token name="T_DOC_COMMENT">     *                 {</token>
+  </line>
+  <line no="192">
+    <token name="T_DOC_COMMENT">     *                     'Key' =&gt; The personalisation tag of the custom field</token>
+  </line>
+  <line no="193">
+    <token name="T_DOC_COMMENT">     *                     'Value' =&gt; The value of the custom field for this subscriber</token>
+  </line>
+  <line no="194">
+    <token name="T_DOC_COMMENT">     *                 }</token>
+  </line>
+  <line no="195">
+    <token name="T_DOC_COMMENT">     *             )</token>
+  </line>
+  <line no="196">
+    <token name="T_DOC_COMMENT">     *         }</token>
+  </line>
+  <line no="197">
+    <token name="T_DOC_COMMENT">     *     )</token>
+  </line>
+  <line no="198">
+    <token name="T_DOC_COMMENT">     * }</token>
+  </line>
+  <line no="199">
+    <token name="T_DOC_COMMENT">     */</token>
+  </line>
+  <line no="200">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_FUNCTION">function</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">get_subscribers</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$subscribed_since</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$page_number</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+  </line>
+  <line no="201">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_VARIABLE">$page_size</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$order_field</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$order_direction</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">NULL</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_OPEN_CURLY">{</token>
+  </line>
+  <line no="202">
+    <token name="T_WHITESPACE">            </token>
+  </line>
+  <line no="203">
+    <token name="T_WHITESPACE">        </token>
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">get_request_paged</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$this</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">_segments_base_route</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'/active.json?date='</token>
+    <token name="T_PHPDOX_DOT">.</token>
+    <token name="T_STRING">urlencode</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$subscribed_since</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+  </line>
+  <line no="204">
+    <token name="T_WHITESPACE">            </token>
+    <token name="T_VARIABLE">$page_number</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$page_size</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$order_field</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$order_direction</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="205">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+  <line no="206">
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
+  </line>
+</source>
