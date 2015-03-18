@@ -9,8 +9,16 @@
  */
 class CampaignMonitorSignupPage extends Page {
 
+	/**
+	 *
+	 * @inherited
+	 */
 	private static $icon = "campaignmonitor/images/treeicons/CampaignMonitorSignupPage";
 
+	/**
+	 *
+	 * @inherited
+	 */
 	private static $db = array(
 		'ListID' => 'Varchar(32)',
 
@@ -34,14 +42,26 @@ class CampaignMonitorSignupPage extends Page {
 		'ShowAllNewsletterForSigningUp' => 'Boolean'
 	);
 
+	/**
+	 *
+	 * @inherited
+	 */
 	private static $has_one = array(
 		"Group" => "Group"
 	);
 
+	/**
+	 *
+	 * @inherited
+	 */
 	private static $belongs_many_many = array(
 		"CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
 	);
 
+	/**
+	 *
+	 * @inherited
+	 */
 	private static $description = "Page to suscribe and review newsletter list(s)";
 
 	/**
@@ -50,6 +70,11 @@ class CampaignMonitorSignupPage extends Page {
 	 */
 	protected static $api = null;
 
+
+	/**
+	 * Campaign monitor pages that are ready to receive "guests"
+	 * @return ArrayList
+	 */
 	public static function get_ready_ones() {
 		$listPages = CampaignMonitorSignupPage::get();
 		$array = array(0 => 0);
@@ -61,6 +86,10 @@ class CampaignMonitorSignupPage extends Page {
 		return CampaignMonitorSignupPage::get()->filter(array("ID" => $array));
 	}
 
+	/**
+	 *
+	 * @inherited
+	 */
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
 		if($this->GroupID) {
@@ -172,6 +201,8 @@ class CampaignMonitorSignupPage extends Page {
 	 * you can add this function to other pages to have a form
 	 * that starts the basic after which the client needs to complete the rest.
 	 *
+	 * Or does a basic sign up if ajax submitted.
+	 *
 	 * @param Controller $controller
 	 * @param String $formName
 	 *
@@ -200,6 +231,41 @@ class CampaignMonitorSignupPage extends Page {
 			$form->setFormAction($this->Link("preloademail"));
 			return $form;
 		}
+	}
+
+	/**
+	 * adds a subcriber to the list without worrying about making it a user ...
+	 *
+	 * @param String $email
+	 *
+	 * @returns
+	 */
+	public function addSubscriber($email){
+		if($this->ReadyToReceiveSubscribtions()) {
+			$listID = $this->ListID;
+			$email = Convert::raw2sql($email);
+			if($member = Member::get()->filter(array("Email" => $email))->first()) {
+
+			}
+			else {
+				$member = new Member();
+				$member->Email = $email;
+				$member->SetPassword = true;
+				$member->Password = Member::create_new_password();
+				$member->write();
+			}
+			if($group = $this->Group()) {
+				$group->Members()->add($member);
+			}
+			$api = $this->getAPI();
+			echo "....";
+			$result = $api->addSubscriber($listID, $member);
+			if($result == $email) {
+				return null;
+			}
+			return "ERROR: could not subscribe";
+		}
+		return "ERROR: not ready";
 	}
 
 	/**
@@ -250,7 +316,8 @@ class CampaignMonitorSignupPage extends Page {
 	}
 
 	/**
-	 *
+	 * add old campaings or remove them
+	 * depending on the setting
 	 *
 	 */
 	function onAfterWrite() {
@@ -294,6 +361,7 @@ class CampaignMonitorSignupPage extends Page {
 			}
 		}
 	}
+
 }
 
 class CampaignMonitorSignupPage_Controller extends Page_Controller {
@@ -342,7 +410,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				$member = new Member();
 			}
 			if($this->ShowAllNewsletterForSigningUp) {
-				$signupField = $member->getSignupField(null, "SubscribeChoices");
+				$signupField = $member->getSignupField(null, "SubscribeManyChoices");
 			}
 			else {
 				$signupField = $member->getSignupField($this->ListID, "SubscribeChoice");
@@ -373,7 +441,13 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		}
 	}
 
-
+	/**
+	 * action subscription form
+	 * @param Array $array
+	 * @param Form $form
+	 *
+	 * return redirect
+	 */
 	function subscribe($data, $form) {
 		if($this->ReadyToReceiveSubscribtions()) {
 				//true until proven otherwise.
@@ -419,25 +493,27 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if(!$memberAlreadyLoggedIn) {
 				$member->logIn($keepMeLoggedIn = false);
 			}
-			if(isset($data["SubscribeChoices"])) {
+			if(isset($data["SubscribeManyChoices"])) {
 				$listPages = CampaignMonitorSignupPage::get_ready_ones();
 				foreach($listPages as $listPage) {
-					if(isset($data["SubscribeChoices"][$listPage->ListID]) && $data["SubscribeChoices"][$listPage->ListID]) {
+					if(isset($data["SubscribeManyChoices"][$listPage->ListID]) && $data["SubscribeManyChoices"][$listPage->ListID]) {
 						$member->addCampaignMonitorList($listPage->ListID);
+						return $this->redirect($this->Link('thankyou'));
 					}
 					else {
 						$member->removeCampaignMonitorList($listPage->ListID);
+						return $this->redirect($this->Link('sadtoseeyougo'));
 					}
 				}
 			}
 			elseif(isset($data["SubscribeChoice"])) {
 				if($data["SubscribeChoice"] == "Subscribe") {
 					$member->addCampaignMonitorList($this->ListID);
-					$this->redirect($this->Link('thankyou'));
+					return $this->redirect($this->Link('thankyou'));
 				}
 				else {
 					$member->removeCampaignMonitorList($this->ListID);
-					$this->redirect($this->Link('sadtoseeyougo'));
+					return $this->redirect($this->Link('sadtoseeyougo'));
 				}
 			}
 			else {
@@ -451,6 +527,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 
 	/**
 	 * immediately unsubscribe if you are logged in.
+	 * @param HTTPRequest
 	 */
 	function unsubscribe($request) {
 		$member = Member::currentUser();
@@ -464,6 +541,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		return array();
 	}
 
+	/**
+	 * action
+	 * @param HTTPRequest
+	 */
 	function confirm($request) {
 		$this->Title = $this->ConfirmTitle;
 		$this->MenuTitle = $this->ConfirmMenuTitle;
@@ -471,6 +552,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		return array();
 	}
 
+	/**
+	 * action
+	 * @param HTTPRequest
+	 */
 	function thankyou($request) {
 		$this->Title = $this->ThankYouTitle;
 		$this->MenuTitle = $this->ThankYouMenuTitle;
@@ -478,6 +563,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		return array();
 	}
 
+	/**
+	 * action
+	 * @param HTTPRequest
+	 */
 	function sadtoseeyougo($request) {
 		$this->Title = $this->SadToSeeYouGoTitle;
 		$this->MenuTitle = $this->SadToSeeYouGoMenuTitle;
@@ -485,6 +574,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		return array();
 	}
 
+	/**
+	 * action
+	 * @param HTTPRequest
+	 */
 	function preloademail(SS_HTTPRequest $request){
 		$data = $request->requestVars();
 		if(isset($data["CampaignMonitorEmail"])) {
@@ -492,8 +585,13 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if($email) {
 				$this->email = $email;
 				if(Director::is_ajax()) {
-					Session::set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
-					return $this->renderWith("CampaignMonitorStartForm_AjaxResult");
+					if(!$this->addSubscriber($email)) {
+						Session::set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["Email"]);
+						return $this->renderWith("CampaignMonitorStartForm_AjaxResult");
+					}
+					else {
+						return "ERROR";
+					}
 				}
 			}
 		}
@@ -560,8 +658,6 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				);
 		}
 	}
-
-
 
 	/**
 	 * action for admins only to see a whole bunch of
@@ -630,7 +726,11 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		}
 	}
 
-	function resetsignup(){
+	/**
+	 * action
+	 * @param HTTPRequest
+	 */
+	function resetsignup($request){
 		Session::clear("CampaignMonitorStartForm_AjaxResult_".$this->ID);
 		return array();
 	}
@@ -650,6 +750,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		}
 	}
 
+
+	/**
+	 * @return String
+	 */
 	private function JSHackForPreSections(){
 		$js = <<<javascript
 			jQuery(document).ready(

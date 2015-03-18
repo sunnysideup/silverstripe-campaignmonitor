@@ -20,10 +20,10 @@ var CampaignMonitorStartForm = {
 				// Get some values from elements on the page:
 				var $form = jQuery( this ),
 					securityID = $form.find( "input[name='SecurityID']" ).val(),
-					email = $form.find( "input[name='Email']" ).val(),
+					email = $form.find( "input[name='CampaignMonitorEmail']" ).val(),
 					url = $form.attr( "action" );
 				// Send the data using post
-				var posting = jQuery.post( url, { SecurityID: securityID, Email: email } )
+				var posting = jQuery.post( url, { SecurityID: securityID, CampaignMonitorEmail: email } )
 				// Put the results in a div
 				posting.done(
 					function( data ) {
