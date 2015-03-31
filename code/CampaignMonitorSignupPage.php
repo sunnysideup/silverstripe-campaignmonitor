@@ -109,12 +109,9 @@ class CampaignMonitorSignupPage extends Page {
 				new Tab('MainSettings',
 					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
 					new LiteralField('ListIDExplanation', '<p>The way this works is that each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
-					new DropdownField('ListID', 'Related List from Campaign Monitor - this must be selected', $this->makeDropdownListFromLists()),
-					new LiteralField('GroupLink', $groupLink)
-				),
-				new Tab('PageSettings',
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up'),
-					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.')
+					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
+					new LiteralField('GroupLink', $groupLink),
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up')
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
@@ -138,6 +135,7 @@ class CampaignMonitorSignupPage extends Page {
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
 				),
 				new Tab('Campaigns',
+					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
 					new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
 					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->limit(100)->map()->toArray())
 				),
@@ -149,6 +147,9 @@ class CampaignMonitorSignupPage extends Page {
 				)
 			)
 		);
+		if(!Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url"))  {
+			$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
+		}
 		return $fields;
 	}
 
@@ -273,10 +274,13 @@ class CampaignMonitorSignupPage extends Page {
 	 * @return String
 	 */
 	public function getListTitle() {
-		$a = $this->makeDropdownListFromLists();
-		if(isset($a[$this->ListID])) {
-			return $a[$this->ListID];
+		if($this->ListID) {
+			$a = $this->makeDropdownListFromLists();
+			if(isset($a[$this->ListID])) {
+				return $a[$this->ListID];
+			}
 		}
+		return "";
 	}
 
 	/**
@@ -297,6 +301,7 @@ class CampaignMonitorSignupPage extends Page {
 		if(!$this->getListTitle()) {
 			$this->ListID = 0;
 		}
+		$gp = null;
 		//check group
 		if($this->GroupID) {
 			$gp = $this->Group();
@@ -304,15 +309,24 @@ class CampaignMonitorSignupPage extends Page {
 				$this->GroupID = 0;
 			}
 		}
+
 		//add group
 		if($this->ListID) {
 			if(!$this->GroupID) {
 				$gp = new Group();
 				$this->GroupID = $gp->ID;
+				$gp->write();
 			}
+			$title = _t("CampaignMonitor.NEWSLETTER", "NEWSLETTER");
+			if($myListName = $this->getListTitle()) {
+				$title .= ": ".$myListName;
+			}
+			$gp->Title = (string)$title;
+			$gp->write();
 		}
-		$gp->Title = _t("CampaignMonitor.NEWSLETTER", "NEWSLETTER") .": " . $this->getListTitle();
-		$gp->write();
+		if($gp) {
+			$this->GroupID = $gp->ID;
+		}
 	}
 
 	/**
