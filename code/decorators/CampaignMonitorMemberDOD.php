@@ -122,7 +122,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		//internal database
-		if($listPage->GroupID) {
+		if($listPage && $listPage->GroupID) {
 			if($gp = Group::get()->byID($listPage->GroupID)) {
 				$groups = $this->owner->Groups();
 				if($groups) {
@@ -131,7 +131,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				}
 			}
 		}
-		if($listPage->ListID) {
+		if($listPage && $listPage->ListID) {
 			if(!$api->addSubscriber($listPage->ListID, $this->owner, $customFields, true, false)) {
 				$outcome++;
 			}
