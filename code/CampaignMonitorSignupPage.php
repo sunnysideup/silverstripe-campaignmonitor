@@ -440,7 +440,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				new FormAction('subscribe', _t("CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS", "Update Subscriptions"))
 			);
 			// Create Validators
-			$validator = new RequiredFields('CampaignMonitorFirstName', 'CampaignMonitorEmail');
+			$validator = new RequiredFields('CampaignMonitorEmail');
 			$form = new Form($this, 'SignupForm', $fields, $actions, $validator);
 			if($member->exists()) {
 				$form->loadDataFrom($member);
