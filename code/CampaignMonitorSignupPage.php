@@ -464,49 +464,68 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 */
 	function subscribe($data, $form) {
 		if($this->ReadyToReceiveSubscribtions()) {
-				//true until proven otherwise.
-			$subscriptionChanged = true;
+			//true until proven otherwise.
+			$newlyCreatedMember = false;
 			$api = $this->getAPI();
 			$member = Member::currentUser();
-			if(!$member) {
-				$memberAlreadyLoggedIn = false;
-				if($existingMember = Member::get()->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))->First()) {
-					$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
-					$this->redirectBack();
-					return;
-				}
-				$member = new Member();
+
+			//subscribe or unsubscribe?
+			if(isset($data["SubscribeManyChoices"])) {
+				$isSubscribe = true;
 			}
 			else {
-				$memberAlreadyLoggedIn = true;
-				if($existingMember = Member::get()
-					->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
-					->exclude(array("ID" => $member->ID))
-					->First()
-				) {
-					$form->addErrorMessage('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
-					$this->redirectBack();
-					return;
+				$isSubscribe = isset($data["SubscribeChoice"]) && $data["SubscribeChoice"] == "Subscribe";
+			}
+
+			//no member logged in: if the member already exists then you can't sign up.
+			if(!$member) {
+				$memberAlreadyLoggedIn = false;
+				$existingMember = Member::get()->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))->First();
+				if($isSubscribe && $existingMember){
+					//$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
+					//$this->redirectBack();
+					//return;
+				}
+				$member = $existingMember;
+				if(!$member) {
+					$newlyCreatedMember = true;
+					$member = new Member();
 				}
 			}
-			if(!isset($data["SubscribeChoice"])) {
+
+			//logged in: if the member already as someone else then you can't sign up.
+			else {
+				$memberAlreadyLoggedIn = true;
+				$existingMember = Member::get()
+					->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
+					->exclude(array("ID" => $member->ID))
+					->First();
+				if($isSubscribe && $existingMember) {
+					//$form->addErrorMessage('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
+					//$this->redirectBack();
+					//return;
+				}
+			}
+
+			//are any choices being made
+			if(!isset($data["SubscribeChoice"]) && !isset($data["SubscribeManyChoices"])) {
 				$form->addErrorMessage('SubscribeChoice', _t("CAMPAIGNMONITORSIGNUPPAGE.NO_NAME", "Please choose your subscription."), 'warning');
 				$this->redirectBack();
 				return;
 			}
-			$form->saveInto($member);
-			if($memberAlreadyLoggedIn) {
-				//nothing more to do
+
+			//if this is a new member then we save the member
+			if($isSubscribe) {
+				if($newlyCreatedMember) {
+					$form->saveInto($member);
+					$member->SetPassword = true;
+					$member->Password = Member::create_new_password();
+					$member->write();
+					$member->logIn($keepMeLoggedIn = false);
+				}
 			}
-			//create new member!
-			else {
-				$member->SetPassword = true;
-				$member->Password = Member::create_new_password();
-			}
-			$member->write();
-			if(!$memberAlreadyLoggedIn) {
-				$member->logIn($keepMeLoggedIn = false);
-			}
+
+			//many choices
 			if(isset($data["SubscribeManyChoices"])) {
 				$listPages = CampaignMonitorSignupPage::get_ready_ones();
 				foreach($listPages as $listPage) {
@@ -520,6 +539,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 					}
 				}
 			}
+
+			//one choice
 			elseif(isset($data["SubscribeChoice"])) {
 				if($data["SubscribeChoice"] == "Subscribe") {
 					$member->addCampaignMonitorList($this->ListID);

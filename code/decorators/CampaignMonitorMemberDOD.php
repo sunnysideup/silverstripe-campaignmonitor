@@ -118,7 +118,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	public function addCampaignMonitorList($listPage, $customFields = array()) {
 		$api = $this->getCMAPI();
 		$outcome = 0;
-		if(is_numeric($listPage)) {
+		if(is_string($listPage)) {
 			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		//internal database
@@ -152,7 +152,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	public function removeCampaignMonitorList($listPage) {
 		$api = $this->getCMAPI();
 		$outcome = 0;
-		if(is_numeric($listPage)) {
+		if(is_string($listPage)) {
 			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
 		if($listPage->GroupID) {
