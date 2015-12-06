@@ -84,6 +84,6 @@ further setup
 
 A full list of api calls can be found in the CampaignMonitorAPIConnector.
 
-4. To test the API, you can visit www.mysite.com/create-send-test/
+4. To test the API, you can visit /create-send-test/
 
 
