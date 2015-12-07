@@ -985,11 +985,13 @@ class CampaignMonitorAPIConnector extends Object {
 			elseif(isset($customFields[$member->Email])) {
 				$customFieldsForMember = $customFields[$member->Email];
 			}
-			$importArray[] = Array(
-				'EmailAddress' => $member->Email,
-				'Name' => $member->getName(),
-				'CustomFields' => $customFieldsForMember
-			);
+			if($member instanceof Member) {
+				$importArray[] = Array(
+					'EmailAddress' => $member->Email,
+					'Name' => $member->getName(),
+					'CustomFields' => $customFieldsForMember
+				);
+			}
 		}
 		$result = $wrap->import(
 			$importArray,
