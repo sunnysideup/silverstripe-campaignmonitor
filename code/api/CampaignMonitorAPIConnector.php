@@ -70,8 +70,8 @@ class CampaignMonitorAPIConnector extends Object {
 	 * must be called to use this API.
 	 */
 	public function init(){
-		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
-		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+		//require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
+		//require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
 	}
 
 	/**
@@ -860,9 +860,22 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
 	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
 	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
+	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	function addSubscriber($listID, Member $member, $customFields = array(), $resubscribe = true, $restartSubscriptionBasedAutoResponders = false){
+	function addSubscriber(
+		$listID,
+		Member $member,
+		$customFields = array(),
+		$resubscribe = true,
+		$restartSubscriptionBasedAutoResponders = false
+	){
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->add(
@@ -891,11 +904,25 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param Member $member
 	 * @param array $customFields The subscriber details to use during creation.
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	public function updateSubscriber($listID, $oldEmailAddress = "", Member $member, $customFields = array(), $resubscribe = true, $restartSubscriptionBasedAutoResponders = false){
+	public function updateSubscriber(
+		$listID,
+		$oldEmailAddress = "",
+		Member $member,
+		$customFields = array(),
+		$resubscribe = true,
+		$restartSubscriptionBasedAutoResponders = false
+	){
 		if(!$oldEmailAddress) {
 			$oldEmailAddress = $member->Email;
 		}
@@ -929,18 +956,39 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param $resubscribe Whether we should resubscribe any existing subscribers
 	 * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
 	 * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
+	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
 
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	function addSubscribers($listID, $membersSet, $customFields = array(), $resubscribe, $queueSubscriptionBasedAutoResponders = false, $restartSubscriptionBasedAutoResponders = false) {
+	function addSubscribers(
+		$listID,
+		$membersSet,
+		$customFields = array(),
+		$resubscribe,
+		$queueSubscriptionBasedAutoResponders = false,
+		$restartSubscriptionBasedAutoResponders = false
+	) {
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$importArray = array();
 		foreach($membersSet as $member) {
+			$customFieldsForMember = array();
+			if(isset($customFields[$member->ID])) {
+				$customFieldsForMember = $customFields[$member->ID];
+			}
+			elseif(isset($customFields[$member->Email])) {
+				$customFieldsForMember = $customFields[$member->Email];
+			}
 			$importArray[] = Array(
 				'EmailAddress' => $member->Email,
 				'Name' => $member->getName(),
-				'CustomFields' => isset($customField[$member->ID]) ? $customField[$member->ID] : array()
+				'CustomFields' => $customFieldsForMember
 			);
 		}
 		$result = $wrap->import(
