@@ -130,7 +130,7 @@ class CampaignMonitorSignupPage extends Page {
 					new HtmlEditorField('ThankYouMessage', 'Thank you message after submitting form')
 				),
 				new Tab('SadToSeeYouGo',
-					new TextField('SadToSeeYouGoTitle', 'AlternativeTitle'),
+					new TextField('SadToSeeYouGoTitle', 'Title'),
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
 				),

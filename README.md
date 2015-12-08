@@ -52,17 +52,20 @@ further setup
 
 #### AVAILABLE FEATURES
 
-1. set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
+ * set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
 
-2. create "starter" form for sign-up page by calling the method
+ * create "starter" form for sign-up page by calling the method (also see below for more details)
 
-```
+```php
+
     CampaignMonitorSignupPage::CampaignMonitorStartForm();
-```
-
-3. lots of API calls can be made through an API class. This class can be used as follows (example only):
 
 ```
+
+ * lots of API calls can be made through an API class. This class can be used as follows (example only):
+
+```php
+
     private static $api = null;
 
     /**
@@ -86,9 +89,9 @@ further setup
 
 A full list of api calls can be found in the CampaignMonitorAPIConnector.
 
-4. To test the API, you can visit /create-send-test/
+ * To test the API, you can visit /create-send-test/
 
-5. adding a quick sign-up form on all your pages:
+ * adding a quick sign-up form on all your pages:
 
 ```php
     class Page_Controller extends ContentController {
