@@ -517,9 +517,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if($isSubscribe) {
 				if($newlyCreatedMember) {
 					$form->saveInto($member);
-					$member->Email = Convert::raw2sql$data["CampaignMonitorEmail"]);
-					$member->FirstName = Convert::raw2sql$data["CampaignMonitorFirstName"]);
-					$member->Surname = Convert::raw2sql$data["CampaignMonitorSurname"]);
+					$member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
+					$member->FirstName = Convert::raw2sql($data["CampaignMonitorFirstName"]);
+					$member->Surname = Convert::raw2sql($data["CampaignMonitorSurname"]);
 					$member->SetPassword = true;
 					$member->Password = Member::create_new_password();
 					$member->write();

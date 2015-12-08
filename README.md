@@ -30,6 +30,8 @@ Installation Instructions
 -----------------------------------------------
 
 1. Find out how to add modules to SS and add module as per usual.
+   You will need to add this module using composer
+   e.g. `composer require sunnysideup/campaingmonitor`
 
 2. Review configs and add entries to mysite/_config/config.yml
 (or similar) as necessary.
@@ -85,5 +87,35 @@ further setup
 A full list of api calls can be found in the CampaignMonitorAPIConnector.
 
 4. To test the API, you can visit /create-send-test/
+
+5. adding a quick sign-up form on all your pages:
+
+```php
+    class Page_Controller extends ContentController {
+
+        private static $allowed_actions = array (
+            "CampaignMonitorStartForm" => true
+        );
+
+        function CampaignMonitorStartForm(){
+            if($this->dataRecord instanceof CampaignMonitorSignupPage) {
+            }
+            else {
+                $page = CampaignMonitorSignupPage::get_ready_ones()->first();
+                if($page) {
+                    return $page->CampaignMonitorStartForm($this);
+                }
+            }
+        }
+
+    }
+
+```
+
+and add this in the your template:
+
+```html
+    $CampaignMonitorStartForm
+```
 
 

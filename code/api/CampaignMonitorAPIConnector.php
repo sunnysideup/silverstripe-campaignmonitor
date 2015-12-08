@@ -868,7 +868,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 */
 	function addSubscriber(
 		$listID,
-		Member $member,
+		$member,
 		$customFields = array(),
 		$resubscribe = true,
 		$restartSubscriptionBasedAutoResponders = false
@@ -1241,7 +1241,12 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 	function init(){
 		parent::init();
-		increase_time_limit_to(600);
+		if($this->debug) {
+			increase_time_limit_to(600);
+		}
+		if(!$this->Config()->get("client_id")) {
+			user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
+		}
 	}
 
 	/**
