@@ -111,7 +111,7 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
 					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up')
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
