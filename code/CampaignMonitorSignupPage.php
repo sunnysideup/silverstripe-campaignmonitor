@@ -259,7 +259,6 @@ class CampaignMonitorSignupPage extends Page {
 				$group->Members()->add($member);
 			}
 			$api = $this->getAPI();
-			echo "....";
 			$result = $api->addSubscriber($listID, $member);
 			if($result == $email) {
 				return null;

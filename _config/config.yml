@@ -1,3 +1,10 @@
+---
+Name: campaignmonitor
+Before: 'mysite/*'
+After: 'framework/*','cms/*'
+---
+
+
 Member:
   extensions:
     - CampaignMonitorMemberDOD
