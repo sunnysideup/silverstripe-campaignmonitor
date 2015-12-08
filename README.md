@@ -52,7 +52,7 @@ further setup
 
 #### AVAILABLE FEATURES
 
- * The `Member` class gets a bunch of additional methods (see [`CampaignMonitorMemberDOD` Class](code/decorators/CampaignMonitorMemberDOD.php)
+ * The `Member` class gets a bunch of additional methods - see [`CampaignMonitorMemberDOD` Class](code/decorators/CampaignMonitorMemberDOD.php)
 
  * set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
 
