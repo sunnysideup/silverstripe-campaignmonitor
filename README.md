@@ -2,10 +2,11 @@ Campaign Monitor Module
 ================================================================================
 
 Connects a Silverstripe Website with the Campaign Monitor
-API.
+API. Here are some examples:
 
-(Sign Up Page)[docs/screenshots/SignupForm.png]
-(Quick Sign Up Form)[docs/screenshots/QuickSignupForm.png]
+ * [Sign Up Page](docs/screenshots/SignupForm.png])
+ * [Quick Sign Up Form](docs/screenshots/QuickSignupForm.png])
+ * [Back-End](docs/screenshots/Backend.png])
 
 
 Developer
