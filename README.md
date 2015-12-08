@@ -44,23 +44,17 @@ further setup
 
 #### MUST DO FIRST
 
-1. create client and list on the Campaign Monitor website.
+ * create client and list on the Campaign Monitor website.
 
-2. set up the api details from Campaign Monitor in the _config/* files
+ * set up the api details from Campaign Monitor in the _config/* files
 
-3. create a sign up page in the CMS and link it to the list on Campaign Monitor
+ * create a sign up page in the CMS and link it to the list on Campaign Monitor
 
 #### AVAILABLE FEATURES
 
+ * The `Member` class gets a bunch of additional methods (see [`CampaignMonitorMemberDOD` Class](code/decorators/CampaignMonitorMemberDOD.php)
+
  * set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
-
- * create "starter" form for sign-up page by calling the method (also see below for more details)
-
-```php
-
-    CampaignMonitorSignupPage::CampaignMonitorStartForm();
-
-```
 
  * lots of API calls can be made through an API class. This class can be used as follows (example only):
 
