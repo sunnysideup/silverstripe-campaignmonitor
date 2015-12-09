@@ -132,7 +132,13 @@ class CampaignMonitorMemberDOD extends DataExtension {
 			}
 		}
 		if($listPage && $listPage->ListID) {
-			if(!$api->addSubscriber($listPage->ListID, $this->owner, $customFields, true, false)) {
+			if(!$api->addSubscriber(
+				$listPage->ListID,
+				$this->owner,
+				$customFields,
+				true,
+				false
+			)) {
 				$outcome++;
 			}
 		}
@@ -185,9 +191,11 @@ class CampaignMonitorMemberDOD extends DataExtension {
 		$api = $this->getCMAPI();
 		$lists = $api->getListsForEmail($this->owner);
 		$array = Array();
-		foreach($lists as $listArray) {
-			if(in_array($listArray["SubscriberState"], array("Active", "Bounced"))) {
-				$array[$listArray["ListID"]] = $listArray["ListID"];
+		if($lists && count($lists)) {
+			foreach($lists as $listArray) {
+				if(in_array($listArray["SubscriberState"], array("Active", "Bounced"))) {
+					$array[$listArray["ListID"]] = $listArray["ListID"];
+				}
 			}
 		}
 		return $array;

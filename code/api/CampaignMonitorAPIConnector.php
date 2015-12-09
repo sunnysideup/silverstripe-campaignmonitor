@@ -313,11 +313,13 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @return CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
 	 */
 	public function createList($title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting = null){
+		//require_once '../../csrest_lists.php';
+		$wrap = new CS_REST_Lists(NULL, $this->getAuth());
+		//we need to do this afterwards otherwise the definition below
+		//is not recognised
 		if(!$unsubscribeSetting) {
 			$unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
 		}
-		//require_once '../../csrest_lists.php';
-		$wrap = new CS_REST_Lists(NULL, $this->getAuth());
 		$result = $wrap->create(
 			$this->Config()->get("client_id"),
 			array(
@@ -708,7 +710,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/campaigns/{id}/summary",
-			"Gost Summary"
+			"Got Summary"
 		);
 	}
 
@@ -837,16 +839,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_clients.php';
 		$wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
 		$result = $wrap->get_lists_for_email($member);
-		if($this->debug) {
-			return $this->returnResult(
-				$result,
-				"/api/v3.1/clients/{id}/listsforemail",
-				"Got lists to which email address ".$member." is subscribed"
-			);
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"/api/v3.1/clients/{id}/listsforemail",
+			"Got lists to which email address ".$member." is subscribed"
+		);
 	}
 
 
@@ -871,7 +868,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 */
 	function addSubscriber(
 		$listID,
-		Member $member,
+		$member,
 		$customFields = array(),
 		$resubscribe = true,
 		$restartSubscriptionBasedAutoResponders = false
@@ -1244,7 +1241,12 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 	function init(){
 		parent::init();
-		increase_time_limit_to(600);
+		if($this->debug) {
+			increase_time_limit_to(600);
+		}
+		if(!$this->Config()->get("client_id")) {
+			user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
+		}
 	}
 
 	/**
@@ -1505,7 +1507,9 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 		//getCampaigns
 		$result = $this->api->getCampaigns();
-		$this->egData["campaignID"] = $result[0]->CampaignID;
+		if(isset($result[0])) {
+			$this->egData["campaignID"] = $result[0]->CampaignID;
+		}
 
 		$this->api->setDebug(true);
 

@@ -2,14 +2,14 @@
 # CAMPAIGN MONITOR
 ############################
 
-CampaignMonitorWrapper:
+CampaignMonitorAPIConnector:
   ### REQUIRED ###
+  ## e.g. http://mycompany.sendmail.com/
   campaign_monitor_url: ""
-  # (see http://yourcompany.createsend.com/admin/account/)
   client_id: ""
-  ### OPTION 1: API KEY ###
+  ### OPTION 1: API KEY RECOMMENDED ###
   api_key: ""
-  ### OPTION 2: OAUTH ###
+  ### OPTION 2: OAUTH UNTESTED .... ###
   client_secret: ""
   redirect_uri: ""
   code: ""
