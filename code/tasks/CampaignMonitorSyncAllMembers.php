@@ -42,6 +42,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 	protected $previouslyUnsubscribedSubscribers = array();
 
 	/**
+	 * @var array
+	 */
+	protected $previouslyBouncedSubscribers = array();
+
+	/**
 	 *
 	 */
 	public function run($request){
@@ -49,7 +54,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		increase_memory_limit_to('5120M');
 		$this->getUnsubscribedSubscribers();
 		$this->getExistingFolkListed();
-		DB::alteration_message("Number of records already exported: ".count($this->previouslyExported), "created");
+		$this->getBouncedSubscribers();
+		DB::alteration_message("Number of active recipients already exported: ".count($this->previouslyExported), "created");
+		DB::alteration_message("Number of recipients already unsubscribed: ".count($this->previouslyUnsubscribedSubscribers), "created");
+		DB::alteration_message("Number of recipients already bounced: ".count($this->previouslyBouncedSubscribers), "created");
+
 		if(Director::isLive()) {
 			$this->debug = false;
 		}
@@ -77,6 +86,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 				foreach($members as $member) {
 					if(isset($this->previouslyUnsubscribedSubscribers[$member->Email])) {
 						DB::alteration_message("already blacklisted: ".$member->Email, "deleted");
+					}
+					elseif(isset($this->previouslyBouncedSubscribers[$member->Email])) {
+						DB::alteration_message("deleting bounced member: ".$member->Email, "deleted");
+						if(!$this->debug) {
+							$api->deleteSubscriber($this->mailingListID, $member->Email);
+						}
 					}
 					else {
 						if(!isset($alreadyCompleted[$member->Email])) {
@@ -124,7 +139,10 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		return self::$api;
 	}
 
-
+	/**
+	 * updates the previouslyExported variable
+	 * @return null
+	 */
 	private function getExistingFolkListed(){
 		$array = array();
 		$api = $this->getAPI();
@@ -157,6 +175,45 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		}
 	}
 
+
+	/**
+	 * updates previouslyBouncedSubscribers variable
+	 *
+	 * @return null
+	 */
+	private function getBouncedSubscribers(){
+		$array = array();
+		$api = $this->getAPI();
+		for($i = 1; $i < 100; $i++) {
+			$list = $api->getBouncedSubscribers(
+				$listID = $this->mailingListID,
+				$daysAgo = 3650,
+				$page = $i,
+				$pageSize = 999,
+				$sortByField = "Email",
+				$sortDirection = "ASC"
+			);
+			if(isset($list->NumberOfPages) && $list->NumberOfPages) {
+				if($i > $list->NumberOfPages) {
+					$i = 999999;
+				}
+			}
+			if(isset($list->Results)) {
+				foreach($list->Results as $obj) {
+					$this->previouslyBouncedSubscribers[$obj->EmailAddress] = true;
+				}
+			}
+			else {
+				return;
+			}
+		}
+	}
+
+	/**
+	 * updates previouslyUnsubscribedSubscribers variable
+	 *
+	 * @return null
+	 */
 	private function getUnsubscribedSubscribers(){
 		$array = array();
 		$api = $this->getAPI();
@@ -185,6 +242,13 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		}
 	}
 
+	/**
+	 * @param array $memberArray
+	 * @param array $customFields
+	 * @param array $unsubscribeArray
+	 *
+	 * @return null
+	 */
 	private function exportNow($memberArray, $customFields, $unsubscribeArray){
 		$api = $this->getAPI();
 		PWUpdateGetData::flush("<hr />", "deleted");

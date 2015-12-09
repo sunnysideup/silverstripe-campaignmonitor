@@ -1085,7 +1085,7 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$outcome = $this->getSubscriber($listID, $member);
 		if($outcome && isset($outcome->State)) {
-			if($outcome->State == "Active" || $outcome == "Bounced") {
+			if($outcome->State == "Active") {
 				if($this->debug) {
 					echo "<h3>Subscriber Can Receive Emails For This List</h3>";
 				}
