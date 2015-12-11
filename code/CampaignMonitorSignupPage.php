@@ -107,7 +107,7 @@ class CampaignMonitorSignupPage extends Page {
 		$fields->addFieldToTab('Root.Newsletters',
 			new TabSet('Options',
 				new Tab('MainSettings',
-					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to the <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
 					new LiteralField('ListIDExplanation', '<p>The way this works is that each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
 					new LiteralField('GroupLink', $groupLink),
