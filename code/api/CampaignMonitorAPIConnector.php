@@ -856,13 +856,19 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param Int $listID
 	 * @param Member $member
 	 * @param Array $customFields
-	 * @param array $customFields The subscriber details to use during creation.
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 * @param boolean $restartSubscriptionBasedAutoResponders
+	 *     Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	function addSubscriber($listID, Member $member, $customFields = array(), $resubscribe = true, $restartSubscriptionBasedAutoResponders = false){
+	function addSubscriber(
+		$listID,
+		Member $member,
+		$customFields = array(),
+		$resubscribe = true,
+		$restartSubscriptionBasedAutoResponders = false
+	){
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$result = $wrap->add(
@@ -891,11 +897,18 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param Member $member
 	 * @param array $customFields The subscriber details to use during creation.
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	public function updateSubscriber($listID, $oldEmailAddress = "", Member $member, $customFields = array(), $resubscribe = true, $restartSubscriptionBasedAutoResponders = false){
+	public function updateSubscriber(
+		$listID,
+		$oldEmailAddress = "",
+		Member $member,
+		$customFields = array(),
+		$resubscribe = true,
+		$restartSubscriptionBasedAutoResponders = false
+	){
 		if(!$oldEmailAddress) {
 			$oldEmailAddress = $member->Email;
 		}
@@ -925,7 +938,9 @@ class CampaignMonitorAPIConnector extends Object {
 	 *
 	 * @param Int $listID
 	 * @param ArraySet $memberSet - list of mebers
-	 * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
+	 * @param array $customFields The subscriber details to use during creation.
+	 *        Each array item needs to have the same key as the member ID or Email -
+	 *        e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
 	 * @param $resubscribe Whether we should resubscribe any existing subscribers
 	 * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
 	 * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
@@ -937,10 +952,19 @@ class CampaignMonitorAPIConnector extends Object {
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$importArray = array();
 		foreach($membersSet as $member) {
+			if(isset($customField[$member->ID])) {
+				$customFields = $customField[$member->ID];
+			}
+			elseif(isset($customField[$member->Email])) {
+				$customFields = $customField[$member->Email];
+			}
+			else {
+				$customFields = array();
+			}
 			$importArray[] = Array(
 				'EmailAddress' => $member->Email,
 				'Name' => $member->getName(),
-				'CustomFields' => isset($customField[$member->ID]) ? $customField[$member->ID] : array()
+				'CustomFields' => $customFields
 			);
 		}
 		$result = $wrap->import(
