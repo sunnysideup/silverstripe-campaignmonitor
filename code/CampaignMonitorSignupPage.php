@@ -93,7 +93,7 @@ class CampaignMonitorSignupPage extends Page {
 	function getCMSFields() {
 		$fields = parent::getCMSFields();
 		if($this->GroupID) {
-			$groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/'.$this->GroupID.'/edit">see group</a></h2>';
+			$groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/'.$this->GroupID.'/edit">open related security group</a></h2>';
 		}
 		else {
 			$groupLink = '<p>No Group has been selected yet.</p>';
@@ -107,11 +107,11 @@ class CampaignMonitorSignupPage extends Page {
 		$fields->addFieldToTab('Root.Newsletters',
 			new TabSet('Options',
 				new Tab('MainSettings',
-					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to the <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
-					new LiteralField('ListIDExplanation', '<p>The way this works is that each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
 					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Show all newsletters for signing up')
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
@@ -130,7 +130,7 @@ class CampaignMonitorSignupPage extends Page {
 					new HtmlEditorField('ThankYouMessage', 'Thank you message after submitting form')
 				),
 				new Tab('SadToSeeYouGo',
-					new TextField('SadToSeeYouGoTitle', 'AlternativeTitle'),
+					new TextField('SadToSeeYouGoTitle', 'Title'),
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
 				),
@@ -259,7 +259,6 @@ class CampaignMonitorSignupPage extends Page {
 				$group->Members()->add($member);
 			}
 			$api = $this->getAPI();
-			echo "....";
 			$result = $api->addSubscriber($listID, $member);
 			if($result == $email) {
 				return null;
@@ -518,6 +517,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if($isSubscribe) {
 				if($newlyCreatedMember) {
 					$form->saveInto($member);
+					$member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
+					$member->FirstName = Convert::raw2sql($data["CampaignMonitorFirstName"]);
+					$member->Surname = Convert::raw2sql($data["CampaignMonitorSurname"]);
 					$member->SetPassword = true;
 					$member->Password = Member::create_new_password();
 					$member->write();

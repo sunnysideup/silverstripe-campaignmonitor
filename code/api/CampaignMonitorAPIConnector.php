@@ -70,8 +70,8 @@ class CampaignMonitorAPIConnector extends Object {
 	 * must be called to use this API.
 	 */
 	public function init(){
-		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
-		require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+		//require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
+		//require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
 	}
 
 	/**
@@ -313,11 +313,13 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @return CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
 	 */
 	public function createList($title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting = null){
+		//require_once '../../csrest_lists.php';
+		$wrap = new CS_REST_Lists(NULL, $this->getAuth());
+		//we need to do this afterwards otherwise the definition below
+		//is not recognised
 		if(!$unsubscribeSetting) {
 			$unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
 		}
-		//require_once '../../csrest_lists.php';
-		$wrap = new CS_REST_Lists(NULL, $this->getAuth());
 		$result = $wrap->create(
 			$this->Config()->get("client_id"),
 			array(
@@ -708,7 +710,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/campaigns/{id}/summary",
-			"Gost Summary"
+			"Got Summary"
 		);
 	}
 
@@ -837,16 +839,11 @@ class CampaignMonitorAPIConnector extends Object {
 		//require_once '../../csrest_clients.php';
 		$wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
 		$result = $wrap->get_lists_for_email($member);
-		if($this->debug) {
-			return $this->returnResult(
-				$result,
-				"/api/v3.1/clients/{id}/listsforemail",
-				"Got lists to which email address ".$member." is subscribed"
-			);
-		}
-		else {
-			return $this->prepareReponse($result);
-		}
+		return $this->returnResult(
+			$result,
+			"/api/v3.1/clients/{id}/listsforemail",
+			"Got lists to which email address ".$member." is subscribed"
+		);
 	}
 
 
@@ -856,15 +853,22 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param Int $listID
 	 * @param Member $member
 	 * @param Array $customFields
+	 * @param array $customFields The subscriber details to use during creation.
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-	 * @param boolean $restartSubscriptionBasedAutoResponders
-	 *     Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
 	function addSubscriber(
 		$listID,
-		Member $member,
+		$member,
 		$customFields = array(),
 		$resubscribe = true,
 		$restartSubscriptionBasedAutoResponders = false
@@ -898,6 +902,13 @@ class CampaignMonitorAPIConnector extends Object {
 	 * @param array $customFields The subscriber details to use during creation.
 	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
 	 * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
 	 *
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
@@ -938,34 +949,46 @@ class CampaignMonitorAPIConnector extends Object {
 	 *
 	 * @param Int $listID
 	 * @param ArraySet $memberSet - list of mebers
-	 * @param array $customFields The subscriber details to use during creation.
-	 *        Each array item needs to have the same key as the member ID or Email -
-	 *        e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
+	 * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
 	 * @param $resubscribe Whether we should resubscribe any existing subscribers
 	 * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
 	 * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
+	 *
+	 * NOTE that for the custom fields they need to be formatted like this:
+	 *    Array(
+	 *        'Key' => The custom fields personalisation tag
+	 *        'Value' => The value for this subscriber
+	 *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
+	 *    )
 
 	 * @return CS_REST_Wrapper_Result A successful response will be empty
 	 */
-	function addSubscribers($listID, $membersSet, $customFields = array(), $resubscribe, $queueSubscriptionBasedAutoResponders = false, $restartSubscriptionBasedAutoResponders = false) {
+	function addSubscribers(
+		$listID,
+		$membersSet,
+		$customFields = array(),
+		$resubscribe,
+		$queueSubscriptionBasedAutoResponders = false,
+		$restartSubscriptionBasedAutoResponders = false
+	) {
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
 		$importArray = array();
 		foreach($membersSet as $member) {
-			if(isset($customField[$member->ID])) {
-				$customFields = $customField[$member->ID];
+			$customFieldsForMember = array();
+			if(isset($customFields[$member->ID])) {
+				$customFieldsForMember = $customFields[$member->ID];
 			}
-			elseif(isset($customField[$member->Email])) {
-				$customFields = $customField[$member->Email];
+			elseif(isset($customFields[$member->Email])) {
+				$customFieldsForMember = $customFields[$member->Email];
 			}
-			else {
-				$customFields = array();
+			if($member instanceof Member) {
+				$importArray[] = Array(
+					'EmailAddress' => $member->Email,
+					'Name' => $member->getName(),
+					'CustomFields' => $customFieldsForMember
+				);
 			}
-			$importArray[] = Array(
-				'EmailAddress' => $member->Email,
-				'Name' => $member->getName(),
-				'CustomFields' => $customFields
-			);
 		}
 		$result = $wrap->import(
 			$importArray,
@@ -1059,7 +1082,7 @@ class CampaignMonitorAPIConnector extends Object {
 		}
 		$outcome = $this->getSubscriber($listID, $member);
 		if($outcome && isset($outcome->State)) {
-			if($outcome->State == "Active" || $outcome == "Bounced") {
+			if($outcome->State == "Active") {
 				if($this->debug) {
 					echo "<h3>Subscriber Can Receive Emails For This List</h3>";
 				}
@@ -1218,7 +1241,12 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 	function init(){
 		parent::init();
-		increase_time_limit_to(600);
+		if($this->debug) {
+			increase_time_limit_to(600);
+		}
+		if(!$this->Config()->get("client_id")) {
+			user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
+		}
 	}
 
 	/**
@@ -1479,7 +1507,9 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 		//getCampaigns
 		$result = $this->api->getCampaigns();
-		$this->egData["campaignID"] = $result[0]->CampaignID;
+		if(isset($result[0])) {
+			$this->egData["campaignID"] = $result[0]->CampaignID;
+		}
 
 		$this->api->setDebug(true);
 

@@ -2,7 +2,13 @@ Campaign Monitor Module
 ================================================================================
 
 Connects a Silverstripe Website with the Campaign Monitor
-API.
+API. Here are some examples:
+
+![Sign Up Page](docs/screenshots/SignupForm.png)
+
+![Quick Sign Up Form](docs/screenshots/QuickSignupForm.png)
+
+![Back-End](docs/screenshots/Backend.png)
 
 
 Developer
@@ -30,6 +36,8 @@ Installation Instructions
 -----------------------------------------------
 
 1. Find out how to add modules to SS and add module as per usual.
+   You will need to add this module using composer
+   e.g. `composer require sunnysideup/campaingmonitor`
 
 2. Review configs and add entries to mysite/_config/config.yml
 (or similar) as necessary.
@@ -42,25 +50,22 @@ further setup
 
 #### MUST DO FIRST
 
-1. create client and list on the Campaign Monitor website.
+ * create client and list on the Campaign Monitor website.
 
-2. set up the api details from Campaign Monitor in the _config/* files
+ * set up the api details from Campaign Monitor in the _config/* files
 
-3. create a sign up page in the CMS and link it to the list on Campaign Monitor
+ * create a sign up page in the CMS and link it to the list on Campaign Monitor
 
 #### AVAILABLE FEATURES
 
-1. set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
+ * The `Member` class gets a bunch of additional methods - see [`CampaignMonitorMemberDOD` Class](code/decorators/CampaignMonitorMemberDOD.php)
 
-2. create "starter" form for sign-up page by calling the method
+ * set up sign-up page for Campaign Monitor list in the CMS for one or all lists. This page has a ton of features.
 
-```
-    CampaignMonitorSignupPage::CampaignMonitorStartForm();
-```
+ * lots of API calls can be made through an API class. This class can be used as follows (example only):
 
-3. lots of API calls can be made through an API class. This class can be used as follows (example only):
+```php
 
-```
     private static $api = null;
 
     /**
@@ -84,6 +89,36 @@ further setup
 
 A full list of api calls can be found in the CampaignMonitorAPIConnector.
 
-4. To test the API, you can visit /create-send-test/
+ * To test the API, you can visit /create-send-test/
+
+ * adding a quick sign-up form on all your pages:
+
+```php
+    class Page_Controller extends ContentController {
+
+        private static $allowed_actions = array (
+            "CampaignMonitorStartForm" => true
+        );
+
+        function CampaignMonitorStartForm(){
+            if($this->dataRecord instanceof CampaignMonitorSignupPage) {
+            }
+            else {
+                $page = CampaignMonitorSignupPage::get_ready_ones()->first();
+                if($page) {
+                    return $page->CampaignMonitorStartForm($this);
+                }
+            }
+        }
+
+    }
+
+```
+
+and add this in the your template:
+
+```html
+    $CampaignMonitorStartForm
+```
 
 
