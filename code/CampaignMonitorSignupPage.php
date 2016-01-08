@@ -68,7 +68,7 @@ class CampaignMonitorSignupPage extends Page {
 	 *
 	 * @var CampaignMonitorAPIConnector | Null
 	 */
-	protected static $api = null;
+	protected static $_api = null;
 
 
 	/**
@@ -148,7 +148,7 @@ class CampaignMonitorSignupPage extends Page {
 			)
 		);
 		if(!Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url"))  {
-			$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
+			//$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
 		}
 		return $fields;
 	}
@@ -158,11 +158,11 @@ class CampaignMonitorSignupPage extends Page {
 	 * @return CampaignMonitorAPIConnector
 	 */
 	public function getAPI(){
-		if(!self::$api) {
-			self::$api = CampaignMonitorAPIConnector::create();
-			self::$api->init();
+		if(!self::$_api) {
+			self::$_api = CampaignMonitorAPIConnector::create();
+			self::$_api->init();
 		}
-		return self::$api;
+		return self::$_api;
 	}
 
 	/**
@@ -401,6 +401,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		"sadtoseeyougo" => true,
 		"preloademail" => true,
 		"viewcampaign" => true,
+		"viewcampaigntextonly" => true,
+		"previewviewcampaign" => true,
+		"previewviewcampaigntextonly" => true,
 		"stats" => true,
 		"resetoldcampaigns" => true,
 		"resetsignup" => true
@@ -652,6 +655,46 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		}
 		return array();
 	}
+
+	/**
+	 *
+	 * action to show one campaign TEXT ONLY...
+	 */
+	function viewcampaigntextonly($request){
+		$campaignID = Convert::raw2sql($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
+		if(!$this->campaign) {
+			return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
+		}
+		return array();
+	}
+
+	/**
+	 *
+	 * action to preview one campaign...
+	 */
+	function previewcampaign($request){
+		$campaignID = Convert::raw2sql($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
+		if($this->campaign && $this->campaign->Content) {
+			return $this->campaign->Content;
+		}
+		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
+	}
+
+	/**
+	 *
+	 * action to preview one campaign TEXT ONLY...
+	 */
+	function previewcampaigntextonly($request){
+		$campaignID = Convert::raw2sql($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
+		if($this->campaign && $this->campaign->Content) {
+			return strip_tags($this->campaign->Content);
+		}
+		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
+	}
+
 
 	/**
 	 *

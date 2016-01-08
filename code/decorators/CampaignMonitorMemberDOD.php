@@ -20,18 +20,18 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 * @var null | CampaignMonitorAPIConnector
 	 *
 	 */
-	private static $api = null;
+	private static $_api = null;
 
 	/**
 	 *
 	 * @return CampaignMonitorAPIConnector
 	 */
 	private function getCMAPI(){
-		if(!self::$api) {
-			self::$api = CampaignMonitorAPIConnector::create();
-			self::$api->init();
+		if(!self::$_api) {
+			self::$_api = CampaignMonitorAPIConnector::create();
+			self::$_api->init();
 		}
-		return self::$api;
+		return self::$_api;
 	}
 
 	/**

@@ -10,11 +10,15 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $db = array(
 		"CampaignID" => "Varchar(40)",
-		"Name" => "Varchar(255)",
-		"Subject" => "Varchar(255)",
+		"Name" => "Varchar(100)",
+		"Subject" => "Varchar(100)",
+		"FromName" => "Varchar(100)",
+		"FromEmail" => "Varchar(100)",
+		"ReplyTo" => "Varchar(100)",
 		"SentDate" => "SS_Datetime",
 		"WebVersionURL" => "Varchar(255)",
     "WebVersionTextURL" => "Varchar(255)",
+    "Content" => "HTMLText",
     "Hide" => "Boolean"
 	);
 
@@ -55,16 +59,50 @@ class CampaignMonitorCampaign extends DataObject {
 		return $fields;
 	}
 
-	function Link($action = null){
+	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("viewcampaign/".$this->CampaignID);
+			$link = $page->Link("viewcampaign".$action."/".$this->CampaignID);
 			return $link;
 		}
 		return "#";
 	}
 
+
+	function PreviewLink($action = ""){
+		if($page = $this->Pages()->First()) {
+			$link = $page->Link("previewcampaign".$action."/".$this->CampaignID);
+			return $link;
+		}
+		return "#";
+	}
+
+	function onAfterWrite(){
+		parent::onAfterWrite();
+		if(!$this->CampaignID) {
+			$api = $this->getAPI();
+			$api->createCampaign(
+
+			);
+		}
+	}
+
+	private static $_api = null;
+
+	/**
+	 *
+	 * @return CampaignMonitorAPIConnector
+	 */
+	public function getAPI(){
+		if(!self::$_api) {
+			self::$_api = CampaignMonitorAPIConnector::create();
+			self::$_api->init();
+		}
+		return self::$_api;
+	}
+
+
 	function canCreate($member = null){
-		return false;
+		return parent::canCreate($member);
 	}
 
 	function canDelete($member = null){

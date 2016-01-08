@@ -26,7 +26,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 			foreach($campaigns as $campaign) {
 				if($campaign->SentDate) {
 					if(!CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaign->CampaignID))->count()) {
-						$campaignMonitorCampaign = new CampaignMonitorCampaign();
+						$campaignMonitorCampaign = CampaignMonitorCampaign::create();
 						$campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
 						$campaignMonitorCampaign->Subject = $campaign->Subject;
 						$campaignMonitorCampaign->Name = $campaign->Name;

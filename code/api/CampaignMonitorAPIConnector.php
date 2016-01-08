@@ -668,7 +668,67 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/lists/{ID}/stats",
-			"Gost Lists Stats"
+			"Got Lists Stats"
+		);
+	}
+
+	/*******************************************************
+	 * create campaigns
+	 *
+	 *******************************************************/
+
+	function createCampaign(
+		$campaignMonitorCampaign,
+		$listIDs = array(),
+		$segmentIDs = array()
+	){
+		//require_once '../../csrest_lists.php';
+		$siteConfig = SiteConfig::current_site_config();
+
+		$subject = $campaignMonitorCampaign->Subject;
+		if(!$subject) {
+			$subject = "no subject set";
+		}
+
+		$name = $campaignMonitorCampaign->Name;
+		if(!$name) {
+			$name = "no name set";
+		}
+
+		$fromName = $campaignMonitorCampaign->FromName;
+		if(!$fromName) {
+			$fromName = $siteConfig->Title;
+		}
+
+		$fromEmail = $campaignMonitorCampaign->FromEmail;
+		if(!$fromEmail) {
+			$fromEmail = Config::inst()->get('Email', 'admin_email');
+		}
+
+		$replyTo = $campaignMonitorCampaign->ReplyTo;
+		if(!$replyTo) {
+			$replyTo = $fromEmail;
+		}
+
+		$wrap = new CS_REST_Campaigns(null, $this->getAuth());
+		$result = $wrap->get_stats();
+
+		$result = $wrap->create(
+			$this->Config()->get("client_id"), array(
+				$subject,
+				$name,
+				$fromName,
+				$fromEmail,
+				$replyTo,
+				$campaignMonitorCampaign->PreviewLink(),
+				$campaignMonitorCampaign->PreviewLink("textonly"),
+				$listIDs,
+				$segmentIDs
+		));
+		return $this->returnResult(
+			$result,
+			"GET /api/v3/campaigns/{clientID}",
+			"Created Campaign"
 		);
 	}
 

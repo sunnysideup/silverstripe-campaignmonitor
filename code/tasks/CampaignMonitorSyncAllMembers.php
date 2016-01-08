@@ -125,18 +125,18 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		DB::alteration_message("<h1>== THE END ==</h1>");
 	}
 
-	private static $api = null;
+	private static $_api = null;
 
 	/**
 	 *
 	 * @return CampaignMonitorAPIConnector
 	 */
 	public function getAPI(){
-		if(!self::$api) {
-			self::$api = CampaignMonitorAPIConnector::create();
-			self::$api->init();
+		if(!self::$_api) {
+			self::$_api = CampaignMonitorAPIConnector::create();
+			self::$_api->init();
 		}
-		return self::$api;
+		return self::$_api;
 	}
 
 	/**
