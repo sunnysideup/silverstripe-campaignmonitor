@@ -150,6 +150,12 @@ class CampaignMonitorSignupPage extends Page {
 		if(!Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url"))  {
 			//$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
 		}
+
+		if($this->ID) {
+			$config = GridFieldConfig_RelationEditor::create();
+			$gridField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+			$fields->addFieldToTab('Root.Newsletters', $gridField);
+		}
 		return $fields;
 	}
 

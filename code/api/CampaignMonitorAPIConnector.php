@@ -710,21 +710,26 @@ class CampaignMonitorAPIConnector extends Object {
 			$replyTo = $fromEmail;
 		}
 
-		$wrap = new CS_REST_Campaigns(null, $this->getAuth());
-		$result = $wrap->get_stats();
+		$listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
+		$wrap = new CS_REST_Campaigns(null, $this->getAuth());
 		$result = $wrap->create(
-			$this->Config()->get("client_id"), array(
-				$subject,
-				$name,
-				$fromName,
-				$fromEmail,
-				$replyTo,
-				$campaignMonitorCampaign->PreviewLink(),
-				$campaignMonitorCampaign->PreviewLink("textonly"),
-				$listIDs,
-				$segmentIDs
-		));
+			$this->Config()->get("client_id"),
+			array(
+				'Subject' => $subject,
+				'Name' => $name,
+				'FromName' => $fromName,
+				'FromEmail' => $fromEmail,
+				'ReplyTo' => $replyTo,
+				'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
+				'TextUrl' => $campaignMonitorCampaign->PreviewLink("textonly"),
+				'ListIDs' => array($listID)
+			)
+		);
+		if(isset($result->response->Code) && ($result->response->Code == 200 || $result->response->Code == 201)) {
+			$campaignMonitorCampaign->CampaignID = $result->response;
+			$campaignMonitorCampaign->write();
+		}
 		return $this->returnResult(
 			$result,
 			"GET /api/v3/campaigns/{clientID}",
@@ -1304,7 +1309,7 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 		if($this->debug) {
 			increase_time_limit_to(600);
 		}
-		if(!$this->Config()->get("client_id")) {
+		if(!Config::inst()->get("CampaignMonitorAPIConnector", "client_id")) {
 			user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
 		}
 	}
@@ -1425,6 +1430,7 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 		$this->setupTests();
 
 		//campaign summary
+		/*
 		$result = $this->api->getSummary($this->egData["campaignID"]);
 
 		$result = $this->api->getEmailClientUsage($this->egData["campaignID"]);
@@ -1437,6 +1443,14 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 			$sortByField = "EMAIL",
 			$sortDirection = "ASC"
 		);
+		*/
+		echo "<h3>creating a campaign</h3>";
+		$obj = CampaignMonitorCampaign::create();
+		$obj->Name = "test only";
+		$obj->Subject = "test only";
+		$obj->write();
+		echo "<h3>deleting a</h3>";
+		$obj->delete();
 		echo "<h2>end of campaign tests</h2>";
 		$this->index();
 

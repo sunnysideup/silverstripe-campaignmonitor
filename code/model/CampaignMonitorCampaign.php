@@ -62,7 +62,7 @@ class CampaignMonitorCampaign extends DataObject {
 	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("viewcampaign".$action."/".$this->CampaignID);
-			return $link;
+			return Director::absoluteURL($link);
 		}
 		return "#";
 	}
@@ -71,18 +71,22 @@ class CampaignMonitorCampaign extends DataObject {
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("previewcampaign".$action."/".$this->CampaignID);
-			return $link;
+			return Director::absoluteURL($link);
 		}
-		return "#";
+		return "";
 	}
 
 	function onAfterWrite(){
 		parent::onAfterWrite();
+		if($this->Pages()->count() == 0) {
+			if($page = CampaignMonitorSignupPage::get()->first()) {
+				$this->Pages()->add($page);
+				$this->write();
+			}
+		}
 		if(!$this->CampaignID) {
 			$api = $this->getAPI();
-			$api->createCampaign(
-
-			);
+			echo $api->createCampaign($this);
 		}
 	}
 
