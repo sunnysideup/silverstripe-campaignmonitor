@@ -69,11 +69,11 @@ class CampaignMonitorCampaign extends DataObject {
 
 		if($this->HasBeenSentCheck()) {
 			$fields->removeFieldFromTab("Root", "CreateFromWebsite");
-			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
+			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target=\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
 		}
 		else {
 			$fields->removeFieldFromTab("Root", "Hide");
-			$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
+			$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target=\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
 			if($this->CreatedFromWebsite) {
 				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
 			}
@@ -87,7 +87,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("viewcampaign".$action."/".$this->ID);
+			$link = $page->Link("viewcampaign".$action."/".$this->ID."/");
 			return Director::absoluteURL($link);
 		}
 		return "#";
@@ -96,7 +96,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("previewcampaign".$action."/".$this->ID);
+			$link = $page->Link("previewcampaign".$action."/".$this->ID."/");
 			return Director::absoluteURL($link);
 		}
 		return "";
