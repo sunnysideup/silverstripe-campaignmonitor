@@ -73,9 +73,9 @@ class CampaignMonitorCampaign extends DataObject {
 		}
 		else {
 			$fields->removeFieldFromTab("Root", "Hide");
+			$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
 			if($this->CreatedFromWebsite) {
 				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
-				$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
 			}
 			elseif(!$this->exists()) {
 				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
