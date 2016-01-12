@@ -9,6 +9,9 @@
 class CampaignMonitorCampaign extends DataObject {
 
 	private static $db = array(
+		"HasBeenSent" => "Boolean",
+    "CreateFromWebsite" => "Boolean",
+    "CreatedFromWebsite" => "Boolean",
 		"CampaignID" => "Varchar(40)",
 		"Name" => "Varchar(100)",
 		"Subject" => "Varchar(100)",
@@ -18,8 +21,8 @@ class CampaignMonitorCampaign extends DataObject {
 		"SentDate" => "SS_Datetime",
 		"WebVersionURL" => "Varchar(255)",
     "WebVersionTextURL" => "Varchar(255)",
-    "Content" => "HTMLText",
-    "Hide" => "Boolean"
+    "Hide" => "Boolean",
+    "Content" => "HTMLText"
 	);
 
 	private static $indexes = array(
@@ -51,17 +54,40 @@ class CampaignMonitorCampaign extends DataObject {
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
 		$fields->makeFieldReadonly("CampaignID");
+		$fields->makeFieldReadonly("WebVersionURL");
+		$fields->makeFieldReadonly("WebVersionTextURL");
+		$fields->makeFieldReadonly("SentDate");
+		$fields->makeFieldReadonly("HasBeenSent");
+		//pages
 		$fields->removeFieldFromTab("Root", "Pages");
 		$source = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
+		$fields->removeFieldFromTab("Root", "CreatedFromWebsite");
+
 		if(count($source))  {
 			$fields->addFieldToTab("Root.Main", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
 		}
+
+		if($this->HasBeenSentCheck()) {
+			$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
+		}
+		else {
+			$fields->removeFieldFromTab("Root", "Hide");
+			if($this->CreatedFromWebsite) {
+				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+				$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
+			}
+			elseif(!$this->exists()) {
+				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+			}
+		}
 		return $fields;
+
 	}
 
 	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("viewcampaign".$action."/".$this->CampaignID);
+			$link = $page->Link("viewcampaign".$action."/".$this->ID);
 			return Director::absoluteURL($link);
 		}
 		return "#";
@@ -70,10 +96,25 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("previewcampaign".$action."/".$this->CampaignID);
+			$link = $page->Link("previewcampaign".$action."/".$this->ID);
 			return Director::absoluteURL($link);
 		}
 		return "";
+	}
+
+	function getNewsletterContent(){
+		$extension = $this->extend("updateNewsletterContent", $content);
+		if($extension !== null) {
+			return $extension[0];
+		}
+		return $this->Content;
+	}
+
+	function onBeforeWrite(){
+		parent::onBeforeWrite();
+		if($this->CampaignID) {
+			$this->CreateFromWebsite = false;
+		}
 	}
 
 	function onAfterWrite(){
@@ -84,9 +125,22 @@ class CampaignMonitorCampaign extends DataObject {
 				$this->write();
 			}
 		}
-		if(!$this->CampaignID) {
+		if(!$this->CampaignID  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
-			echo $api->createCampaign($this);
+			$api->createCampaign($this);
+		}
+	}
+
+	function onBeforeDelete(){
+		parent::onBeforeDelete();
+		if($this->HasBeenSentCheck()) {
+			//do nothing
+		}
+		else {
+			if($this->CreatedFromWebsite) {
+				$api = $this->getAPI();
+				$api->deleteCampaign($this->CampaignID);
+			}
 		}
 	}
 
@@ -96,7 +150,7 @@ class CampaignMonitorCampaign extends DataObject {
 	 *
 	 * @return CampaignMonitorAPIConnector
 	 */
-	public function getAPI(){
+	protected function getAPI(){
 		if(!self::$_api) {
 			self::$_api = CampaignMonitorAPIConnector::create();
 			self::$_api->init();
@@ -104,13 +158,27 @@ class CampaignMonitorCampaign extends DataObject {
 		return self::$_api;
 	}
 
-
-	function canCreate($member = null){
-		return parent::canCreate($member);
-	}
-
-	function canDelete($member = null){
-		return false;
+	public function HasBeenSentCheck(){
+		if(!$this->CampaignID) {
+			return false;
+		}
+		if(!$this->HasBeenSent) {
+			$api = $this->getAPI();
+			$result = $this->api->getCampaigns();
+			if(isset($result)) {
+				foreach($result as $key => $campaign) {
+					if($this->CampaignID == $campaign->CampaignID) {
+						$this->HasBeenSent = true;
+						$this->HasBeenSent->write();
+						return true;
+					}
+				}
+			}
+			else {
+				user_error("error");
+			}
+		}
+		return $this->HasBeenSent;
 	}
 
 

@@ -25,25 +25,27 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 		if(is_array($campaigns)) {
 			foreach($campaigns as $campaign) {
 				if($campaign->SentDate) {
-					if(!CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaign->CampaignID))->count()) {
-						$campaignMonitorCampaign = CampaignMonitorCampaign::create();
-						$campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
-						$campaignMonitorCampaign->Subject = $campaign->Subject;
-						$campaignMonitorCampaign->Name = $campaign->Name;
-						$campaignMonitorCampaign->SentDate = $campaign->SentDate;
-						$campaignMonitorCampaign->WebVersionURL = $campaign->WebVersionURL;
-						$campaignMonitorCampaign->WebVersionTextURL = $campaign->WebVersionTextURL;
-						//$CampaignMonitorCampaign->ParentID = $this->ID;
-						$campaignMonitorCampaign->write();
+					$campaignMonitorCampaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaign->CampaignID))->first()
+					if(!$campaignMonitorCampaign) {
 						if($this->verbose) {
 							DB::alteration_message("Adding ".$campaign->Subject." sent ".$campaign->SentDate, "created");
 						}
+						$campaignMonitorCampaign = CampaignMonitorCampaign::create();
 					}
 					else {
 						if($this->verbose) {
 							DB::alteration_message("already added ".$campaign->Subject, "edited");
 						}
 					}
+					$campaignMonitorCampaign->HasBeenSent = true;
+					$campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
+					$campaignMonitorCampaign->Subject = $campaign->Subject;
+					$campaignMonitorCampaign->Name = $campaign->Name;
+					$campaignMonitorCampaign->SentDate = $campaign->SentDate;
+					$campaignMonitorCampaign->WebVersionURL = $campaign->WebVersionURL;
+					$campaignMonitorCampaign->WebVersionTextURL = $campaign->WebVersionTextURL;
+					//$CampaignMonitorCampaign->ParentID = $this->ID;
+					$campaignMonitorCampaign->write();
 				}
 				else {
 					if($this->verbose) {

@@ -726,17 +726,35 @@ class CampaignMonitorAPIConnector extends Object {
 				'ListIDs' => array($listID)
 			)
 		);
-		if(isset($result->response->Code) && ($result->response->Code == 200 || $result->response->Code == 201)) {
-			$campaignMonitorCampaign->CampaignID = $result->response;
-			$campaignMonitorCampaign->write();
+		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+			$code = $result->response;
 		}
+		else {
+			$code = "Error";
+			if(is_object($result->response)) {
+				$code = $result->response->Code.":".$result->response->Message;
+			}
+		}
+		$campaignMonitorCampaign->CreatedFromWebsite = true;
+		$campaignMonitorCampaign->CampaignID = $code;
+		$campaignMonitorCampaign->write();
+
 		return $this->returnResult(
 			$result,
-			"GET /api/v3/campaigns/{clientID}",
+			"CREATE /api/v3/campaigns/{clientID}",
 			"Created Campaign"
 		);
 	}
 
+	function deleteCampaign($campaignID){
+		$wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+		$result = $wrap->delete();
+		return $this->returnResult(
+			$result,
+			"DELETE /api/v3/campaigns/{id}",
+			"Deleted Campaign"
+		);
+	}
 
 	/*******************************************************
 	 * information about the campaigns
@@ -1430,7 +1448,9 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 		$this->setupTests();
 
 		//campaign summary
-		/*
+
+		$result = $this->api->getCampaigns();
+
 		$result = $this->api->getSummary($this->egData["campaignID"]);
 
 		$result = $this->api->getEmailClientUsage($this->egData["campaignID"]);
@@ -1443,14 +1463,19 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 			$sortByField = "EMAIL",
 			$sortDirection = "ASC"
 		);
-		*/
+
 		echo "<h3>creating a campaign</h3>";
 		$obj = CampaignMonitorCampaign::create();
-		$obj->Name = "test only";
-		$obj->Subject = "test only";
+		$randNumber = rand(0, 9999999);
+		$obj->Name = "test only ".$randNumber;
+		$obj->Subject = "test only".$randNumber;
+		$obj->CreateFromWebsite = true;
 		$obj->write();
-		echo "<h3>deleting a</h3>";
+		$result = $this->api->getSummary($obj->CampaignID);
+
+		echo "<h3>deleting a campaign</h3>";
 		$obj->delete();
+
 		echo "<h2>end of campaign tests</h2>";
 		$this->index();
 

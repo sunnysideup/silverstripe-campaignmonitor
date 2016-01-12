@@ -104,7 +104,14 @@ class CampaignMonitorSignupPage extends Page {
 		if($campaignExample) {
 			$campaignExampleLink = $this->Link("viewcampaign/".$campaignExample->CampaignID);
 		}
-		$fields->addFieldToTab('Root.Newsletters',
+		if($this->ID) {
+			$config = GridFieldConfig_RelationEditor::create();
+			$campaignField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+		}
+		else {
+			$campaignField = new HiddenField("CampaignList");
+		}
+		$fields->addFieldToTab('Root.Details',
 			new TabSet('Options',
 				new Tab('MainSettings',
 					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
@@ -134,10 +141,11 @@ class CampaignMonitorSignupPage extends Page {
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
 				),
-				new Tab('Campaigns',
+				new Tab('Newsletters',
 					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
 					new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->limit(100)->map()->toArray())
+					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->limit(100)->map()->toArray()),
+					$campaignField
 				),
 				new Tab('Advanced',
 					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
@@ -149,12 +157,6 @@ class CampaignMonitorSignupPage extends Page {
 		);
 		if(!Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url"))  {
 			//$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
-		}
-
-		if($this->ID) {
-			$config = GridFieldConfig_RelationEditor::create();
-			$gridField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
-			$fields->addFieldToTab('Root.Newsletters', $gridField);
 		}
 		return $fields;
 	}
@@ -408,8 +410,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		"preloademail" => true,
 		"viewcampaign" => true,
 		"viewcampaigntextonly" => true,
-		"previewviewcampaign" => true,
-		"previewviewcampaigntextonly" => true,
+		"previewcampaign" => true,
+		"previewcampaigntextonly" => true,
 		"stats" => true,
 		"resetoldcampaigns" => true,
 		"resetsignup" => true
@@ -654,8 +656,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 * action to show one campaign...
 	 */
 	function viewcampaign($request){
-		$campaignID = Convert::raw2sql($request->param("ID"));
-		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
+		$id = intval($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if(!$this->campaign) {
 			return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
 		}
@@ -667,8 +669,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 * action to show one campaign TEXT ONLY...
 	 */
 	function viewcampaigntextonly($request){
-		$campaignID = Convert::raw2sql($request->param("ID"));
-		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
+		$id = intval($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if(!$this->campaign) {
 			return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
 		}
@@ -680,10 +682,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 * action to preview one campaign...
 	 */
 	function previewcampaign($request){
-		$campaignID = Convert::raw2sql($request->param("ID"));
-		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
-		if($this->campaign && $this->campaign->Content) {
-			return $this->campaign->Content;
+		$id = intval($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
+		if($this->campaign) {
+			return $this->campaign->getNewsletterContent();
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
@@ -693,10 +695,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 * action to preview one campaign TEXT ONLY...
 	 */
 	function previewcampaigntextonly($request){
-		$campaignID = Convert::raw2sql($request->param("ID"));
-		$this->campaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaignID))->First();
-		if($this->campaign && $this->campaign->Content) {
-			return strip_tags($this->campaign->Content);
+		$id = intval($request->param("ID"));
+		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
+		if($this->campaign) {
+			return strip_tags($this->campaign->getNewsletterContent());
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
@@ -739,7 +741,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				->filter(
 					array(
 						"ID" => $campaigns->map("ID", "ID")->toArray(),
-						"Hide" => 0
+						"Hide" => 0,
+						"HasBeenSent" => 1
 					)
 				);
 		}
