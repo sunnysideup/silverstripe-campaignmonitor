@@ -66,17 +66,17 @@ class CampaignMonitorCampaign extends DataObject {
 		$fields->makeFieldReadonly("SentDate");
 		$fields->makeFieldReadonly("HasBeenSent");
 		//pages
-		$fields->removeFieldFromTab("Root", "Pages");
+		$fields->removeFieldFromTab("Root.Main", "Pages");
 		$source = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
-		$fields->removeFieldFromTab("Root", "CreatedFromWebsite");
+		$fields->removeFieldFromTab("Root.Main", "CreatedFromWebsite");
 
 		if(count($source))  {
 			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
 		}
 		if($this->ExistsOnCampaignMonitorCheck()){
-			$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+			$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
 			if(!$this->HasBeenSentCheck()) {
-				$fields->addFieldToTab("Root", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>", "CampaignID"));
+				$fields->addFieldToTab("Root.Main", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>"), "CampaignID");
 			}
 			$fields->makeFieldReadonly("Name");
 			$fields->makeFieldReadonly("Subject");
@@ -93,17 +93,17 @@ class CampaignMonitorCampaign extends DataObject {
 			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
 		}
 		else {
-			$fields->removeFieldFromTab("Root", "Hide");
+			$fields->removeFieldFromTab("Root.Main", "Hide");
 			if($this->exists()) {
 				if($this->ExistsOnCampaignMonitorCheck()) {
-					$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+					$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
 				}
 				else {
 					$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
 				}
 			}
 			else {
-				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+				$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
 			}
 		}
 		return $fields;
