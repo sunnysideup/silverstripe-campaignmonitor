@@ -685,7 +685,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$id = intval($request->param("ID"));
 		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if($this->campaign) {
-			return $this->campaign->getNewsletterContent();
+			return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
@@ -698,7 +698,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$id = intval($request->param("ID"));
 		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if($this->campaign) {
-			return strip_tags($this->campaign->getNewsletterContent());
+			return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
