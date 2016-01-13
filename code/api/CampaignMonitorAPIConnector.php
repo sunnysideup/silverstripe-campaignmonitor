@@ -259,11 +259,20 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/clients/{id}/campaigns",
-			"Got campaigns"
+			"Got sent campaigns"
 		);
 	}
 
-	public function getDrafts(){user_error("This method is still to be implemented, see samples for an example");}
+	public function getDrafts(){
+		//require_once '../../csrest_clients.php';
+		$wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
+		$result = $wrap->get_drafts();
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/clients/{id}/drafts",
+			"Got draft campaigns"
+		);
+	}
 
 	/**
 	 * Gets all subscriber lists the current client has created
@@ -1450,6 +1459,8 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 		//campaign summary
 
 		$result = $this->api->getCampaigns();
+
+		$result = $this->api->getDrafts();
 
 		$result = $this->api->getSummary($this->egData["campaignID"]);
 

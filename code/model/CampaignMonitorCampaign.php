@@ -87,7 +87,6 @@ class CampaignMonitorCampaign extends DataObject {
 			$fields->makeFieldReadonly("WebVersionURL");
 			$fields->makeFieldReadonly("WebVersionTextURL");
 			$fields->makeFieldReadonly("Content");
-
 		}
 		if($this->HasBeenSentCheck()) {
 			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
@@ -220,11 +219,17 @@ class CampaignMonitorCampaign extends DataObject {
 			else {
 				$api = $this->getAPI();
 				$result = $this->api->getSummary($this->CampaignID);
-				if(!$result) {
-					$this->_existsOnCampaignMonitorCheck = false;
+				$result = $this->api->getDrafts();
+				if(isset($result)) {
+					foreach($result as $key => $campaign) {
+						if($this->CampaignID == $campaign->CampaignID) {
+							$this->_existsOnCampaignMonitorCheck = true;
+							break;
+						}
+					}
 				}
-				else {
-					$this->_existsOnCampaignMonitorCheck = true;
+				else{
+					$this->_existsOnCampaignMonitorCheck = false;
 				}
 			}
 		}
