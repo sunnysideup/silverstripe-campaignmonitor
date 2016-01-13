@@ -30,6 +30,10 @@ class CampaignMonitorCampaign extends DataObject {
 		"Hide" => true
 	);
 
+	private static $field_labels = array(
+		"CreateFromWebsite" => "Create on newsletter server"
+	);
+
 	private static $many_many = array(
 		"Pages" => "CampaignMonitorSignupPage"
 	);
@@ -50,6 +54,9 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $default_sort = "Hide ASC, SentDate DESC";
 
+	function canDelete($member = null){
+		return $this->HasBeenSentCheck() ? false : parent::canDelete($member);
+	}
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
@@ -64,30 +71,47 @@ class CampaignMonitorCampaign extends DataObject {
 		$fields->removeFieldFromTab("Root", "CreatedFromWebsite");
 
 		if(count($source))  {
-			$fields->addFieldToTab("Root.Main", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
+			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
 		}
-
-		if($this->HasBeenSentCheck()) {
+		if($this->ExistsOnCampaignMonitorCheck()){
 			$fields->removeFieldFromTab("Root", "CreateFromWebsite");
-			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target=\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
+			if(!$this->HasBeenSentCheck()) {
+				$fields->addFieldToTab("Root", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>", "CampaignID"));
+			}
+			$fields->makeFieldReadonly("Name");
+			$fields->makeFieldReadonly("Subject");
+			$fields->makeFieldReadonly("FromName");
+			$fields->makeFieldReadonly("FromEmail");
+			$fields->makeFieldReadonly("ReplyTo");
+			$fields->makeFieldReadonly("SentDate");
+			$fields->makeFieldReadonly("WebVersionURL");
+			$fields->makeFieldReadonly("WebVersionTextURL");
+			$fields->makeFieldReadonly("Content");
+
+		}
+		if($this->HasBeenSentCheck()) {
+			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
 		}
 		else {
 			$fields->removeFieldFromTab("Root", "Hide");
-			$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target=\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
-			if($this->CreatedFromWebsite) {
-				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+			if($this->exists()) {
+				if($this->ExistsOnCampaignMonitorCheck()) {
+					$fields->removeFieldFromTab("Root", "CreateFromWebsite");
+				}
+				else {
+					$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
+				}
 			}
-			elseif(!$this->exists()) {
+			else {
 				$fields->removeFieldFromTab("Root", "CreateFromWebsite");
 			}
 		}
 		return $fields;
-
 	}
 
 	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("viewcampaign".$action."/".$this->ID."/");
+			$link = $page->Link("viewcampaign".$action."/".$this->ID);
 			return Director::absoluteURL($link);
 		}
 		return "#";
@@ -96,7 +120,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("previewcampaign".$action."/".$this->ID."/");
+			$link = $page->Link("previewcampaign".$action."/".$this->ID);
 			return Director::absoluteURL($link);
 		}
 		return "";
@@ -125,7 +149,7 @@ class CampaignMonitorCampaign extends DataObject {
 				$this->write();
 			}
 		}
-		if(!$this->CampaignID  && $this->CreateFromWebsite) {
+		if(!$this->ExistsOnCampaignMonitorCheck()  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
 			$api->createCampaign($this);
 		}
@@ -137,7 +161,7 @@ class CampaignMonitorCampaign extends DataObject {
 			//do nothing
 		}
 		else {
-			if($this->CreatedFromWebsite) {
+			if($this->ExistsOnCampaignMonitorCheck()) {
 				$api = $this->getAPI();
 				$api->deleteCampaign($this->CampaignID);
 			}
@@ -158,29 +182,54 @@ class CampaignMonitorCampaign extends DataObject {
 		return self::$_api;
 	}
 
+	private $_hasBeenSent = null;
+
 	public function HasBeenSentCheck(){
-		if(!$this->CampaignID) {
-			return false;
-		}
-		if(!$this->HasBeenSent) {
-			$api = $this->getAPI();
-			$result = $this->api->getCampaigns();
-			if(isset($result)) {
-				foreach($result as $key => $campaign) {
-					if($this->CampaignID == $campaign->CampaignID) {
-						$this->HasBeenSent = true;
-						$this->HasBeenSent->write();
-						return true;
+		if($this->_hasBeenSent === null) {
+			if(!$this->CampaignID) {
+				$this->_hasBeenSent = false;
+			}
+			elseif(!$this->HasBeenSent) {
+				$api = $this->getAPI();
+				$result = $this->api->getCampaigns();
+				if(isset($result)) {
+					foreach($result as $key => $campaign) {
+						if($this->CampaignID == $campaign->CampaignID) {
+							$this->HasBeenSent = true;
+							$this->HasBeenSent->write();
+							$this->_hasBeenSent = true;
+							break;
+						}
 					}
 				}
 			}
 			else {
-				user_error("error");
+				$this->_hasBeenSent = $this->HasBeenSent;
 			}
 		}
-		return $this->HasBeenSent;
+		return $this->_hasBeenSent;
 	}
 
+	private $_existsOnCampaignMonitorCheck = null;
+
+	public function ExistsOnCampaignMonitorCheck(){
+		if($this->_existsOnCampaignMonitorCheck === null) {
+			if(!$this->CampaignID) {
+				$this->_existsOnCampaignMonitorCheck = false;
+			}
+			else {
+				$api = $this->getAPI();
+				$result = $this->api->getSummary($this->CampaignID);
+				if(!$result) {
+					$this->_existsOnCampaignMonitorCheck = false;
+				}
+				else {
+					$this->_existsOnCampaignMonitorCheck = true;
+				}
+			}
+		}
+		return $this->_existsOnCampaignMonitorCheck;
+	}
 
 }
 
