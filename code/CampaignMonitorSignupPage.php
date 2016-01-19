@@ -144,7 +144,7 @@ class CampaignMonitorSignupPage extends Page {
 				new Tab('Newsletters',
 					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
 					new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->limit(100)->map()->toArray()),
+					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter("HasBeenSent", 1)->limit(10000)->map()->toArray()),
 					$campaignField
 				),
 				new Tab('Advanced',
@@ -685,7 +685,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$id = intval($request->param("ID"));
 		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if($this->campaign) {
-			return $this->campaign->getNewsletterContent();
+			return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
@@ -698,7 +698,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$id = intval($request->param("ID"));
 		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if($this->campaign) {
-			return strip_tags($this->campaign->getNewsletterContent());
+			return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}
