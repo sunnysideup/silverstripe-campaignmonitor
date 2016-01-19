@@ -10,8 +10,8 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $db = array(
 		"HasBeenSent" => "Boolean",
-    "CreateFromWebsite" => "Boolean",
-    "CreatedFromWebsite" => "Boolean",
+		"CreateFromWebsite" => "Boolean",
+		"CreatedFromWebsite" => "Boolean",
 		"CampaignID" => "Varchar(40)",
 		"Name" => "Varchar(100)",
 		"Subject" => "Varchar(100)",
@@ -20,9 +20,9 @@ class CampaignMonitorCampaign extends DataObject {
 		"ReplyTo" => "Varchar(100)",
 		"SentDate" => "SS_Datetime",
 		"WebVersionURL" => "Varchar(255)",
-    "WebVersionTextURL" => "Varchar(255)",
-    "Hide" => "Boolean",
-    "Content" => "HTMLText"
+		"WebVersionTextURL" => "Varchar(255)",
+		"Hide" => "Boolean",
+		"Content" => "HTMLText"
 	);
 
 	private static $indexes = array(
@@ -32,6 +32,10 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $many_many = array(
 		"Pages" => "CampaignMonitorSignupPage"
+	);
+
+	private static $has_one = array(
+		"CampaigMonitorCampaignStyle" => "CampaigMonitorCampaignStyle"
 	);
 
 	private static $searchable_fields = array(
@@ -48,8 +52,9 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private static $plural_name = "Campaign";
 
-	private static $default_sort = "Hide ASC, SentDate DESC";
+	private static $default_template = "CampaignTemplate";
 
+	private static $default_sort = "Hide ASC, SentDate DESC";
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
@@ -107,7 +112,27 @@ class CampaignMonitorCampaign extends DataObject {
 		if($extension !== null) {
 			return $extension[0];
 		}
-		return $this->Content;
+		$isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
+		if(!$isThemeEnabled) {
+			Config::inst()->update('SSViewer', 'theme_enabled', true);
+		}
+		Requirements::clear();
+		$html = $this->owner->renderWith($this->Template);
+		if(!$isThemeEnabled) {
+			Config::inst()->update('SSViewer', 'theme_enabled', false);
+		}
+		if(class_exists('\Pelago\Emogrifier')) {
+			$allCSS = "";
+			$cssFileLocations = Director::baseFolder() . Config::inst()->get("CampaignMonitorCampaign", "css_files");
+			foreach($cssFileLocations as $cssFileLocation) {
+				$cssFileHandler = fopen($cssFileLocation, 'r');
+				$allCSS .= fread($cssFileHandler,  filesize($cssFileLocation));
+				fclose($cssFileHandler);
+			}
+			$emog = new \Pelago\Emogrifier($html, $allCSS);
+			$html = $emog->emogrify();
+		}
+		return $html;
 	}
 
 	function onBeforeWrite(){
