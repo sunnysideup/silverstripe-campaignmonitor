@@ -46,14 +46,15 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	}
 
 	function getFileLocation(){
-		$themedFile = Director::baseFolder()."/campaignmonitor/templates/Email/".$this->TemplateName;
+		$themedFile = Director::baseFolder()."/campaignmonitor/templates/Email/".$this->TemplateName.".ss";
 		if(file_exists($themedFile)) {
 			return $themedFile;
 		}
-		$unthemedFile = Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/".$this->TemplateName;
+		$unthemedFile = Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/".$this->TemplateName.".ss";
 		if(file_exists($unthemedFile)) {
 			return $unthemedFile;
 		}
+		Director::baseFolder()."/campaignmonitor/templates/Email/CampaignMonitorCampaign".$this->TemplateName.".ss";
 		return 
 		
 
