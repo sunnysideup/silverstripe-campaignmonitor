@@ -111,6 +111,8 @@ class CampaignMonitorSignupPage extends Page {
 		else {
 			$campaignField = new HiddenField("CampaignList");
 		}
+		$gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+		$gridFieldTemplatesAvailable->setDescription("Ask your developer on how to add more templates");
 		$fields->addFieldToTab('Root.Details',
 			new TabSet('Options',
 				new Tab('MainSettings',
@@ -145,7 +147,8 @@ class CampaignMonitorSignupPage extends Page {
 					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
 					new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
 					new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter("HasBeenSent", 1)->limit(10000)->map()->toArray()),
-					$campaignField
+					$campaignField,
+					$gridFieldTemplatesAvailable
 				),
 				new Tab('Advanced',
 					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),

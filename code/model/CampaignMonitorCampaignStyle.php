@@ -11,7 +11,6 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	private static $db = array(
 		"Title" => "Varchar(100)",
 		"TemplateName" => "Varchar(200)",
-		"FileLocation" => "Text",
 		"CSSFiles" => "Text"
 	);
 
@@ -20,7 +19,7 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	);
 
 	private static $has_many = array(
-		"CampaigMonitorCampaign" => "CampaigMonitorCampaign"
+		"CampaignMonitorCampaign" => "CampaignMonitorCampaign"
 	);
 
 	private static $searchable_fields = array(
@@ -39,42 +38,90 @@ class CampaignMonitorCampaignStyle extends DataObject {
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab("Root.Debug", ReadonlyField("TemplateName"));
-		$fields->addFieldToTab("Root.Debug", ReadonlyField("FileLocation"));
-		$fields->addFieldToTab("Root.Debug", ReadonlyField("CSSFiles"));
+		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("TemplateName"));
+		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("FileLocation"));
+		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("CSSFiles"));
 		return $fields;
 	}
 
-	function getFileLocation(){
-		$themedFile = Director::baseFolder()."/campaignmonitor/templates/Email/".$this->TemplateName.".ss";
-		if(file_exists($themedFile)) {
-			return $themedFile;
-		}
-		$unthemedFile = Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/".$this->TemplateName.".ss";
-		if(file_exists($unthemedFile)) {
-			return $unthemedFile;
-		}
-		Director::baseFolder()."/campaignmonitor/templates/Email/CampaignMonitorCampaign".$this->TemplateName.".ss";
-		return 
-		
-
+	function canCreate($member = null) {
+		return false;
 	}
 
-	function onBeforeWrite(){
-		parent::onBeforeWrite();
-		//check file location and/or create one ...
-		
-		$dom = new DOMDocument();
-		$dom->loadHTMLFile('file.html'); // Can replace with $dom->loadHTML($str);
-
-		$linkTags = $dom->getElementsByTagName('link');
-
-		foreach($linkTags as $linkTag){
-			print_r($linkTag);
-			 // if $link_tag rel == stylesheet
-			 //   get href value and load CSS
+	function getFoldersToSearch() {
+		$array = array(
+			Director::baseFolder()."/campaignmonitor/templates/Email/",
+			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/"
+		);
+		foreach($array as $key => $folder) {
+			if(!file_exists($folder)) {
+				unset($array[$key]);
+			}
 		}
-		
+		return $array;
+	}
+
+	/**
+	 *
+	 * @return string | null
+	 */
+	function getFileLocation(){
+		foreach($this->getFoldersToSearch() as $folder) {
+			$fileLocation = $folder."/".$this->TemplateName.".ss";
+			if(file_exists($fileLocation)) {
+				return $fileLocation;
+			}
+		}
+		$this->delete();
+	}
+
+	function getCSSFiles(){
+		return implode("," $this->getCSSFilesAsArray());
+	}
+	function getCSSFilesAsArray(){
+		$dom = new DOMDocument();
+		$cssFiles = array();
+		$fileLocation = $this->getFileLocation();
+		if($fileLocation) {
+			$dom->loadHTMLFile($fileLocation); // Can replace with $dom->loadHTML($str);
+			$linkTags = $dom->getElementsByTagName('link');
+			foreach($linkTags as $linkTag){
+				if(strtolower($linkTag->getAttribute("rel")) == "stylesheet") {
+					$cssFiles[] = $linkTag->getAttribute("href");
+				}
+				 // if $link_tag rel == stylesheet
+				 //   get href value and load CSS
+			}
+		}
+		else {
+			user_error("Can not find file");
+		}
+	}
+
+	function requireDefaultRecords(){
+		parent::requireDefaultRecords();
+		$templates = array();
+		foreach($this->getFoldersToSearch() as $folder) {
+			$finder = new SS_FileFinder();
+			$finder->setOption('name_regex', '/^.*\.ss$/');
+			$found = $finder->find($folder);
+			foreach ($found as $key => $value) {
+				$template = pathinfo($value);
+				$templates[$template['filename']] = $template['filename'];
+			}
+		}
+		foreach($templates as $template) {
+			$filter = array("TemplateName" => $template);
+			$obj = CampaignMonitorCampaignStyle::get()->filter($filter)->first();
+			if(!$obj) {
+				$obj = CampaignMonitorCampaignStyle::create($filter+array("Title" => $template));
+				$obj->write();
+			}
+		}
+		$excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(array("TemplateName" => $templates));
+		foreach($excludes as $exclude) {
+			$exclude->delete();
+		}
 	}
 
 }

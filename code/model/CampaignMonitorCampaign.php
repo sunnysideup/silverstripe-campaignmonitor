@@ -35,7 +35,7 @@ class CampaignMonitorCampaign extends DataObject {
 	);
 
 	private static $has_one = array(
-		"CampaigMonitorCampaignStyle" => "CampaigMonitorCampaignStyle"
+		"CampaignMonitorCampaignStyle" => "CampaignMonitorCampaignStyle"
 	);
 
 	private static $many_many = array(
@@ -82,6 +82,7 @@ class CampaignMonitorCampaign extends DataObject {
 		}
 		if($this->ExistsOnCampaignMonitorCheck()){
 			$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
+			$fields->removeFieldFromTab("Root.Main", "CampaignMonitorCampaignStyleID");
 			if(!$this->HasBeenSentCheck()) {
 				$fields->addFieldToTab("Root.Main", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>"), "CampaignID");
 			}
@@ -113,7 +114,6 @@ class CampaignMonitorCampaign extends DataObject {
 			}
 		}
 		return $fields;
-
 	}
 
 	function Link($action = ""){
@@ -164,16 +164,16 @@ class CampaignMonitorCampaign extends DataObject {
 
 	/**
 	 * @return array
-	 */ 
+	 */
 	protected function getBestTemplate(){
-		
+
 	}
 
 	/**
-	 * @return 
-	 */ 
+	 * @return
+	 */
 	protected function getCSSFileLocations(){
-		
+
 	}
 
 	function onBeforeWrite(){
