@@ -69,9 +69,11 @@
         </ul>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class CampaignMonitorMemberDOD
-                extends <a title="DataExtension" href="../classes/DataExtension.xhtml">DataExtension</a>
-            {<br/><ul class="none"><li>// members</li><li>private <span title="String">String</span> <a href="#members">$campaign_monitor_signup_fieldname</a>;
-                    </li><li>private <span title="null">null</span> <a href="#members">$api</a>;
+                extends DataExtension
+            {<br/><ul class="none"><li>// members</li><li>private static <span title="String">String</span> <a href="#members">$campaign_monitor_signup_fieldname</a> =
+                        "CampaignMonitorSubscriptions";
+                    </li><li>private static null <a href="#members">$_api</a> =
+                        null;
                     </li></ul><ul class="none"><li>// methods</li><li>private CampaignMonitorAPIConnector <a title="CampaignMonitorMemberDOD" href="../classes/CampaignMonitorMemberDOD/getCMAPI.xhtml">getCMAPI</a>()
                     </li><li>public FormField <a title="CampaignMonitorMemberDOD" href="../classes/CampaignMonitorMemberDOD/getSignupField.xhtml">getSignupField</a>()
                     </li><li>public Boolean <a title="CampaignMonitorMemberDOD" href="../classes/CampaignMonitorMemberDOD/IsCampaignMonitorSubscriber.xhtml">IsCampaignMonitorSubscriber</a>()
@@ -85,21 +87,19 @@
         <div class="styled">
           <h4>Extends</h4>
           <ul>
-            <li>
-              <a href="../classes/DataExtension.xhtml">DataExtension</a>
-            </li>
+            <li>DataExtension</li>
           </ul>
         </div>
         <h2 id="members">Members</h2>
         <div class="styled members">
           <h4>private</h4>
           <ul class="members">
-            <li id="api"><strong>$api</strong>
+            <li id="_api"><strong>$_api</strong>
                 —
-                <a href="#">null</a></li>
+                null</li>
             <li id="campaign_monitor_signup_fieldname"><strong>$campaign_monitor_signup_fieldname</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">name of the field to use for sign-ups</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">name of the field to use for sign-ups</span></li>
           </ul>
         </div>
         <h2 id="methods">Methods</h2>
@@ -127,7 +127,7 @@
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>

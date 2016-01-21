@@ -62,21 +62,32 @@
       </nav>
       <section>
         <h1 id="introduction"><small>\</small>CampaignMonitorAPIConnector</h1>
-        <h4>Main Holder page for Recipes author nicolaas [at] sunnysideup.co.nz</h4>
+        <h4>Main Holder page for Recipes</h4>
         <p/>
-        <ul/>
+        <ul>
+          <li>Author: nicolaas [at] sunnysideup.co.nz</li>
+        </ul>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class CampaignMonitorAPIConnector
-                extends <a title="Object" href="../classes/Object.xhtml">Object</a>
-            {<br/><ul class="none"><li>// members</li><li>private <span title="String">String</span> <a href="#members">$campaign_monitor_url</a>;
-                    </li><li>private <span title="String">String</span> <a href="#members">$client_id</a>;
-                    </li><li>private <span title="String">String</span> <a href="#members">$api_key</a>;
-                    </li><li>private <span title="String">String</span> <a href="#members">$client_secret</a>;
-                    </li><li>private <span title="String">String</span> <a href="#members">$redirect_uri</a>;
-                    </li><li>private <span title="String">String</span> <a href="#members">$code</a>;
-                    </li><li>protected <span title="Boolean">Boolean</span> <a href="#members">$debug</a>;
-                    </li><li>protected <span title="Boolean">Boolean</span> <a href="#members">$allowCaching</a>;
-                    </li><li>protected <span title="Int">Int</span> <a href="#members">$httpStatusCode</a>;
+                extends Object
+            {<br/><ul class="none"><li>// members</li><li>private static <span title="String">String</span> <a href="#members">$campaign_monitor_url</a> =
+                        "";
+                    </li><li>private static <span title="String">String</span> <a href="#members">$client_id</a> =
+                        "";
+                    </li><li>private static <span title="String">String</span> <a href="#members">$api_key</a> =
+                        "";
+                    </li><li>private static <span title="String">String</span> <a href="#members">$client_secret</a> =
+                        "";
+                    </li><li>private static <span title="String">String</span> <a href="#members">$redirect_uri</a> =
+                        "";
+                    </li><li>private static <span title="String">String</span> <a href="#members">$code</a> =
+                        "";
+                    </li><li>protected <span title="Boolean">Boolean</span> <a href="#members">$debug</a> =
+                        false;
+                    </li><li>protected <span title="Boolean">Boolean</span> <a href="#members">$allowCaching</a> =
+                        false;
+                    </li><li>protected <span title="Int">Int</span> <a href="#members">$httpStatusCode</a> =
+                        0;
                     </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/init.xhtml">init</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/setDebug.xhtml">setDebug</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/setAllowCaching.xhtml">setAllowCaching</a>()
@@ -102,6 +113,8 @@
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getUnsubscribedSubscribers.xhtml">getUnsubscribedSubscribers</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/updateList.xhtml">updateList</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getListStats.xhtml">getListStats</a>()
+                    </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCampaign.xhtml">createCampaign</a>()
+                    </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCampaign.xhtml">deleteCampaign</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getBounces.xhtml">getBounces</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getClicks.xhtml">getClicks</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getSummary.xhtml">getSummary</a>()
@@ -129,9 +142,7 @@
         <div class="styled">
           <h4>Extends</h4>
           <ul>
-            <li>
-              <a href="../classes/Object.xhtml">Object</a>
-            </li>
+            <li>Object</li>
           </ul>
         </div>
         <h2 id="members">Members</h2>
@@ -140,34 +151,34 @@
           <ul class="members">
             <li id="api_key"><strong>$api_key</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">OPTION 1: API KEY!</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">OPTION 1: API KEY!</span></li>
             <li id="campaign_monitor_url"><strong>$campaign_monitor_url</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">REQUIRED! this is the CM url for logging in.</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">REQUIRED! this is the CM url for logging in.</span></li>
             <li id="client_id"><strong>$client_id</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">REQUIRED!</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">REQUIRED!</span></li>
             <li id="client_secret"><strong>$client_secret</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
             <li id="code"><strong>$code</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
             <li id="redirect_uri"><strong>$redirect_uri</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">OPTION 2: OAUTH OPTION</span></li>
           </ul>
           <h4>protected</h4>
           <ul class="members">
             <li id="allowCaching"><strong>$allowCaching</strong>
                 —
-                <a href="#">Boolean</a></li>
+                <a title="Boolean" href="../classes/Boolean.xhtml">Boolean</a></li>
             <li id="debug"><strong>$debug</strong>
                 —
-                <a href="#">Boolean</a></li>
+                <a title="Boolean" href="../classes/Boolean.xhtml">Boolean</a></li>
             <li id="httpStatusCode"><strong>$httpStatusCode</strong>
                 —
-                <a href="#">Int</a></li>
+                <a title="Int" href="../classes/Int.xhtml">Int</a></li>
           </ul>
         </div>
         <h2 id="methods">Methods</h2>
@@ -191,8 +202,14 @@
                 — Adds a new subscriber to the specified list</li>
             <li id="addSubscribers"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/addSubscribers.xhtml">addSubscribers()</a>
                 — Updates an existing subscriber (email, name, state, or custom fields) in the specified list.</li>
+            <li id="createCampaign">
+              <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCampaign.xhtml">createCampaign()</a>
+            </li>
             <li id="createList"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createList.xhtml">createList()</a>
                 — Creates a new list based on the provided details.</li>
+            <li id="deleteCampaign">
+              <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCampaign.xhtml">deleteCampaign()</a>
+            </li>
             <li id="deleteList"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteList.xhtml">deleteList()</a>
                 — Deletes an existing list from the system</li>
             <li id="deleteSubscriber">
@@ -289,7 +306,7 @@
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaignStyle" namespace="" name="CampaignMonitorCampaignStyle" abstract="false" final="false" start="9" end="169">
+  <docblock>
+    <description/>
+    <author value="nicolaas [at] sunnysideup.co.nz"/>
+  </docblock>
+  <extends full="DataObject" namespace="" name="DataObject" unresolved="true"/>
+  <member name="db" type="array" default="" visibility="private" static="true" line="11"/>
+  <member name="indexes" type="array" default="" visibility="private" static="true" line="17"/>
+  <member name="has_many" type="array" default="" visibility="private" static="true" line="21"/>
+  <member name="searchable_fields" type="array" default="" visibility="private" static="true" line="25"/>
+  <member name="summary_fields" type="array" default="" visibility="private" static="true" line="29"/>
+  <member name="singular_name" type="string" default="&quot;Campaign Template&quot;" visibility="private" static="true" line="33"/>
+  <member name="plural_name" type="string" default="&quot;Campaign Templates&quot;" visibility="private" static="true" line="35"/>
+  <member name="default_template" type="string" default="&quot;CampaignMonitorCampaign&quot;" visibility="private" static="true" line="37"/>
+  <method name="getCMSFields" start="39" end="47" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="canCreate" start="49" end="51" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="member" byreference="false" type="{unknown}" default="" constant="null"/>
+  </method>
+  <method name="getFoldersToSearch" start="56" end="67" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="array"/>
+    </docblock>
+  </method>
+  <method name="getCSSFoldersToSearch" start="72" end="83" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="array"/>
+    </docblock>
+  </method>
+  <method name="getFileLocation" start="89" end="101" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return description="| null" type="string"/>
+    </docblock>
+  </method>
+  <method name="getCSSFiles" start="103" end="105" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getCSSFilesAsArray" start="107" end="141" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="requireDefaultRecords" start="143" end="167" abstract="false" final="false" static="false" visibility="public"/>
+</class>

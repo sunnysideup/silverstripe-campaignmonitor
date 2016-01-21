@@ -69,19 +69,27 @@
         </ul>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class CampaignMonitorSignupPage
-                extends <a title="Page" href="../classes/Page.xhtml">Page</a>
-            {<br/><ul class="none"><li>// members</li><li>private string <a href="#members">$icon</a>;
-                    </li><li>private array <a href="#members">$db</a>;
-                    </li><li>private array <a href="#members">$has_one</a>;
-                    </li><li>private array <a href="#members">$belongs_many_many</a>;
-                    </li><li>private string <a href="#members">$description</a>;
-                    </li><li>protected <span title="CampaignMonitorAPIConnector">CampaignMonitorAPIConnector</span> <a href="#members">$api</a>;
-                    </li><li>private <span title="Null">Null</span> <a href="#members">$drop_down_list</a>;
-                    </li></ul><ul class="none"><li>// methods</li><li>public static void <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/get_ready_ones.xhtml">get_ready_ones</a>()
+                extends Page
+            {<br/><ul class="none"><li>// members</li><li>private static string <a href="#members">$icon</a> =
+                        "campaignmonitor/images/treeicons/CampaignMonitorSignupPage";
+                    </li><li>private static array <a href="#members">$db</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$has_one</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$belongs_many_many</a> =
+                        ;
+                    </li><li>private static string <a href="#members">$description</a> =
+                        "Page to suscribe and review newsletter list(s)";
+                    </li><li>protected static <span title="CampaignMonitorAPIConnector">CampaignMonitorAPIConnector</span> <a href="#members">$_api</a> =
+                        null;
+                    </li><li>private static <span title="Null">Null</span> <a href="#members">$drop_down_list</a> =
+                        null;
+                    </li></ul><ul class="none"><li>// methods</li><li>public static ArrayList <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/get_ready_ones.xhtml">get_ready_ones</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/getCMSFields.xhtml">getCMSFields</a>()
                     </li><li>public CampaignMonitorAPIConnector <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/getAPI.xhtml">getAPI</a>()
                     </li><li>protected array <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/makeDropdownListFromLists.xhtml">makeDropdownListFromLists</a>()
                     </li><li>public Form <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/CampaignMonitorStartForm.xhtml">CampaignMonitorStartForm</a>()
+                    </li><li>public void <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/addSubscriber.xhtml">addSubscriber</a>()
                     </li><li>public String <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/getListTitle.xhtml">getListTitle</a>()
                     </li><li>public Boolean <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/ReadyToReceiveSubscribtions.xhtml">ReadyToReceiveSubscribtions</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/onBeforeWrite.xhtml">onBeforeWrite</a>()
@@ -95,9 +103,7 @@
         <div class="styled">
           <h4>Extends</h4>
           <ul>
-            <li>
-              <a href="../classes/Page.xhtml">Page</a>
-            </li>
+            <li>Page</li>
           </ul>
         </div>
         <h2 id="members">Members</h2>
@@ -115,7 +121,7 @@
             </li>
             <li id="drop_down_list"><strong>$drop_down_list</strong>
                 —
-                <a href="#">Null</a></li>
+                <a title="Null" href="../classes/Null.xhtml">Null</a></li>
             <li id="has_one">
               <strong>$has_one</strong>
             </li>
@@ -125,9 +131,9 @@
           </ul>
           <h4>protected</h4>
           <ul class="members">
-            <li id="api"><strong>$api</strong>
+            <li id="_api"><strong>$_api</strong>
                 —
-                <a href="#">CampaignMonitorAPIConnector</a></li>
+                <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector.xhtml">CampaignMonitorAPIConnector</a></li>
           </ul>
         </div>
         <h2 id="methods">Methods</h2>
@@ -146,6 +152,8 @@
                 — you can add this function to other pages to have a form that starts the basic after which the client needs to complete the rest.</li>
             <li id="ReadyToReceiveSubscribtions"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/ReadyToReceiveSubscribtions.xhtml">ReadyToReceiveSubscribtions()</a>
                 — tells us if the page is ready to receive subscriptions</li>
+            <li id="addSubscriber"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/addSubscriber.xhtml">addSubscriber()</a>
+                — adds a subcriber to the list without worrying about making it a user ...</li>
             <li id="getAPI">
               <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/getAPI.xhtml">getAPI()</a>
             </li>
@@ -154,12 +162,10 @@
             </li>
             <li id="getListTitle"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/getListTitle.xhtml">getListTitle()</a>
                 — name of the list connected to.</li>
-            <li id="get_ready_ones">
-              <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/get_ready_ones.xhtml">get_ready_ones()</a>
-            </li>
-            <li id="onAfterWrite">
-              <a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/onAfterWrite.xhtml">onAfterWrite()</a>
-            </li>
+            <li id="get_ready_ones"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/get_ready_ones.xhtml">get_ready_ones()</a>
+                — Campaign monitor pages that are ready to receive "guests"</li>
+            <li id="onAfterWrite"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/onAfterWrite.xhtml">onAfterWrite()</a>
+                — add old campaings or remove them depending on the setting</li>
             <li id="onBeforeWrite"><a title="CampaignMonitorSignupPage" href="../classes/CampaignMonitorSignupPage/onBeforeWrite.xhtml">onBeforeWrite()</a>
                 — check list and group IDs</li>
             <li id="requireDefaultRecords">
@@ -170,7 +176,7 @@
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>

@@ -59,7 +59,7 @@
             <a href="#return">Return</a>
           </li>
           <li>
-            <a href="../../source/code/api/CampaignMonitorAPIConnector.php.xhtml#line935">Source</a>
+            <a href="../../source/code/api/CampaignMonitorAPIConnector.php.xhtml#line1058">Source</a>
           </li>
         </ul>
       </nav>
@@ -73,16 +73,16 @@ given email not existing in the list.</p>
         <div class="styled synopsis">
           <code>public function addSubscribers(<a title="Int" href="../../classes/Int.xhtml">Int</a>
         $listID,
-            [
-        $membersSet = false,
+            
+        $membersSet,
             [array
-        $customFields = false,
-            [<a title="Whether" href="../../classes/Whether.xhtml">Whether</a>
-        $resubscribe = false,
-            [<a title="By" href="../../classes/By.xhtml">By</a>
+        $customFields = ,
+            <a title="Whether" href="../../classes/Whether.xhtml">Whether</a>
+        $resubscribe,
+            [boolean
         $queueSubscriptionBasedAutoResponders = false,
-            [<a title="By" href="../../classes/By.xhtml">By</a>
-        $restartSubscriptionBasedAutoResponders = false]]]]] )
+            [boolean
+        $restartSubscriptionBasedAutoResponders = false]]] )
             </code>
         </div>
         <h2 id="parameterlist">Parameters</h2>
@@ -105,12 +105,12 @@ given email not existing in the list.</p>
           <dd>we should resubscribe any existing subscribers<br/><br/><br/>      </dd>
           <dt><code>$queueSubscriptionBasedAutoResponders</code>
                 —
-                object</dt>
+                boolean</dt>
           <dd>default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour<br/><br/><br/>      </dd>
           <dt><code>$restartSubscriptionBasedAutoResponders</code>
                 —
-                object</dt>
-          <dd>default, subscription based auto responders will not be restarted<br/><br/><br/>      </dd>
+                boolean</dt>
+          <dd>default, subscription based auto responders will not be restarted<br/>NOTE that for the custom fields they need to be formatted like this:<br/>Array(<br/>'Key' =&gt; The custom fields personalisation tag<br/>'Value' =&gt; The value for this subscriber<br/>'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)<br/>   )</dd>
         </dl>
         <h2 id="return">Returns</h2>
         <dl class="styled">
@@ -121,7 +121,7 @@ given email not existing in the list.</p>
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>

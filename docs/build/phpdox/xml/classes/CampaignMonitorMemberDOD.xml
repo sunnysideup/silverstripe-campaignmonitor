@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorMemberDOD" namespace="" name="CampaignMonitorMemberDOD" abstract="false" final="false" start="9" end="204">
+  <docblock>
+    <description/>
+    <author value="nicolaas [at] sunnysideup.co.nz">TO DO: only apply the on afterwrite to people in the subscriber group.</author>
+  </docblock>
+  <extends full="DataExtension" namespace="" name="DataExtension" unresolved="true"/>
+  <member name="campaign_monitor_signup_fieldname" type="string" default="&quot;CampaignMonitorSubscriptions&quot;" visibility="private" static="true" line="15">
+    <docblock>
+      <description compact="name of the field to use for sign-ups"/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="_api" type="{unknown}" default="" constant="null" visibility="private" static="true" line="23">
+    <docblock>
+      <description/>
+      <var description="| CampaignMonitorAPIConnector" type="null"/>
+    </docblock>
+  </member>
+  <method name="getCMAPI" start="29" end="35" abstract="false" final="false" static="false" visibility="private">
+    <docblock>
+      <description/>
+      <return type="object">
+        <type full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="getSignupField" start="45" end="97" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="returns a form field for signing up to all available lists or if a list is provided, for that particular list."/>
+      <param description="| Null $listPage" type="object">
+        <type full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage"/>
+      </param>
+      <return type="object">
+        <type full="FormField" namespace="" name="FormField"/>
+      </return>
+    </docblock>
+    <parameter name="listPage" byreference="false" type="{unknown}" default="" constant="null"/>
+    <parameter name="fieldName" byreference="false" type="string" default="&quot;&quot;"/>
+    <parameter name="fieldTitle" byreference="false" type="string" default="&quot;&quot;"/>
+  </method>
+  <method name="IsCampaignMonitorSubscriber" start="104" end="109" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="is this user currently signed up to one or more newsletters"/>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="addCampaignMonitorList" start="118" end="149" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="add to Group add to CM database..."/>
+      <param description="| Int $listPage" type="object">
+        <type full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage"/>
+      </param>
+      <param type="array" variable="$customFields"/>
+      <return description="- returns true on success" type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+    <parameter name="listPage" byreference="false" type="{unknown}"/>
+    <parameter name="customFields" byreference="false" type="array" default=""/>
+    <inline>
+      <comment value="internal database" line="124"/>
+    </inline>
+  </method>
+  <method name="removeCampaignMonitorList" start="158" end="182" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="remove from Group remove from CM database..."/>
+      <param description="| Int $listPage" type="object">
+        <type full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage"/>
+      </param>
+      <return description="returns true if successful." type="boolean"/>
+    </docblock>
+    <parameter name="listPage" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="CampaignMonitorSignupPageIDs" start="190" end="202" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="returns a list of list IDs that the user is currently subscribed to."/>
+      <return type="object">
+        <type full="Array" namespace="" name="Array"/>
+      </return>
+    </docblock>
+  </method>
+</class>

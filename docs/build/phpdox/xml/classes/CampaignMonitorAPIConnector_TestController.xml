@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorAPIConnector_TestController" namespace="" name="CampaignMonitorAPIConnector_TestController" abstract="false" final="false" start="1291" end="1628">
+  <docblock>
+    <description compact="simple class to see that everything is working ..."/>
+  </docblock>
+  <extends full="Controller" namespace="" name="Controller" unresolved="true"/>
+  <member name="url_segment" type="string" default="&quot;create-send-test&quot;" visibility="private" static="true" line="1293"/>
+  <member name="allowed_actions" type="array" default="" visibility="private" static="true" line="1295"/>
+  <member name="egData" type="array" default="" visibility="protected" static="false" line="1306">
+    <docblock>
+      <description compact="example data"/>
+      <var type="object">
+        <type full="Array" namespace="" name="Array"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="api" type="{unknown}" default="" constant="null" visibility="protected" static="false" line="1326">
+    <docblock>
+      <description compact="contains API once started"/>
+      <var type="object">
+        <type full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector"/>
+      </var>
+    </docblock>
+  </member>
+  <member name="showAll" type="boolean" default="false" visibility="protected" static="false" line="1332">
+    <docblock>
+      <description compact="should we show as much as possible?"/>
+      <var type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </var>
+    </docblock>
+  </member>
+  <method name="init" start="1334" end="1342" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="Link" start="1349" end="1355" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="link for controller we add baseURL to make it work for all set ups."/>
+      <var type="object">
+        <type full="String" namespace="" name="String"/>
+      </var>
+    </docblock>
+    <parameter name="action" byreference="false" type="{unknown}" default="" constant="null"/>
+  </method>
+  <method name="testall" start="1360" end="1366" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="run all tests"/>
+    </docblock>
+  </method>
+  <method name="index" start="1368" end="1379" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="testlists" start="1381" end="1454" abstract="false" final="false" static="false" visibility="public">
+    <inline>
+      <comment value="create list" line="1384"/>
+      <comment value="update list" line="1394"/>
+      <comment value="delete list" line="1406"/>
+      <comment value="getList" line="1411"/>
+    </inline>
+  </method>
+  <method name="testcampaigns" start="1456" end="1493" abstract="false" final="false" static="false" visibility="public">
+    <inline>
+      <comment value="campaign summary" line="1459"/>
+    </inline>
+  </method>
+  <method name="testsubscribers" start="1495" end="1603" abstract="false" final="false" static="false" visibility="public">
+    <inline>
+      <comment value="create list" line="1500"/>
+      <comment value="$result = $this-&gt;api-&gt;addSubscribers(" line="1539"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$this-&gt;egData[&quot;tempListID&quot;]," line="1540"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$membersSet," line="1541"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$customFields = array()," line="1542"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$resubscribe," line="1543"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$queueSubscriptionBasedAutoResponders = false," line="1544"/>
+      <comment xmlns="http://xml.phpdox.net/src" value="$restartSubscriptionBasedAutoResponders = false" line="1545"/>
+      <comment xmlns="http://xml.phpdox.net/src" value=");" line="1546"/>
+      <comment value="delete list" line="1596"/>
+    </inline>
+  </method>
+  <method name="setupTests" start="1605" end="1626" abstract="false" final="false" static="false" visibility="protected">
+    <inline>
+      <comment value="getLists" line="1614"/>
+      <comment value="getCampaigns" line="1618"/>
+    </inline>
+  </method>
+</class>
