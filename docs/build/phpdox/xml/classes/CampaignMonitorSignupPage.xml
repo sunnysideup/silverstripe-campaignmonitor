@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage" abstract="false" final="false" start="10" end="389">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="27156" time="2016-01-20T20:23:02+00:00" unixtime="1453321382" sha1="47394d121be9546a7c54e41bbfa3d860e8fe81c6" relative="code/CampaignMonitorSignupPage.php"/>
+  <docblock>
+    <description compact="Page for Signing Up to Campaign Monitor List">Each page relates to one CM list.</description>
+    <author value="nicolaas [at] sunnysideup.co.nz"/>
+  </docblock>
+  <extends full="Page" namespace="" name="Page" unresolved="true"/>
+  <member name="icon" type="string" default="&quot;campaignmonitor/images/treeicons/CampaignMonitorSignupPage&quot;" visibility="private" static="true" line="16">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="db" type="array" default="" visibility="private" static="true" line="22">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="has_one" type="array" default="" visibility="private" static="true" line="49">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="belongs_many_many" type="array" default="" visibility="private" static="true" line="57">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="description" type="string" default="&quot;Page to suscribe and review newsletter list(s)&quot;" visibility="private" static="true" line="65">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="_api" type="{unknown}" default="" constant="null" visibility="protected" static="true" line="71">
+    <docblock>
+      <description/>
+      <var description="| Null" type="object">
+        <type full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector"/>
+      </var>
+    </docblock>
+  </member>
+  <method name="get_ready_ones" start="78" end="87" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="Campaign monitor pages that are ready to receive &quot;guests&quot;"/>
+      <return type="object">
+        <type full="ArrayList" namespace="" name="ArrayList"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="getCMSFields" start="93" end="165" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </method>
+  <method name="getAPI" start="171" end="177" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description/>
+      <return type="object">
+        <type full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector"/>
+      </return>
+    </docblock>
+  </method>
+  <member name="drop_down_list" type="{unknown}" default="" constant="null" visibility="private" static="true" line="183">
+    <docblock>
+      <description/>
+      <var description="| Array" type="object">
+        <type full="Null" namespace="" name="Null"/>
+      </var>
+    </docblock>
+  </member>
+  <method name="makeDropdownListFromLists" start="189" end="210" abstract="false" final="false" static="false" visibility="protected">
+    <docblock>
+      <description compact="returns available list for client"/>
+      <return type="array"/>
+    </docblock>
+  </method>
+  <method name="CampaignMonitorStartForm" start="223" end="246" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="you can add this function to other pages to have a form that starts the basic after which the client needs to complete the rest.">Or does a basic sign up if ajax submitted.</description>
+      <param type="object" variable="$controller">
+        <type full="Controller" namespace="" name="Controller"/>
+      </param>
+      <param type="object" variable="$formName">
+        <type full="String" namespace="" name="String"/>
+      </param>
+      <return type="object">
+        <type full="Form" namespace="" name="Form"/>
+      </return>
+    </docblock>
+    <parameter name="controller" byreference="false" type="object">
+      <type full="Controller" namespace="" name="Controller"/>
+    </parameter>
+    <parameter name="formName" byreference="false" type="string" default="&quot;CampaignMonitorStarterForm&quot;"/>
+  </method>
+  <method name="addSubscriber" start="255" end="280" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="adds a subcriber to the list without worrying about making it a user ..."/>
+      <param type="object" variable="$email">
+        <type full="String" namespace="" name="String"/>
+      </param>
+      <returns/>
+    </docblock>
+    <parameter name="email" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="getListTitle" start="286" end="294" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="name of the list connected to."/>
+      <return type="object">
+        <type full="String" namespace="" name="String"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="ReadyToReceiveSubscribtions" start="300" end="302" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="tells us if the page is ready to receive subscriptions"/>
+      <return type="object">
+        <type full="Boolean" namespace="" name="Boolean"/>
+      </return>
+    </docblock>
+  </method>
+  <method name="onBeforeWrite" start="308" end="340" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="check list and group IDs"/>
+    </docblock>
+    <inline>
+      <comment value="check list" line="310"/>
+      <comment value="check group" line="315"/>
+      <comment value="add group" line="323"/>
+    </inline>
+  </method>
+  <method name="onAfterWrite" start="347" end="355" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="add old campaings or remove them depending on the setting"/>
+    </docblock>
+  </method>
+  <method name="AddOldCampaigns" start="357" end="361" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="requireDefaultRecords" start="363" end="387" abstract="false" final="false" static="false" visibility="public"/>
+</class>

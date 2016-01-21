@@ -62,24 +62,59 @@
       </nav>
       <section>
         <h1 id="introduction"><small>\</small>CampaignMonitorCampaign</h1>
-        <h4>author nicolaas [at] sunnysideup.co.nz</h4>
+        <h4/>
         <p/>
-        <ul/>
+        <ul>
+          <li>Author: nicolaas [at] sunnysideup.co.nz</li>
+        </ul>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class CampaignMonitorCampaign
-                extends <a title="DataObject" href="../classes/DataObject.xhtml">DataObject</a>
-            {<br/><ul class="none"><li>// members</li><li>private array <a href="#members">$db</a>;
-                    </li><li>private array <a href="#members">$indexes</a>;
-                    </li><li>private array <a href="#members">$many_many</a>;
-                    </li><li>private array <a href="#members">$searchable_fields</a>;
-                    </li><li>private array <a href="#members">$summary_fields</a>;
-                    </li><li>private string <a href="#members">$singular_name</a>;
-                    </li><li>private string <a href="#members">$plural_name</a>;
-                    </li><li>private string <a href="#members">$default_sort</a>;
-                    </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getCMSFields.xhtml">getCMSFields</a>()
+                extends DataObject
+            {<br/><ul class="none"><li>// members</li><li>private static array <a href="#members">$emogrifier_add_allowed_media_types</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$emogrifier_remove_allowed_media_types</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$db</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$indexes</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$field_labels</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$has_one</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$many_many</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$searchable_fields</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$summary_fields</a> =
+                        ;
+                    </li><li>private static string <a href="#members">$singular_name</a> =
+                        "Campaigns";
+                    </li><li>private static string <a href="#members">$plural_name</a> =
+                        "Campaign";
+                    </li><li>private static string <a href="#members">$default_template</a> =
+                        "CampaignTemplate";
+                    </li><li>private static string <a href="#members">$default_sort</a> =
+                        "Hide ASC, SentDate DESC";
+                    </li><li>private static <a href="#members">$_api</a> =
+                        null;
+                    </li><li>private <a href="#members">$_hasBeenSent</a> =
+                        null;
+                    </li><li>private <a href="#members">$_existsOnCampaignMonitorCheck</a> =
+                        null;
+                    </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/canDelete.xhtml">canDelete</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getCMSFields.xhtml">getCMSFields</a>()
                     </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/Link.xhtml">Link</a>()
-                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/canCreate.xhtml">canCreate</a>()
-                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/canDelete.xhtml">canDelete</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/PreviewLink.xhtml">PreviewLink</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getNewsletterContent.xhtml">getNewsletterContent</a>()
+                    </li><li>protected string <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getBestTemplate.xhtml">getBestTemplate</a>()
+                    </li><li>protected array <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getCSSFileLocations.xhtml">getCSSFileLocations</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onBeforeWrite.xhtml">onBeforeWrite</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onAfterWrite.xhtml">onAfterWrite</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onBeforeDelete.xhtml">onBeforeDelete</a>()
+                    </li><li>protected CampaignMonitorAPIConnector <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getAPI.xhtml">getAPI</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/HasBeenSentCheck.xhtml">HasBeenSentCheck</a>()
+                    </li><li>public void <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/ExistsOnCampaignMonitorCheck.xhtml">ExistsOnCampaignMonitorCheck</a>()
                     </li></ul>
 
             }<br/></div>
@@ -87,20 +122,42 @@
         <div class="styled">
           <h4>Extends</h4>
           <ul>
-            <li>
-              <a href="../classes/DataObject.xhtml">DataObject</a>
-            </li>
+            <li>DataObject</li>
           </ul>
         </div>
         <h2 id="members">Members</h2>
         <div class="styled members">
           <h4>private</h4>
           <ul class="members">
+            <li id="_api">
+              <strong>$_api</strong>
+            </li>
+            <li id="_existsOnCampaignMonitorCheck">
+              <strong>$_existsOnCampaignMonitorCheck</strong>
+            </li>
+            <li id="_hasBeenSent">
+              <strong>$_hasBeenSent</strong>
+            </li>
             <li id="db">
               <strong>$db</strong>
             </li>
             <li id="default_sort">
               <strong>$default_sort</strong>
+            </li>
+            <li id="default_template">
+              <strong>$default_template</strong>
+            </li>
+            <li id="emogrifier_add_allowed_media_types"><strong>$emogrifier_add_allowed_media_types</strong>
+                —
+                array</li>
+            <li id="emogrifier_remove_allowed_media_types"><strong>$emogrifier_remove_allowed_media_types</strong>
+                —
+                array</li>
+            <li id="field_labels">
+              <strong>$field_labels</strong>
+            </li>
+            <li id="has_one">
+              <strong>$has_one</strong>
             </li>
             <li id="indexes">
               <strong>$indexes</strong>
@@ -124,13 +181,31 @@
         </div>
         <h2 id="methods">Methods</h2>
         <div class="styled">
+          <h4>protected</h4>
+          <ul>
+            <li id="getAPI">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getAPI.xhtml">getAPI()</a>
+            </li>
+            <li id="getBestTemplate">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getBestTemplate.xhtml">getBestTemplate()</a>
+            </li>
+            <li id="getCSSFileLocations">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getCSSFileLocations.xhtml">getCSSFileLocations()</a>
+            </li>
+          </ul>
           <h4>public</h4>
           <ul>
+            <li id="ExistsOnCampaignMonitorCheck">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/ExistsOnCampaignMonitorCheck.xhtml">ExistsOnCampaignMonitorCheck()</a>
+            </li>
+            <li id="HasBeenSentCheck">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/HasBeenSentCheck.xhtml">HasBeenSentCheck()</a>
+            </li>
             <li id="Link">
               <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/Link.xhtml">Link()</a>
             </li>
-            <li id="canCreate">
-              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/canCreate.xhtml">canCreate()</a>
+            <li id="PreviewLink">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/PreviewLink.xhtml">PreviewLink()</a>
             </li>
             <li id="canDelete">
               <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/canDelete.xhtml">canDelete()</a>
@@ -138,12 +213,24 @@
             <li id="getCMSFields">
               <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getCMSFields.xhtml">getCMSFields()</a>
             </li>
+            <li id="getNewsletterContent">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/getNewsletterContent.xhtml">getNewsletterContent()</a>
+            </li>
+            <li id="onAfterWrite">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onAfterWrite.xhtml">onAfterWrite()</a>
+            </li>
+            <li id="onBeforeDelete">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onBeforeDelete.xhtml">onBeforeDelete()</a>
+            </li>
+            <li id="onBeforeWrite">
+              <a title="CampaignMonitorCampaign" href="../classes/CampaignMonitorCampaign/onBeforeWrite.xhtml">onBeforeWrite()</a>
+            </li>
           </ul>
         </div>
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>

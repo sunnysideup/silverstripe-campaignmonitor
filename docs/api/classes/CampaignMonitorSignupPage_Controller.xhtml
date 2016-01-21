@@ -56,7 +56,7 @@
             <a href="#methods">Methods</a>
           </li>
           <li>
-            <a href="../source/code/CampaignMonitorSignupPage.php.xhtml#line299">Source</a>
+            <a href="../source/code/CampaignMonitorSignupPage.php.xhtml#line391">Source</a>
           </li>
         </ul>
       </nav>
@@ -66,10 +66,13 @@
         <p/>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class CampaignMonitorSignupPage_Controller
-                extends <a title="Page_Controller" href="../classes/Page_Controller.xhtml">Page_Controller</a>
-            {<br/><ul class="none"><li>// members</li><li>protected <span title="String">String</span> <a href="#members">$email</a>;
-                    </li><li>protected <span title="Null">Null</span> <a href="#members">$campaign</a>;
-                    </li><li>private array <a href="#members">$allowed_actions</a>;
+                extends Page_Controller
+            {<br/><ul class="none"><li>// members</li><li>protected <span title="String">String</span> <a href="#members">$email</a> =
+                        '';
+                    </li><li>protected <span title="Null">Null</span> <a href="#members">$campaign</a> =
+                        '';
+                    </li><li>private static array <a href="#members">$allowed_actions</a> =
+                        ;
                     </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/init.xhtml">init</a>()
                     </li><li>public Form <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/SignupForm.xhtml">SignupForm</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/subscribe.xhtml">subscribe</a>()
@@ -79,6 +82,9 @@
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/sadtoseeyougo.xhtml">sadtoseeyougo</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/preloademail.xhtml">preloademail</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/viewcampaign.xhtml">viewcampaign</a>()
+                    </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/viewcampaigntextonly.xhtml">viewcampaigntextonly</a>()
+                    </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/previewcampaign.xhtml">previewcampaign</a>()
+                    </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/previewcampaigntextonly.xhtml">previewcampaigntextonly</a>()
                     </li><li>public String <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/Email.xhtml">Email</a>()
                     </li><li>public Boolean <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/HasCampaign.xhtml">HasCampaign</a>()
                     </li><li>public Null <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/Campaign.xhtml">Campaign</a>()
@@ -87,7 +93,7 @@
                     </li><li>public String <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/CampaignStats.xhtml">CampaignStats</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/resetsignup.xhtml">resetsignup</a>()
                     </li><li>public void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/resetoldcampaigns.xhtml">resetoldcampaigns</a>()
-                    </li><li>private void <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/JSHackForPreSections.xhtml">JSHackForPreSections</a>()
+                    </li><li>private String <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/JSHackForPreSections.xhtml">JSHackForPreSections</a>()
                     </li></ul>
 
             }<br/></div>
@@ -95,9 +101,7 @@
         <div class="styled">
           <h4>Extends</h4>
           <ul>
-            <li>
-              <a href="../classes/Page_Controller.xhtml">Page_Controller</a>
-            </li>
+            <li>Page_Controller</li>
           </ul>
         </div>
         <h2 id="members">Members</h2>
@@ -112,10 +116,10 @@
           <ul class="members">
             <li id="campaign"><strong>$campaign</strong>
                 —
-                <a href="#">Null</a><br/><span class="indent">holder for selected campaign</span></li>
+                <a title="Null" href="../classes/Null.xhtml">Null</a><br/><span class="indent">holder for selected campaign</span></li>
             <li id="email"><strong>$email</strong>
                 —
-                <a href="#">String</a><br/><span class="indent">retains email for processing</span></li>
+                <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">retains email for processing</span></li>
           </ul>
         </div>
         <h2 id="methods">Methods</h2>
@@ -143,41 +147,41 @@
                 — same as $this-&gt;CampaignMonitorCampaigns() but sorted correctly.</li>
             <li id="SignupForm"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/SignupForm.xhtml">SignupForm()</a>
                 — creates a subscription form...</li>
-            <li id="confirm">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/confirm.xhtml">confirm()</a>
-            </li>
+            <li id="confirm"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/confirm.xhtml">confirm()</a>
+                — action</li>
             <li id="init">
               <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/init.xhtml">init()</a>
             </li>
-            <li id="preloademail">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/preloademail.xhtml">preloademail()</a>
-            </li>
+            <li id="preloademail"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/preloademail.xhtml">preloademail()</a>
+                — action</li>
+            <li id="previewcampaign"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/previewcampaign.xhtml">previewcampaign()</a>
+                — action to preview one campaign...</li>
+            <li id="previewcampaigntextonly"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/previewcampaigntextonly.xhtml">previewcampaigntextonly()</a>
+                — action to preview one campaign TEXT ONLY...</li>
             <li id="resetoldcampaigns"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/resetoldcampaigns.xhtml">resetoldcampaigns()</a>
                 — removes all campaigns so that they can be re-imported.</li>
-            <li id="resetsignup">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/resetsignup.xhtml">resetsignup()</a>
-            </li>
-            <li id="sadtoseeyougo">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/sadtoseeyougo.xhtml">sadtoseeyougo()</a>
-            </li>
+            <li id="resetsignup"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/resetsignup.xhtml">resetsignup()</a>
+                — action</li>
+            <li id="sadtoseeyougo"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/sadtoseeyougo.xhtml">sadtoseeyougo()</a>
+                — action</li>
             <li id="stats"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/stats.xhtml">stats()</a>
                 — action for admins only to see a whole bunch of stats</li>
-            <li id="subscribe">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/subscribe.xhtml">subscribe()</a>
-            </li>
-            <li id="thankyou">
-              <a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/thankyou.xhtml">thankyou()</a>
-            </li>
+            <li id="subscribe"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/subscribe.xhtml">subscribe()</a>
+                — action subscription form</li>
+            <li id="thankyou"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/thankyou.xhtml">thankyou()</a>
+                — action</li>
             <li id="unsubscribe"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/unsubscribe.xhtml">unsubscribe()</a>
                 — immediately unsubscribe if you are logged in.</li>
             <li id="viewcampaign"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/viewcampaign.xhtml">viewcampaign()</a>
                 — action to show one campaign...</li>
+            <li id="viewcampaigntextonly"><a title="CampaignMonitorSignupPage_Controller" href="../classes/CampaignMonitorSignupPage_Controller/viewcampaigntextonly.xhtml">viewcampaigntextonly()</a>
+                — action to show one campaign TEXT ONLY...</li>
           </ul>
         </div>
       </section>
     </div>
     <footer>
-      <span/>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
     </footer>
   </body>
 </html>
