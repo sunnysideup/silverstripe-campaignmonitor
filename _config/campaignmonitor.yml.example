@@ -14,5 +14,11 @@ CampaignMonitorAPIConnector:
   redirect_uri: ""
   code: ""
 
+CampaignMonitorCampaign:
+  emogrifier_add_allowed_media_types:
+    - "media screen and (min-width: 100px)"
+  emogrifier_remove_allowed_media_types:
+    - "media screen and (min-width: 1000px)"
+
 ############################
 ############################

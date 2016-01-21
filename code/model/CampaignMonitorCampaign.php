@@ -8,6 +8,20 @@
 
 class CampaignMonitorCampaign extends DataObject {
 
+	/**
+	 *
+	 * @var array
+	 */ 
+	private static $emogrifier_add_allowed_media_types = array(
+		"media screen and (min-width: 0)"
+	);
+	
+	/**
+	 *
+	 * @var array
+	 */ 
+	private static $emogrifier_remove_allowed_media_types = array();
+
 	private static $db = array(
 		"HasBeenSent" => "Boolean",
 		"CreateFromWebsite" => "Boolean",
@@ -135,7 +149,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function getNewsletterContent(){
 		$extension = $this->extend("updateNewsletterContent", $content);
-		if($extension !== null) {
+		if(is_array($extension) && count($extension)) {
 			return $extension[0];
 		}
 		$isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
@@ -143,37 +157,53 @@ class CampaignMonitorCampaign extends DataObject {
 			Config::inst()->update('SSViewer', 'theme_enabled', true);
 		}
 		Requirements::clear();
-		$style = $this->getBestTemplate();
-		$html = $this->owner->renderWith($style->TemplateName);
+		$templateName = $this->getBestTemplate();
+		$html = $this->renderWith($templateName);
 		if(!$isThemeEnabled) {
 			Config::inst()->update('SSViewer', 'theme_enabled', false);
 		}
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
-			$cssFileLocations = $style->getCSSFileLocation();
+			$cssFileLocations = $this->getCSSFileLocations();
 			foreach($cssFileLocations as $cssFileLocation) {
 				$cssFileHandler = fopen($cssFileLocation, 'r');
 				$allCSS .= fread($cssFileHandler,  filesize($cssFileLocation));
 				fclose($cssFileHandler);
 			}
-			$emog = new \Pelago\Emogrifier($html, $allCSS);
-			$html = $emog->emogrify();
+			$emogrifier = new \Pelago\Emogrifier($html, $allCSS);
+			$addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
+			foreach($addMediaTypes as $type) {
+				$emogrifier->addAllowedMediaType($type);
+			}
+			$removeMediaTypes = $this->Config()->get("emogrifier_remove_allowed_media_types");
+			foreach($removeMediaTypes as $type) {
+				$emogrifier->removeAllowedMediaType($type);
+			}
+			$html = $emogrifier->emogrify();
 		}
 		return $html;
 	}
 
 	/**
-	 * @return array
+	 * @return string
 	 */
 	protected function getBestTemplate(){
-
+		if($style = $this->CampaignMonitorCampaignStyle()) {
+			if($style->exists() && $style->TemplateName) {
+				return $style->TemplateName;
+			}
+		}
+		return "CampaignMonitorCampaign";
 	}
 
 	/**
-	 * @return
+	 * @return array
 	 */
 	protected function getCSSFileLocations(){
-
+		if($style = $this->CampaignMonitorCampaignStyle()) {
+			return $style->getCSSFilesAsArray();
+		}
+		return array();
 	}
 
 	function onBeforeWrite(){

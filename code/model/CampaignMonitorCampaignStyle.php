@@ -19,7 +19,7 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	);
 
 	private static $has_many = array(
-		"CampaignMonitorCampaign" => "CampaignMonitorCampaign"
+		"CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
 	);
 
 	private static $searchable_fields = array(
@@ -38,9 +38,11 @@ class CampaignMonitorCampaignStyle extends DataObject {
 
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("TemplateName"));
+		$fields->addFieldToTab("Root.Debug", TextField::create("TemplateName"));
 		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("FileLocation"));
 		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("CSSFiles"));
+		$fields->addFieldToTab("Root.Debug", ReadonlyField::create("CampaignMonitorCampaigns", "Used in ", implode(",", $this->CampaignMonitorCampaigns()->map()->toArray())));
+		$fields->removeFieldFromTab("Root", "CampaignMonitorCampaigns");
 		return $fields;
 	}
 
@@ -48,10 +50,29 @@ class CampaignMonitorCampaignStyle extends DataObject {
 		return false;
 	}
 
+	/**
+	 * @return array
+	 */ 
 	function getFoldersToSearch() {
 		$array = array(
 			Director::baseFolder()."/campaignmonitor/templates/Email/",
 			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/"
+		);
+		foreach($array as $key => $folder) {
+			if(!file_exists($folder)) {
+				unset($array[$key]);
+			}
+		}
+		return $array;
+	}
+
+	/**
+	 * @return array
+	 */ 
+	function getCSSFoldersToSearch() {
+		$array = array(
+			Director::baseFolder()."/campaignmonitor/css/",
+			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/css/"
 		);
 		foreach($array as $key => $folder) {
 			if(!file_exists($folder)) {
@@ -71,31 +92,52 @@ class CampaignMonitorCampaignStyle extends DataObject {
 			if(file_exists($fileLocation)) {
 				return $fileLocation;
 			}
+			else {
+				//just try the next one ...
+			}
 		}
-		$this->delete();
+		user_error("can not find template, last one tried: $fileLocation");
+
 	}
 
 	function getCSSFiles(){
-		return implode("," $this->getCSSFilesAsArray());
+		return implode(", ", $this->getCSSFilesAsArray());
 	}
+	
 	function getCSSFilesAsArray(){
 		$dom = new DOMDocument();
 		$cssFiles = array();
 		$fileLocation = $this->getFileLocation();
 		if($fileLocation) {
-			$dom->loadHTMLFile($fileLocation); // Can replace with $dom->loadHTML($str);
+			$dom->loadHTML($this->CampaignMonitorCampaigns()->first()->renderWith($this->TemplateName)); // Can replace with $dom->loadHTML($str);
 			$linkTags = $dom->getElementsByTagName('link');
 			foreach($linkTags as $linkTag){
 				if(strtolower($linkTag->getAttribute("rel")) == "stylesheet") {
-					$cssFiles[] = $linkTag->getAttribute("href");
+					$file = Director::baseFolder()."/".$linkTag->getAttribute("href");
+					if(file_exists($file)) {
+						$cssFiles[$file] = $file;
+					}
+					else {
+						user_error("can find css file $file");
+					}
 				}
 				 // if $link_tag rel == stylesheet
 				 //   get href value and load CSS
 			}
 		}
 		else {
-			user_error("Can not find file");
+			user_error("Can not find template file");
 		}
+		if(count($cssFiles) == 0) {
+			foreach($this->getCSSFoldersToSearch() as $folder) {
+				$file = $folder."CampaignMonitorCampaign.css";
+				if(file_exists($file)) {
+					$cssFiles[$file] = $file;
+					break;
+				}
+			}
+		}
+		return $cssFiles;
 	}
 
 	function requireDefaultRecords(){
