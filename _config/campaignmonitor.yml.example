@@ -16,9 +16,9 @@ CampaignMonitorAPIConnector:
 
 CampaignMonitorCampaign:
   emogrifier_add_allowed_media_types:
-    - "media screen"
+    - "screen"
   emogrifier_remove_allowed_media_types:
-    - "media print"
+    - "print"
 
 ############################
 ############################
