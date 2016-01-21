@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <title>$Subject</title>
-  <link rel="stylesheet" type="text/css" href="campaignmonitor/css/CampaignMonitorCampaign.css">
+  <% require themedCSS("CampaignMonitorCampaign") %>
 </head>
 <body>
 	$Content

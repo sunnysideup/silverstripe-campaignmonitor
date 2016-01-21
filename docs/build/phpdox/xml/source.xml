@@ -13,10 +13,10 @@
       <dir name="api">
         <file name="CampaignMonitorAPIConnector.php" size="52560" time="2016-01-19T18:56:08+00:00" unixtime="1453229768" sha1="5d247b22e0fedefe07d0ac04ba043f3d9e3df25a" xml="tokens/code/api/CampaignMonitorAPIConnector.php.xml"/>
       </dir>
-      <file name="CampaignMonitorSignupPage.php" size="27156" time="2016-01-20T20:23:02+00:00" unixtime="1453321382" sha1="47394d121be9546a7c54e41bbfa3d860e8fe81c6" xml="tokens/code/CampaignMonitorSignupPage.php.xml"/>
+      <file name="CampaignMonitorSignupPage.php" size="27267" time="2016-01-21T08:59:53+00:00" unixtime="1453366793" sha1="cf9145829108a412643ec5d6ee53a883a45e735e" xml="tokens/code/CampaignMonitorSignupPage.php.xml"/>
       <dir name="model">
-        <file name="CampaignMonitorCampaignStyle.php" size="4598" time="2016-01-21T08:12:25+00:00" unixtime="1453363945" sha1="eb1ecacac85508785b181b74ed72ffd004749aa7" xml="tokens/code/model/CampaignMonitorCampaignStyle.php.xml"/>
-        <file name="CampaignMonitorCampaign.php" size="8749" time="2016-01-21T02:59:38+00:00" unixtime="1453345178" sha1="b457d60f883c47eda5dfbbac9344e9b73b335597" xml="tokens/code/model/CampaignMonitorCampaign.php.xml"/>
+        <file name="CampaignMonitorCampaignStyle.php" size="4499" time="2016-01-21T08:48:46+00:00" unixtime="1453366126" sha1="c42526aa55624a4a5f64f468ddc877dc7d6af576" xml="tokens/code/model/CampaignMonitorCampaignStyle.php.xml"/>
+        <file name="CampaignMonitorCampaign.php" size="9202" time="2016-01-21T08:56:59+00:00" unixtime="1453366619" sha1="d90e336da991a407bd340c092b1831a20797ba31" xml="tokens/code/model/CampaignMonitorCampaign.php.xml"/>
       </dir>
     </dir>
   </dir>

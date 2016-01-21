@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <source xmlns="http://xml.phpdox.net/token">
-  <file xmlns="http://xml.phpdox.net/src" path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model" file="CampaignMonitorCampaignStyle.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model/CampaignMonitorCampaignStyle.php" size="4598" time="2016-01-21T08:12:25+00:00" unixtime="1453363945" sha1="eb1ecacac85508785b181b74ed72ffd004749aa7" relative="code/model/CampaignMonitorCampaignStyle.php"/>
+  <file xmlns="http://xml.phpdox.net/src" path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model" file="CampaignMonitorCampaignStyle.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model/CampaignMonitorCampaignStyle.php" size="4499" time="2016-01-21T08:48:46+00:00" unixtime="1453366126" sha1="c42526aa55624a4a5f64f468ddc877dc7d6af576" relative="code/model/CampaignMonitorCampaignStyle.php"/>
   <line no="1">
     <token name="T_OPEN_TAG">&lt;?php</token>
   </line>
@@ -857,30 +857,14 @@
   </line>
   <line no="112">
     <token name="T_WHITESPACE">			</token>
+    <token name="T_PHPDOX_AT">@</token>
     <token name="T_VARIABLE">$dom</token>
     <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">loadHTML</token>
+    <token name="T_STRING">loadHTMLFile</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_VARIABLE">$this</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">CampaignMonitorCampaigns</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">first</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">renderWith</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_VARIABLE">$this</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">TemplateName</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_VARIABLE">$fileLocation</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
-    <token name="T_WHITESPACE"> </token>
-    <token name="T_COMMENT">// Can replace with $dom-&gt;loadHTML($str);</token>
   </line>
   <line no="113">
     <token name="T_WHITESPACE">			</token>

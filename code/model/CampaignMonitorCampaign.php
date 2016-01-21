@@ -36,12 +36,14 @@ class CampaignMonitorCampaign extends DataObject {
 		"WebVersionURL" => "Varchar(255)",
 		"WebVersionTextURL" => "Varchar(255)",
 		"Hide" => "Boolean",
-		"Content" => "HTMLText"
+		"Content" => "HTMLText",
+		"Hash" => "Varchar(32)"
 	);
 
 	private static $indexes = array(
 		"CampaignID" => true,
-		"Hide" => true
+		"Hide" => true,
+		"Hash" => true
 	);
 
 	private static $field_labels = array(
@@ -88,6 +90,7 @@ class CampaignMonitorCampaign extends DataObject {
 		$fields->makeFieldReadonly("HasBeenSent");
 		//removed
 		$fields->removeFieldFromTab("Root.Main", "CreatedFromWebsite");
+		$fields->removeFieldFromTab("Root.Main", "SecurityCode");
 		//pages
 		$source = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
 		$fields->removeFieldFromTab("Root.Main", "Pages");
@@ -120,7 +123,7 @@ class CampaignMonitorCampaign extends DataObject {
 					$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
 				}
 				else {
-					$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
+					$fields->addFieldToTab("Root.Main", new LiteralField("PreviewLink", "<h2><a target=\"_blank\" href=\"".$this->PreviewLink()."\">Preview Link</a></h2>"), "CampaignID");
 				}
 			}
 			else {
@@ -141,7 +144,7 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
-			$link = $page->Link("previewcampaign".$action."/".$this->ID."/");
+			$link = $page->Link("previewcampaign".$action."/".$this->ID."/?hash=".$this->Hash);
 			return Director::absoluteURL($link);
 		}
 		return "";
@@ -152,16 +155,7 @@ class CampaignMonitorCampaign extends DataObject {
 		if(is_array($extension) && count($extension)) {
 			return $extension[0];
 		}
-		$isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
-		if(!$isThemeEnabled) {
-			Config::inst()->update('SSViewer', 'theme_enabled', true);
-		}
-		Requirements::clear();
-		$templateName = $this->getBestTemplate();
-		$html = $this->renderWith($templateName);
-		if(!$isThemeEnabled) {
-			Config::inst()->update('SSViewer', 'theme_enabled', false);
-		}
+
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
 			$cssFileLocations = $this->getCSSFileLocations();
@@ -170,6 +164,16 @@ class CampaignMonitorCampaign extends DataObject {
 				$allCSS .= fread($cssFileHandler,  filesize($cssFileLocation));
 				fclose($cssFileHandler);
 			}
+			$isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
+			if(!$isThemeEnabled) {
+				Config::inst()->update('SSViewer', 'theme_enabled', true);
+			}
+			Requirements::clear();
+			$templateName = $this->getBestTemplate();
+			$html = $this->renderWith($templateName);
+			if(!$isThemeEnabled) {
+				Config::inst()->update('SSViewer', 'theme_enabled', false);
+			}			
 			$emogrifier = new \Pelago\Emogrifier($html, $allCSS);
 			$addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
 			foreach($addMediaTypes as $type) {
@@ -187,7 +191,7 @@ class CampaignMonitorCampaign extends DataObject {
 	/**
 	 * @return string
 	 */
-	protected function getBestTemplate(){
+	public function getBestTemplate(){
 		if($style = $this->CampaignMonitorCampaignStyle()) {
 			if($style->exists() && $style->TemplateName) {
 				return $style->TemplateName;
@@ -206,10 +210,23 @@ class CampaignMonitorCampaign extends DataObject {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
+	public function getHTMLContent(){
+		if($style = $this->CampaignMonitorCampaignStyle()) {
+			return $style->getHTMLContent($this);
+		}
+		return $this->renderWith("CampaignMonitorCampaign");
+	}
+
 	function onBeforeWrite(){
 		parent::onBeforeWrite();
 		if($this->CampaignID) {
 			$this->CreateFromWebsite = false;
+		}
+		if(!$this->Hash) {
+			$this->Hash = substr(hash("md5", uniqid()), 0, 7);
 		}
 	}
 

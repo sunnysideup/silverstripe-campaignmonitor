@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage" abstract="false" final="false" start="10" end="389">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="27156" time="2016-01-20T20:23:02+00:00" unixtime="1453321382" sha1="47394d121be9546a7c54e41bbfa3d860e8fe81c6" relative="code/CampaignMonitorSignupPage.php"/>
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="27267" time="2016-01-21T08:59:53+00:00" unixtime="1453366793" sha1="cf9145829108a412643ec5d6ee53a883a45e735e" relative="code/CampaignMonitorSignupPage.php"/>
   <docblock>
     <description compact="Page for Signing Up to Campaign Monitor List">Each page relates to one CM list.</description>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
