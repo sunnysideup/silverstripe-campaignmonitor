@@ -13,7 +13,7 @@ class CampaignMonitorCampaign extends DataObject {
 	 * @var array
 	 */ 
 	private static $emogrifier_add_allowed_media_types = array(
-		"media screen"
+		"screen"
 	);
 	
 	/**
