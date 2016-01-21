@@ -16,9 +16,9 @@ CampaignMonitorAPIConnector:
 
 CampaignMonitorCampaign:
   emogrifier_add_allowed_media_types:
-    - "media screen and (min-width: 100px)"
+    - "media screen"
   emogrifier_remove_allowed_media_types:
-    - "media screen and (min-width: 1000px)"
+    - "media print"
 
 ############################
 ############################
