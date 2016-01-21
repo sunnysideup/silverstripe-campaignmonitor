@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="ComposerAutoloaderInited1ac8c2d68bf64a7097009b34d58681" namespace="" name="ComposerAutoloaderInited1ac8c2d68bf64a7097009b34d58681" abstract="false" final="false" start="5" end="45">
-  <file path="/var/www/_modules/campaignmonitor/trunk/docs/en/phpdox/../../../third_party/vendor/composer" file="autoload_real.php" realpath="/var/www/_modules/campaignmonitor/trunk/third_party/vendor/composer/autoload_real.php" size="1398" time="2015-03-14T10:22:26+13:00" unixtime="1426281746" sha1="3fb59bb586f98abacaceec0cfff7d10b946a5d4a" relative="third_party/vendor/composer/autoload_real.php"/>
-  <member name="loader" type="{unknown}" visibility="private" line="7"/>
-  <method name="loadClassLoader" start="9" end="14" abstract="false" final="false" static="true" visibility="public">
-    <parameter name="class" byreference="false" type="{unknown}"/>
-  </method>
-  <method name="getLoader" start="16" end="44" abstract="false" final="false" static="true" visibility="public"/>
-</class>
