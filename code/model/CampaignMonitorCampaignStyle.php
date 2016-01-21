@@ -109,7 +109,7 @@ class CampaignMonitorCampaignStyle extends DataObject {
 		$cssFiles = array();
 		$fileLocation = $this->getFileLocation();
 		if($fileLocation) {
-			$dom->loadHTML($this->CampaignMonitorCampaigns()->first()->renderWith($this->TemplateName)); // Can replace with $dom->loadHTML($str);
+			@$dom->loadHTMLFile($fileLocation);
 			$linkTags = $dom->getElementsByTagName('link');
 			foreach($linkTags as $linkTag){
 				if(strtolower($linkTag->getAttribute("rel")) == "stylesheet") {

@@ -688,7 +688,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$id = intval($request->param("ID"));
 		$this->campaign = CampaignMonitorCampaign::get()->byID($id);
 		if($this->campaign) {
-			return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
+			if(isset($_GET["hash"]) && strlen($_GET["hash"]) == 7 &&  $_GET["hash"] == $this->campaign->Hash) {
+				return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
+			}
 		}
 		return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
 	}

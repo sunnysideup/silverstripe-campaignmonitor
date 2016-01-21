@@ -856,30 +856,14 @@
   </line>
   <line no="112">
     <token name="T_WHITESPACE">			</token>
+    <token name="T_PHPDOX_AT">@</token>
     <token name="T_VARIABLE">$dom</token>
     <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">loadHTML</token>
+    <token name="T_STRING">loadHTMLFile</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_VARIABLE">$this</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">CampaignMonitorCampaigns</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">first</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">renderWith</token>
-    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
-    <token name="T_VARIABLE">$this</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">TemplateName</token>
-    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_VARIABLE">$fileLocation</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
-    <token name="T_WHITESPACE"> </token>
-    <token name="T_COMMENT">// Can replace with $dom-&gt;loadHTML($str);</token>
   </line>
   <line no="113">
     <token name="T_WHITESPACE">			</token>

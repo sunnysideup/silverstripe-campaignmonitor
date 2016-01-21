@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage_Controller" namespace="" name="CampaignMonitorSignupPage_Controller" abstract="false" final="false" start="391" end="870">
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage_Controller" namespace="" name="CampaignMonitorSignupPage_Controller" abstract="false" final="false" start="391" end="872">
   <extends full="Page_Controller" namespace="" name="Page_Controller" unresolved="true"/>
   <member name="email" type="string" default="''" visibility="protected" static="false" line="397">
     <docblock>
@@ -97,19 +97,19 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="previewcampaign" start="687" end="694" abstract="false" final="false" static="false" visibility="public">
+  <method name="previewcampaign" start="687" end="696" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to preview one campaign..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="previewcampaigntextonly" start="700" end="707" abstract="false" final="false" static="false" visibility="public">
+  <method name="previewcampaigntextonly" start="702" end="709" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to preview one campaign TEXT ONLY..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="Email" start="714" end="716" abstract="false" final="false" static="false" visibility="public">
+  <method name="Email" start="716" end="718" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="object">
@@ -117,7 +117,7 @@
       </return>
     </docblock>
   </method>
-  <method name="HasCampaign" start="722" end="724" abstract="false" final="false" static="false" visibility="public">
+  <method name="HasCampaign" start="724" end="726" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="object">
@@ -125,7 +125,7 @@
       </return>
     </docblock>
   </method>
-  <method name="Campaign" start="730" end="732" abstract="false" final="false" static="false" visibility="public">
+  <method name="Campaign" start="732" end="734" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return description="| CampaignMonitorCampaign" type="object">
@@ -133,7 +133,7 @@
       </return>
     </docblock>
   </method>
-  <method name="PreviousCampaignMonitorCampaigns" start="740" end="752" abstract="false" final="false" static="false" visibility="public">
+  <method name="PreviousCampaignMonitorCampaigns" start="742" end="754" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="same as $this-&gt;CampaignMonitorCampaigns() but sorted correctly."/>
       <return description="of CampaignMonitorCampaigns" type="object">
@@ -141,12 +141,12 @@
       </return>
     </docblock>
   </method>
-  <method name="stats" start="758" end="792" abstract="false" final="false" static="false" visibility="public">
+  <method name="stats" start="760" end="794" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action for admins only to see a whole bunch of stats"/>
     </docblock>
   </method>
-  <method name="CampaignStats" start="799" end="819" abstract="false" final="false" static="false" visibility="public">
+  <method name="CampaignStats" start="801" end="821" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="returns a bunch of stats about a campaign IF the user is an admin AND a campaign is selected"/>
       <return description="(html) | false" type="object">
@@ -154,7 +154,7 @@
       </return>
     </docblock>
   </method>
-  <method name="resetsignup" start="825" end="828" abstract="false" final="false" static="false" visibility="public">
+  <method name="resetsignup" start="827" end="830" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -163,12 +163,12 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="resetoldcampaigns" start="834" end="843" abstract="false" final="false" static="false" visibility="public">
+  <method name="resetoldcampaigns" start="836" end="845" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="removes all campaigns so that they can be re-imported."/>
     </docblock>
   </method>
-  <method name="JSHackForPreSections" start="849" end="868" abstract="false" final="false" static="false" visibility="private">
+  <method name="JSHackForPreSections" start="851" end="870" abstract="false" final="false" static="false" visibility="private">
     <docblock>
       <description/>
       <return type="object">

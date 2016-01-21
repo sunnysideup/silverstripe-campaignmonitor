@@ -5,9 +5,9 @@
     <class name="CampaignMonitorGroupDOD" src="code/decorators/CampaignMonitorGroupDOD.php" xml="classes/CampaignMonitorGroupDOD.xml"/>
     <class name="CampaignMonitorAPIConnector" src="code/api/CampaignMonitorAPIConnector.php" description="Main Holder page for Recipes" xml="classes/CampaignMonitorAPIConnector.xml"/>
     <class name="CampaignMonitorAPIConnector_TestController" src="code/api/CampaignMonitorAPIConnector.php" description="simple class to see that everything is working ..." xml="classes/CampaignMonitorAPIConnector_TestController.xml"/>
-    <class name="CampaignMonitorSignupPage" src="code/CampaignMonitorSignupPage.php" description="Page for Signing Up to Campaign Monitor List" xml="classes/CampaignMonitorSignupPage.xml"/>
-    <class name="CampaignMonitorSignupPage_Controller" src="code/CampaignMonitorSignupPage.php" xml="classes/CampaignMonitorSignupPage_Controller.xml"/>
-    <class name="CampaignMonitorCampaignStyle" src="code/model/CampaignMonitorCampaignStyle.php" xml="classes/CampaignMonitorCampaignStyle.xml"/>
-    <class name="CampaignMonitorCampaign" src="code/model/CampaignMonitorCampaign.php" xml="classes/CampaignMonitorCampaign.xml"/>
-  </namespace>
+    
+    
+    
+    
+  <class name="CampaignMonitorSignupPage" src="code/CampaignMonitorSignupPage.php" description="Page for Signing Up to Campaign Monitor List" xml="classes/CampaignMonitorSignupPage.xml"/><class name="CampaignMonitorSignupPage_Controller" src="code/CampaignMonitorSignupPage.php" xml="classes/CampaignMonitorSignupPage_Controller.xml"/><class name="CampaignMonitorCampaignStyle" src="code/model/CampaignMonitorCampaignStyle.php" xml="classes/CampaignMonitorCampaignStyle.xml"/><class name="CampaignMonitorCampaign" src="code/model/CampaignMonitorCampaign.php" xml="classes/CampaignMonitorCampaign.xml"/></namespace>
 </index>
