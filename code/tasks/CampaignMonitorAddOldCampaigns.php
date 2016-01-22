@@ -25,7 +25,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 		if(is_array($campaigns)) {
 			foreach($campaigns as $campaign) {
 				if($campaign->SentDate) {
-					$campaignMonitorCampaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaign->CampaignID))->first()
+					$campaignMonitorCampaign = CampaignMonitorCampaign::get()->filter(array("CampaignID" => $campaign->CampaignID))->first();
 					if(!$campaignMonitorCampaign) {
 						if($this->verbose) {
 							DB::alteration_message("Adding ".$campaign->Subject." sent ".$campaign->SentDate, "created");
