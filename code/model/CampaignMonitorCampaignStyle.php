@@ -71,8 +71,9 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	 */ 
 	function getCSSFoldersToSearch() {
 		$array = array(
-			Director::baseFolder()."/campaignmonitor/css/",
-			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/css/"
+			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/css/",
+			Director::baseFolder()."/campaignmonitor/css/"
+			
 		);
 		foreach($array as $key => $folder) {
 			if(!file_exists($folder)) {
@@ -109,7 +110,7 @@ class CampaignMonitorCampaignStyle extends DataObject {
 		$cssFiles = array();
 		$fileLocation = $this->getFileLocation();
 		if($fileLocation) {
-			@$dom->loadHTMLFile($fileLocation);
+			$dom->loadHTMLFile($fileLocation);
 			$linkTags = $dom->getElementsByTagName('link');
 			foreach($linkTags as $linkTag){
 				if(strtolower($linkTag->getAttribute("rel")) == "stylesheet") {

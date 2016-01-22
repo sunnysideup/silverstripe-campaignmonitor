@@ -156,6 +156,7 @@ class CampaignMonitorCampaign extends DataObject {
 			return $extension[0];
 		}
 
+		
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
 			$cssFileLocations = $this->getCSSFileLocations();
@@ -177,7 +178,7 @@ class CampaignMonitorCampaign extends DataObject {
 			$emogrifier = new \Pelago\Emogrifier($html, $allCSS);
 			$addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
 			foreach($addMediaTypes as $type) {
-				$emogrifier->addAllowedMediaType($type);
+				//$emogrifier->addAllowedMediaType($type);
 			}
 			$removeMediaTypes = $this->Config()->get("emogrifier_remove_allowed_media_types");
 			foreach($removeMediaTypes as $type) {
