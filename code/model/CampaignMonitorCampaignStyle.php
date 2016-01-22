@@ -52,11 +52,11 @@ class CampaignMonitorCampaignStyle extends DataObject {
 
 	/**
 	 * @return array
-	 */ 
+	 */
 	function getFoldersToSearch() {
 		$array = array(
-			Director::baseFolder()."/campaignmonitor/templates/Email/",
-			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/"
+			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/",
+			Director::baseFolder()."/campaignmonitor/templates/Email/"
 		);
 		foreach($array as $key => $folder) {
 			if(!file_exists($folder)) {
@@ -68,12 +68,12 @@ class CampaignMonitorCampaignStyle extends DataObject {
 
 	/**
 	 * @return array
-	 */ 
+	 */
 	function getCSSFoldersToSearch() {
 		$array = array(
 			Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/css/",
 			Director::baseFolder()."/campaignmonitor/css/"
-			
+
 		);
 		foreach($array as $key => $folder) {
 			if(!file_exists($folder)) {
@@ -88,8 +88,11 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	 * @return string | null
 	 */
 	function getFileLocation(){
+		if(!$this->TemplateName) {
+			$this->TemplateName = "CampaignMonitorCampaign";
+		}
 		foreach($this->getFoldersToSearch() as $folder) {
-			$fileLocation = $folder."/".$this->TemplateName.".ss";
+			$fileLocation = $folder.$this->TemplateName.".ss";
 			if(file_exists($fileLocation)) {
 				return $fileLocation;
 			}
@@ -104,13 +107,13 @@ class CampaignMonitorCampaignStyle extends DataObject {
 	function getCSSFiles(){
 		return implode(", ", $this->getCSSFilesAsArray());
 	}
-	
+
 	function getCSSFilesAsArray(){
 		$dom = new DOMDocument();
 		$cssFiles = array();
 		$fileLocation = $this->getFileLocation();
 		if($fileLocation) {
-			$dom->loadHTMLFile($fileLocation);
+			@$dom->loadHTMLFile($fileLocation);
 			$linkTags = $dom->getElementsByTagName('link');
 			foreach($linkTags as $linkTag){
 				if(strtolower($linkTag->getAttribute("rel")) == "stylesheet") {
@@ -164,6 +167,13 @@ class CampaignMonitorCampaignStyle extends DataObject {
 		$excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(array("TemplateName" => $templates));
 		foreach($excludes as $exclude) {
 			$exclude->delete();
+		}
+	}
+
+	function onBeforeWrite(){
+		parent::onBeforeWrite();
+		if($this->TemplateName == "CampaignMonitorCampaign") {
+			$this->Title = "Default Template";
 		}
 	}
 
