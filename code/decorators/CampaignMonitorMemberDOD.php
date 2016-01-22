@@ -38,7 +38,9 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 * returns a form field for signing up to all available lists
 	 * or if a list is provided, for that particular list.
 	 *
-	 * @param CampaignMonitorSignupPage | Null $listPage
+	 * @param CampaignMonitorSignupPage | string | Null $listPage
+	 * @param string $fieldName
+	 * @param string $fieldTitle
 	 *
 	 * @return FormField
 	 */
@@ -65,7 +67,22 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				if(!$fieldTitle) {
 					$fieldTitle = _t("CampaignMonitorSignupPage.SIGNUP_FOR", "Sign up for ")." ".$listPage->getListTitle();
 				}
-				$field = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
+				$segments = $api->getSegments($listPage->ListID);
+				$subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
+				if($segments && count($segments)) {
+					foreach($segments as $segment) {
+						$segmentOptions[$segment->SegmentID] = $segment->Title;
+					}
+					$segmentField = new CheckboxSetField(
+						$fieldName."_Segment",
+						_t("CampaignMonitorMemberDOD.SELECT_INTERESTS", "select interests"),
+						$segmentOptions
+					);
+					$field = CompositeField::create($subscribeField, $segmentField);
+				}
+				else {
+					$field = CompositeField::create($subscribeField);
+				}
 			}
 		}
 		else {
