@@ -11,15 +11,15 @@ class CampaignMonitorCampaign extends DataObject {
 	/**
 	 *
 	 * @var array
-	 */ 
+	 */
 	private static $emogrifier_add_allowed_media_types = array(
 		"screen"
 	);
-	
+
 	/**
 	 *
 	 * @var array
-	 */ 
+	 */
 	private static $emogrifier_remove_allowed_media_types = array();
 
 	private static $db = array(
@@ -113,6 +113,9 @@ class CampaignMonitorCampaign extends DataObject {
 			$fields->makeFieldReadonly("WebVersionTextURL");
 			$fields->makeFieldReadonly("Content");
 		}
+		else {
+			$this->CampaignID = null;
+		}
 		if($this->HasBeenSentCheck()) {
 			$fields->addFieldToTab("Root.Main", new LiteralField("Link", "<h2><a target=\"_blank\" href=\"".$this->Link()."\">Link</a></h2>"), "CampaignID");
 		}
@@ -156,7 +159,7 @@ class CampaignMonitorCampaign extends DataObject {
 			return $extension[0];
 		}
 
-		
+
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
 			$cssFileLocations = $this->getCSSFileLocations();
@@ -174,7 +177,7 @@ class CampaignMonitorCampaign extends DataObject {
 			$html = $this->renderWith($templateName);
 			if(!$isThemeEnabled) {
 				Config::inst()->update('SSViewer', 'theme_enabled', false);
-			}			
+			}
 			$emogrifier = new \Pelago\Emogrifier($html, $allCSS);
 			$addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
 			foreach($addMediaTypes as $type) {
@@ -223,11 +226,11 @@ class CampaignMonitorCampaign extends DataObject {
 
 	function onBeforeWrite(){
 		parent::onBeforeWrite();
-		if($this->CampaignID) {
-			$this->CreateFromWebsite = false;
-		}
 		if(!$this->Hash) {
 			$this->Hash = substr(hash("md5", uniqid()), 0, 7);
+		}
+		if(!$this->ExistsOnCampaignMonitorCheck()) {
+			$this->CampaignID = null;
 		}
 	}
 
@@ -309,7 +312,6 @@ class CampaignMonitorCampaign extends DataObject {
 			}
 			else {
 				$api = $this->getAPI();
-				$result = $this->api->getSummary($this->CampaignID);
 				$result = $this->api->getDrafts();
 				if(isset($result)) {
 					foreach($result as $key => $campaign) {
