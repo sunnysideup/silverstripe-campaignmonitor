@@ -13,7 +13,7 @@ API. Here are some examples:
 
 Developer
 -----------------------------------------------
-Nicolaas Francken [at] sunnysideup.co.nz
+Nicolaas Francken [at] sunnysideup.nz
 
 
 Requirements
