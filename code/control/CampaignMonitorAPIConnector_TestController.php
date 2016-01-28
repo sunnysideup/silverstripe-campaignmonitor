@@ -52,12 +52,10 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 	function init(){
 		parent::init();
-		if($this->debug) {
-			increase_time_limit_to(600);
-		}
 		if(!Config::inst()->get("CampaignMonitorAPIConnector", "client_id")) {
 			user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
 		}
+		$this->egData["listTitle"] = $this->egData["listTitle"].rand(0,999999999999);
 	}
 
 	/**
@@ -166,11 +164,11 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 			$sortDirection = "DESC"
 		);
 
-		$result = $this->api->getSegments(
-			$this->egData["listID"]
-		);
+		$result = $this->api->getSegments($this->egData["listID"]);
 
 		$result = $this->api->getListStats($this->egData["listID"]);
+
+		$result = $this->api->getListCustomFields($this->egData["listID"]);
 
 		echo "<h2>end of list tests</h2>";
 		$this->index();

@@ -44,7 +44,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 *
 	 * @return FormField
 	 */
-	public function getSignupField($listPage = null, $fieldName = "", $fieldTitle = "") {
+	public function getCampaignMonitorSignupField($listPage = null, $fieldName = "", $fieldTitle = "") {
 		if(!is_object($listPage)) {
 			$listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
 		}
@@ -67,7 +67,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				if(!$fieldTitle) {
 					$fieldTitle = _t("CampaignMonitorSignupPage.SIGNUP_FOR", "Sign up for ")." ".$listPage->getListTitle();
 				}
-				$segments = $api->getSegments($listPage->ListID);
+				$segments = $listPage->CampaignMonitorSegments()->filter(array("AutomaticallyAddUser" => 0, "ShowToUser" => 1));
 				$subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
 				if($segments && count($segments)) {
 					foreach($segments as $segment) {
@@ -111,6 +111,68 @@ class CampaignMonitorMemberDOD extends DataExtension {
 			);
 		}
 		return $field;
+	}
+
+
+	/**
+	 * action subscription form
+	 * @param CampaignMonitorSignUpPage $page
+	 * @param Array $array
+	 * @param Form $form
+	 *
+	 * return string: can be subscribe / unsubscribe / error
+	 */
+	function processCampaignMonitorSignupField($page, $data, $form) {
+		$typeOfAction = "unsubscribe";
+		//many choices
+		if(isset($data["SubscribeManyChoices"])) {
+			$listPages = CampaignMonitorSignupPage::get_ready_ones();
+			foreach($listPages as $listPage) {
+				if(isset($data["SubscribeManyChoices"][$listPage->ListID]) && $data["SubscribeManyChoices"][$listPage->ListID]) {
+					$this->owner->addCampaignMonitorList($listPage->ListID);
+					$typeOfAction = "subscribe";
+				}
+				else {
+					$this->owner->removeCampaignMonitorList($listPage->ListID);
+				}
+			}
+		}
+		//one choice
+		elseif(isset($data["SubscribeChoice"])) {
+			$params = array();
+			if(isset($data["SubscribeChoice_Segment"])) {
+				$params = $data["SubscribeChoice_Segment"];
+			}
+			if($data["SubscribeChoice"] == "Subscribe") {
+				print_r($data);
+				die("DDD");
+				$this->owner->addCampaignMonitorList($page->ListID, $params);
+				$typeOfAction = "subscribe";
+			}
+			else {
+				$this->owner->removeCampaignMonitorList($page->ListID);
+			}
+		}
+		else {
+			user_error("Subscriber field missing", E_USER_WARNING);
+		}
+		return $typeOfAction;
+	}
+
+	/**
+	 * immediately unsubscribe if you are logged in.
+	 * @param HTTPRequest
+	 */
+	function unsubscribe($request) {
+		$member = Member::currentUser();
+		if ($member) {
+			$member->removeCampaignMonitorList($this->ListID);
+			$this->Content = $member->Email." has been removed from this list: ".$this->getListTitle();
+		}
+		else {
+			Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST", "Please login first."));
+		}
+		return array();
 	}
 
 	/**
