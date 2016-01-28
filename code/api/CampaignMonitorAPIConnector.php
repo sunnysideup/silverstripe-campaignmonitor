@@ -693,6 +693,16 @@ class CampaignMonitorAPIConnector extends Object {
 		);
 	}
 
+	function getListCustomFields($listID){
+		$wrap = new CS_REST_Lists($listID, $this->getAuth());
+		$result = $wrap->get_custom_fields();
+		return $this->returnResult(
+			$result,
+			"GET /api/v3.1/lists/{ID}/customfields",
+			"Got Lists Custom Fields"
+		);
+	}
+
 	/*******************************************************
 	 * create campaigns
 	 *

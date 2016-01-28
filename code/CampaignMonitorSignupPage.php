@@ -39,7 +39,8 @@ class CampaignMonitorSignupPage extends Page {
 		'SignUpButtonLabel' => 'Varchar(20)',
 
 		'ShowOldNewsletters' => 'Boolean',
-		'ShowAllNewsletterForSigningUp' => 'Boolean'
+		'ShowAllNewsletterForSigningUp' => 'Boolean',
+
 	);
 
 	/**
@@ -48,6 +49,14 @@ class CampaignMonitorSignupPage extends Page {
 	 */
 	private static $has_one = array(
 		"Group" => "Group"
+	);
+
+	/**
+	 *
+	 * @inherited
+	 */
+	private static $has_many = array(
+		"CampaignMonitorSegments" => "CampaignMonitorSegment"
 	);
 
 	/**
@@ -72,7 +81,7 @@ class CampaignMonitorSignupPage extends Page {
 
 
 	/**
-	 * Campaign monitor pages that are ready to receive "guests"
+	 * Campaign monitor pages that are ready to receive "sign-ups"
 	 * @return ArrayList
 	 */
 	public static function get_ready_ones() {
@@ -120,7 +129,8 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
 					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'),
+					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RelationEditor::create())
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
@@ -180,14 +190,14 @@ class CampaignMonitorSignupPage extends Page {
 	 *
 	 * @var Null | Array
 	 */
-	private static $drop_down_list = null;
+	private static $drop_down_list = array();
 
 	/**
 	 * returns available list for client
 	 * @return array
 	 */
 	protected function makeDropdownListFromLists() {
-		if(self::$drop_down_list === null) {
+		if(!isset(self::$drop_down_list[$this->ID])) {
 			$array = array();
 			$api = $this->getAPI();
 			$lists = $api->getLists();
@@ -204,9 +214,9 @@ class CampaignMonitorSignupPage extends Page {
 					unset($array[$page->ListID]);
 				}
 			}
-			self::$drop_down_list = $array;
+			self::$drop_down_list[$this->ID] = $array;
 		}
-		return self::$drop_down_list;
+		return self::$drop_down_list[$this->ID];
 	}
 
 	/**
@@ -343,6 +353,8 @@ class CampaignMonitorSignupPage extends Page {
 	 * add old campaings or remove them
 	 * depending on the setting
 	 *
+	 * add / remove segments ...
+	 *
 	 */
 	function onAfterWrite() {
 		parent::onAfterWrite();
@@ -350,8 +362,28 @@ class CampaignMonitorSignupPage extends Page {
 			$this->AddOldCampaigns();
 		}
 		else {
-			$this->CampaignMonitorCampaigns()->removeAll();
+			$this->CampaignMonitorCampaigns()->filter(array("HasBeenSent" => 1))->removeAll();
 		}
+		//add segments
+		$segmentsAdded = array();
+		$segments = $this->api->getSegments($this->ListID);
+		if($segments && is_array($segments) && count($segments)) {
+			foreach($segments as $segment) {
+				$segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
+				$filterArray = array("SegmentID" => $segment->SegmentID, "ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID);
+				$obj = CampaignMonitorSegment::get()->filter($filterArray)->first();
+				if(!$obj) {
+					$obj = CampaignMonitorSegment::create($filterArray);
+				}
+				$obj->Title = $segment->Title;
+				$obj->write();
+			}
+		}
+		$unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))->exclude(array("SegmentID" => $segmentsAdded));
+		foreach($unwantedSegments as $unwantedSegment) {
+			$unwantedSegment->delete();
+		}
+		//CampaignMonitorSegment
 	}
 
 	public function AddOldCampaigns(){
@@ -385,6 +417,7 @@ class CampaignMonitorSignupPage extends Page {
 			}
 		}
 	}
+
 
 }
 
@@ -437,10 +470,10 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				$member = new Member();
 			}
 			if($this->ShowAllNewsletterForSigningUp) {
-				$signupField = $member->getSignupField(null, "SubscribeManyChoices");
+				$signupField = $member->getCampaignMonitorSignupField(null, "SubscribeManyChoices");
 			}
 			else {
-				$signupField = $member->getSignupField($this->ListID, "SubscribeChoice");
+				$signupField = $member->getCampaignMonitorSignupField($this->ListID, "SubscribeChoice");
 			}
 			$fields = new FieldList(
 				$signupField,
@@ -540,36 +573,14 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 					$member->logIn($keepMeLoggedIn = false);
 				}
 			}
-
-			//many choices
-			if(isset($data["SubscribeManyChoices"])) {
-				$listPages = CampaignMonitorSignupPage::get_ready_ones();
-				foreach($listPages as $listPage) {
-					if(isset($data["SubscribeManyChoices"][$listPage->ListID]) && $data["SubscribeManyChoices"][$listPage->ListID]) {
-						$member->addCampaignMonitorList($listPage->ListID);
-						return $this->redirect($this->Link('thankyou'));
-					}
-					else {
-						$member->removeCampaignMonitorList($listPage->ListID);
-						return $this->redirect($this->Link('sadtoseeyougo'));
-					}
-				}
-			}
-
-			//one choice
-			elseif(isset($data["SubscribeChoice"])) {
-				if($data["SubscribeChoice"] == "Subscribe") {
-					$member->addCampaignMonitorList($this->ListID);
-					return $this->redirect($this->Link('thankyou'));
-				}
-				else {
-					$member->removeCampaignMonitorList($this->ListID);
-					return $this->redirect($this->Link('sadtoseeyougo'));
-				}
+			$outcome = $member->processCampaignMonitorSignupField($this->dataRecord, $data, $form);
+			if($outcome == "subscribe") {
+				return $this->redirect($this->link("thankyou"));
 			}
 			else {
-				user_error("Subscriber field missing", E_USER_WARNING);
+				return $this->redirect($this->link("sadtoseeyougo"));
 			}
+
 		}
 		else {
 			user_error("No list to subscribe to", E_USER_WARNING);
