@@ -52,6 +52,8 @@ class CampaignMonitorMemberDOD extends DataExtension {
 		if(!$fieldName) {
 			$fieldName = Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname");
 		}
+		$api = $this->getCMAPI();
+		$currentValues = null;
 		if($listPage) {
 			if($listPage->ReadyToReceiveSubscribtions()) {
 				$currentSelection = "Subscribe";
@@ -59,29 +61,28 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$optionArray["Subscribe"] = _t("CampaignMonitorSignupPage.SUBSCRIBE_TO", "subscribe to")." ".$listPage->getListTitle();
 				$optionArray["Unsubscribe"] = _t("CampaignMonitorSignupPage.UNSUBSCRIBE_FROM", "unsubscribe from ")." ".$listPage->getListTitle();
 				if($this->owner->exists()) {
-					$api = $this->getCMAPI();
 					if($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
+						$currentValues = $api->getSubscriber($listPage->ListID, $this->owner);
 						$currentSelection = "Unsubscribe";
 					}
 				}
 				if(!$fieldTitle) {
 					$fieldTitle = _t("CampaignMonitorSignupPage.SIGNUP_FOR", "Sign up for ")." ".$listPage->getListTitle();
 				}
-				$segments = $listPage->CampaignMonitorSegments()->filter(array("AutomaticallyAddUser" => 0, "ShowToUser" => 1));
 				$subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
-				if($segments && count($segments)) {
-					foreach($segments as $segment) {
-						$segmentOptions[$segment->SegmentID] = $segment->Title;
+				$field = CompositeField::create($subscribeField);
+				//add custom fields
+				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
+				foreach($customFields as $customField) {
+					$customFormField = $customField->getFormField("CMCustomField");
+					if($currentValues && isset($currentValues->CustomFields)) {
+						foreach($currentValues->CustomFields as $customFieldObject) {
+							if($customFieldObject->Key == $customField->Title) {
+								$customFormField->setValue($customFieldObject->Value);
+							}
+						}
 					}
-					$segmentField = new CheckboxSetField(
-						$fieldName."_Segment",
-						_t("CampaignMonitorMemberDOD.SELECT_INTERESTS", "select interests"),
-						$segmentOptions
-					);
-					$field = CompositeField::create($subscribeField, $segmentField);
-				}
-				else {
-					$field = CompositeField::create($subscribeField);
+					$field->push($customFormField);
 				}
 			}
 		}
@@ -122,7 +123,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 *
 	 * return string: can be subscribe / unsubscribe / error
 	 */
-	function processCampaignMonitorSignupField($page, $data, $form) {
+	function processCampaignMonitorSignupField($listPage, $data, $form) {
 		$typeOfAction = "unsubscribe";
 		//many choices
 		if(isset($data["SubscribeManyChoices"])) {
@@ -139,18 +140,19 @@ class CampaignMonitorMemberDOD extends DataExtension {
 		}
 		//one choice
 		elseif(isset($data["SubscribeChoice"])) {
-			$params = array();
-			if(isset($data["SubscribeChoice_Segment"])) {
-				$params = $data["SubscribeChoice_Segment"];
-			}
 			if($data["SubscribeChoice"] == "Subscribe") {
-				print_r($data);
-				die("DDD");
-				$this->owner->addCampaignMonitorList($page->ListID, $params);
+				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
+				$customFieldsArray = array();
+				foreach($customFields as $customField) {
+					if(isset($data["CMCustomField".$customField->Code])) {
+						$customFieldsArray[$customField->Code] = $data["CMCustomField".$customField->Code];
+					}
+				}
+				$this->owner->addCampaignMonitorList($listPage->ListID, $customFieldsArray);
 				$typeOfAction = "subscribe";
 			}
 			else {
-				$this->owner->removeCampaignMonitorList($page->ListID);
+				$this->owner->removeCampaignMonitorList($listPage->ListID);
 			}
 		}
 		else {
@@ -195,6 +197,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 * @return Boolean - returns true on success
 	 */
 	public function addCampaignMonitorList($listPage, $customFields = array()) {
+		print_r($customFields);
 		$api = $this->getCMAPI();
 		$outcome = 0;
 		if(is_string($listPage)) {
@@ -221,6 +224,8 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$outcome++;
 			}
 		}
+		die("AAAAAAAAAAAAAAA");
+
 		if($outcome > 1) {
 			return true;
 		}

@@ -278,6 +278,11 @@ class CampaignMonitorCampaign extends DataObject {
 	private $_hasBeenSent = null;
 
 	public function HasBeenSentCheck(){
+		//lazy check
+		if($this->HasBeenSent || $this->WebVersionURL) {
+			return true;
+		}
+		//real check
 		if($this->_hasBeenSent === null) {
 			if(!$this->CampaignID) {
 				$this->_hasBeenSent = false;
@@ -306,6 +311,11 @@ class CampaignMonitorCampaign extends DataObject {
 	private $_existsOnCampaignMonitorCheck = null;
 
 	public function ExistsOnCampaignMonitorCheck(){
+		//lazy check
+		if($this->HasBeenSent || $this->WebVersionURL) {
+			return true;
+		}
+		//real check
 		if($this->_existsOnCampaignMonitorCheck === null) {
 			if(!$this->CampaignID) {
 				$this->_existsOnCampaignMonitorCheck = false;
