@@ -23,7 +23,8 @@ class CampaignMonitorCustomField extends DataObject {
 	);
 
 	private static $summary_fields = array(
-		"Title" => "Title"
+		"Title" => "Title",
+		"Visible.Nice" => "Visible"
 	);
 
 	private static $indexes = array(
@@ -35,14 +36,20 @@ class CampaignMonitorCustomField extends DataObject {
 		"CampaignMonitorSignupPage" => "CampaignMonitorSignupPage"
 	);
 
+	private static $default_sort = array(
+		"Visible" => "DESC"
+	);
+
 	/**
 	 * form field matcher between CM and SS CMField => SSField
 	 * @return array
 	 */
 	private static $field_translator = array(
 		"MultiSelectOne" => "OptionSetField",
-		"Text" => "Text",
-		"Number" => "NumericField"
+		"Text" => "TextField",
+		"Number" => "NumericField",
+		"MultiSelectMany" => "CheckboxSetField",
+		"Date" => "DateField"
 	);
 
 
@@ -71,12 +78,16 @@ class CampaignMonitorCustomField extends DataObject {
 		return array("" => _t("CampaignMonitor.PLEASE_SELECT", "-- please select --"))+explode(",",$this->Options);
 	}
 
-	public static create_from_campaign_monitor_object($object, $listID) {
+	/**
+	 *
+	 * @return CampaignMonitorCustomField
+	 */
+	public static function create_from_campaign_monitor_object($customFieldsObject, $listID) {
 		$filterOptions = array(
 			"ListID" => $listID,
-			"Code" => self::key_to_code($object->Key)
+			"Code" => self::key_to_code($customFieldsObject->Key)
 		);
-		$obj = CampaignMonitorCustomField::get()->filter($filterOptions);
+		$obj = CampaignMonitorCustomField::get()->filter($filterOptions)->first();
 		if(!$obj) {
 			$obj = CampaignMonitorCustomField::create($filterOptions);
 		}
@@ -91,10 +102,43 @@ class CampaignMonitorCustomField extends DataObject {
 		$obj->Options = implode(",",$customFieldsObject->FieldOptions);
 		$obj->Visible = $customFieldsObject->VisibleInPreferenceCenter;
 		$obj->write();
+		return $obj;
 	}
 
-	private static key_to_code($key) {
+	private static function key_to_code($key) {
 		return str_replace(array("[", "]"), "", $key);
+	}
+
+	/**
+	 * @var array
+	 */
+	private $_fieldTranslator = array();
+
+	/**
+	 * @param string $namePrefix
+	 * @param string $nameAppendix
+	 * @param string $title
+	 * @param null | array $options
+	 */
+	public function getFormField($namePrefix = "", $nameAppendix = "", $title = "", $options = null) {
+		//sort out names, title
+		if(!$title) {
+			$title = $this->Title;
+		}
+		$name = $namePrefix.$this->Code.$nameAppendix;
+		//create field
+		if(!count($this->_fieldTranslator)) {
+			$this->_fieldTranslator = $this->Config()->get("field_translator");
+		}
+		$fieldName = $this->_fieldTranslator[$this->Type];
+		$field = $fieldName::create($name, $title);
+		//add options
+		if(!$options && $this->Options) {
+			$optionsArray = explode(",", $this->Options);
+			$optionsArray = array_combine($optionsArray, $optionsArray);
+			$field->setSource($optionsArray);
+		}
+		return $field;
 	}
 
 }

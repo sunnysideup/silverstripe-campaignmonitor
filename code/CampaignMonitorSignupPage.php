@@ -56,7 +56,8 @@ class CampaignMonitorSignupPage extends Page {
 	 * @inherited
 	 */
 	private static $has_many = array(
-		"CampaignMonitorSegments" => "CampaignMonitorSegment"
+		"CampaignMonitorSegments" => "CampaignMonitorSegment",
+		"CampaignMonitorCustomFields" => "CampaignMonitorCustomField"
 	);
 
 	/**
@@ -129,8 +130,7 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
 					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
 					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'),
-					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RelationEditor::create())
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
 				),
 				new Tab('StartForm',
 					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
@@ -164,7 +164,9 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
 					new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
 					new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
-					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>')
+					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>'),
+					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RelationEditor::create()),
+					$gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RelationEditor::create())
 				)
 			)
 		);
@@ -379,11 +381,25 @@ class CampaignMonitorSignupPage extends Page {
 				$obj->write();
 			}
 		}
-		$unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))->exclude(array("SegmentID" => $segmentsAdded));
+		$unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
+			->exclude(array("SegmentID" => $segmentsAdded));
 		foreach($unwantedSegments as $unwantedSegment) {
 			$unwantedSegment->delete();
 		}
-		//CampaignMonitorSegment
+		//add custom fields
+		$customCustomFieldsAdded = array();
+		$customCustomFields = $this->api->getListCustomFields($this->ListID);
+		if($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
+			foreach($customCustomFields as $customCustomField) {
+				$obj = CampaignMonitorCustomField::create_from_campaign_monitor_object($customCustomField, $this->ListID);
+				$customCustomFieldsAdded[$obj->Code] = $obj->Code;
+			}
+		}
+		$unwantedCustomFields = CampaignMonitorCustomField::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
+			->exclude(array("Code" => $customCustomFieldsAdded));
+		foreach($unwantedCustomFields as $unwantedCustomField) {
+			$unwantedCustomField->delete();
+		}
 	}
 
 	public function AddOldCampaigns(){
@@ -476,10 +492,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				$signupField = $member->getCampaignMonitorSignupField($this->ListID, "SubscribeChoice");
 			}
 			$fields = new FieldList(
-				$signupField,
-				new TextField('CampaignMonitorFirstName', _t("CAMPAIGNMONITORSIGNUPPAGE.FIRSTNAME", 'First Name')),
-				new TextField('CampaignMonitorSurname', _t("CAMPAIGNMONITORSIGNUPPAGE.SURNAME",'Surname')),
-				new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email)
+				new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email),
+				$signupField
 			);
 			// Create action
 			$actions = new FieldList(
@@ -565,8 +579,6 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				if($newlyCreatedMember) {
 					$form->saveInto($member);
 					$member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
-					$member->FirstName = Convert::raw2sql($data["CampaignMonitorFirstName"]);
-					$member->Surname = Convert::raw2sql($data["CampaignMonitorSurname"]);
 					$member->SetPassword = true;
 					$member->Password = Member::create_new_password();
 					$member->write();
