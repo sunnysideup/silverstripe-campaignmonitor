@@ -88,17 +88,19 @@ class CampaignMonitorCampaign extends DataObject {
 		$fields->makeFieldReadonly("WebVersionTextURL");
 		$fields->makeFieldReadonly("SentDate");
 		$fields->makeFieldReadonly("HasBeenSent");
+		$fields->makeFieldReadonly("Hash");
 		//removed
 		$fields->removeFieldFromTab("Root.Main", "CreatedFromWebsite");
 		$fields->removeFieldFromTab("Root.Main", "SecurityCode");
 		//pages
-		$source = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
+		$pages = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
 		$fields->removeFieldFromTab("Root.Main", "Pages");
-		if(count($source))  {
-			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
+		if(count($pages))  {
+			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $pages));
 		}
 		if($this->ExistsOnCampaignMonitorCheck()){
 			$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
+			$fields->removeFieldFromTab("Root.Main", "Hash");
 			$fields->removeFieldFromTab("Root.Main", "CampaignMonitorCampaignStyleID");
 			if(!$this->HasBeenSentCheck()) {
 				$fields->addFieldToTab("Root.Main", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>"), "CampaignID");
