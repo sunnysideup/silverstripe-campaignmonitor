@@ -486,8 +486,20 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		if($this->ReadyToReceiveSubscribtions()) {
 			// Create fields
 			$member = Member::currentUser();
+			$emailField = null;
+			$emailRequired = true;
 			if(!$member) {
 				$member = new Member();
+			}
+			else{
+				$this->email = $member->Email;
+				if($this->email) {
+					$emailRequired = false;
+					$emailField = new ReadonlyField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email);
+				}
+			}
+			if(!$emailField) {
+				$emailField = new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email);
 			}
 			if($this->ShowAllNewsletterForSigningUp) {
 				$signupField = $member->getCampaignMonitorSignupField(null, "SubscribeManyChoices");
@@ -496,7 +508,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				$signupField = $member->getCampaignMonitorSignupField($this->ListID, "SubscribeChoice");
 			}
 			$fields = new FieldList(
-				new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email),
+				$emailField,
 				$signupField
 			);
 			// Create action
@@ -504,7 +516,12 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				new FormAction('subscribe', _t("CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS", "Update Subscriptions"))
 			);
 			// Create Validators
-			$validator = new RequiredFields('CampaignMonitorEmail');
+			if($emailRequired) {
+				$validator = new RequiredFields('CampaignMonitorEmail');
+			}
+			else {
+				$validator = new RequiredFields();
+			}
 			$form = new Form($this, 'SignupForm', $fields, $actions, $validator);
 			if($member->exists()) {
 				$form->loadDataFrom($member);
@@ -545,11 +562,11 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if(!$member) {
 				$memberAlreadyLoggedIn = false;
 				$existingMember = Member::get()->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))->First();
-				if($isSubscribe && $existingMember){
+				//if($isSubscribe && $existingMember){
 					//$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
 					//$this->redirectBack();
 					//return;
-				}
+				//}
 				$member = $existingMember;
 				if(!$member) {
 					$newlyCreatedMember = true;
@@ -560,15 +577,15 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			//logged in: if the member already as someone else then you can't sign up.
 			else {
 				$memberAlreadyLoggedIn = true;
-				$existingMember = Member::get()
-					->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
-					->exclude(array("ID" => $member->ID))
-					->First();
-				if($isSubscribe && $existingMember) {
+				//$existingMember = Member::get()
+				//	->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
+				//	->exclude(array("ID" => $member->ID))
+				//	->First();
+				//if($isSubscribe && $existingMember) {
 					//$form->addErrorMessage('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
 					//$this->redirectBack();
 					//return;
-				}
+				//}
 			}
 
 			//are any choices being made
