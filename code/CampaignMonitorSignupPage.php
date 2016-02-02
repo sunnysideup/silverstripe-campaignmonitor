@@ -123,22 +123,9 @@ class CampaignMonitorSignupPage extends Page {
 		}
 		$gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
 		$gridFieldTemplatesAvailable->setDescription("Ask your developer on how to add more templates");
-		$fields->addFieldToTab('Root.Details',
-			new TabSet('Options',
-				new Tab('MainSettings',
-					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
-					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
-					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
-					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
-				),
-				new Tab('StartForm',
-					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
-					new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
-					new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
-					new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
-				),
-				new Tab('Confirm',
+		$fields->addFieldToTab('Root.AlternativeContent',
+			new TabSet("AlternativeContentSubHeader",
+					new Tab('Confirm',
 					new TextField('ConfirmTitle', 'Title'),
 					new TextField('ConfirmMenuTitle', 'Menu Title'),
 					new HtmlEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
@@ -152,6 +139,22 @@ class CampaignMonitorSignupPage extends Page {
 					new TextField('SadToSeeYouGoTitle', 'Title'),
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
+				)
+			)
+		);
+		$fields->addFieldToTab('Root.Newsletters',
+			new TabSet('Options',
+				new Tab('MainSettings',
+					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorAPIConnector", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
+				),
+				new Tab('StartForm',
+					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
+					new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
+					new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
+					new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
 				),
 				new Tab('Newsletters',
 					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
@@ -165,8 +168,9 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
 					new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
 					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>'),
-					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RelationEditor::create()),
-					$gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RelationEditor::create())
+					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
+					$gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
+					new LiteralField('GroupLink', $groupLink)
 				)
 			)
 		);
