@@ -312,16 +312,18 @@ class CampaignMonitorCampaign extends DataObject {
 
 	public function ExistsOnCampaignMonitorCheck(){
 		//lazy check
-		if($this->HasBeenSent || $this->WebVersionURL) {
+		if($this->HasBeenSent) {
 			return true;
 		}
 		//real check
 		if($this->_existsOnCampaignMonitorCheck === null) {
+			$this->_existsOnCampaignMonitorCheck = false;
 			if(!$this->CampaignID) {
-				$this->_existsOnCampaignMonitorCheck = false;
+				//do nothing
 			}
 			else {
 				$api = $this->getAPI();
+				//check drafts
 				$result = $this->api->getDrafts();
 				if(isset($result)) {
 					foreach($result as $key => $campaign) {
@@ -332,7 +334,16 @@ class CampaignMonitorCampaign extends DataObject {
 					}
 				}
 				else{
-					$this->_existsOnCampaignMonitorCheck = false;
+					//check sent ones
+					$result = $this->api->getCampaigns();
+					if(isset($result)) {
+						foreach($result as $key => $campaign) {
+							if($this->CampaignID == $campaign->CampaignID) {
+								$this->_existsOnCampaignMonitorCheck = true;
+								break;
+							}
+						}
+					}
 				}
 			}
 		}
