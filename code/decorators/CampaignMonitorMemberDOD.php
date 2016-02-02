@@ -63,7 +63,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				if($this->owner->exists()) {
 					if($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
 						$currentValues = $api->getSubscriber($listPage->ListID, $this->owner);
-						$currentSelection = "Unsubscribe";
+						//$currentSelection = "Unsubscribe";
 					}
 				}
 				if(!$fieldTitle) {
@@ -71,6 +71,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				}
 				$subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
 				$field = CompositeField::create($subscribeField);
+				$field->addExtraClass("CMFieldsCustomFieldsHolder");
 				//add custom fields
 				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
 				foreach($customFields as $customField) {
@@ -213,7 +214,19 @@ class CampaignMonitorMemberDOD extends DataExtension {
 			}
 		}
 		if($listPage && $listPage->ListID) {
-			if(!$api->addSubscriber(
+			if($api->getSubscriber($listPage->ListID, $this->owner)) {
+			if($api->updateSubscriber(
+					$listPage->ListID,
+					$oldEmailAddress = "",
+					$this->owner,
+					$customFields,
+					$resubscribe = true,
+					$restartSubscriptionBasedAutoResponders = false
+				)){
+					$outcome++;
+				}
+			}
+			elseif(!$api->addSubscriber(
 				$listPage->ListID,
 				$this->owner,
 				$customFields,
