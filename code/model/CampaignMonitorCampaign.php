@@ -160,8 +160,7 @@ class CampaignMonitorCampaign extends DataObject {
 		if(is_array($extension) && count($extension)) {
 			return $extension[0];
 		}
-
-
+		$html = "";
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
 			$cssFileLocations = $this->getCSSFileLocations();

@@ -265,7 +265,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 			}
 		}
 		if($listPage->ListID) {
-			if(!$api->deleteSubscriber($listPage->ListID, $this->owner)) {
+			if(!$api->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
 				$outcome++;
 			}
 		}
