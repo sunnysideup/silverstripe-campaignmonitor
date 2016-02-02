@@ -197,7 +197,6 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	 * @return Boolean - returns true on success
 	 */
 	public function addCampaignMonitorList($listPage, $customFields = array()) {
-		print_r($customFields);
 		$api = $this->getCMAPI();
 		$outcome = 0;
 		if(is_string($listPage)) {
@@ -224,8 +223,6 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$outcome++;
 			}
 		}
-		die("AAAAAAAAAAAAAAA");
-
 		if($outcome > 1) {
 			return true;
 		}
