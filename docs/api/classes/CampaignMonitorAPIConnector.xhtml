@@ -88,6 +88,8 @@
                         false;
                     </li><li>protected <span title="Int">Int</span> <a href="#members">$httpStatusCode</a> =
                         0;
+                    </li><li>private static array <a href="#members">$_get_subscriber</a> =
+                        ;
                     </li></ul><ul class="none"><li>// methods</li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/init.xhtml">init</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/setDebug.xhtml">setDebug</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/setAllowCaching.xhtml">setAllowCaching</a>()
@@ -101,10 +103,11 @@
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getDrafts.xhtml">getDrafts</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getLists.xhtml">getLists</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getScheduled.xhtml">getScheduled</a>()
-                    </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getSegments.xhtml">getSegments</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getSuppressionlist.xhtml">getSuppressionlist</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getTemplates.xhtml">getTemplates</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createList.xhtml">createList</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCustomField.xhtml">createCustomField</a>()
+                    </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCustomField.xhtml">deleteCustomField</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteList.xhtml">deleteList</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getList.xhtml">getList</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getActiveSubscribers.xhtml">getActiveSubscribers</a>()
@@ -112,7 +115,9 @@
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getBouncedSubscribers.xhtml">getBouncedSubscribers</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getUnsubscribedSubscribers.xhtml">getUnsubscribedSubscribers</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/updateList.xhtml">updateList</a>()
+                    </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getSegments.xhtml">getSegments</a>()
                     </li><li>public CS_REST_Wrapper_Result <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getListStats.xhtml">getListStats</a>()
+                    </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getListCustomFields.xhtml">getListCustomFields</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCampaign.xhtml">createCampaign</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCampaign.xhtml">deleteCampaign</a>()
                     </li><li>public void <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getBounces.xhtml">getBounces</a>()
@@ -149,6 +154,9 @@
         <div class="styled members">
           <h4>private</h4>
           <ul class="members">
+            <li id="_get_subscriber">
+              <strong>$_get_subscriber</strong>
+            </li>
             <li id="api_key"><strong>$api_key</strong>
                 —
                 <a title="String" href="../classes/String.xhtml">String</a><br/><span class="indent">OPTION 1: API KEY!</span></li>
@@ -205,11 +213,15 @@
             <li id="createCampaign">
               <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCampaign.xhtml">createCampaign()</a>
             </li>
+            <li id="createCustomField"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createCustomField.xhtml">createCustomField()</a>
+                — Creates custom field for list</li>
             <li id="createList"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/createList.xhtml">createList()</a>
                 — Creates a new list based on the provided details.</li>
             <li id="deleteCampaign">
               <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCampaign.xhtml">deleteCampaign()</a>
             </li>
+            <li id="deleteCustomField"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteCustomField.xhtml">deleteCustomField()</a>
+                — Creates custom field for list</li>
             <li id="deleteList"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/deleteList.xhtml">deleteList()</a>
                 — Deletes an existing list from the system</li>
             <li id="deleteSubscriber">
@@ -242,6 +254,9 @@
                 — returns the HTTP code for the response.</li>
             <li id="getList"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getList.xhtml">getList()</a>
                 — Gets the basic details of the current list</li>
+            <li id="getListCustomFields">
+              <a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getListCustomFields.xhtml">getListCustomFields()</a>
+            </li>
             <li id="getListStats"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getListStats.xhtml">getListStats()</a>
                 — Gets statistics for list subscriptions, deletions, bounces and unsubscriptions</li>
             <li id="getLists"><a title="CampaignMonitorAPIConnector" href="../classes/CampaignMonitorAPIConnector/getLists.xhtml">getLists()</a>

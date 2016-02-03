@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaignStyle" namespace="" name="CampaignMonitorCampaignStyle" abstract="false" final="false" start="9" end="169">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model" file="CampaignMonitorCampaignStyle.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model/CampaignMonitorCampaignStyle.php" size="4499" time="2016-01-21T08:48:46+00:00" unixtime="1453366126" sha1="c42526aa55624a4a5f64f468ddc877dc7d6af576" relative="code/model/CampaignMonitorCampaignStyle.php"/>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaignStyle" namespace="" name="CampaignMonitorCampaignStyle" abstract="false" final="false" start="9" end="180">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model" file="CampaignMonitorCampaignStyle.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/model/CampaignMonitorCampaignStyle.php" size="4746" time="2016-01-22T13:28:43+13:00" unixtime="1453422523" sha1="c1a355758cbe11c9c9c92a0f37050b294ef523d8" relative="code/model/CampaignMonitorCampaignStyle.php"/>
   <docblock>
     <description/>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
@@ -24,19 +24,20 @@
       <return type="array"/>
     </docblock>
   </method>
-  <method name="getCSSFoldersToSearch" start="72" end="83" abstract="false" final="false" static="false" visibility="public">
+  <method name="getCSSFoldersToSearch" start="72" end="84" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="array"/>
     </docblock>
   </method>
-  <method name="getFileLocation" start="89" end="101" abstract="false" final="false" static="false" visibility="public">
+  <method name="getFileLocation" start="90" end="105" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return description="| null" type="string"/>
     </docblock>
   </method>
-  <method name="getCSSFiles" start="103" end="105" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getCSSFilesAsArray" start="107" end="141" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="requireDefaultRecords" start="143" end="167" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getCSSFiles" start="107" end="109" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getCSSFilesAsArray" start="111" end="145" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="requireDefaultRecords" start="147" end="171" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="onBeforeWrite" start="173" end="178" abstract="false" final="false" static="false" visibility="public"/>
 </class>

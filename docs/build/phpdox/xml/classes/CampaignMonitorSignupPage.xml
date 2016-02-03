@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage" abstract="false" final="false" start="10" end="389">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="27267" time="2016-01-21T08:59:53+00:00" unixtime="1453366793" sha1="cf9145829108a412643ec5d6ee53a883a45e735e" relative="code/CampaignMonitorSignupPage.php"/>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage" namespace="" name="CampaignMonitorSignupPage" abstract="false" final="false" start="10" end="442">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="29016" time="2016-02-03T13:06:02+13:00" unixtime="1454457962" sha1="30bdf7b5929404e0a568cfd69e90fa3c4c4dab36" relative="code/CampaignMonitorSignupPage.php"/>
   <docblock>
     <description compact="Page for Signing Up to Campaign Monitor List">Each page relates to one CM list.</description>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
@@ -18,25 +18,31 @@
       <inherited/>
     </docblock>
   </member>
-  <member name="has_one" type="array" default="" visibility="private" static="true" line="49">
+  <member name="has_one" type="array" default="" visibility="private" static="true" line="50">
     <docblock>
       <description/>
       <inherited/>
     </docblock>
   </member>
-  <member name="belongs_many_many" type="array" default="" visibility="private" static="true" line="57">
+  <member name="has_many" type="array" default="" visibility="private" static="true" line="58">
     <docblock>
       <description/>
       <inherited/>
     </docblock>
   </member>
-  <member name="description" type="string" default="&quot;Page to suscribe and review newsletter list(s)&quot;" visibility="private" static="true" line="65">
+  <member name="belongs_many_many" type="array" default="" visibility="private" static="true" line="67">
     <docblock>
       <description/>
       <inherited/>
     </docblock>
   </member>
-  <member name="_api" type="{unknown}" default="" constant="null" visibility="protected" static="true" line="71">
+  <member name="description" type="string" default="&quot;Page to suscribe and review newsletter list(s)&quot;" visibility="private" static="true" line="75">
+    <docblock>
+      <description/>
+      <inherited/>
+    </docblock>
+  </member>
+  <member name="_api" type="{unknown}" default="" constant="null" visibility="protected" static="true" line="81">
     <docblock>
       <description/>
       <var description="| Null" type="object">
@@ -44,21 +50,21 @@
       </var>
     </docblock>
   </member>
-  <method name="get_ready_ones" start="78" end="87" abstract="false" final="false" static="true" visibility="public">
+  <method name="get_ready_ones" start="88" end="97" abstract="false" final="false" static="true" visibility="public">
     <docblock>
-      <description compact="Campaign monitor pages that are ready to receive &quot;guests&quot;"/>
+      <description compact="Campaign monitor pages that are ready to receive &quot;sign-ups&quot;"/>
       <return type="object">
         <type full="ArrayList" namespace="" name="ArrayList"/>
       </return>
     </docblock>
   </method>
-  <method name="getCMSFields" start="93" end="165" abstract="false" final="false" static="false" visibility="public">
+  <method name="getCMSFields" start="103" end="181" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <inherited/>
     </docblock>
   </method>
-  <method name="getAPI" start="171" end="177" abstract="false" final="false" static="false" visibility="public">
+  <method name="getAPI" start="187" end="193" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="object">
@@ -66,7 +72,7 @@
       </return>
     </docblock>
   </method>
-  <member name="drop_down_list" type="{unknown}" default="" constant="null" visibility="private" static="true" line="183">
+  <member name="drop_down_list" type="array" default="" visibility="private" static="true" line="199">
     <docblock>
       <description/>
       <var description="| Array" type="object">
@@ -74,13 +80,13 @@
       </var>
     </docblock>
   </member>
-  <method name="makeDropdownListFromLists" start="189" end="210" abstract="false" final="false" static="false" visibility="protected">
+  <method name="makeDropdownListFromLists" start="205" end="226" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description compact="returns available list for client"/>
       <return type="array"/>
     </docblock>
   </method>
-  <method name="CampaignMonitorStartForm" start="223" end="246" abstract="false" final="false" static="false" visibility="public">
+  <method name="CampaignMonitorStartForm" start="239" end="262" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="you can add this function to other pages to have a form that starts the basic after which the client needs to complete the rest.">Or does a basic sign up if ajax submitted.</description>
       <param type="object" variable="$controller">
@@ -98,7 +104,7 @@
     </parameter>
     <parameter name="formName" byreference="false" type="string" default="&quot;CampaignMonitorStarterForm&quot;"/>
   </method>
-  <method name="addSubscriber" start="255" end="280" abstract="false" final="false" static="false" visibility="public">
+  <method name="addSubscriber" start="271" end="296" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="adds a subcriber to the list without worrying about making it a user ..."/>
       <param type="object" variable="$email">
@@ -108,7 +114,7 @@
     </docblock>
     <parameter name="email" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getListTitle" start="286" end="294" abstract="false" final="false" static="false" visibility="public">
+  <method name="getListTitle" start="302" end="310" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="name of the list connected to."/>
       <return type="object">
@@ -116,7 +122,7 @@
       </return>
     </docblock>
   </method>
-  <method name="ReadyToReceiveSubscribtions" start="300" end="302" abstract="false" final="false" static="false" visibility="public">
+  <method name="ReadyToReceiveSubscribtions" start="316" end="318" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="tells us if the page is ready to receive subscriptions"/>
       <return type="object">
@@ -124,21 +130,25 @@
       </return>
     </docblock>
   </method>
-  <method name="onBeforeWrite" start="308" end="340" abstract="false" final="false" static="false" visibility="public">
+  <method name="onBeforeWrite" start="324" end="356" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="check list and group IDs"/>
     </docblock>
     <inline>
-      <comment value="check list" line="310"/>
-      <comment value="check group" line="315"/>
-      <comment value="add group" line="323"/>
+      <comment value="check list" line="326"/>
+      <comment value="check group" line="331"/>
+      <comment value="add group" line="339"/>
     </inline>
   </method>
-  <method name="onAfterWrite" start="347" end="355" abstract="false" final="false" static="false" visibility="public">
+  <method name="onAfterWrite" start="365" end="407" abstract="false" final="false" static="false" visibility="public">
     <docblock>
-      <description compact="add old campaings or remove them depending on the setting"/>
+      <description compact="add old campaings or remove them depending on the setting">add / remove segments ...</description>
     </docblock>
+    <inline>
+      <comment value="add segments" line="373"/>
+      <comment value="add custom fields" line="393"/>
+    </inline>
   </method>
-  <method name="AddOldCampaigns" start="357" end="361" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="requireDefaultRecords" start="363" end="387" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="AddOldCampaigns" start="409" end="413" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="requireDefaultRecords" start="415" end="439" abstract="false" final="false" static="false" visibility="public"/>
 </class>
