@@ -822,6 +822,8 @@ class CampaignMonitorAPIConnector extends Object {
 		);
 		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
 			$code = $result->response;
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = true;
 		}
 		else {
 			$code = "Error";
@@ -829,7 +831,6 @@ class CampaignMonitorAPIConnector extends Object {
 				$code = $result->response->Code.":".$result->response->Message;
 			}
 		}
-		$campaignMonitorCampaign->CreatedFromWebsite = true;
 		$campaignMonitorCampaign->CampaignID = $code;
 		$campaignMonitorCampaign->write();
 
