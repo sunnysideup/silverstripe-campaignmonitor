@@ -100,7 +100,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 					}
 					if(isset($linkedMemberFields[$custom->Code]) && !$valueSet) {
 						$fieldOrMethod = $linkedMemberFields[$custom->Code];
-						if($this->owner->hasMethod($fieldOrMethod) {
+						if($this->owner->hasMethod($fieldOrMethod)) {
 							$value = $this->owner->$fieldOrMethod();
 						}
 						else {
