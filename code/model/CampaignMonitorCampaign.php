@@ -246,7 +246,7 @@ class CampaignMonitorCampaign extends DataObject {
 				$this->write();
 			}
 		}
-		if(!$this->ExistsOnCampaignMonitorCheck()  && $this->CreateFromWebsite) {
+		if(!$this->ExistsOnCampaignMonitorCheck($forceCheck = true)  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
 			$api->createCampaign($this);
 		}
@@ -314,13 +314,13 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private $_existsOnCampaignMonitorCheck = null;
 
-	public function ExistsOnCampaignMonitorCheck(){
+	public function ExistsOnCampaignMonitorCheck($forceCheck = false){
 		//lazy check
 		if($this->HasBeenSent) {
 			return true;
 		}
 		//real check
-		if($this->_existsOnCampaignMonitorCheck === null) {
+		if($this->_existsOnCampaignMonitorCheck === null || $forceCheck) {
 			$this->_existsOnCampaignMonitorCheck = false;
 			if(!$this->CampaignID) {
 				//do nothing
