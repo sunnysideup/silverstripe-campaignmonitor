@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorMemberDOD" namespace="" name="CampaignMonitorMemberDOD" abstract="false" final="false" start="9" end="298">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/decorators" file="CampaignMonitorMemberDOD.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/decorators/CampaignMonitorMemberDOD.php" size="8816" time="2016-02-03T12:23:03+13:00" unixtime="1454455383" sha1="3c5f53d34f9303851a8675171601c9aaccd5d6e1" relative="code/decorators/CampaignMonitorMemberDOD.php"/>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorMemberDOD" namespace="" name="CampaignMonitorMemberDOD" abstract="false" final="false" start="9" end="325">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/decorators" file="CampaignMonitorMemberDOD.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/decorators/CampaignMonitorMemberDOD.php" size="9708" time="2016-02-03T09:55:49+00:00" unixtime="1454493349" sha1="2f7293b70c45c8965c0be387419d40e3460d6ce5" relative="code/decorators/CampaignMonitorMemberDOD.php"/>
   <docblock>
     <description/>
     <author value="nicolaas [at] sunnysideup.co.nz">TO DO: only apply the on afterwrite to people in the subscriber group.</author>
@@ -14,13 +14,21 @@
       </var>
     </docblock>
   </member>
-  <member name="_api" type="{unknown}" default="" constant="null" visibility="private" static="true" line="23">
+  <member name="custom_fields_member_field_or_method_map" type="array" default="" visibility="private" static="true" line="25">
+    <docblock>
+      <description compact="array of fields where the member value is set as the default for the custom field ...">The should be like this
+
+    CustomFieldCode =&gt; MemberFieldOrMethod</description>
+      <var type="array"/>
+    </docblock>
+  </member>
+  <member name="_api" type="{unknown}" default="" constant="null" visibility="private" static="true" line="33">
     <docblock>
       <description/>
       <var description="| CampaignMonitorAPIConnector" type="null"/>
     </docblock>
   </member>
-  <method name="getCMAPI" start="29" end="35" abstract="false" final="false" static="false" visibility="private">
+  <method name="getCMAPI" start="39" end="45" abstract="false" final="false" static="false" visibility="private">
     <docblock>
       <description/>
       <return type="object">
@@ -28,7 +36,7 @@
       </return>
     </docblock>
   </method>
-  <method name="getCampaignMonitorSignupField" start="47" end="116" abstract="false" final="false" static="false" visibility="public">
+  <method name="getCampaignMonitorSignupField" start="57" end="143" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="returns a form field for signing up to all available lists or if a list is provided, for that particular list."/>
       <param description="| string | Null $listPage" type="object">
@@ -44,7 +52,7 @@
     <parameter name="fieldName" byreference="false" type="string" default="&quot;&quot;"/>
     <parameter name="fieldTitle" byreference="false" type="string" default="&quot;&quot;"/>
   </method>
-  <method name="processCampaignMonitorSignupField" start="127" end="163" abstract="false" final="false" static="false" visibility="public">
+  <method name="processCampaignMonitorSignupField" start="154" end="190" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action subscription form"/>
       <param type="object" variable="$page">
@@ -59,10 +67,10 @@
     <parameter name="data" byreference="false" type="{unknown}"/>
     <parameter name="form" byreference="false" type="{unknown}"/>
     <inline>
-      <comment value="many choices" line="129"/>
+      <comment value="many choices" line="156"/>
     </inline>
   </method>
-  <method name="unsubscribe" start="169" end="179" abstract="false" final="false" static="false" visibility="public">
+  <method name="unsubscribe" start="196" end="206" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="immediately unsubscribe if you are logged in."/>
       <param type="object">
@@ -71,7 +79,7 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="IsCampaignMonitorSubscriber" start="186" end="191" abstract="false" final="false" static="false" visibility="public">
+  <method name="IsCampaignMonitorSubscriber" start="213" end="218" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="is this user currently signed up to one or more newsletters"/>
       <return type="object">
@@ -79,7 +87,7 @@
       </return>
     </docblock>
   </method>
-  <method name="addCampaignMonitorList" start="200" end="243" abstract="false" final="false" static="false" visibility="public">
+  <method name="addCampaignMonitorList" start="227" end="270" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="add to Group add to CM database..."/>
       <param description="| Int $listPage" type="object">
@@ -93,10 +101,10 @@
     <parameter name="listPage" byreference="false" type="{unknown}"/>
     <parameter name="customFields" byreference="false" type="array" default=""/>
     <inline>
-      <comment value="internal database" line="206"/>
+      <comment value="internal database" line="233"/>
     </inline>
   </method>
-  <method name="removeCampaignMonitorList" start="252" end="276" abstract="false" final="false" static="false" visibility="public">
+  <method name="removeCampaignMonitorList" start="279" end="303" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="remove from Group remove from CM database..."/>
       <param description="| Int $listPage" type="object">
@@ -106,7 +114,7 @@
     </docblock>
     <parameter name="listPage" byreference="false" type="{unknown}"/>
   </method>
-  <method name="CampaignMonitorSignupPageIDs" start="284" end="296" abstract="false" final="false" static="false" visibility="public">
+  <method name="CampaignMonitorSignupPageIDs" start="311" end="323" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="returns a list of list IDs that the user is currently subscribed to."/>
       <return type="object">

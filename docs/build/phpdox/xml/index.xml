@@ -7,11 +7,11 @@
     <class name="CampaignMonitorCampaignStyle" src="code/model/CampaignMonitorCampaignStyle.php" xml="classes/CampaignMonitorCampaignStyle.xml"/>
     <class name="CampaignMonitorCustomField" src="code/model/CampaignMonitorCustomField.php" xml="classes/CampaignMonitorCustomField.xml"/>
     <class name="CampaignMonitorSegment" src="code/model/CampaignMonitorSegment.php" xml="classes/CampaignMonitorSegment.xml"/>
-    <class name="CampaignMonitorCampaign" src="code/model/CampaignMonitorCampaign.php" xml="classes/CampaignMonitorCampaign.xml"/>
+    
     <class name="CampaignMonitorSignupPage" src="code/CampaignMonitorSignupPage.php" description="Page for Signing Up to Campaign Monitor List" xml="classes/CampaignMonitorSignupPage.xml"/>
     <class name="CampaignMonitorSignupPage_Controller" src="code/CampaignMonitorSignupPage.php" xml="classes/CampaignMonitorSignupPage_Controller.xml"/>
     <class name="CampaignMonitorGroupDOD" src="code/decorators/CampaignMonitorGroupDOD.php" xml="classes/CampaignMonitorGroupDOD.xml"/>
-    <class name="CampaignMonitorMemberDOD" src="code/decorators/CampaignMonitorMemberDOD.php" xml="classes/CampaignMonitorMemberDOD.xml"/>
-    <class name="CampaignMonitorAPIConnector" src="code/api/CampaignMonitorAPIConnector.php" description="Main Holder page for Recipes" xml="classes/CampaignMonitorAPIConnector.xml"/>
-  </namespace>
+    
+    
+  <class name="CampaignMonitorMemberDOD" src="code/decorators/CampaignMonitorMemberDOD.php" xml="classes/CampaignMonitorMemberDOD.xml"/><class name="CampaignMonitorAPIConnector" src="code/api/CampaignMonitorAPIConnector.php" description="Main Holder page for Recipes" xml="classes/CampaignMonitorAPIConnector.xml"/><class name="CampaignMonitorCampaign" src="code/model/CampaignMonitorCampaign.php" xml="classes/CampaignMonitorCampaign.xml"/></namespace>
 </index>
