@@ -86,15 +86,19 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$linkedMemberFields = $this->Config()->get("custom_fields_member_field_or_method_map");
 				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
 				foreach($customFields as $customField) {
+					$valueSet = false;
 					$customFormField = $customField->getFormField("CMCustomField");
 					if($currentValues && isset($currentValues->CustomFields)) {
 						foreach($currentValues->CustomFields as $customFieldObject) {
 							if($customFieldObject->Key == $customField->Title) {
-								$customFormField->setValue($customFieldObject->Value);
+								if($value $customFieldObject->Value) {
+									$valueSet = true;
+								}
+								$customFormField->setValue($value);
 							}
 						}
 					}
-					if(isset($linkedMemberFields[$custom->Code])) {
+					if(isset($linkedMemberFields[$custom->Code]) && !$valueSet) {
 						$fieldOrMethod = $linkedMemberFields[$custom->Code];
 						if($this->owner->hasMethod($fieldOrMethod) {
 							$value = $this->owner->$fieldOrMethod();
