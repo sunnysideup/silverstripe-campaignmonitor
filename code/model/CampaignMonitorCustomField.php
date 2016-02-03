@@ -71,7 +71,7 @@ class CampaignMonitorCustomField extends DataObject {
 		return array("" => _t("CampaignMonitor.PLEASE_SELECT", "-- please select --"))+explode(",",$this->Options);
 	}
 
-	public static create_from_campaign_monitor_object($object, $listID) {
+	public static function create_from_campaign_monitor_object($object, $listID) {
 		$filterOptions = array(
 			"ListID" => $listID,
 			"Code" => self::key_to_code($object->Key)
@@ -93,7 +93,7 @@ class CampaignMonitorCustomField extends DataObject {
 		$obj->write();
 	}
 
-	private static key_to_code($key) {
+	protected static function key_to_code($key) {
 		return str_replace(array("[", "]"), "", $key);
 	}
 
