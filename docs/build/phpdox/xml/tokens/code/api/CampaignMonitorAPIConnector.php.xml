@@ -4927,16 +4927,38 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
   <line no="825">
+    <token name="T_WHITESPACE">			</token>
+    <token name="T_VARIABLE">$campaignMonitorCampaign</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">CreateFromWebsite</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">false</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="826">
+    <token name="T_WHITESPACE">			</token>
+    <token name="T_VARIABLE">$campaignMonitorCampaign</token>
+    <token name="T_OBJECT_OPERATOR">-&gt;</token>
+    <token name="T_STRING">CreatedFromWebsite</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_STRING">true</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="827">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="826">
+  <line no="828">
     <token name="T_WHITESPACE">		</token>
     <token name="T_ELSE">else</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="827">
+  <line no="829">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$code</token>
     <token name="T_WHITESPACE"> </token>
@@ -4945,7 +4967,7 @@
     <token name="T_CONSTANT_ENCAPSED_STRING">"Error"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="828">
+  <line no="830">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -4959,7 +4981,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="829">
+  <line no="831">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$code</token>
     <token name="T_WHITESPACE"> </token>
@@ -4980,26 +5002,15 @@
     <token name="T_STRING">Message</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="830">
+  <line no="832">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="831">
+  <line no="833">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="832">
-    <token name="T_WHITESPACE">		</token>
-    <token name="T_VARIABLE">$campaignMonitorCampaign</token>
-    <token name="T_OBJECT_OPERATOR">-&gt;</token>
-    <token name="T_STRING">CreatedFromWebsite</token>
-    <token name="T_WHITESPACE"> </token>
-    <token name="T_PHPDOX_EQUAL">=</token>
-    <token name="T_WHITESPACE"> </token>
-    <token name="T_STRING">true</token>
-    <token name="T_PHPDOX_SEMICOLON">;</token>
-  </line>
-  <line no="833">
+  <line no="834">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$campaignMonitorCampaign</token>
     <token name="T_OBJECT_OPERATOR">-&gt;</token>
@@ -5010,7 +5021,7 @@
     <token name="T_VARIABLE">$code</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="834">
+  <line no="835">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$campaignMonitorCampaign</token>
     <token name="T_OBJECT_OPERATOR">-&gt;</token>
@@ -5019,8 +5030,8 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="835"/>
-  <line no="836">
+  <line no="836"/>
+  <line no="837">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5029,31 +5040,31 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="837">
+  <line no="838">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="838">
+  <line no="839">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"CREATE /api/v3/campaigns/{clientID}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="839">
+  <line no="840">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Created Campaign"</token>
   </line>
-  <line no="840">
+  <line no="841">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="841">
+  <line no="842">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="842"/>
-  <line no="843">
+  <line no="843"/>
+  <line no="844">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5063,7 +5074,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="844">
+  <line no="845">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -5084,7 +5095,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="845">
+  <line no="846">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -5097,7 +5108,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="846">
+  <line no="847">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5106,45 +5117,45 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="847">
+  <line no="848">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="848">
+  <line no="849">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"DELETE /api/v3/campaigns/{id}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="849">
+  <line no="850">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Deleted Campaign"</token>
   </line>
-  <line no="850">
+  <line no="851">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="851">
+  <line no="852">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="852"/>
-  <line no="853">
+  <line no="853"/>
+  <line no="854">
     <token name="T_WHITESPACE">	</token>
     <token name="T_COMMENT">/*******************************************************</token>
   </line>
-  <line no="854">
+  <line no="855">
     <token name="T_COMMENT">	 * information about the campaigns</token>
   </line>
-  <line no="855">
+  <line no="856">
     <token name="T_COMMENT">	 *</token>
   </line>
-  <line no="856">
+  <line no="857">
     <token name="T_COMMENT">	 *******************************************************/</token>
   </line>
-  <line no="857"/>
-  <line no="858">
+  <line no="858"/>
+  <line no="859">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5159,8 +5170,8 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="859"/>
-  <line no="860">
+  <line no="860"/>
+  <line no="861">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5175,75 +5186,75 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="861"/>
-  <line no="862">
+  <line no="862"/>
+  <line no="863">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="863">
+  <line no="864">
     <token name="T_DOC_COMMENT">	 * Gets a summary of all campaign reporting statistics</token>
   </line>
-  <line no="864">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="865">
-    <token name="T_DOC_COMMENT">	 * @param int $campaignID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="866">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param int $campaignID</token>
   </line>
   <line no="867">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="868">
-    <token name="T_DOC_COMMENT">	 * {</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
   </line>
   <line no="869">
-    <token name="T_DOC_COMMENT">	 *     'Recipients' =&gt; The total recipients of the campaign</token>
+    <token name="T_DOC_COMMENT">	 * {</token>
   </line>
   <line no="870">
-    <token name="T_DOC_COMMENT">	 *     'TotalOpened' =&gt; The total number of opens recorded</token>
+    <token name="T_DOC_COMMENT">	 *     'Recipients' =&gt; The total recipients of the campaign</token>
   </line>
   <line no="871">
-    <token name="T_DOC_COMMENT">	 *     'Clicks' =&gt; The total number of recorded clicks</token>
+    <token name="T_DOC_COMMENT">	 *     'TotalOpened' =&gt; The total number of opens recorded</token>
   </line>
   <line no="872">
-    <token name="T_DOC_COMMENT">	 *     'Unsubscribed' =&gt; The number of recipients who unsubscribed</token>
+    <token name="T_DOC_COMMENT">	 *     'Clicks' =&gt; The total number of recorded clicks</token>
   </line>
   <line no="873">
-    <token name="T_DOC_COMMENT">	 *     'Bounced' =&gt; The number of recipients who bounced</token>
+    <token name="T_DOC_COMMENT">	 *     'Unsubscribed' =&gt; The number of recipients who unsubscribed</token>
   </line>
   <line no="874">
-    <token name="T_DOC_COMMENT">	 *     'UniqueOpened' =&gt; The number of recipients who opened</token>
+    <token name="T_DOC_COMMENT">	 *     'Bounced' =&gt; The number of recipients who bounced</token>
   </line>
   <line no="875">
-    <token name="T_DOC_COMMENT">	 *     'WebVersionURL' =&gt; The url of the web version of the campaign</token>
+    <token name="T_DOC_COMMENT">	 *     'UniqueOpened' =&gt; The number of recipients who opened</token>
   </line>
   <line no="876">
-    <token name="T_DOC_COMMENT">	 *     'WebVersionTextURL' =&gt; The url of the web version of the text version of the campaign</token>
+    <token name="T_DOC_COMMENT">	 *     'WebVersionURL' =&gt; The url of the web version of the campaign</token>
   </line>
   <line no="877">
-    <token name="T_DOC_COMMENT">	 *     'WorldviewURL' =&gt; The public Worldview URL for the campaign</token>
+    <token name="T_DOC_COMMENT">	 *     'WebVersionTextURL' =&gt; The url of the web version of the text version of the campaign</token>
   </line>
   <line no="878">
-    <token name="T_DOC_COMMENT">	 *     'Forwards' =&gt; The number of times the campaign has been forwarded to a friend</token>
+    <token name="T_DOC_COMMENT">	 *     'WorldviewURL' =&gt; The public Worldview URL for the campaign</token>
   </line>
   <line no="879">
-    <token name="T_DOC_COMMENT">	 *     'Likes' =&gt; The number of times the campaign has been 'liked' on Facebook</token>
+    <token name="T_DOC_COMMENT">	 *     'Forwards' =&gt; The number of times the campaign has been forwarded to a friend</token>
   </line>
   <line no="880">
-    <token name="T_DOC_COMMENT">	 *     'Mentions' =&gt; The number of times the campaign has been tweeted about</token>
+    <token name="T_DOC_COMMENT">	 *     'Likes' =&gt; The number of times the campaign has been 'liked' on Facebook</token>
   </line>
   <line no="881">
-    <token name="T_DOC_COMMENT">	 *     'SpamComplaints' =&gt; The number of recipients who marked the campaign as spam</token>
+    <token name="T_DOC_COMMENT">	 *     'Mentions' =&gt; The number of times the campaign has been tweeted about</token>
   </line>
   <line no="882">
-    <token name="T_DOC_COMMENT">	 * }</token>
+    <token name="T_DOC_COMMENT">	 *     'SpamComplaints' =&gt; The number of recipients who marked the campaign as spam</token>
   </line>
   <line no="883">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * }</token>
   </line>
   <line no="884">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="885">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5253,7 +5264,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="885">
+  <line no="886">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -5274,7 +5285,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="886">
+  <line no="887">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -5287,7 +5298,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="887">
+  <line no="888">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5296,77 +5307,77 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="888">
+  <line no="889">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="889">
+  <line no="890">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/campaigns/{id}/summary"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="890">
+  <line no="891">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Got Summary"</token>
   </line>
-  <line no="891">
+  <line no="892">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="892">
+  <line no="893">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="893"/>
-  <line no="894">
+  <line no="894"/>
+  <line no="895">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="895">
+  <line no="896">
     <token name="T_DOC_COMMENT">	 * Gets the email clients that subscribers used to open the campaign</token>
   </line>
-  <line no="896">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="897">
-    <token name="T_DOC_COMMENT">	 * @param Int $campaignID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="898">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $campaignID</token>
   </line>
   <line no="899">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="900">
-    <token name="T_DOC_COMMENT">	 * array(</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
   </line>
   <line no="901">
-    <token name="T_DOC_COMMENT">	 *     {</token>
+    <token name="T_DOC_COMMENT">	 * array(</token>
   </line>
   <line no="902">
-    <token name="T_DOC_COMMENT">	 *         Client =&gt; The email client name</token>
+    <token name="T_DOC_COMMENT">	 *     {</token>
   </line>
   <line no="903">
-    <token name="T_DOC_COMMENT">	 *         Version =&gt; The email client version</token>
+    <token name="T_DOC_COMMENT">	 *         Client =&gt; The email client name</token>
   </line>
   <line no="904">
-    <token name="T_DOC_COMMENT">	 *         Percentage =&gt; The percentage of subscribers who used this email client</token>
+    <token name="T_DOC_COMMENT">	 *         Version =&gt; The email client version</token>
   </line>
   <line no="905">
-    <token name="T_DOC_COMMENT">	 *         Subscribers =&gt; The actual number of subscribers who used this email client</token>
+    <token name="T_DOC_COMMENT">	 *         Percentage =&gt; The percentage of subscribers who used this email client</token>
   </line>
   <line no="906">
-    <token name="T_DOC_COMMENT">	 *     }</token>
+    <token name="T_DOC_COMMENT">	 *         Subscribers =&gt; The actual number of subscribers who used this email client</token>
   </line>
   <line no="907">
-    <token name="T_DOC_COMMENT">	 * )</token>
+    <token name="T_DOC_COMMENT">	 *     }</token>
   </line>
   <line no="908">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * )</token>
   </line>
   <line no="909">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="910">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5376,7 +5387,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="910">
+  <line no="911">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -5397,7 +5408,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="911">
+  <line no="912">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -5410,7 +5421,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="912">
+  <line no="913">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5419,31 +5430,31 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="913">
+  <line no="914">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="914">
+  <line no="915">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/campaigns/{id}/emailclientusage"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="915">
+  <line no="916">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Got email client usage"</token>
   </line>
-  <line no="916">
+  <line no="917">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="917">
+  <line no="918">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="918"/>
-  <line no="919">
+  <line no="919"/>
+  <line no="920">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5458,8 +5469,8 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="920"/>
-  <line no="921">
+  <line no="921"/>
+  <line no="922">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5474,8 +5485,8 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="922"/>
-  <line no="923">
+  <line no="923"/>
+  <line no="924">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5490,8 +5501,8 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="924"/>
-  <line no="925">
+  <line no="925"/>
+  <line no="926">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -5506,96 +5517,96 @@
     <token name="T_PHPDOX_SEMICOLON">;</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="926"/>
-  <line no="927">
+  <line no="927"/>
+  <line no="928">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="928">
+  <line no="929">
     <token name="T_DOC_COMMENT">	 * Gets all unsubscribes recorded for a campaign since the provided date</token>
   </line>
-  <line no="929">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="930">
-    <token name="T_DOC_COMMENT">	 * @param int $campaignID ID of the Campaign</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="931">
-    <token name="T_DOC_COMMENT">	 * @param string $daysAgo The date to start getting subscribers from</token>
+    <token name="T_DOC_COMMENT">	 * @param int $campaignID ID of the Campaign</token>
   </line>
   <line no="932">
-    <token name="T_DOC_COMMENT">	 * @param int $page The page number to get</token>
+    <token name="T_DOC_COMMENT">	 * @param string $daysAgo The date to start getting subscribers from</token>
   </line>
   <line no="933">
-    <token name="T_DOC_COMMENT">	 * @param int $pageSize The number of records per page</token>
+    <token name="T_DOC_COMMENT">	 * @param int $page The page number to get</token>
   </line>
   <line no="934">
-    <token name="T_DOC_COMMENT">	 * @param string $sortByField ('EMAIL', 'NAME', 'DATE')</token>
+    <token name="T_DOC_COMMENT">	 * @param int $pageSize The number of records per page</token>
   </line>
   <line no="935">
-    <token name="T_DOC_COMMENT">	 * @param string $sortDirection ('ASC', 'DESC')</token>
+    <token name="T_DOC_COMMENT">	 * @param string $sortByField ('EMAIL', 'NAME', 'DATE')</token>
   </line>
   <line no="936">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param string $sortDirection ('ASC', 'DESC')</token>
   </line>
   <line no="937">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="938">
-    <token name="T_DOC_COMMENT">	 * {</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
   </line>
   <line no="939">
-    <token name="T_DOC_COMMENT">	 *     'ResultsOrderedBy' =&gt; The field the results are ordered by</token>
+    <token name="T_DOC_COMMENT">	 * {</token>
   </line>
   <line no="940">
-    <token name="T_DOC_COMMENT">	 *     'OrderDirection' =&gt; The order direction</token>
+    <token name="T_DOC_COMMENT">	 *     'ResultsOrderedBy' =&gt; The field the results are ordered by</token>
   </line>
   <line no="941">
-    <token name="T_DOC_COMMENT">	 *     'PageNumber' =&gt; The page number for the result set</token>
+    <token name="T_DOC_COMMENT">	 *     'OrderDirection' =&gt; The order direction</token>
   </line>
   <line no="942">
-    <token name="T_DOC_COMMENT">	 *     'PageSize' =&gt; The page size used</token>
+    <token name="T_DOC_COMMENT">	 *     'PageNumber' =&gt; The page number for the result set</token>
   </line>
   <line no="943">
-    <token name="T_DOC_COMMENT">	 *     'RecordsOnThisPage' =&gt; The number of records returned</token>
+    <token name="T_DOC_COMMENT">	 *     'PageSize' =&gt; The page size used</token>
   </line>
   <line no="944">
-    <token name="T_DOC_COMMENT">	 *     'TotalNumberOfRecords' =&gt; The total number of records available</token>
+    <token name="T_DOC_COMMENT">	 *     'RecordsOnThisPage' =&gt; The number of records returned</token>
   </line>
   <line no="945">
-    <token name="T_DOC_COMMENT">	 *     'NumberOfPages' =&gt; The total number of pages for this collection</token>
+    <token name="T_DOC_COMMENT">	 *     'TotalNumberOfRecords' =&gt; The total number of records available</token>
   </line>
   <line no="946">
-    <token name="T_DOC_COMMENT">	 *     'Results' =&gt; array(</token>
+    <token name="T_DOC_COMMENT">	 *     'NumberOfPages' =&gt; The total number of pages for this collection</token>
   </line>
   <line no="947">
-    <token name="T_DOC_COMMENT">	 *         {</token>
+    <token name="T_DOC_COMMENT">	 *     'Results' =&gt; array(</token>
   </line>
   <line no="948">
-    <token name="T_DOC_COMMENT">	 *             'EmailAddress' =&gt; The email address of the subscriber who unsubscribed</token>
+    <token name="T_DOC_COMMENT">	 *         {</token>
   </line>
   <line no="949">
-    <token name="T_DOC_COMMENT">	 *             'ListID' =&gt; The list id of the list containing the subscriber</token>
+    <token name="T_DOC_COMMENT">	 *             'EmailAddress' =&gt; The email address of the subscriber who unsubscribed</token>
   </line>
   <line no="950">
-    <token name="T_DOC_COMMENT">	 *             'Date' =&gt; The date of the unsubscribe</token>
+    <token name="T_DOC_COMMENT">	 *             'ListID' =&gt; The list id of the list containing the subscriber</token>
   </line>
   <line no="951">
-    <token name="T_DOC_COMMENT">	 *             'IPAddress' =&gt; The ip address where the unsubscribe originated</token>
+    <token name="T_DOC_COMMENT">	 *             'Date' =&gt; The date of the unsubscribe</token>
   </line>
   <line no="952">
-    <token name="T_DOC_COMMENT">	 *         }</token>
+    <token name="T_DOC_COMMENT">	 *             'IPAddress' =&gt; The ip address where the unsubscribe originated</token>
   </line>
   <line no="953">
-    <token name="T_DOC_COMMENT">	 *     )</token>
+    <token name="T_DOC_COMMENT">	 *         }</token>
   </line>
   <line no="954">
-    <token name="T_DOC_COMMENT">	 * }</token>
+    <token name="T_DOC_COMMENT">	 *     )</token>
   </line>
   <line no="955">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * }</token>
   </line>
   <line no="956">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="957">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -5641,11 +5652,11 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="957">
+  <line no="958">
     <token name="T_WHITESPACE">		</token>
     <token name="T_COMMENT">//require_once '../../csrest_campaigns.php';</token>
   </line>
-  <line no="958">
+  <line no="959">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -5666,7 +5677,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="959">
+  <line no="960">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -5677,7 +5688,7 @@
     <token name="T_STRING">get_unsubscribes</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="960">
+  <line no="961">
     <token name="T_WHITESPACE">			</token>
     <token name="T_STRING">date</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -5695,31 +5706,31 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="961">
+  <line no="962">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$page</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="962">
+  <line no="963">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$pageSize</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="963">
+  <line no="964">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$sortByField</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="964">
+  <line no="965">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$sortDirection</token>
   </line>
-  <line no="965">
+  <line no="966">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="966">
+  <line no="967">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5728,144 +5739,144 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="967">
+  <line no="968">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="968">
+  <line no="969">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/campaigns/{id}/unsubscribes"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="969">
+  <line no="970">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Got unsubscribes"</token>
   </line>
-  <line no="970">
+  <line no="971">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="971">
+  <line no="972">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="972"/>
   <line no="973"/>
   <line no="974"/>
-  <line no="975">
+  <line no="975"/>
+  <line no="976">
     <token name="T_WHITESPACE">	</token>
     <token name="T_COMMENT">/*******************************************************</token>
   </line>
-  <line no="976">
+  <line no="977">
     <token name="T_COMMENT">	 * user</token>
   </line>
-  <line no="977">
-    <token name="T_COMMENT">	 *</token>
-  </line>
   <line no="978">
-    <token name="T_COMMENT">	 * states:</token>
+    <token name="T_COMMENT">	 *</token>
   </line>
   <line no="979">
-    <token name="T_COMMENT">	 *</token>
+    <token name="T_COMMENT">	 * states:</token>
   </line>
   <line no="980">
-    <token name="T_COMMENT">	 * Active &#x2013; Someone who is on a list and will receive any emails sent to that list.</token>
+    <token name="T_COMMENT">	 *</token>
   </line>
   <line no="981">
-    <token name="T_COMMENT">	 *</token>
+    <token name="T_COMMENT">	 * Active &#x2013; Someone who is on a list and will receive any emails sent to that list.</token>
   </line>
   <line no="982">
-    <token name="T_COMMENT">	 * Unconfirmed &#x2013; The individual signed up to a confirmed opt-in list</token>
+    <token name="T_COMMENT">	 *</token>
   </line>
   <line no="983">
-    <token name="T_COMMENT">	 * but has not clicked the link in the verification email sent to them.</token>
+    <token name="T_COMMENT">	 * Unconfirmed &#x2013; The individual signed up to a confirmed opt-in list</token>
   </line>
   <line no="984">
-    <token name="T_COMMENT">	 *</token>
+    <token name="T_COMMENT">	 * but has not clicked the link in the verification email sent to them.</token>
   </line>
   <line no="985">
-    <token name="T_COMMENT">	 * Unsubscribed &#x2013; The subscriber has removed themselves from a list, or lists,</token>
+    <token name="T_COMMENT">	 *</token>
   </line>
   <line no="986">
-    <token name="T_COMMENT">	 * via an unsubscribe link or form.</token>
+    <token name="T_COMMENT">	 * Unsubscribed &#x2013; The subscriber has removed themselves from a list, or lists,</token>
   </line>
   <line no="987">
-    <token name="T_COMMENT">	 * You can also change a subscriber's status to unsubscribed through your account.</token>
+    <token name="T_COMMENT">	 * via an unsubscribe link or form.</token>
   </line>
   <line no="988">
-    <token name="T_COMMENT">	 *</token>
+    <token name="T_COMMENT">	 * You can also change a subscriber's status to unsubscribed through your account.</token>
   </line>
   <line no="989">
-    <token name="T_COMMENT">	 * Bounced &#x2013; This describes an email address that campaigns cannot be delivered to,</token>
+    <token name="T_COMMENT">	 *</token>
   </line>
   <line no="990">
-    <token name="T_COMMENT">	 * which can happen for a number of reasons.</token>
+    <token name="T_COMMENT">	 * Bounced &#x2013; This describes an email address that campaigns cannot be delivered to,</token>
   </line>
   <line no="991">
-    <token name="T_COMMENT">	 *</token>
+    <token name="T_COMMENT">	 * which can happen for a number of reasons.</token>
   </line>
   <line no="992">
-    <token name="T_COMMENT">	 * Deleted &#x2013; Means the subscriber has been deleted from a list through your account.</token>
-  </line>
-  <line no="993">
     <token name="T_COMMENT">	 *</token>
   </line>
+  <line no="993">
+    <token name="T_COMMENT">	 * Deleted &#x2013; Means the subscriber has been deleted from a list through your account.</token>
+  </line>
   <line no="994">
+    <token name="T_COMMENT">	 *</token>
+  </line>
+  <line no="995">
     <token name="T_COMMENT">	 *******************************************************/</token>
   </line>
-  <line no="995"/>
-  <line no="996">
+  <line no="996"/>
+  <line no="997">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="997">
+  <line no="998">
     <token name="T_DOC_COMMENT">	 * Gets the lists across a client to which a subscriber with a particular</token>
   </line>
-  <line no="998">
+  <line no="999">
     <token name="T_DOC_COMMENT">	 * email address belongs.</token>
   </line>
-  <line no="999">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1000">
-    <token name="T_DOC_COMMENT">	 * @param string | Member $email Subscriber's email address (or Member)</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1001">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param string | Member $email Subscriber's email address (or Member)</token>
   </line>
   <line no="1002">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1003">
-    <token name="T_DOC_COMMENT">	 * array(</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
   </line>
   <line no="1004">
-    <token name="T_DOC_COMMENT">	 *     {</token>
+    <token name="T_DOC_COMMENT">	 * array(</token>
   </line>
   <line no="1005">
-    <token name="T_DOC_COMMENT">	 *         'ListID' =&gt; The id of the list</token>
+    <token name="T_DOC_COMMENT">	 *     {</token>
   </line>
   <line no="1006">
-    <token name="T_DOC_COMMENT">	 *         'ListName' =&gt; The name of the list</token>
+    <token name="T_DOC_COMMENT">	 *         'ListID' =&gt; The id of the list</token>
   </line>
   <line no="1007">
-    <token name="T_DOC_COMMENT">	 *         'SubscriberState' =&gt; The state of the subscriber in the list</token>
+    <token name="T_DOC_COMMENT">	 *         'ListName' =&gt; The name of the list</token>
   </line>
   <line no="1008">
-    <token name="T_DOC_COMMENT">	 *         'DateSubscriberAdded' =&gt; The date the subscriber was added</token>
+    <token name="T_DOC_COMMENT">	 *         'SubscriberState' =&gt; The state of the subscriber in the list</token>
   </line>
   <line no="1009">
-    <token name="T_DOC_COMMENT">	 *     }</token>
+    <token name="T_DOC_COMMENT">	 *         'DateSubscriberAdded' =&gt; The date the subscriber was added</token>
   </line>
   <line no="1010">
-    <token name="T_DOC_COMMENT">	 * )</token>
+    <token name="T_DOC_COMMENT">	 *     }</token>
   </line>
   <line no="1011">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * )</token>
   </line>
   <line no="1012">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1013">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -5877,7 +5888,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1013">
+  <line no="1014">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -5890,7 +5901,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1014">
+  <line no="1015">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -5901,15 +5912,15 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1015">
+  <line no="1016">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1016">
+  <line no="1017">
     <token name="T_WHITESPACE">		</token>
     <token name="T_COMMENT">//require_once '../../csrest_clients.php';</token>
   </line>
-  <line no="1017">
+  <line no="1018">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -5939,7 +5950,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1018">
+  <line no="1019">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -5953,7 +5964,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1019">
+  <line no="1020">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -5962,17 +5973,17 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1020">
+  <line no="1021">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1021">
+  <line no="1022">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"/api/v3.1/clients/{id}/listsforemail"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1022">
+  <line no="1023">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Got lists to which email address "</token>
     <token name="T_PHPDOX_DOT">.</token>
@@ -5980,93 +5991,93 @@
     <token name="T_PHPDOX_DOT">.</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">" is subscribed"</token>
   </line>
-  <line no="1023">
+  <line no="1024">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1024">
+  <line no="1025">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1025"/>
   <line no="1026"/>
-  <line no="1027">
+  <line no="1027"/>
+  <line no="1028">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1028">
+  <line no="1029">
     <token name="T_DOC_COMMENT">	 * Adds a new subscriber to the specified list</token>
   </line>
-  <line no="1029">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1030">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1031">
-    <token name="T_DOC_COMMENT">	 * @param Member $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1032">
-    <token name="T_DOC_COMMENT">	 * @param Array $customFields</token>
+    <token name="T_DOC_COMMENT">	 * @param Member $member</token>
   </line>
   <line no="1033">
-    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation.</token>
+    <token name="T_DOC_COMMENT">	 * @param Array $customFields</token>
   </line>
   <line no="1034">
-    <token name="T_DOC_COMMENT">	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list</token>
+    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation.</token>
   </line>
   <line no="1035">
-    <token name="T_DOC_COMMENT">	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.</token>
+    <token name="T_DOC_COMMENT">	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list</token>
   </line>
   <line no="1036">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.</token>
   </line>
   <line no="1037">
-    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
-  </line>
-  <line no="1038">
-    <token name="T_DOC_COMMENT">	 *    Array(</token>
-  </line>
-  <line no="1039">
-    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
-  </line>
-  <line no="1040">
-    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
-  </line>
-  <line no="1041">
-    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
-  </line>
-  <line no="1042">
-    <token name="T_DOC_COMMENT">	 *    )</token>
-  </line>
-  <line no="1043">
     <token name="T_DOC_COMMENT">	 *</token>
   </line>
+  <line no="1038">
+    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
+  </line>
+  <line no="1039">
+    <token name="T_DOC_COMMENT">	 *    Array(</token>
+  </line>
+  <line no="1040">
+    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
+  </line>
+  <line no="1041">
+    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
+  </line>
+  <line no="1042">
+    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
+  </line>
+  <line no="1043">
+    <token name="T_DOC_COMMENT">	 *    )</token>
+  </line>
   <line no="1044">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1045">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
   </line>
   <line no="1046">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1047">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">addSubscriber</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1047">
+  <line no="1048">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$listID</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1048">
+  <line no="1049">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1049">
+  <line no="1050">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_WHITESPACE"> </token>
@@ -6077,7 +6088,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1050">
+  <line no="1051">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_WHITESPACE"> </token>
@@ -6086,7 +6097,7 @@
     <token name="T_STRING">true</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1051">
+  <line no="1052">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
     <token name="T_WHITESPACE"> </token>
@@ -6094,16 +6105,16 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
   </line>
-  <line no="1052">
+  <line no="1053">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1053">
+  <line no="1054">
     <token name="T_WHITESPACE">		</token>
     <token name="T_COMMENT">//require_once '../../csrest_subscribers.php';</token>
   </line>
-  <line no="1054">
+  <line no="1055">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -6124,7 +6135,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1055">
+  <line no="1056">
     <token name="T_WHITESPACE">		</token>
     <token name="T_FOREACH">foreach</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6141,7 +6152,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1056">
+  <line no="1057">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6157,7 +6168,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1057">
+  <line no="1058">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -6168,7 +6179,7 @@
     <token name="T_ARRAY">array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1058">
+  <line no="1059">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Key"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6177,7 +6188,7 @@
     <token name="T_VARIABLE">$key</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1059">
+  <line no="1060">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Value"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6186,7 +6197,7 @@
     <token name="T_VARIABLE">$customFieldValue</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1060">
+  <line no="1061">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Clear"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6202,12 +6213,12 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
   </line>
-  <line no="1061">
+  <line no="1062">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1062">
+  <line no="1063">
     <token name="T_WHITESPACE">				</token>
     <token name="T_UNSET">unset</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6218,15 +6229,15 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1063">
+  <line no="1064">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1064">
+  <line no="1065">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1065">
+  <line no="1066">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -6237,7 +6248,7 @@
     <token name="T_STRING">add</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1066">
+  <line no="1067">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$request</token>
     <token name="T_WHITESPACE"> </token>
@@ -6246,7 +6257,7 @@
     <token name="T_ARRAY">array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1067">
+  <line no="1068">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'EmailAddress'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6257,7 +6268,7 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1068">
+  <line no="1069">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'Name'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6270,7 +6281,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1069">
+  <line no="1070">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'CustomFields'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6279,7 +6290,7 @@
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1070">
+  <line no="1071">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'Resubscribe'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6288,7 +6299,7 @@
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1071">
+  <line no="1072">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'RestartSubscriptionBasedAutoResponders'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6296,16 +6307,16 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
   </line>
-  <line no="1072">
+  <line no="1073">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
   </line>
-  <line no="1073">
+  <line no="1074">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1074">
+  <line no="1075">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -6314,95 +6325,95 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1075">
+  <line no="1076">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1076">
+  <line no="1077">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"POST /api/v3.1/subscribers/{list id}.{format}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1077">
+  <line no="1078">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Subscribed with code ..."</token>
   </line>
-  <line no="1078">
+  <line no="1079">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1079">
+  <line no="1080">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1080"/>
-  <line no="1081">
+  <line no="1081"/>
+  <line no="1082">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1082">
+  <line no="1083">
     <token name="T_DOC_COMMENT">	 * Updates an existing subscriber (email, name, state, or custom fields) in the specified list.</token>
   </line>
-  <line no="1083">
+  <line no="1084">
     <token name="T_DOC_COMMENT">	 * The update is performed even for inactive subscribers, but will return an error in the event of the</token>
   </line>
-  <line no="1084">
+  <line no="1085">
     <token name="T_DOC_COMMENT">	 * given email not existing in the list.</token>
   </line>
-  <line no="1085">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1086">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1087">
-    <token name="T_DOC_COMMENT">	 * @param String $oldEmailAddress</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1088">
-    <token name="T_DOC_COMMENT">	 * @param Member $member</token>
+    <token name="T_DOC_COMMENT">	 * @param String $oldEmailAddress</token>
   </line>
   <line no="1089">
-    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation.</token>
+    <token name="T_DOC_COMMENT">	 * @param Member $member</token>
   </line>
   <line no="1090">
-    <token name="T_DOC_COMMENT">	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list</token>
+    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation.</token>
   </line>
   <line no="1091">
-    <token name="T_DOC_COMMENT">	 * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.</token>
+    <token name="T_DOC_COMMENT">	 * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list</token>
   </line>
   <line no="1092">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.</token>
   </line>
   <line no="1093">
-    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
-  </line>
-  <line no="1094">
-    <token name="T_DOC_COMMENT">	 *    Array(</token>
-  </line>
-  <line no="1095">
-    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
-  </line>
-  <line no="1096">
-    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
-  </line>
-  <line no="1097">
-    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
-  </line>
-  <line no="1098">
-    <token name="T_DOC_COMMENT">	 *    )</token>
-  </line>
-  <line no="1099">
     <token name="T_DOC_COMMENT">	 *</token>
   </line>
+  <line no="1094">
+    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
+  </line>
+  <line no="1095">
+    <token name="T_DOC_COMMENT">	 *    Array(</token>
+  </line>
+  <line no="1096">
+    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
+  </line>
+  <line no="1097">
+    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
+  </line>
+  <line no="1098">
+    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
+  </line>
+  <line no="1099">
+    <token name="T_DOC_COMMENT">	 *    )</token>
+  </line>
   <line no="1100">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1101">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
   </line>
   <line no="1102">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1103">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -6411,12 +6422,12 @@
     <token name="T_STRING">updateSubscriber</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1103">
+  <line no="1104">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$listID</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1104">
+  <line no="1105">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$oldEmailAddress</token>
     <token name="T_WHITESPACE"> </token>
@@ -6425,14 +6436,14 @@
     <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1105">
+  <line no="1106">
     <token name="T_WHITESPACE">		</token>
     <token name="T_STRING">Member</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1106">
+  <line no="1107">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_WHITESPACE"> </token>
@@ -6443,7 +6454,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1107">
+  <line no="1108">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_WHITESPACE"> </token>
@@ -6452,7 +6463,7 @@
     <token name="T_STRING">true</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1108">
+  <line no="1109">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
     <token name="T_WHITESPACE"> </token>
@@ -6460,12 +6471,12 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
   </line>
-  <line no="1109">
+  <line no="1110">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1110">
+  <line no="1111">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6475,7 +6486,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1111">
+  <line no="1112">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$oldEmailAddress</token>
     <token name="T_WHITESPACE"> </token>
@@ -6486,11 +6497,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1112">
+  <line no="1113">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1113">
+  <line no="1114">
     <token name="T_WHITESPACE">		</token>
     <token name="T_FOREACH">foreach</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6507,7 +6518,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1114">
+  <line no="1115">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6523,7 +6534,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1115">
+  <line no="1116">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -6534,7 +6545,7 @@
     <token name="T_ARRAY">array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1116">
+  <line no="1117">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Key"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6543,7 +6554,7 @@
     <token name="T_VARIABLE">$key</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1117">
+  <line no="1118">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Value"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6552,7 +6563,7 @@
     <token name="T_VARIABLE">$customFieldValue</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1118">
+  <line no="1119">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Clear"</token>
     <token name="T_WHITESPACE"> </token>
@@ -6568,12 +6579,12 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
   </line>
-  <line no="1119">
+  <line no="1120">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1120">
+  <line no="1121">
     <token name="T_WHITESPACE">				</token>
     <token name="T_UNSET">unset</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6584,19 +6595,19 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1121">
-    <token name="T_WHITESPACE">			</token>
-    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
-  </line>
   <line no="1122">
-    <token name="T_WHITESPACE">		</token>
+    <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
   <line no="1123">
     <token name="T_WHITESPACE">		</token>
-    <token name="T_COMMENT">//require_once '../../csrest_subscribers.php';</token>
+    <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
   <line no="1124">
+    <token name="T_WHITESPACE">		</token>
+    <token name="T_COMMENT">//require_once '../../csrest_subscribers.php';</token>
+  </line>
+  <line no="1125">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -6617,7 +6628,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1125">
+  <line no="1126">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$request</token>
     <token name="T_WHITESPACE"> </token>
@@ -6628,7 +6639,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1126">
+  <line no="1127">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -6639,7 +6650,7 @@
     <token name="T_STRING">update</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1127">
+  <line no="1128">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$request</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -6650,7 +6661,7 @@
     <token name="T_VARIABLE">$oldEmailAddress</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1128">
+  <line no="1129">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$request</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -6661,7 +6672,7 @@
     <token name="T_ARRAY">array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1129">
+  <line no="1130">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'EmailAddress'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6672,7 +6683,7 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1130">
+  <line no="1131">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'Name'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6685,7 +6696,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1131">
+  <line no="1132">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'CustomFields'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6694,7 +6705,7 @@
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1132">
+  <line no="1133">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'Resubscribe'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6703,7 +6714,7 @@
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1133">
+  <line no="1134">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'RestartSubscriptionBasedAutoResponders'</token>
     <token name="T_WHITESPACE"> </token>
@@ -6712,16 +6723,16 @@
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1134">
+  <line no="1135">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
   </line>
-  <line no="1135">
+  <line no="1136">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1136">
+  <line no="1137">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -6730,17 +6741,17 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1137">
+  <line no="1138">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1138">
+  <line no="1139">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"PUT /api/v3.1/subscribers/{list id}.{format}?email={email}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1139">
+  <line no="1140">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_DOUBLE_QUOTES">"</token>
     <token name="T_ENCAPSED_AND_WHITESPACE">updated with email </token>
@@ -6748,96 +6759,96 @@
     <token name="T_ENCAPSED_AND_WHITESPACE"> ...</token>
     <token name="T_PHPDOX_DOUBLE_QUOTES">"</token>
   </line>
-  <line no="1140">
+  <line no="1141">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1141">
+  <line no="1142">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1142"/>
-  <line no="1143">
+  <line no="1143"/>
+  <line no="1144">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1144">
+  <line no="1145">
     <token name="T_DOC_COMMENT">	 * Updates an existing subscriber (email, name, state, or custom fields) in the specified list.</token>
   </line>
-  <line no="1145">
+  <line no="1146">
     <token name="T_DOC_COMMENT">	 * The update is performed even for inactive subscribers, but will return an error in the event of the</token>
   </line>
-  <line no="1146">
+  <line no="1147">
     <token name="T_DOC_COMMENT">	 * given email not existing in the list.</token>
   </line>
-  <line no="1147">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1148">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1149">
-    <token name="T_DOC_COMMENT">	 * @param ArraySet $memberSet - list of mebers</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1150">
-    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 =&gt; array( [custom fields here] ), 456 =&gt; array( [custom fields here] ) )</token>
+    <token name="T_DOC_COMMENT">	 * @param ArraySet $memberSet - list of mebers</token>
   </line>
   <line no="1151">
-    <token name="T_DOC_COMMENT">	 * @param $resubscribe Whether we should resubscribe any existing subscribers</token>
+    <token name="T_DOC_COMMENT">	 * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 =&gt; array( [custom fields here] ), 456 =&gt; array( [custom fields here] ) )</token>
   </line>
   <line no="1152">
-    <token name="T_DOC_COMMENT">	 * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour</token>
+    <token name="T_DOC_COMMENT">	 * @param $resubscribe Whether we should resubscribe any existing subscribers</token>
   </line>
   <line no="1153">
-    <token name="T_DOC_COMMENT">	 * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted</token>
+    <token name="T_DOC_COMMENT">	 * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour</token>
   </line>
   <line no="1154">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted</token>
   </line>
   <line no="1155">
-    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1156">
-    <token name="T_DOC_COMMENT">	 *    Array(</token>
+    <token name="T_DOC_COMMENT">	 * NOTE that for the custom fields they need to be formatted like this:</token>
   </line>
   <line no="1157">
-    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
+    <token name="T_DOC_COMMENT">	 *    Array(</token>
   </line>
   <line no="1158">
-    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
+    <token name="T_DOC_COMMENT">	 *        'Key' =&gt; The custom fields personalisation tag</token>
   </line>
   <line no="1159">
-    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
+    <token name="T_DOC_COMMENT">	 *        'Value' =&gt; The value for this subscriber</token>
   </line>
   <line no="1160">
+    <token name="T_DOC_COMMENT">	 *        'Clear' =&gt; true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)</token>
+  </line>
+  <line no="1161">
     <token name="T_DOC_COMMENT">	 *    )</token>
   </line>
-  <line no="1161"/>
-  <line no="1162">
+  <line no="1162"/>
+  <line no="1163">
     <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
   </line>
-  <line no="1163">
+  <line no="1164">
     <token name="T_DOC_COMMENT">	 */</token>
   </line>
-  <line no="1164">
+  <line no="1165">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">addSubscribers</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1165">
+  <line no="1166">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$listID</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1166">
+  <line no="1167">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$membersSet</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1167">
+  <line no="1168">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$customFields</token>
     <token name="T_WHITESPACE"> </token>
@@ -6848,12 +6859,12 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1168">
+  <line no="1169">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1169">
+  <line no="1170">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$queueSubscriptionBasedAutoResponders</token>
     <token name="T_WHITESPACE"> </token>
@@ -6862,7 +6873,7 @@
     <token name="T_STRING">false</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1170">
+  <line no="1171">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
     <token name="T_WHITESPACE"> </token>
@@ -6870,17 +6881,17 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
   </line>
-  <line no="1171">
+  <line no="1172">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1172">
+  <line no="1173">
     <token name="T_WHITESPACE">		</token>
     <token name="T_COMMENT">//require_once '../../csrest_subscribers.php';</token>
   </line>
-  <line no="1173">
+  <line no="1174">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -6901,7 +6912,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1174">
+  <line no="1175">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$importArray</token>
     <token name="T_WHITESPACE"> </token>
@@ -6912,7 +6923,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1175">
+  <line no="1176">
     <token name="T_WHITESPACE">		</token>
     <token name="T_FOREACH">foreach</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6925,7 +6936,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1176">
+  <line no="1177">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$customFieldsForMember</token>
     <token name="T_WHITESPACE"> </token>
@@ -6936,7 +6947,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1177">
+  <line no="1178">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6953,7 +6964,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1178">
+  <line no="1179">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$customFieldsForMember</token>
     <token name="T_WHITESPACE"> </token>
@@ -6967,11 +6978,11 @@
     <token name="T_PHPDOX_CLOSE_SQUARE">]</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1179">
+  <line no="1180">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1180">
+  <line no="1181">
     <token name="T_WHITESPACE">			</token>
     <token name="T_ELSEIF">elseif</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -6988,7 +6999,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1181">
+  <line no="1182">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$customFieldsForMember</token>
     <token name="T_WHITESPACE"> </token>
@@ -7002,11 +7013,11 @@
     <token name="T_PHPDOX_CLOSE_SQUARE">]</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1182">
+  <line no="1183">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1183">
+  <line no="1184">
     <token name="T_WHITESPACE">			</token>
     <token name="T_FOREACH">foreach</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7023,7 +7034,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1184">
+  <line no="1185">
     <token name="T_WHITESPACE">				</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7039,7 +7050,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1185">
+  <line no="1186">
     <token name="T_WHITESPACE">					</token>
     <token name="T_VARIABLE">$customFieldsForMember</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -7050,7 +7061,7 @@
     <token name="T_ARRAY">array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1186">
+  <line no="1187">
     <token name="T_WHITESPACE">						</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Key"</token>
     <token name="T_WHITESPACE"> </token>
@@ -7059,7 +7070,7 @@
     <token name="T_VARIABLE">$key</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1187">
+  <line no="1188">
     <token name="T_WHITESPACE">						</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Value"</token>
     <token name="T_WHITESPACE"> </token>
@@ -7068,7 +7079,7 @@
     <token name="T_VARIABLE">$customFieldValue</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1188">
+  <line no="1189">
     <token name="T_WHITESPACE">						</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Clear"</token>
     <token name="T_WHITESPACE"> </token>
@@ -7084,12 +7095,12 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
   </line>
-  <line no="1189">
+  <line no="1190">
     <token name="T_WHITESPACE">					</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1190">
+  <line no="1191">
     <token name="T_WHITESPACE">					</token>
     <token name="T_UNSET">unset</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7100,15 +7111,15 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1191">
+  <line no="1192">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1192">
+  <line no="1193">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1193">
+  <line no="1194">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7121,7 +7132,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1194">
+  <line no="1195">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$importArray</token>
     <token name="T_PHPDOX_OPEN_SQUARE">[</token>
@@ -7132,7 +7143,7 @@
     <token name="T_ARRAY">Array</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1195">
+  <line no="1196">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'EmailAddress'</token>
     <token name="T_WHITESPACE"> </token>
@@ -7143,7 +7154,7 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1196">
+  <line no="1197">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'Name'</token>
     <token name="T_WHITESPACE"> </token>
@@ -7156,7 +7167,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1197">
+  <line no="1198">
     <token name="T_WHITESPACE">					</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">'CustomFields'</token>
     <token name="T_WHITESPACE"> </token>
@@ -7164,20 +7175,20 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_VARIABLE">$customFieldsForMember</token>
   </line>
-  <line no="1198">
+  <line no="1199">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1199">
+  <line no="1200">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1200">
+  <line no="1201">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1201">
+  <line no="1202">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -7188,31 +7199,31 @@
     <token name="T_STRING">import</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1202">
+  <line no="1203">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$importArray</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1203">
+  <line no="1204">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$resubscribe</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1204">
+  <line no="1205">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$queueSubscriptionBasedAutoResponders</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1205">
+  <line no="1206">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$restartSubscriptionBasedAutoResponders</token>
   </line>
-  <line no="1206">
+  <line no="1207">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1207">
+  <line no="1208">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -7221,50 +7232,50 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1208">
+  <line no="1209">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1209">
+  <line no="1210">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"POST /api/v3.1/subscribers/{list id}/import.{format}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1210">
+  <line no="1211">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"review details ..."</token>
   </line>
-  <line no="1211">
+  <line no="1212">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1212">
+  <line no="1213">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1213"/>
-  <line no="1214">
+  <line no="1214"/>
+  <line no="1215">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1215">
+  <line no="1216">
     <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
-  <line no="1216">
+  <line no="1217">
     <token name="T_DOC_COMMENT">	 * @param Member | String $member - email address or Member Object</token>
   </line>
-  <line no="1217">
+  <line no="1218">
     <token name="T_DOC_COMMENT">	 *</token>
   </line>
-  <line no="1218">
+  <line no="1219">
     <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
   </line>
-  <line no="1219">
+  <line no="1220">
     <token name="T_DOC_COMMENT">	 */</token>
   </line>
-  <line no="1220">
+  <line no="1221">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -7277,7 +7288,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1221">
+  <line no="1222">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7290,7 +7301,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1222">
+  <line no="1223">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -7301,11 +7312,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1223">
+  <line no="1224">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1224">
+  <line no="1225">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -7326,7 +7337,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1225">
+  <line no="1226">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -7340,7 +7351,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1226">
+  <line no="1227">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -7349,56 +7360,56 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1227">
+  <line no="1228">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1228">
+  <line no="1229">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"DELETE /api/v3.1/subscribers/{list id}.{format}?email={emailAddress}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1229">
+  <line no="1230">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Unsubscribed with code  ..."</token>
   </line>
-  <line no="1230">
+  <line no="1231">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1231">
+  <line no="1232">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1232"/>
-  <line no="1233">
+  <line no="1233"/>
+  <line no="1234">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1234">
+  <line no="1235">
     <token name="T_DOC_COMMENT">	 * Unsubscribes the given subscriber from the current list</token>
   </line>
-  <line no="1235">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1236">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1237">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1238">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1239">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1240">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be empty</token>
   </line>
   <line no="1241">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1242">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -7411,7 +7422,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1242">
+  <line no="1243">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7424,7 +7435,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1243">
+  <line no="1244">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -7435,11 +7446,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1244">
+  <line no="1245">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1245">
+  <line no="1246">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -7460,7 +7471,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1246">
+  <line no="1247">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -7474,7 +7485,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1247">
+  <line no="1248">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -7483,56 +7494,56 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1248">
+  <line no="1249">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1249">
+  <line no="1250">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/subscribers/{list id}/unsubscribe.{format}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1250">
+  <line no="1251">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"Unsubscribed with code  ..."</token>
   </line>
-  <line no="1251">
+  <line no="1252">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1252">
+  <line no="1253">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1253"/>
-  <line no="1254">
+  <line no="1254"/>
+  <line no="1255">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1255">
+  <line no="1256">
     <token name="T_DOC_COMMENT">	 * Is this user part of this list at all?</token>
   </line>
-  <line no="1256">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1257">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1258">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1259">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1260">
-    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1261">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
   </line>
   <line no="1262">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1263">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -7548,7 +7559,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1263">
+  <line no="1264">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7561,7 +7572,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1264">
+  <line no="1265">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -7572,11 +7583,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1265">
+  <line no="1266">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1266">
+  <line no="1267">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$outcome</token>
     <token name="T_WHITESPACE"> </token>
@@ -7593,7 +7604,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1267">
+  <line no="1268">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7611,7 +7622,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1268">
+  <line no="1269">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7622,29 +7633,29 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1269">
+  <line no="1270">
     <token name="T_WHITESPACE">				</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber Exists For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1270">
+  <line no="1271">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1271">
+  <line no="1272">
     <token name="T_WHITESPACE">			</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1272">
+  <line no="1273">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1273">
+  <line no="1274">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7655,55 +7666,55 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1274">
+  <line no="1275">
     <token name="T_WHITESPACE">			</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber does *** NOT *** Exist For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1275">
+  <line no="1276">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1276">
+  <line no="1277">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1277">
+  <line no="1278">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1278"/>
-  <line no="1279">
+  <line no="1279"/>
+  <line no="1280">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1280">
+  <line no="1281">
     <token name="T_DOC_COMMENT">	 * Can we send e-mails to this person in the future for this list?</token>
   </line>
-  <line no="1281">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1282">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1283">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1284">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1285">
-    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1286">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
   </line>
   <line no="1287">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1288">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -7719,7 +7730,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1288">
+  <line no="1289">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7732,7 +7743,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1289">
+  <line no="1290">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -7743,11 +7754,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1290">
+  <line no="1291">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1291">
+  <line no="1292">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$outcome</token>
     <token name="T_WHITESPACE"> </token>
@@ -7764,7 +7775,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1292">
+  <line no="1293">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7782,7 +7793,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1293">
+  <line no="1294">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7797,7 +7808,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1294">
+  <line no="1295">
     <token name="T_WHITESPACE">				</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7808,33 +7819,33 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1295">
+  <line no="1296">
     <token name="T_WHITESPACE">					</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber Can Receive Emails For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1296">
+  <line no="1297">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1297">
+  <line no="1298">
     <token name="T_WHITESPACE">				</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1298">
+  <line no="1299">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1299">
+  <line no="1300">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1300">
+  <line no="1301">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7845,55 +7856,55 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1301">
+  <line no="1302">
     <token name="T_WHITESPACE">			</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber Can *** NOT *** Receive Emails For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1302">
+  <line no="1303">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1303">
+  <line no="1304">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1304">
+  <line no="1305">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1305"/>
-  <line no="1306">
+  <line no="1306"/>
+  <line no="1307">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1307">
+  <line no="1308">
     <token name="T_DOC_COMMENT">	 * This e-mail / user has been banned from a list.</token>
   </line>
-  <line no="1308">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1309">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1310">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1311">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1312">
-    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1313">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 * @return Boolean</token>
   </line>
   <line no="1314">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1315">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PUBLIC">public</token>
     <token name="T_WHITESPACE"> </token>
@@ -7909,7 +7920,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1315">
+  <line no="1316">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$subscriberExistsForThisList</token>
     <token name="T_WHITESPACE"> </token>
@@ -7926,7 +7937,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1316">
+  <line no="1317">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$subscriberCanReceiveEmailsForThisList</token>
     <token name="T_WHITESPACE"> </token>
@@ -7943,7 +7954,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1317">
+  <line no="1318">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7951,7 +7962,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1318">
+  <line no="1319">
     <token name="T_WHITESPACE">			</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7961,7 +7972,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1319">
+  <line no="1320">
     <token name="T_WHITESPACE">				</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -7972,33 +7983,33 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1320">
+  <line no="1321">
     <token name="T_WHITESPACE">					</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber Can No Longer Receive Emails For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1321">
+  <line no="1322">
     <token name="T_WHITESPACE">				</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1322">
+  <line no="1323">
     <token name="T_WHITESPACE">				</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">true</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1323">
+  <line no="1324">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1324">
+  <line no="1325">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1325">
+  <line no="1326">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -8009,30 +8020,30 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1326">
+  <line no="1327">
     <token name="T_WHITESPACE">			</token>
     <token name="T_ECHO">echo</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"&lt;h3&gt;Subscriber Can *** STILL *** Receive Emails For This List&lt;/h3&gt;"</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1327">
+  <line no="1328">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1328">
+  <line no="1329">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_STRING">false</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1329">
+  <line no="1330">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1330"/>
-  <line no="1331">
+  <line no="1331"/>
+  <line no="1332">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PRIVATE">private</token>
     <token name="T_WHITESPACE"> </token>
@@ -8047,72 +8058,72 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1332"/>
-  <line no="1333">
+  <line no="1333"/>
+  <line no="1334">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1334">
+  <line no="1335">
     <token name="T_DOC_COMMENT">	 * Gets a subscriber details, including custom fields</token>
   </line>
-  <line no="1335">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1336">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1337">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1338">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1339">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
-  </line>
-  <line no="1340">
-    <token name="T_DOC_COMMENT">	 * {</token>
-  </line>
-  <line no="1341">
-    <token name="T_DOC_COMMENT">	 *     'EmailAddress' =&gt; The subscriber email address</token>
-  </line>
-  <line no="1342">
-    <token name="T_DOC_COMMENT">	 *     'Name' =&gt; The subscribers name</token>
-  </line>
-  <line no="1343">
-    <token name="T_DOC_COMMENT">	 *     'Date' =&gt; The date the subscriber was added to the list</token>
-  </line>
-  <line no="1344">
-    <token name="T_DOC_COMMENT">	 *     'State' =&gt; The current state of the subscriber</token>
-  </line>
-  <line no="1345">
-    <token name="T_DOC_COMMENT">	 *     'CustomFields' =&gt; array(</token>
-  </line>
-  <line no="1346">
-    <token name="T_DOC_COMMENT">	 *         {</token>
-  </line>
-  <line no="1347">
-    <token name="T_DOC_COMMENT">	 *             'Key' =&gt; The custom fields personalisation tag</token>
-  </line>
-  <line no="1348">
-    <token name="T_DOC_COMMENT">	 *             'Value' =&gt; The custom field value for this subscriber</token>
-  </line>
-  <line no="1349">
-    <token name="T_DOC_COMMENT">	 *         }</token>
-  </line>
-  <line no="1350">
-    <token name="T_DOC_COMMENT">	 *     )</token>
-  </line>
-  <line no="1351">
-    <token name="T_DOC_COMMENT">	 * }</token>
-  </line>
-  <line no="1352">
     <token name="T_DOC_COMMENT">	 *</token>
   </line>
+  <line no="1340">
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+  </line>
+  <line no="1341">
+    <token name="T_DOC_COMMENT">	 * {</token>
+  </line>
+  <line no="1342">
+    <token name="T_DOC_COMMENT">	 *     'EmailAddress' =&gt; The subscriber email address</token>
+  </line>
+  <line no="1343">
+    <token name="T_DOC_COMMENT">	 *     'Name' =&gt; The subscribers name</token>
+  </line>
+  <line no="1344">
+    <token name="T_DOC_COMMENT">	 *     'Date' =&gt; The date the subscriber was added to the list</token>
+  </line>
+  <line no="1345">
+    <token name="T_DOC_COMMENT">	 *     'State' =&gt; The current state of the subscriber</token>
+  </line>
+  <line no="1346">
+    <token name="T_DOC_COMMENT">	 *     'CustomFields' =&gt; array(</token>
+  </line>
+  <line no="1347">
+    <token name="T_DOC_COMMENT">	 *         {</token>
+  </line>
+  <line no="1348">
+    <token name="T_DOC_COMMENT">	 *             'Key' =&gt; The custom fields personalisation tag</token>
+  </line>
+  <line no="1349">
+    <token name="T_DOC_COMMENT">	 *             'Value' =&gt; The custom field value for this subscriber</token>
+  </line>
+  <line no="1350">
+    <token name="T_DOC_COMMENT">	 *         }</token>
+  </line>
+  <line no="1351">
+    <token name="T_DOC_COMMENT">	 *     )</token>
+  </line>
+  <line no="1352">
+    <token name="T_DOC_COMMENT">	 * }</token>
+  </line>
   <line no="1353">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1354">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1355">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -8132,7 +8143,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1355">
+  <line no="1356">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -8145,7 +8156,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1356">
+  <line no="1357">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -8156,11 +8167,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1357">
+  <line no="1358">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1358">
+  <line no="1359">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$key</token>
     <token name="T_WHITESPACE"> </token>
@@ -8173,7 +8184,7 @@
     <token name="T_VARIABLE">$member</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1359">
+  <line no="1360">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -8194,21 +8205,21 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1360">
+  <line no="1361">
     <token name="T_WHITESPACE">			</token>
     <token name="T_COMMENT">//do nothing</token>
   </line>
-  <line no="1361">
+  <line no="1362">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1362">
+  <line no="1363">
     <token name="T_WHITESPACE">		</token>
     <token name="T_ELSE">else</token>
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1363">
+  <line no="1364">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -8229,7 +8240,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1364">
+  <line no="1365">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -8243,7 +8254,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1365">
+  <line no="1366">
     <token name="T_WHITESPACE">			</token>
     <token name="T_STRING">self</token>
     <token name="T_DOUBLE_COLON">::</token>
@@ -8259,30 +8270,30 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1366">
+  <line no="1367">
     <token name="T_WHITESPACE">				</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1367">
+  <line no="1368">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/subscribers/{list id}.{format}?email={email}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1368">
+  <line no="1369">
     <token name="T_WHITESPACE">				</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"got subscribed subscriber"</token>
   </line>
-  <line no="1369">
+  <line no="1370">
     <token name="T_WHITESPACE">			</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1370">
+  <line no="1371">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1371">
+  <line no="1372">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -8294,76 +8305,76 @@
     <token name="T_PHPDOX_CLOSE_SQUARE">]</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1372">
+  <line no="1373">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1373"/>
-  <line no="1374">
+  <line no="1374"/>
+  <line no="1375">
     <token name="T_WHITESPACE">	</token>
     <token name="T_DOC_COMMENT">/**</token>
   </line>
-  <line no="1375">
+  <line no="1376">
     <token name="T_DOC_COMMENT">	 * Gets a subscriber details, including custom fields</token>
   </line>
-  <line no="1376">
-    <token name="T_DOC_COMMENT">	 *</token>
-  </line>
   <line no="1377">
-    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1378">
-    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
+    <token name="T_DOC_COMMENT">	 * @param Int $listID</token>
   </line>
   <line no="1379">
-    <token name="T_DOC_COMMENT">	 *</token>
+    <token name="T_DOC_COMMENT">	 * @param Member | String $member</token>
   </line>
   <line no="1380">
-    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
-  </line>
-  <line no="1381">
-    <token name="T_DOC_COMMENT">	 * {</token>
-  </line>
-  <line no="1382">
-    <token name="T_DOC_COMMENT">	 *     'EmailAddress' =&gt; The subscriber email address</token>
-  </line>
-  <line no="1383">
-    <token name="T_DOC_COMMENT">	 *     'Name' =&gt; The subscribers name</token>
-  </line>
-  <line no="1384">
-    <token name="T_DOC_COMMENT">	 *     'Date' =&gt; The date the subscriber was added to the list</token>
-  </line>
-  <line no="1385">
-    <token name="T_DOC_COMMENT">	 *     'State' =&gt; The current state of the subscriber</token>
-  </line>
-  <line no="1386">
-    <token name="T_DOC_COMMENT">	 *     'CustomFields' =&gt; array(</token>
-  </line>
-  <line no="1387">
-    <token name="T_DOC_COMMENT">	 *         {</token>
-  </line>
-  <line no="1388">
-    <token name="T_DOC_COMMENT">	 *             'Key' =&gt; The custom fields personalisation tag</token>
-  </line>
-  <line no="1389">
-    <token name="T_DOC_COMMENT">	 *             'Value' =&gt; The custom field value for this subscriber</token>
-  </line>
-  <line no="1390">
-    <token name="T_DOC_COMMENT">	 *         }</token>
-  </line>
-  <line no="1391">
-    <token name="T_DOC_COMMENT">	 *     )</token>
-  </line>
-  <line no="1392">
-    <token name="T_DOC_COMMENT">	 * }</token>
-  </line>
-  <line no="1393">
     <token name="T_DOC_COMMENT">	 *</token>
   </line>
+  <line no="1381">
+    <token name="T_DOC_COMMENT">	 * @return CS_REST_Wrapper_Result A successful response will be an object of the form</token>
+  </line>
+  <line no="1382">
+    <token name="T_DOC_COMMENT">	 * {</token>
+  </line>
+  <line no="1383">
+    <token name="T_DOC_COMMENT">	 *     'EmailAddress' =&gt; The subscriber email address</token>
+  </line>
+  <line no="1384">
+    <token name="T_DOC_COMMENT">	 *     'Name' =&gt; The subscribers name</token>
+  </line>
+  <line no="1385">
+    <token name="T_DOC_COMMENT">	 *     'Date' =&gt; The date the subscriber was added to the list</token>
+  </line>
+  <line no="1386">
+    <token name="T_DOC_COMMENT">	 *     'State' =&gt; The current state of the subscriber</token>
+  </line>
+  <line no="1387">
+    <token name="T_DOC_COMMENT">	 *     'CustomFields' =&gt; array(</token>
+  </line>
+  <line no="1388">
+    <token name="T_DOC_COMMENT">	 *         {</token>
+  </line>
+  <line no="1389">
+    <token name="T_DOC_COMMENT">	 *             'Key' =&gt; The custom fields personalisation tag</token>
+  </line>
+  <line no="1390">
+    <token name="T_DOC_COMMENT">	 *             'Value' =&gt; The custom field value for this subscriber</token>
+  </line>
+  <line no="1391">
+    <token name="T_DOC_COMMENT">	 *         }</token>
+  </line>
+  <line no="1392">
+    <token name="T_DOC_COMMENT">	 *     )</token>
+  </line>
+  <line no="1393">
+    <token name="T_DOC_COMMENT">	 * }</token>
+  </line>
   <line no="1394">
-    <token name="T_DOC_COMMENT">	 */</token>
+    <token name="T_DOC_COMMENT">	 *</token>
   </line>
   <line no="1395">
+    <token name="T_DOC_COMMENT">	 */</token>
+  </line>
+  <line no="1396">
     <token name="T_WHITESPACE">	</token>
     <token name="T_FUNCTION">function</token>
     <token name="T_WHITESPACE"> </token>
@@ -8376,7 +8387,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1396">
+  <line no="1397">
     <token name="T_WHITESPACE">		</token>
     <token name="T_IF">if</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
@@ -8389,7 +8400,7 @@
     <token name="T_WHITESPACE"> </token>
     <token name="T_PHPDOX_OPEN_CURLY">{</token>
   </line>
-  <line no="1397">
+  <line no="1398">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$member</token>
     <token name="T_WHITESPACE"> </token>
@@ -8400,11 +8411,11 @@
     <token name="T_STRING">Email</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1398">
+  <line no="1399">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1399">
+  <line no="1400">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$wrap</token>
     <token name="T_WHITESPACE"> </token>
@@ -8425,7 +8436,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1400">
+  <line no="1401">
     <token name="T_WHITESPACE">		</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_WHITESPACE"> </token>
@@ -8439,7 +8450,7 @@
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1401">
+  <line no="1402">
     <token name="T_WHITESPACE">		</token>
     <token name="T_RETURN">return</token>
     <token name="T_WHITESPACE"> </token>
@@ -8448,32 +8459,32 @@
     <token name="T_STRING">returnResult</token>
     <token name="T_PHPDOX_OPEN_BRACKET">(</token>
   </line>
-  <line no="1402">
+  <line no="1403">
     <token name="T_WHITESPACE">			</token>
     <token name="T_VARIABLE">$result</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1403">
+  <line no="1404">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"GET /api/v3.1/subscribers/{list id}/history.{format}?email={email}"</token>
     <token name="T_PHPDOX_COMMA">,</token>
   </line>
-  <line no="1404">
+  <line no="1405">
     <token name="T_WHITESPACE">			</token>
     <token name="T_CONSTANT_ENCAPSED_STRING">"got subscriber history"</token>
   </line>
-  <line no="1405">
+  <line no="1406">
     <token name="T_WHITESPACE">		</token>
     <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
     <token name="T_PHPDOX_SEMICOLON">;</token>
   </line>
-  <line no="1406">
+  <line no="1407">
     <token name="T_WHITESPACE">	</token>
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1407"/>
-  <line no="1408">
+  <line no="1408"/>
+  <line no="1409">
     <token name="T_PHPDOX_CLOSE_CURLY">}</token>
   </line>
-  <line no="1409"/>
+  <line no="1410"/>
 </source>

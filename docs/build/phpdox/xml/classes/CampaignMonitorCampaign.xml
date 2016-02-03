@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaign" namespace="" name="CampaignMonitorCampaign" abstract="false" final="false" start="9" end="354">
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaign" namespace="" name="CampaignMonitorCampaign" abstract="false" final="false" start="9" end="357">
   <docblock>
     <description/>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
@@ -44,30 +44,30 @@
   <method name="PreviewLink" start="150" end="156" abstract="false" final="false" static="false" visibility="public">
     <parameter name="action" byreference="false" type="string" default="&quot;&quot;"/>
   </method>
-  <method name="getNewsletterContent" start="158" end="194" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getBestTemplate" start="199" end="206" abstract="false" final="false" static="false" visibility="public">
+  <method name="getNewsletterContent" start="158" end="197" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getBestTemplate" start="202" end="209" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="string"/>
     </docblock>
   </method>
-  <method name="getCSSFileLocations" start="211" end="216" abstract="false" final="false" static="false" visibility="protected">
+  <method name="getCSSFileLocations" start="214" end="219" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description/>
       <return type="array"/>
     </docblock>
   </method>
-  <method name="getHTMLContent" start="221" end="226" abstract="false" final="false" static="false" visibility="public">
+  <method name="getHTMLContent" start="224" end="229" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="array"/>
     </docblock>
   </method>
-  <method name="onBeforeWrite" start="228" end="236" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="onAfterWrite" start="238" end="250" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="onBeforeDelete" start="252" end="263" abstract="false" final="false" static="false" visibility="public"/>
-  <member name="_api" type="{unknown}" default="" constant="null" visibility="private" static="true" line="265"/>
-  <method name="getAPI" start="271" end="277" abstract="false" final="false" static="false" visibility="protected">
+  <method name="onBeforeWrite" start="231" end="239" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="onAfterWrite" start="241" end="253" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="onBeforeDelete" start="255" end="266" abstract="false" final="false" static="false" visibility="public"/>
+  <member name="_api" type="{unknown}" default="" constant="null" visibility="private" static="true" line="268"/>
+  <method name="getAPI" start="274" end="280" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description/>
       <return type="object">
@@ -75,18 +75,19 @@
       </return>
     </docblock>
   </method>
-  <member name="_hasBeenSent" type="{unknown}" default="" constant="null" visibility="private" static="false" line="279"/>
-  <method name="HasBeenSentCheck" start="281" end="310" abstract="false" final="false" static="false" visibility="public">
+  <member name="_hasBeenSent" type="{unknown}" default="" constant="null" visibility="private" static="false" line="282"/>
+  <method name="HasBeenSentCheck" start="284" end="313" abstract="false" final="false" static="false" visibility="public">
     <inline>
-      <comment value="lazy check" line="282"/>
-      <comment value="real check" line="286"/>
+      <comment value="lazy check" line="285"/>
+      <comment value="real check" line="289"/>
     </inline>
   </method>
-  <member name="_existsOnCampaignMonitorCheck" type="{unknown}" default="" constant="null" visibility="private" static="false" line="312"/>
-  <method name="ExistsOnCampaignMonitorCheck" start="314" end="352" abstract="false" final="false" static="false" visibility="public">
+  <member name="_existsOnCampaignMonitorCheck" type="{unknown}" default="" constant="null" visibility="private" static="false" line="315"/>
+  <method name="ExistsOnCampaignMonitorCheck" start="317" end="355" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="forceRecheck" byreference="false" type="boolean" default="false"/>
     <inline>
-      <comment value="lazy check" line="315"/>
-      <comment value="real check" line="319"/>
+      <comment value="lazy check" line="318"/>
+      <comment value="real check" line="322"/>
     </inline>
   </method>
 </class>
