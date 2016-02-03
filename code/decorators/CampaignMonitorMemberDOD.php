@@ -15,6 +15,16 @@ class CampaignMonitorMemberDOD extends DataExtension {
 	private static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
 
 	/**
+	 * array of fields where the member value is set as the default for the
+	 * custom field ...
+	 * The should be like this
+	 *
+	 *     CustomFieldCode => MemberFieldOrMethod
+	 * @var array
+	 */
+	private static $custom_fields_member_field_or_method_map = array();
+
+	/**
 	 *
 	 *
 	 * @var null | CampaignMonitorAPIConnector
@@ -73,6 +83,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$field = CompositeField::create($subscribeField);
 				$field->addExtraClass("CMFieldsCustomFieldsHolder");
 				//add custom fields
+				$linkedMemberFields = $this->Config()->get("custom_fields_member_field_or_method_map");
 				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
 				foreach($customFields as $customField) {
 					$customFormField = $customField->getFormField("CMCustomField");
@@ -81,6 +92,18 @@ class CampaignMonitorMemberDOD extends DataExtension {
 							if($customFieldObject->Key == $customField->Title) {
 								$customFormField->setValue($customFieldObject->Value);
 							}
+						}
+					}
+					if(isset($linkedMemberFields[$custom->Code])) {
+						$fieldOrMethod = $linkedMemberFields[$custom->Code];
+						if($this->owner->hasMethod($fieldOrMethod) {
+							$value = $this->owner->$fieldOrMethod();
+						}
+						else {
+							$value = $this->owner->$fieldOrMethod;
+						}
+						if($value) {
+							$customFormField->setValue($value);
 						}
 					}
 					$field->push($customFormField);
