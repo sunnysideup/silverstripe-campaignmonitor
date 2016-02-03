@@ -19,6 +19,10 @@ class CampaignMonitorAddOldCampaigns extends BuildTask {
 	 * standard method
 	 */
 	function run($request) {
+		$faultyOnes = CampaignMonitorCampaign::get()->where("(\"CampaignID\" = '' OR \"CampaignID\" IS NULL) AND (\"WebVersionURL\" IS NOT NULL && \"WebVersionURL\" <> '')");
+		foreach($faultyOnes as $faultyOne) {
+			$faultyOne->delete();
+		}
 		$api = CampaignMonitorAPIConnector::create();
 		$api->init();
 		$campaigns = $api->getCampaigns();

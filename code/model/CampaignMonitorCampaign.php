@@ -88,17 +88,19 @@ class CampaignMonitorCampaign extends DataObject {
 		$fields->makeFieldReadonly("WebVersionTextURL");
 		$fields->makeFieldReadonly("SentDate");
 		$fields->makeFieldReadonly("HasBeenSent");
+		$fields->makeFieldReadonly("Hash");
 		//removed
 		$fields->removeFieldFromTab("Root.Main", "CreatedFromWebsite");
 		$fields->removeFieldFromTab("Root.Main", "SecurityCode");
 		//pages
-		$source = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
+		$pages = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
 		$fields->removeFieldFromTab("Root.Main", "Pages");
-		if(count($source))  {
-			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $source));
+		if(count($pages))  {
+			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $pages));
 		}
 		if($this->ExistsOnCampaignMonitorCheck()){
 			$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
+			$fields->removeFieldFromTab("Root.Main", "Hash");
 			$fields->removeFieldFromTab("Root.Main", "CampaignMonitorCampaignStyleID");
 			if(!$this->HasBeenSentCheck()) {
 				$fields->addFieldToTab("Root.Main", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>"), "CampaignID");
@@ -158,8 +160,7 @@ class CampaignMonitorCampaign extends DataObject {
 		if(is_array($extension) && count($extension)) {
 			return $extension[0];
 		}
-
-
+		$html = "";
 		if(class_exists('\Pelago\Emogrifier')) {
 			$allCSS = "";
 			$cssFileLocations = $this->getCSSFileLocations();
@@ -188,6 +189,9 @@ class CampaignMonitorCampaign extends DataObject {
 				$emogrifier->removeAllowedMediaType($type);
 			}
 			$html = $emogrifier->emogrify();
+		}
+		else {
+			user_error("Please include Emogrifier module");
 		}
 		return $html;
 	}
@@ -229,7 +233,7 @@ class CampaignMonitorCampaign extends DataObject {
 		if(!$this->Hash) {
 			$this->Hash = substr(hash("md5", uniqid()), 0, 7);
 		}
-		if(!$this->ExistsOnCampaignMonitorCheck()) {
+		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
 			$this->CampaignID = null;
 		}
 	}
@@ -242,7 +246,7 @@ class CampaignMonitorCampaign extends DataObject {
 				$this->write();
 			}
 		}
-		if(!$this->ExistsOnCampaignMonitorCheck()  && $this->CreateFromWebsite) {
+		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
 			$api->createCampaign($this);
 		}
@@ -254,7 +258,7 @@ class CampaignMonitorCampaign extends DataObject {
 			//do nothing
 		}
 		else {
-			if($this->ExistsOnCampaignMonitorCheck()) {
+			if($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
 				$api = $this->getAPI();
 				$api->deleteCampaign($this->CampaignID);
 			}
@@ -278,6 +282,11 @@ class CampaignMonitorCampaign extends DataObject {
 	private $_hasBeenSent = null;
 
 	public function HasBeenSentCheck(){
+		//lazy check
+		if($this->HasBeenSent || $this->WebVersionURL) {
+			return true;
+		}
+		//real check
 		if($this->_hasBeenSent === null) {
 			if(!$this->CampaignID) {
 				$this->_hasBeenSent = false;
@@ -305,13 +314,20 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private $_existsOnCampaignMonitorCheck = null;
 
-	public function ExistsOnCampaignMonitorCheck(){
-		if($this->_existsOnCampaignMonitorCheck === null) {
+	public function ExistsOnCampaignMonitorCheck($forceRecheck = false){
+		//lazy check
+		if($this->HasBeenSent) {
+			return true;
+		}
+		//real check
+		if($this->_existsOnCampaignMonitorCheck === null || $forceRecheck) {
+			$this->_existsOnCampaignMonitorCheck = false;
 			if(!$this->CampaignID) {
-				$this->_existsOnCampaignMonitorCheck = false;
+				//do nothing
 			}
 			else {
 				$api = $this->getAPI();
+				//check drafts
 				$result = $this->api->getDrafts();
 				if(isset($result)) {
 					foreach($result as $key => $campaign) {
@@ -322,7 +338,16 @@ class CampaignMonitorCampaign extends DataObject {
 					}
 				}
 				else{
-					$this->_existsOnCampaignMonitorCheck = false;
+					//check sent ones
+					$result = $this->api->getCampaigns();
+					if(isset($result)) {
+						foreach($result as $key => $campaign) {
+							if($this->CampaignID == $campaign->CampaignID) {
+								$this->_existsOnCampaignMonitorCheck = true;
+								break;
+							}
+						}
+					}
 				}
 			}
 		}

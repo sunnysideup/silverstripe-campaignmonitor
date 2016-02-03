@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaignStyle" namespace="" name="CampaignMonitorCampaignStyle" abstract="false" final="false" start="9" end="169">
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorCampaignStyle" namespace="" name="CampaignMonitorCampaignStyle" abstract="false" final="false" start="9" end="180">
   <docblock>
     <description/>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
@@ -23,19 +23,20 @@
       <return type="array"/>
     </docblock>
   </method>
-  <method name="getCSSFoldersToSearch" start="72" end="83" abstract="false" final="false" static="false" visibility="public">
+  <method name="getCSSFoldersToSearch" start="72" end="84" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="array"/>
     </docblock>
   </method>
-  <method name="getFileLocation" start="89" end="101" abstract="false" final="false" static="false" visibility="public">
+  <method name="getFileLocation" start="90" end="105" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return description="| null" type="string"/>
     </docblock>
   </method>
-  <method name="getCSSFiles" start="103" end="105" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getCSSFilesAsArray" start="107" end="141" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="requireDefaultRecords" start="143" end="167" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getCSSFiles" start="107" end="109" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getCSSFilesAsArray" start="111" end="145" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="requireDefaultRecords" start="147" end="171" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="onBeforeWrite" start="173" end="178" abstract="false" final="false" static="false" visibility="public"/>
 </class>

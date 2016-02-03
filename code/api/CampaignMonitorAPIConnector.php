@@ -172,9 +172,10 @@ class CampaignMonitorAPIConnector extends Object {
 			print_r($result);
 			echo "</pre>";
 			echo "<hr /><hr /><hr />";
+			ob_flush(); flush();
 		}
 		if($result->was_successful()) {
-			if($result->response && is_array($result->response)) {
+			if(isset($result->response)) {
 				return $result->response;
 			}
 			return true;
@@ -312,7 +313,7 @@ class CampaignMonitorAPIConnector extends Object {
 	 * Creates a new list based on the provided details.
 	 * Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional
 	 *
-	 * @param string $title - he page to redirect subscribers to when they unsubscribeThe list title
+	 * @param string $title - the page to redirect subscribers to when they unsubscribeThe list title
 	 * @param string $unsubscribePage - The page to redirect subscribers to when they unsubscribe
 	 * @param boolean $confirmedOptIn - Whether this list requires confirmation of subscription
 	 * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
@@ -342,6 +343,68 @@ class CampaignMonitorAPIConnector extends Object {
 			$result,
 			"POST /api/v3.1/lists/{clientID}",
 			"Created with ID"
+		);
+	}
+
+	/**
+	 * Creates custom field for list
+	 *
+	 * @param string $listID - list ID
+	 * @param string $type - type of custom field
+	 * @param string $title - field type
+	 * @param array $options - options for dropdown field type
+	 *
+	 * @return CS_REST_Wrapper_Result A successful response will be the key of the newly created custom field
+	 */
+	public function createCustomField($listID, $visible, $type, $title, $options = array()){
+		$wrap = new CS_REST_Lists($listID, $this->getAuth());
+		switch ($type) {
+			case "text":
+				$type = CS_REST_CUSTOM_FIELD_TYPE_TEXT;
+				break;
+			case "number":
+				$type = CS_REST_CUSTOM_FIELD_TYPE_NUMBER;
+				break;
+			case "multi_select_one":
+				$type = CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTONE;
+				break;
+			case "multi_select_many":
+				$type = CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTMANY;
+				break;
+			case "date":
+				$type = CS_REST_CUSTOM_FIELD_TYPE_DATE;
+				break;
+			default:
+				user_error("You must select one from text, number, multi_select_one, multi_select_many, date)");
+		}
+		$result = $wrap->create_custom_field(array(
+			'FieldName' => $title,
+			'DataType' => $type,
+			'Options' => $options,
+			'VisibleInPreferenceCenter' => $visible ? true : false
+		));
+		return $this->returnResult(
+			$result,
+			"POST /api/v3/lists/{ID}/customfields",
+			"Created Custom Field for $listID "
+		);
+	}
+
+	/**
+	 * Creates custom field for list
+	 *
+	 * @param string $listID - list ID
+	 * @param string $key
+	 *
+	 * @return CS_REST_Wrapper_Result
+	 */
+	public function deleteCustomField($listID, $key){
+		$wrap = new CS_REST_Lists($listID, $this->getAuth());
+		$result = $wrap->delete_custom_field($key);
+		return $this->returnResult(
+			$result,
+			"DELETE /api/v3/lists/{ID}/{Key}",
+			"Delete Custom Field for $listID with key $key"
 		);
 	}
 
@@ -438,7 +501,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/lists/{ID}/active",
-			"Got subscribers"
+			"Got active subscribers"
 		);
 	}
 
@@ -490,7 +553,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/lists/{ID}/unconfirmed",
-			"Got subscribers"
+			"Got unconfimred subscribers"
 		);
 	}
 
@@ -542,7 +605,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/lists/{ID}/bounced",
-			"Got subscribers"
+			"Got bounced subscribers"
 		);
 
 	}
@@ -596,7 +659,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"GET /api/v3.1/lists/{ID}/unsubscribed",
-			"Got subscribers"
+			"Got unsubscribed subscribers"
 		);
 	}
 
@@ -989,8 +1052,18 @@ class CampaignMonitorAPIConnector extends Object {
 	){
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+		foreach($customFields as $key => $customFieldValue) {
+			if(!is_array($customFields[$key])) {
+				$customFields[] = array(
+					"Key" => $key,
+					"Value" => $customFieldValue,
+					"Clear" => $customFieldValue ? false : true
+				);
+				unset($customFields[$key]);
+			}
+		}
 		$result = $wrap->add(
-			array(
+			$request = array(
 				'EmailAddress' => $member->Email,
 				'Name' => $member->getName(),
 				'CustomFields' => $customFields,
@@ -1037,11 +1110,22 @@ class CampaignMonitorAPIConnector extends Object {
 		if(!$oldEmailAddress) {
 			$oldEmailAddress = $member->Email;
 		}
+		foreach($customFields as $key => $customFieldValue) {
+			if(!is_array($customFields[$key])) {
+				$customFields[] = array(
+					"Key" => $key,
+					"Value" => $customFieldValue,
+					"Clear" => $customFieldValue ? false : true
+				);
+				unset($customFields[$key]);
+			}
+		}
 		//require_once '../../csrest_subscribers.php';
 		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+		$request = array();
 		$result = $wrap->update(
-			$oldEmailAddress,
-			array(
+			$request[] = $oldEmailAddress,
+			$request[] = array(
 				'EmailAddress' => $member->Email,
 				'Name' => $member->getName(),
 				'CustomFields' => $customFields,
@@ -1052,7 +1136,7 @@ class CampaignMonitorAPIConnector extends Object {
 		return $this->returnResult(
 			$result,
 			"PUT /api/v3.1/subscribers/{list id}.{format}?email={email}",
-			"Subscribed with code ..."
+			"updated with email $oldEmailAddress ..."
 		);
 	}
 
@@ -1095,6 +1179,16 @@ class CampaignMonitorAPIConnector extends Object {
 			}
 			elseif(isset($customFields[$member->Email])) {
 				$customFieldsForMember = $customFields[$member->Email];
+			}
+			foreach($customFieldsForMember as $key => $customFieldValue) {
+				if(!is_array($customFieldsForMember[$key])) {
+					$customFieldsForMember[] = array(
+						"Key" => $key,
+						"Value" => $customFieldValue,
+						"Clear" => $customFieldValue ? false : true
+					);
+					unset($customFieldsForMember[$key]);
+				}
 			}
 			if($member instanceof Member) {
 				$importArray[] = Array(
@@ -1234,6 +1328,8 @@ class CampaignMonitorAPIConnector extends Object {
 		return false;
 	}
 
+	private static $_get_subscriber = array();
+
 	/**
 	 * Gets a subscriber details, including custom fields
 	 *
@@ -1255,17 +1351,24 @@ class CampaignMonitorAPIConnector extends Object {
 	 * }
 	 *
 	 */
-	function getSubscriber($listID, $member){
+	function getSubscriber($listID, $member, $cacheIsOK = true){
 		if($member instanceof Member) {
 			$member = $member->Email;
 		}
-		$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
-		$result = $wrap->get($member);
-		return $this->returnResult(
-			$result,
-			"GET /api/v3.1/subscribers/{list id}.{format}?email={email}",
-			"got subscriber"
-		);
+		$key = $listID."_".$member;
+		if(isset(self::$_get_subscriber[$key]) && $cacheIsOK) {
+			//do nothing
+		}
+		else {
+			$wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+			$result = $wrap->get($member);
+			self::$_get_subscriber[$key] = $this->returnResult(
+				$result,
+				"GET /api/v3.1/subscribers/{list id}.{format}?email={email}",
+				"got subscribed subscriber"
+			);
+		}
+		return self::$_get_subscriber[$key];
 	}
 
 	/**

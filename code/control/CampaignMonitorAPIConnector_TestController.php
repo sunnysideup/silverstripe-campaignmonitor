@@ -220,13 +220,21 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 
 		//create list
 		$result = $this->api->createList(
-			$this->egData["listTitle"]."27",
+			$this->egData["listTitle"],
 			$this->egData["unsubscribePage"],
 			$this->egData["confirmedOptIn"],
 			$this->egData["confirmationSuccessPage"],
 			$this->egData["unsubscribeSetting"]
 		);
 		$this->egData["tempListID"] = $result;
+
+		$customFieldKey = $this->api->createCustomField(
+			$this->egData["tempListID"],
+			$visible = true,
+			$type = "multi_select_one",
+			$title = "are you happy?",
+			$options = array("YES", "NO")
+		);
 
 		for($i = 0; $i < 5; $i++) {
 			$member[$i] = new Member();
@@ -242,20 +250,21 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 			$result = $this->api->addSubscriber(
 				$this->egData["tempListID"],
 				$member[$i],
-				$customFields = array(),
+				$customFields = array($customFieldKey => "NO"),
 				$resubscribe = true,
 				$restartSubscriptionBasedAutoResponders = false
 			);
+			$result = $this->api->updateSubscriber(
+				$this->egData["tempListID"],
+				$email,
+				$member[$i],
+				$customFields = array($customFieldKey => "YES"),
+				$resubscribe = true,
+				$restartSubscriptionBasedAutoResponders = false
+			);
+			sleep(1);
 		}
 
-		$result = $this->api->updateSubscriber(
-			$this->egData["tempListID"],
-			"test_1_.".$this->egData["oldEmailAddress"],
-			$member[1],
-			$customFields = array(),
-			$resubscribe = true,
-			$restartSubscriptionBasedAutoResponders = false
-		);
 
 		/*
 		$result = $this->api->addSubscribers(
@@ -312,10 +321,12 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 				$member[$i]
 			);
 			$member[$i]->delete();
+			sleep(1);
 		}
 
 		//delete list
 		if($this->egData["tempListID"]) {
+			$this->api->deleteCustomField($this->egData["tempListID"], $customFieldKey);
 			$result = $this->api->deleteList($this->egData["tempListID"]);
 		}
 
