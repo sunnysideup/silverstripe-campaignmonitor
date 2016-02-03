@@ -91,7 +91,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 					if($currentValues && isset($currentValues->CustomFields)) {
 						foreach($currentValues->CustomFields as $customFieldObject) {
 							if($customFieldObject->Key == $customField->Title) {
-								if($value $customFieldObject->Value) {
+								if($value = $customFieldObject->Value) {
 									$valueSet = true;
 								}
 								$customFormField->setValue($value);
