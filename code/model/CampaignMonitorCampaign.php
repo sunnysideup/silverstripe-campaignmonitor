@@ -190,6 +190,9 @@ class CampaignMonitorCampaign extends DataObject {
 			}
 			$html = $emogrifier->emogrify();
 		}
+		else {
+			user_error("Please include Emogrifier module");
+		}
 		return $html;
 	}
 
