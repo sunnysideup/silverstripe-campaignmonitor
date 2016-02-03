@@ -233,7 +233,7 @@ class CampaignMonitorCampaign extends DataObject {
 		if(!$this->Hash) {
 			$this->Hash = substr(hash("md5", uniqid()), 0, 7);
 		}
-		if(!$this->ExistsOnCampaignMonitorCheck()) {
+		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
 			$this->CampaignID = null;
 		}
 	}
@@ -246,7 +246,7 @@ class CampaignMonitorCampaign extends DataObject {
 				$this->write();
 			}
 		}
-		if(!$this->ExistsOnCampaignMonitorCheck($forceCheck = true)  && $this->CreateFromWebsite) {
+		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
 			$api->createCampaign($this);
 		}
@@ -258,7 +258,7 @@ class CampaignMonitorCampaign extends DataObject {
 			//do nothing
 		}
 		else {
-			if($this->ExistsOnCampaignMonitorCheck()) {
+			if($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
 				$api = $this->getAPI();
 				$api->deleteCampaign($this->CampaignID);
 			}
@@ -314,13 +314,13 @@ class CampaignMonitorCampaign extends DataObject {
 
 	private $_existsOnCampaignMonitorCheck = null;
 
-	public function ExistsOnCampaignMonitorCheck($forceCheck = false){
+	public function ExistsOnCampaignMonitorCheck($forceRecheck = false){
 		//lazy check
 		if($this->HasBeenSent) {
 			return true;
 		}
 		//real check
-		if($this->_existsOnCampaignMonitorCheck === null || $forceCheck) {
+		if($this->_existsOnCampaignMonitorCheck === null || $forceRecheck) {
 			$this->_existsOnCampaignMonitorCheck = false;
 			if(!$this->CampaignID) {
 				//do nothing
