@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSyncAllMembers" namespace="" name="CampaignMonitorSyncAllMembers" abstract="false" final="false" start="16" end="343">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/tasks" file="CampaignMonitorSyncAllMembers.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/tasks/CampaignMonitorSyncAllMembers.php" size="9899" time="2016-01-12T20:27:18+00:00" unixtime="1452630438" sha1="d79d31704a8df02992df1b3e13f156a4ea31b9d0" relative="code/tasks/CampaignMonitorSyncAllMembers.php"/>
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/tasks" file="CampaignMonitorSyncAllMembers.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/tasks/CampaignMonitorSyncAllMembers.php" size="9899" time="2016-01-27T12:23:03+13:00" unixtime="1453850583" sha1="d79d31704a8df02992df1b3e13f156a4ea31b9d0" relative="code/tasks/CampaignMonitorSyncAllMembers.php"/>
   <docblock>
     <description compact="Moves all Members to a Campaign Monitor List">Requires the Member Object
 to have a method `IsBlackListed`

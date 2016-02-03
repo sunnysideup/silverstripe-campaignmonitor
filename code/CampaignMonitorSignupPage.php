@@ -56,7 +56,8 @@ class CampaignMonitorSignupPage extends Page {
 	 * @inherited
 	 */
 	private static $has_many = array(
-		"CampaignMonitorSegments" => "CampaignMonitorSegment"
+		"CampaignMonitorSegments" => "CampaignMonitorSegment",
+		"CampaignMonitorCustomFields" => "CampaignMonitorCustomField"
 	);
 
 	/**
@@ -122,23 +123,9 @@ class CampaignMonitorSignupPage extends Page {
 		}
 		$gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
 		$gridFieldTemplatesAvailable->setDescription("Ask your developer on how to add more templates");
-		$fields->addFieldToTab('Root.Details',
-			new TabSet('Options',
-				new Tab('MainSettings',
-					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
-					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
-					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
-					new LiteralField('GroupLink', $groupLink),
-					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'),
-					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RelationEditor::create())
-				),
-				new Tab('StartForm',
-					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
-					new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
-					new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
-					new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
-				),
-				new Tab('Confirm',
+		$fields->addFieldToTab('Root.AlternativeContent',
+			new TabSet("AlternativeContentSubHeader",
+					new Tab('Confirm',
 					new TextField('ConfirmTitle', 'Title'),
 					new TextField('ConfirmMenuTitle', 'Menu Title'),
 					new HtmlEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
@@ -152,6 +139,22 @@ class CampaignMonitorSignupPage extends Page {
 					new TextField('SadToSeeYouGoTitle', 'Title'),
 					new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
 					new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
+				)
+			)
+		);
+		$fields->addFieldToTab('Root.Newsletters',
+			new TabSet('Options',
+				new Tab('MainSettings',
+					new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorAPIConnector", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+					new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+					new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
+					new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
+				),
+				new Tab('StartForm',
+					new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
+					new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
+					new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
+					new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
 				),
 				new Tab('Newsletters',
 					new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
@@ -164,7 +167,10 @@ class CampaignMonitorSignupPage extends Page {
 					new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
 					new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
 					new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
-					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>')
+					new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>'),
+					$gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
+					$gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
+					new LiteralField('GroupLink', $groupLink)
 				)
 			)
 		);
@@ -379,11 +385,25 @@ class CampaignMonitorSignupPage extends Page {
 				$obj->write();
 			}
 		}
-		$unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))->exclude(array("SegmentID" => $segmentsAdded));
+		$unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
+			->exclude(array("SegmentID" => $segmentsAdded));
 		foreach($unwantedSegments as $unwantedSegment) {
 			$unwantedSegment->delete();
 		}
-		//CampaignMonitorSegment
+		//add custom fields
+		$customCustomFieldsAdded = array();
+		$customCustomFields = $this->api->getListCustomFields($this->ListID);
+		if($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
+			foreach($customCustomFields as $customCustomField) {
+				$obj = CampaignMonitorCustomField::create_from_campaign_monitor_object($customCustomField, $this->ListID);
+				$customCustomFieldsAdded[$obj->Code] = $obj->Code;
+			}
+		}
+		$unwantedCustomFields = CampaignMonitorCustomField::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
+			->exclude(array("Code" => $customCustomFieldsAdded));
+		foreach($unwantedCustomFields as $unwantedCustomField) {
+			$unwantedCustomField->delete();
+		}
 	}
 
 	public function AddOldCampaigns(){
@@ -466,8 +486,20 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		if($this->ReadyToReceiveSubscribtions()) {
 			// Create fields
 			$member = Member::currentUser();
+			$emailField = null;
+			$emailRequired = true;
 			if(!$member) {
 				$member = new Member();
+			}
+			else{
+				$this->email = $member->Email;
+				if($this->email) {
+					$emailRequired = false;
+					$emailField = new ReadonlyField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email);
+				}
+			}
+			if(!$emailField) {
+				$emailField = new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email);
 			}
 			if($this->ShowAllNewsletterForSigningUp) {
 				$signupField = $member->getCampaignMonitorSignupField(null, "SubscribeManyChoices");
@@ -476,17 +508,20 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				$signupField = $member->getCampaignMonitorSignupField($this->ListID, "SubscribeChoice");
 			}
 			$fields = new FieldList(
-				$signupField,
-				new TextField('CampaignMonitorFirstName', _t("CAMPAIGNMONITORSIGNUPPAGE.FIRSTNAME", 'First Name')),
-				new TextField('CampaignMonitorSurname', _t("CAMPAIGNMONITORSIGNUPPAGE.SURNAME",'Surname')),
-				new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL",'Email'), $this->email)
+				$emailField,
+				$signupField
 			);
 			// Create action
 			$actions = new FieldList(
 				new FormAction('subscribe', _t("CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS", "Update Subscriptions"))
 			);
 			// Create Validators
-			$validator = new RequiredFields('CampaignMonitorEmail');
+			if($emailRequired) {
+				$validator = new RequiredFields('CampaignMonitorEmail');
+			}
+			else {
+				$validator = new RequiredFields();
+			}
 			$form = new Form($this, 'SignupForm', $fields, $actions, $validator);
 			if($member->exists()) {
 				$form->loadDataFrom($member);
@@ -527,11 +562,11 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			if(!$member) {
 				$memberAlreadyLoggedIn = false;
 				$existingMember = Member::get()->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))->First();
-				if($isSubscribe && $existingMember){
+				//if($isSubscribe && $existingMember){
 					//$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
 					//$this->redirectBack();
 					//return;
-				}
+				//}
 				$member = $existingMember;
 				if(!$member) {
 					$newlyCreatedMember = true;
@@ -542,15 +577,15 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 			//logged in: if the member already as someone else then you can't sign up.
 			else {
 				$memberAlreadyLoggedIn = true;
-				$existingMember = Member::get()
-					->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
-					->exclude(array("ID" => $member->ID))
-					->First();
-				if($isSubscribe && $existingMember) {
+				//$existingMember = Member::get()
+				//	->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
+				//	->exclude(array("ID" => $member->ID))
+				//	->First();
+				//if($isSubscribe && $existingMember) {
 					//$form->addErrorMessage('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
 					//$this->redirectBack();
 					//return;
-				}
+				//}
 			}
 
 			//are any choices being made
@@ -565,8 +600,6 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 				if($newlyCreatedMember) {
 					$form->saveInto($member);
 					$member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
-					$member->FirstName = Convert::raw2sql($data["CampaignMonitorFirstName"]);
-					$member->Surname = Convert::raw2sql($data["CampaignMonitorSurname"]);
 					$member->SetPassword = true;
 					$member->Password = Member::create_new_password();
 					$member->write();

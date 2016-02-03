@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage_Controller" namespace="" name="CampaignMonitorSignupPage_Controller" abstract="false" final="false" start="391" end="872">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="27267" time="2016-01-21T08:59:53+00:00" unixtime="1453366793" sha1="cf9145829108a412643ec5d6ee53a883a45e735e" relative="code/CampaignMonitorSignupPage.php"/>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorSignupPage_Controller" namespace="" name="CampaignMonitorSignupPage_Controller" abstract="false" final="false" start="444" end="916">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code" file="CampaignMonitorSignupPage.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/CampaignMonitorSignupPage.php" size="29016" time="2016-02-03T13:06:02+13:00" unixtime="1454457962" sha1="30bdf7b5929404e0a568cfd69e90fa3c4c4dab36" relative="code/CampaignMonitorSignupPage.php"/>
   <extends full="Page_Controller" namespace="" name="Page_Controller" unresolved="true"/>
-  <member name="email" type="string" default="''" visibility="protected" static="false" line="397">
+  <member name="email" type="string" default="''" visibility="protected" static="false" line="450">
     <docblock>
       <description compact="retains email for processing"/>
       <var type="object">
@@ -10,7 +10,7 @@
       </var>
     </docblock>
   </member>
-  <member name="campaign" type="string" default="''" visibility="protected" static="false" line="404">
+  <member name="campaign" type="string" default="''" visibility="protected" static="false" line="457">
     <docblock>
       <description compact="holder for selected campaign"/>
       <var description="| CampaignMonitorCampaign" type="object">
@@ -18,9 +18,9 @@
       </var>
     </docblock>
   </member>
-  <member name="allowed_actions" type="array" default="" visibility="private" static="true" line="406"/>
-  <method name="init" start="423" end="426" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="SignupForm" start="432" end="469" abstract="false" final="false" static="false" visibility="public">
+  <member name="allowed_actions" type="array" default="" visibility="private" static="true" line="459"/>
+  <method name="init" start="476" end="479" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="SignupForm" start="485" end="537" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="creates a subscription form..."/>
       <return type="object">
@@ -28,7 +28,7 @@
       </return>
     </docblock>
   </method>
-  <method name="subscribe" start="478" end="577" abstract="false" final="false" static="false" visibility="public">
+  <method name="subscribe" start="546" end="621" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action subscription form"/>
       <param type="object" variable="$array">
@@ -39,7 +39,7 @@
     <parameter name="data" byreference="false" type="{unknown}"/>
     <parameter name="form" byreference="false" type="{unknown}"/>
   </method>
-  <method name="unsubscribe" start="583" end="593" abstract="false" final="false" static="false" visibility="public">
+  <method name="unsubscribe" start="627" end="637" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="immediately unsubscribe if you are logged in."/>
       <param type="object">
@@ -48,7 +48,7 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="confirm" start="599" end="604" abstract="false" final="false" static="false" visibility="public">
+  <method name="confirm" start="643" end="648" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -57,7 +57,7 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="thankyou" start="610" end="615" abstract="false" final="false" static="false" visibility="public">
+  <method name="thankyou" start="654" end="659" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -66,7 +66,7 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="sadtoseeyougo" start="621" end="626" abstract="false" final="false" static="false" visibility="public">
+  <method name="sadtoseeyougo" start="665" end="670" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -75,7 +75,7 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="preloademail" start="632" end="655" abstract="false" final="false" static="false" visibility="public">
+  <method name="preloademail" start="676" end="699" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -86,31 +86,31 @@
       <type full="SS_HTTPRequest" namespace="" name="SS_HTTPRequest"/>
     </parameter>
   </method>
-  <method name="viewcampaign" start="661" end="668" abstract="false" final="false" static="false" visibility="public">
+  <method name="viewcampaign" start="705" end="712" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to show one campaign..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="viewcampaigntextonly" start="674" end="681" abstract="false" final="false" static="false" visibility="public">
+  <method name="viewcampaigntextonly" start="718" end="725" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to show one campaign TEXT ONLY..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="previewcampaign" start="687" end="696" abstract="false" final="false" static="false" visibility="public">
+  <method name="previewcampaign" start="731" end="740" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to preview one campaign..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="previewcampaigntextonly" start="702" end="709" abstract="false" final="false" static="false" visibility="public">
+  <method name="previewcampaigntextonly" start="746" end="753" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action to preview one campaign TEXT ONLY..."/>
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="Email" start="716" end="718" abstract="false" final="false" static="false" visibility="public">
+  <method name="Email" start="760" end="762" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="object">
@@ -118,7 +118,7 @@
       </return>
     </docblock>
   </method>
-  <method name="HasCampaign" start="724" end="726" abstract="false" final="false" static="false" visibility="public">
+  <method name="HasCampaign" start="768" end="770" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return type="object">
@@ -126,7 +126,7 @@
       </return>
     </docblock>
   </method>
-  <method name="Campaign" start="732" end="734" abstract="false" final="false" static="false" visibility="public">
+  <method name="Campaign" start="776" end="778" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return description="| CampaignMonitorCampaign" type="object">
@@ -134,7 +134,7 @@
       </return>
     </docblock>
   </method>
-  <method name="PreviousCampaignMonitorCampaigns" start="742" end="754" abstract="false" final="false" static="false" visibility="public">
+  <method name="PreviousCampaignMonitorCampaigns" start="786" end="798" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="same as $this-&gt;CampaignMonitorCampaigns() but sorted correctly."/>
       <return description="of CampaignMonitorCampaigns" type="object">
@@ -142,12 +142,12 @@
       </return>
     </docblock>
   </method>
-  <method name="stats" start="760" end="794" abstract="false" final="false" static="false" visibility="public">
+  <method name="stats" start="804" end="838" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action for admins only to see a whole bunch of stats"/>
     </docblock>
   </method>
-  <method name="CampaignStats" start="801" end="821" abstract="false" final="false" static="false" visibility="public">
+  <method name="CampaignStats" start="845" end="865" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="returns a bunch of stats about a campaign IF the user is an admin AND a campaign is selected"/>
       <return description="(html) | false" type="object">
@@ -155,7 +155,7 @@
       </return>
     </docblock>
   </method>
-  <method name="resetsignup" start="827" end="830" abstract="false" final="false" static="false" visibility="public">
+  <method name="resetsignup" start="871" end="874" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="action"/>
       <param type="object">
@@ -164,12 +164,12 @@
     </docblock>
     <parameter name="request" byreference="false" type="{unknown}"/>
   </method>
-  <method name="resetoldcampaigns" start="836" end="845" abstract="false" final="false" static="false" visibility="public">
+  <method name="resetoldcampaigns" start="880" end="889" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="removes all campaigns so that they can be re-imported."/>
     </docblock>
   </method>
-  <method name="JSHackForPreSections" start="851" end="870" abstract="false" final="false" static="false" visibility="private">
+  <method name="JSHackForPreSections" start="895" end="914" abstract="false" final="false" static="false" visibility="private">
     <docblock>
       <description/>
       <return type="object">

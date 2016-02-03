@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector" abstract="false" final="false" start="7" end="1283">
-  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/api" file="CampaignMonitorAPIConnector.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/api/CampaignMonitorAPIConnector.php" size="52560" time="2016-01-19T18:56:08+00:00" unixtime="1453229768" sha1="5d247b22e0fedefe07d0ac04ba043f3d9e3df25a" relative="code/api/CampaignMonitorAPIConnector.php"/>
+<class xmlns="http://xml.phpdox.net/src" full="CampaignMonitorAPIConnector" namespace="" name="CampaignMonitorAPIConnector" abstract="false" final="false" start="7" end="1408">
+  <file path="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/api" file="CampaignMonitorAPIConnector.php" realpath="/var/www/3.2.photowarehouse.co.nz/campaignmonitor/code/api/CampaignMonitorAPIConnector.php" size="47740" time="2016-02-01T16:41:24+13:00" unixtime="1454298084" sha1="a1d7d2a634abc8acd290d9db48e5b426799a4d04" relative="code/api/CampaignMonitorAPIConnector.php"/>
   <docblock>
     <description compact="Main Holder page for Recipes"/>
     <author value="nicolaas [at] sunnysideup.co.nz"/>
@@ -117,7 +117,7 @@
       </return>
     </docblock>
   </method>
-  <method name="returnResult" start="162" end="186" abstract="false" final="false" static="false" visibility="protected">
+  <method name="returnResult" start="162" end="187" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description compact="returns the result or NULL in case of an error"/>
       <param type="object">
@@ -131,7 +131,7 @@
     <parameter name="apiCall" byreference="false" type="{unknown}"/>
     <parameter name="description" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getHttpStatusCode" start="193" end="195" abstract="false" final="false" static="false" visibility="public">
+  <method name="getHttpStatusCode" start="194" end="196" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="returns the HTTP code for the response.">This can be handy for debuging purposes.</description>
       <return type="object">
@@ -139,7 +139,7 @@
       </return>
     </docblock>
   </method>
-  <method name="getFromCache" start="206" end="216" abstract="false" final="false" static="false" visibility="protected">
+  <method name="getFromCache" start="207" end="217" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description/>
       <param type="object" variable="$name">
@@ -151,7 +151,7 @@
     </docblock>
     <parameter name="name" byreference="false" type="{unknown}"/>
   </method>
-  <method name="saveToCache" start="222" end="230" abstract="false" final="false" static="false" visibility="protected">
+  <method name="saveToCache" start="223" end="231" abstract="false" final="false" static="false" visibility="protected">
     <docblock>
       <description/>
       <param type="object" variable="$unserializedValue">
@@ -164,7 +164,7 @@
     <parameter name="unserializedValue" byreference="false" type="{unknown}"/>
     <parameter name="name" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getCampaigns" start="255" end="264" abstract="false" final="false" static="false" visibility="public">
+  <method name="getCampaigns" start="256" end="265" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <return description="A successful response will be an object of the form" type="object">array(
@@ -182,15 +182,15 @@
     }<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
     </docblock>
     <inline>
-      <comment value="require_once '../../csrest_clients.php';" line="256"/>
+      <comment value="require_once '../../csrest_clients.php';" line="257"/>
     </inline>
   </method>
-  <method name="getDrafts" start="266" end="275" abstract="false" final="false" static="false" visibility="public">
+  <method name="getDrafts" start="267" end="276" abstract="false" final="false" static="false" visibility="public">
     <inline>
-      <comment value="require_once '../../csrest_clients.php';" line="267"/>
+      <comment value="require_once '../../csrest_clients.php';" line="268"/>
     </inline>
   </method>
-  <method name="getLists" start="287" end="296" abstract="false" final="false" static="false" visibility="public">
+  <method name="getLists" start="288" end="297" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all subscriber lists the current client has created"/>
       <return description="A successful response will be an object of the form" type="object">array(
@@ -201,17 +201,16 @@
 )<type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/></return>
     </docblock>
     <inline>
-      <comment value="require_once '../../csrest_clients.php';" line="288"/>
+      <comment value="require_once '../../csrest_clients.php';" line="289"/>
     </inline>
   </method>
-  <method name="getScheduled" start="298" end="298" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getSegments" start="300" end="300" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getScheduled" start="299" end="299" abstract="false" final="false" static="false" visibility="public"/>
   <method name="getSuppressionlist" start="302" end="302" abstract="false" final="false" static="false" visibility="public"/>
   <method name="getTemplates" start="304" end="304" abstract="false" final="false" static="false" visibility="public"/>
   <method name="createList" start="324" end="347" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Creates a new list based on the provided details.">Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional</description>
-      <param description="- he page to redirect subscribers to when they unsubscribeThe list title" type="string" variable="$title"/>
+      <param description="- the page to redirect subscribers to when they unsubscribeThe list title" type="string" variable="$title"/>
       <param description="- The page to redirect subscribers to when they unsubscribe" type="string" variable="$unsubscribePage"/>
       <param description="- Whether this list requires confirmation of subscription" type="boolean" variable="$confirmedOptIn"/>
       <param description="- The page to redirect subscribers to when they confirm their subscription" type="string" variable="$confirmationSuccessPage"/>
@@ -231,7 +230,36 @@
       <comment value="is not recognised" line="328"/>
     </inline>
   </method>
-  <method name="deleteList" start="354" end="363" abstract="false" final="false" static="false" visibility="public">
+  <method name="createCustomField" start="359" end="391" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates custom field for list"/>
+      <param description="- list ID" type="string" variable="$listID"/>
+      <param description="- type of custom field" type="string" variable="$type"/>
+      <param description="- field type" type="string" variable="$title"/>
+      <param description="- options for dropdown field type" type="array" variable="$options"/>
+      <return description="A successful response will be the key of the newly created custom field" type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="visible" byreference="false" type="{unknown}"/>
+    <parameter name="type" byreference="false" type="{unknown}"/>
+    <parameter name="title" byreference="false" type="{unknown}"/>
+    <parameter name="options" byreference="false" type="array" default=""/>
+  </method>
+  <method name="deleteCustomField" start="401" end="409" abstract="false" final="false" static="false" visibility="public">
+    <docblock>
+      <description compact="Creates custom field for list"/>
+      <param description="- list ID" type="string" variable="$listID"/>
+      <param type="string" variable="$key"/>
+      <return type="object">
+        <type full="CS_REST_Wrapper_Result" namespace="" name="CS_REST_Wrapper_Result"/>
+      </return>
+    </docblock>
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <parameter name="key" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="deleteList" start="416" end="425" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Deletes an existing list from the system"/>
       <param type="object" variable="$listID">
@@ -243,10 +271,10 @@
     </docblock>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="355"/>
+      <comment value="require_once '../../csrest_lists.php';" line="417"/>
     </inline>
   </method>
-  <method name="getList" start="383" end="392" abstract="false" final="false" static="false" visibility="public">
+  <method name="getList" start="445" end="454" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets the basic details of the current list"/>
       <param type="object" variable="$listID">
@@ -266,10 +294,10 @@
     </docblock>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="384"/>
+      <comment value="require_once '../../csrest_lists.php';" line="446"/>
     </inline>
   </method>
-  <method name="getActiveSubscribers" start="429" end="444" abstract="false" final="false" static="false" visibility="public">
+  <method name="getActiveSubscribers" start="491" end="506" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all active subscribers added since the given date"/>
       <param type="object" variable="$listID">
@@ -311,10 +339,10 @@
     <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
     <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="430"/>
+      <comment value="require_once '../../csrest_lists.php';" line="492"/>
     </inline>
   </method>
-  <method name="getUnconfirmedSubscribers" start="481" end="496" abstract="false" final="false" static="false" visibility="public">
+  <method name="getUnconfirmedSubscribers" start="543" end="558" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all unconfirmed subscribers added since the given date"/>
       <param type="object" variable="$listID">
@@ -356,10 +384,10 @@
     <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
     <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="482"/>
+      <comment value="require_once '../../csrest_lists.php';" line="544"/>
     </inline>
   </method>
-  <method name="getBouncedSubscribers" start="533" end="549" abstract="false" final="false" static="false" visibility="public">
+  <method name="getBouncedSubscribers" start="595" end="611" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all bounced subscribers who have bounced out since the given date"/>
       <param type="object" variable="$listID">
@@ -401,10 +429,10 @@
     <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
     <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="534"/>
+      <comment value="require_once '../../csrest_lists.php';" line="596"/>
     </inline>
   </method>
-  <method name="getUnsubscribedSubscribers" start="587" end="602" abstract="false" final="false" static="false" visibility="public">
+  <method name="getUnsubscribedSubscribers" start="649" end="664" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all unsubscribed subscribers who have unsubscribed since the given date"/>
       <param type="object" variable="$listID">
@@ -446,10 +474,10 @@
     <parameter name="sortByField" byreference="false" type="string" default="&quot;DATE&quot;"/>
     <parameter name="sortDirection" byreference="false" type="string" default="&quot;DESC&quot;"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="588"/>
+      <comment value="require_once '../../csrest_lists.php';" line="650"/>
     </inline>
   </method>
-  <method name="updateList" start="618" end="638" abstract="false" final="false" static="false" visibility="public">
+  <method name="updateList" start="680" end="700" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Updates the details of an existing list Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional"/>
       <param description="- he page to redirect subscribers to when they unsubscribeThe list title" type="string" variable="$title"/>
@@ -472,10 +500,18 @@
     <parameter name="addUnsubscribesToSuppList" byreference="false" type="boolean" default="true"/>
     <parameter name="scrubActiveWithSuppList" byreference="false" type="boolean" default="true"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="619"/>
+      <comment value="require_once '../../csrest_lists.php';" line="681"/>
     </inline>
   </method>
-  <method name="getListStats" start="673" end="682" abstract="false" final="false" static="false" visibility="public">
+  <method name="getSegments" start="702" end="713" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+    <inline>
+      <comment value="require_once '../../csrest_lists.php';" line="703"/>
+      <comment value="we need to do this afterwards otherwise the definition below" line="705"/>
+      <comment value="is not recognised" line="706"/>
+    </inline>
+  </method>
+  <method name="getListStats" start="748" end="757" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets statistics for list subscriptions, deletions, bounces and unsubscriptions"/>
       <param type="object" variable="$listID">
@@ -510,23 +546,26 @@
     </docblock>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="674"/>
+      <comment value="require_once '../../csrest_lists.php';" line="749"/>
     </inline>
   </method>
-  <method name="createCampaign" start="689" end="756" abstract="false" final="false" static="false" visibility="public">
+  <method name="getListCustomFields" start="759" end="767" abstract="false" final="false" static="false" visibility="public">
+    <parameter name="listID" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="createCampaign" start="774" end="841" abstract="false" final="false" static="false" visibility="public">
     <parameter name="campaignMonitorCampaign" byreference="false" type="{unknown}"/>
     <parameter name="listIDs" byreference="false" type="array" default=""/>
     <parameter name="segmentIDs" byreference="false" type="array" default=""/>
     <inline>
-      <comment value="require_once '../../csrest_lists.php';" line="694"/>
+      <comment value="require_once '../../csrest_lists.php';" line="779"/>
     </inline>
   </method>
-  <method name="deleteCampaign" start="758" end="766" abstract="false" final="false" static="false" visibility="public">
+  <method name="deleteCampaign" start="843" end="851" abstract="false" final="false" static="false" visibility="public">
     <parameter name="campaignID" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getBounces" start="773" end="773" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getClicks" start="775" end="775" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getSummary" start="799" end="807" abstract="false" final="false" static="false" visibility="public">
+  <method name="getBounces" start="858" end="858" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getClicks" start="860" end="860" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSummary" start="884" end="892" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets a summary of all campaign reporting statistics"/>
       <param type="int" variable="$campaignID"/>
@@ -548,7 +587,7 @@
     </docblock>
     <parameter name="campaignID" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getEmailClientUsage" start="824" end="832" abstract="false" final="false" static="false" visibility="public">
+  <method name="getEmailClientUsage" start="909" end="917" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets the email clients that subscribers used to open the campaign"/>
       <param type="object" variable="$campaignID">
@@ -565,11 +604,11 @@
     </docblock>
     <parameter name="campaignID" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getListsAndSegments" start="834" end="834" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getOpens" start="836" end="836" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getRecipients" start="838" end="838" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getSpam" start="840" end="840" abstract="false" final="false" static="false" visibility="public"/>
-  <method name="getUnsubscribes" start="871" end="886" abstract="false" final="false" static="false" visibility="public">
+  <method name="getListsAndSegments" start="919" end="919" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getOpens" start="921" end="921" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getRecipients" start="923" end="923" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getSpam" start="925" end="925" abstract="false" final="false" static="false" visibility="public"/>
+  <method name="getUnsubscribes" start="956" end="971" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets all unsubscribes recorded for a campaign since the provided date"/>
       <param description="ID of the Campaign" type="int" variable="$campaignID"/>
@@ -603,10 +642,10 @@
     <parameter name="sortByField" byreference="false" type="string" default="&quot;EMAIL&quot;"/>
     <parameter name="sortDirection" byreference="false" type="string" default="&quot;ASC&quot;"/>
     <inline>
-      <comment value="require_once '../../csrest_campaigns.php';" line="872"/>
+      <comment value="require_once '../../csrest_campaigns.php';" line="957"/>
     </inline>
   </method>
-  <method name="getListsForEmail" start="927" end="939" abstract="false" final="false" static="false" visibility="public">
+  <method name="getListsForEmail" start="1012" end="1024" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets the lists across a client to which a subscriber with a particular email address belongs."/>
       <param description="| Member $email Subscriber's email address (or Member)" type="string"/>
@@ -621,10 +660,10 @@
     </docblock>
     <parameter name="member" byreference="false" type="{unknown}"/>
     <inline>
-      <comment value="require_once '../../csrest_clients.php';" line="931"/>
+      <comment value="require_once '../../csrest_clients.php';" line="1016"/>
     </inline>
   </method>
-  <method name="addSubscriber" start="961" end="984" abstract="false" final="false" static="false" visibility="public">
+  <method name="addSubscriber" start="1046" end="1079" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Adds a new subscriber to the specified list"/>
       <param type="object" variable="$listID">
@@ -654,10 +693,10 @@
     <parameter name="resubscribe" byreference="false" type="boolean" default="true"/>
     <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="boolean" default="false"/>
     <inline>
-      <comment value="require_once '../../csrest_subscribers.php';" line="968"/>
+      <comment value="require_once '../../csrest_subscribers.php';" line="1053"/>
     </inline>
   </method>
-  <method name="updateSubscriber" start="1007" end="1035" abstract="false" final="false" static="false" visibility="public">
+  <method name="updateSubscriber" start="1102" end="1141" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Updates an existing subscriber (email, name, state, or custom fields) in the specified list.">The update is performed even for inactive subscribers, but will return an error in the event of the
 given email not existing in the list.</description>
@@ -691,10 +730,10 @@ given email not existing in the list.</description>
     <parameter name="resubscribe" byreference="false" type="boolean" default="true"/>
     <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="boolean" default="false"/>
     <inline>
-      <comment value="require_once '../../csrest_subscribers.php';" line="1018"/>
+      <comment value="require_once '../../csrest_subscribers.php';" line="1123"/>
     </inline>
   </method>
-  <method name="addSubscribers" start="1058" end="1096" abstract="false" final="false" static="false" visibility="public">
+  <method name="addSubscribers" start="1164" end="1212" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Updates an existing subscriber (email, name, state, or custom fields) in the specified list.">The update is performed even for inactive subscribers, but will return an error in the event of the
 given email not existing in the list.</description>
@@ -728,10 +767,10 @@ given email not existing in the list.</description>
     <parameter name="queueSubscriptionBasedAutoResponders" byreference="false" type="boolean" default="false"/>
     <parameter name="restartSubscriptionBasedAutoResponders" byreference="false" type="boolean" default="false"/>
     <inline>
-      <comment value="require_once '../../csrest_subscribers.php';" line="1066"/>
+      <comment value="require_once '../../csrest_subscribers.php';" line="1172"/>
     </inline>
   </method>
-  <method name="deleteSubscriber" start="1104" end="1115" abstract="false" final="false" static="false" visibility="public">
+  <method name="deleteSubscriber" start="1220" end="1231" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description/>
       <param type="object" variable="$listID">
@@ -747,7 +786,7 @@ given email not existing in the list.</description>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
   </method>
-  <method name="unsubscribeSubscriber" start="1125" end="1136" abstract="false" final="false" static="false" visibility="public">
+  <method name="unsubscribeSubscriber" start="1241" end="1252" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Unsubscribes the given subscriber from the current list"/>
       <param type="object" variable="$listID">
@@ -763,7 +802,7 @@ given email not existing in the list.</description>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getSubscriberExistsForThisList" start="1146" end="1161" abstract="false" final="false" static="false" visibility="public">
+  <method name="getSubscriberExistsForThisList" start="1262" end="1277" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Is this user part of this list at all?"/>
       <param type="object" variable="$listID">
@@ -779,7 +818,7 @@ given email not existing in the list.</description>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getSubscriberCanReceiveEmailsForThisList" start="1171" end="1188" abstract="false" final="false" static="false" visibility="public">
+  <method name="getSubscriberCanReceiveEmailsForThisList" start="1287" end="1304" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Can we send e-mails to this person in the future for this list?"/>
       <param type="object" variable="$listID">
@@ -795,7 +834,7 @@ given email not existing in the list.</description>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getSubscriberCanNoLongerReceiveEmailsForThisList" start="1198" end="1213" abstract="false" final="false" static="false" visibility="public">
+  <method name="getSubscriberCanNoLongerReceiveEmailsForThisList" start="1314" end="1329" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="This e-mail / user has been banned from a list."/>
       <param type="object" variable="$listID">
@@ -811,7 +850,8 @@ given email not existing in the list.</description>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
   </method>
-  <method name="getSubscriber" start="1236" end="1247" abstract="false" final="false" static="false" visibility="public">
+  <member name="_get_subscriber" type="array" default="" visibility="private" static="true" line="1331"/>
+  <method name="getSubscriber" start="1354" end="1372" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets a subscriber details, including custom fields"/>
       <param type="object" variable="$listID">
@@ -835,8 +875,9 @@ given email not existing in the list.</description>
     </docblock>
     <parameter name="listID" byreference="false" type="{unknown}"/>
     <parameter name="member" byreference="false" type="{unknown}"/>
+    <parameter name="cacheIsOK" byreference="false" type="boolean" default="true"/>
   </method>
-  <method name="getHistory" start="1270" end="1281" abstract="false" final="false" static="false" visibility="public">
+  <method name="getHistory" start="1395" end="1406" abstract="false" final="false" static="false" visibility="public">
     <docblock>
       <description compact="Gets a subscriber details, including custom fields"/>
       <param type="object" variable="$listID">
