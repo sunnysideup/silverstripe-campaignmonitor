@@ -83,7 +83,7 @@ class CampaignMonitorMemberDOD extends DataExtension {
 				$field = CompositeField::create($subscribeField);
 				$field->addExtraClass("CMFieldsCustomFieldsHolder");
 				//add custom fields
-				$linkedMemberFields = $this->Config()->get("custom_fields_member_field_or_method_map");
+				$linkedMemberFields = Config::inst()->get("CampaignMonitorMemberDOD", "custom_fields_member_field_or_method_map");
 				$customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
 				foreach($customFields as $customField) {
 					$valueSet = false;
