@@ -445,6 +445,24 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 
 	/**
 	 * retains email for processing
+	 * @var boolean
+	 */
+	protected $isThankYou = false;
+
+	/**
+	 * retains email for processing
+	 * @var boolean
+	 */
+	protected $isUnsubscribe = false;
+
+	/**
+	 * retains email for processing
+	 * @var boolean
+	 */
+	protected $isConfirm = false;
+
+	/**
+	 * retains email for processing
 	 * @var String
 	 */
 	protected $email = '';
@@ -644,6 +662,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$this->Title = $this->ConfirmTitle;
 		$this->MenuTitle = $this->ConfirmMenuTitle;
 		$this->Content = $this->ConfirmMessage;
+		$this->isConfirm = true;
 		return array();
 	}
 
@@ -655,6 +674,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$this->Title = $this->ThankYouTitle;
 		$this->MenuTitle = $this->ThankYouMenuTitle;
 		$this->Content = $this->ThankYouMessage;
+		$this->isThankYou = true;
 		return array();
 	}
 
@@ -666,6 +686,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 		$this->Title = $this->SadToSeeYouGoTitle;
 		$this->MenuTitle = $this->SadToSeeYouGoMenuTitle;
 		$this->Content = $this->SadToSeeYouGoMessage;
+		$this->isUnsubscribe = true;
 		return array();
 	}
 
@@ -766,7 +787,23 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 * @return Boolean
 	 */
 	function IsThankYou(){
-		return $this->Title == $this->ThankYouTitle ? true : false;
+		return $this->isThankYou;
+	}
+	
+	/**
+	 *
+	 * @return Boolean
+	 */
+	function IsConfirm(){
+		return $this->isConfirm;
+	}
+	
+	/**
+	 *
+	 * @return Boolean
+	 */
+	function IsUnsubscribe(){
+		return $this->isUnsubscribe;
 	}
 	
 	/**
