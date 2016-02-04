@@ -765,6 +765,14 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	 *
 	 * @return Boolean
 	 */
+	function IsThankYou(){
+		return $this->Title == $this->ThankYouTitle ? true : false;
+	}
+	
+	/**
+	 *
+	 * @return Boolean
+	 */
 	function HasCampaign(){
 		return $this->campaign ? true : false;
 	}
@@ -776,6 +784,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller {
 	function Campaign(){
 		return $this->campaign;
 	}
+
 
 	/**
 	 * same as $this->CampaignMonitorCampaigns()
