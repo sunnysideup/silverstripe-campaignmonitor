@@ -243,12 +243,11 @@ class CampaignMonitorCampaign extends DataObject {
 		if($this->Pages()->count() == 0) {
 			if($page = CampaignMonitorSignupPage::get()->first()) {
 				$this->Pages()->add($page);
-				$this->write();
 			}
 		}
 		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
-			$api->createCampaign($this);
+			$api->createTemplate($this);
 		}
 	}
 

@@ -303,6 +303,66 @@ class CampaignMonitorAPIConnector extends Object {
 
 	public function getTemplates(){user_error("This method is still to be implemented, see samples for an example");}
 
+	/**
+	 *
+	 * @param CampaignMonitorCampaign $campaignMonitorCampaign
+	 * @param array $listIDs 
+	 * @param array $segmentIDs
+	 *
+	 * @return CS_REST_Wrapper_Result 
+	 */
+	 
+	function createTemplate($campaignMonitorCampaign,	$listIDs = array(), $segmentIDs = array()){
+		$siteConfig = SiteConfig::current_site_config();
+
+		$subject = $campaignMonitorCampaign->Subject;
+		if(!$subject) {
+			$subject = "no subject set";
+		}
+
+		$name = $campaignMonitorCampaign->Name;
+		if(!$name) {
+			$name = "no name set";
+		}
+
+		$replyTo = $campaignMonitorCampaign->ReplyTo;
+		if(!$replyTo) {
+			$replyTo = $fromEmail;
+		}
+
+		$listID = $campaignMonitorCampaign->Pages()->first()->ListID;
+
+		$wrap = new CS_REST_Templates(null, $this->getAuth());
+		$result = $wrap->create(
+			$this->Config()->get("client_id"),
+			array(
+				'Name' => $name,
+				'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
+				'ZipFileURL' => 'Template Images Zip URL'
+			)
+		);
+		
+		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+			$code = $result->response;
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = true;
+		}
+		else {
+			$code = "Error";
+			if(is_object($result->response)) {
+				$code = $result->response->Code.":".$result->response->Message;
+			}
+		}
+		$campaignMonitorCampaign->CampaignID = $code;
+		$campaignMonitorCampaign->write();
+
+		return $this->returnResult(
+			$result,
+			"POST /api/v3/templates/{clientID}",
+			"Created Templates"
+		);
+	}
+
 
 	/*******************************************************
 	 * lists
