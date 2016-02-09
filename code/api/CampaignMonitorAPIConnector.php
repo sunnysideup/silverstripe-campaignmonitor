@@ -336,8 +336,6 @@ class CampaignMonitorAPIConnector extends Object {
 				'ZipFileURL' => $campaignMonitorCampaign->PreviewLink()
 			)
 		);
-		print_r($result);
-		die("SDF");
 		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
 			$code = $result->response;
 			$campaignMonitorCampaign->CreateFromWebsite = false;
