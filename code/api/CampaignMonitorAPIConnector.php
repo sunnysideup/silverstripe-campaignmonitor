@@ -333,7 +333,7 @@ class CampaignMonitorAPIConnector extends Object {
 			array(
 				'Name' => $name,
 				'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
-				'ZipFileURL' => $campaignMonitorCampaign->PreviewLink()
+				'ZipFileURL' => ''
 			)
 		);
 		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
