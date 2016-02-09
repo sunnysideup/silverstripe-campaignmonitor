@@ -325,11 +325,6 @@ class CampaignMonitorAPIConnector extends Object {
 			$name = "no name set";
 		}
 
-		$replyTo = $campaignMonitorCampaign->ReplyTo;
-		if(!$replyTo) {
-			$replyTo = $fromEmail;
-		}
-
 		$listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
 		$wrap = new CS_REST_Templates(null, $this->getAuth());
