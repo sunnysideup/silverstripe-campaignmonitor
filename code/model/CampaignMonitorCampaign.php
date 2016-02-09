@@ -247,7 +247,7 @@ class CampaignMonitorCampaign extends DataObject {
 		}
 		if(!$this->ExistsOnCampaignMonitorCheck($forceRecheck = true)  && $this->CreateFromWebsite) {
 			$api = $this->getAPI();
-			$api->createCampaign($this);
+			$api->createTemplate($this);
 		}
 	}
 
