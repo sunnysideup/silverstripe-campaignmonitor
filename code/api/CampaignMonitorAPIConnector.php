@@ -301,31 +301,45 @@ class CampaignMonitorAPIConnector extends Object {
 
 	public function getSuppressionlist(){user_error("This method is still to be implemented, see samples for an example");}
 
-	public function getTemplates(){user_error("This method is still to be implemented, see samples for an example");}
+	public function getTemplates(){
+		$wrap = new CS_REST_Clients(
+			$this->Config()->get("client_id"), 
+			$this->getAuth()
+		);
+		$result = $wrap->get_templates();
+		return $this->returnResult(
+			$result,
+			"GET /api/v3/clients/{id}/templates",
+			"Get Templates"
+		);
+	}
+
+	public function getTemplate($templatID){
+		$wrap = new CS_REST_Templates(
+			$templatID, 
+			$this->getAuth()
+		);
+		$result = $wrap->get();
+		return $this->returnResult(
+			$result,
+			"GET /api/v3/templates/{ID}",
+			"Got Summary"
+		);
+	}		
 
 	/**
 	 *
 	 * @param CampaignMonitorCampaign $campaignMonitorCampaign
-	 * @param array $listIDs 
-	 * @param array $segmentIDs
 	 *
 	 * @return CS_REST_Wrapper_Result 
 	 */
-	 
-	function createTemplate($campaignMonitorCampaign,	$listIDs = array(), $segmentIDs = array()){
+	function createTemplate($campaignMonitorCampaign){
 		$siteConfig = SiteConfig::current_site_config();
 
-		$subject = $campaignMonitorCampaign->Subject;
-		if(!$subject) {
-			$subject = "no subject set";
-		}
-
-		$name = $campaignMonitorCampaign->Name;
+		$name = "Template for ".$campaignMonitorCampaign->Name;
 		if(!$name) {
 			$name = "no name set";
 		}
-
-		$listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
 		$wrap = new CS_REST_Templates(null, $this->getAuth());
 		$result = $wrap->create(
@@ -340,23 +354,79 @@ class CampaignMonitorAPIConnector extends Object {
 			$code = $result->response;
 			$campaignMonitorCampaign->CreateFromWebsite = false;
 			$campaignMonitorCampaign->CreatedFromWebsite = true;
+			$campaignMonitorCampaign->TemplateID = $code;
 		}
 		else {
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = false;
 			$code = "Error";
 			if(is_object($result->response)) {
 				$code = $result->response->Code.":".$result->response->Message;
 			}
+			$campaignMonitorCampaign->MessageFromNewsletterServer = $code;
 		}
-		$campaignMonitorCampaign->CampaignID = $code;
 		$campaignMonitorCampaign->write();
-
 		return $this->returnResult(
 			$result,
 			"POST /api/v3/templates/{clientID}",
-			"Created Templates"
+			"Created Template"
 		);
 	}
 
+	/**
+	 *
+	 * @param CampaignMonitorCampaign $campaignMonitorCampaign
+	 * @param string $templateID
+	 *
+	 * @return CS_REST_Wrapper_Result 
+	 */
+	function updateTemplate($campaignMonitorCampaign, $templateID){
+		$siteConfig = SiteConfig::current_site_config();
+
+		$name = "Template for ".$campaignMonitorCampaign->Name;
+		if(!$name) {
+			$name = "no name set";
+		}
+		$wrap = new CS_REST_Templates($templateID, $this->getAuth());
+		$result = $wrap->create(
+			$this->Config()->get("client_id"),
+			array(
+				'Name' => $name,
+				'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
+				'ZipFileURL' => ''
+			)
+		);
+		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+			$code = $result->response;
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = true;
+		}
+		else {
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = false;
+			$code = "Error";
+			if(is_object($result->response)) {
+				$code = $result->response->Code.":".$result->response->Message;
+			}
+			$campaignMonitorCampaign->MessageFromNewsletterServer = $code;
+		}
+		$campaignMonitorCampaign->write();
+		return $this->returnResult(
+			$result,
+			"PUT /api/v3/templates/{ID}",
+			"Updated Template"
+		);
+	}
+
+	function deleteTemplate($templateID) {
+		$wrap = new CS_REST_Templates($templateID, $this->getAuth());
+		$result = $wrap->delete();
+		return $this->returnResult(
+			$result,
+			"DELETE /api/v3/templates/{ID}",
+			"Deleted Template"
+		);
+	}
 
 	/*******************************************************
 	 * lists
@@ -825,10 +895,21 @@ class CampaignMonitorAPIConnector extends Object {
 	 *
 	 *******************************************************/
 
+	/**
+	 *
+	 * 
+	 * @param CampaignMonitorCampaign $campaignMonitorCampaign
+	 * @param array listIDs
+	 * @param array segmentIDs
+	 * @param string templateID - OPTIONAL!
+	 * @param array templateContent - OPTIONAL!
+	 */ 
 	function createCampaign(
 		$campaignMonitorCampaign,
 		$listIDs = array(),
-		$segmentIDs = array()
+		$segmentIDs = array(),
+		$templateID = "",
+		$templateContent = array()
 	){
 		//require_once '../../csrest_lists.php';
 		$siteConfig = SiteConfig::current_site_config();
@@ -861,33 +942,53 @@ class CampaignMonitorAPIConnector extends Object {
 		$listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
 		$wrap = new CS_REST_Campaigns(null, $this->getAuth());
-		$result = $wrap->create(
-			$this->Config()->get("client_id"),
-			array(
-				'Subject' => $subject,
-				'Name' => $name,
-				'FromName' => $fromName,
-				'FromEmail' => $fromEmail,
-				'ReplyTo' => $replyTo,
-				'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
-				'TextUrl' => $campaignMonitorCampaign->PreviewLink("textonly"),
-				'ListIDs' => array($listID)
-			)
-		);
+		if($templateID) {
+			$result = $wrap->create_from_template(
+				$this->Config()->get("client_id"),
+				array(
+					'Subject' => $subject,
+					'Name' => $name,
+					'FromName' => $fromName,
+					'FromEmail' => $fromEmail,
+					'ReplyTo' => $replyTo,
+					'ListIDs' => array($listID),
+					'SegmentIDs' => array(),
+					'TemplateID' => $templateID,
+					'TemplateContent' => $templateContent
+				)
+			);
+		}
+		else {
+			$result = $wrap->create(
+				$this->Config()->get("client_id"),
+				array(
+					'Subject' => $subject,
+					'Name' => $name,
+					'FromName' => $fromName,
+					'FromEmail' => $fromEmail,
+					'ReplyTo' => $replyTo,
+					'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
+					'TextUrl' => $campaignMonitorCampaign->PreviewLink("textonly"),
+					'ListIDs' => array($listID)
+				)
+			);
+		}
 		if(isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
 			$code = $result->response;
 			$campaignMonitorCampaign->CreateFromWebsite = false;
 			$campaignMonitorCampaign->CreatedFromWebsite = true;
+			$campaignMonitorCampaign->CampaignID = $code;
 		}
 		else {
+			$campaignMonitorCampaign->CreateFromWebsite = false;
+			$campaignMonitorCampaign->CreatedFromWebsite = false;
 			$code = "Error";
 			if(is_object($result->response)) {
 				$code = $result->response->Code.":".$result->response->Message;
 			}
+			$campaignMonitorCampaign->MessageFromNewsletterServer = $code;
 		}
-		$campaignMonitorCampaign->CampaignID = $code;
 		$campaignMonitorCampaign->write();
-
 		return $this->returnResult(
 			$result,
 			"CREATE /api/v3/campaigns/{clientID}",
