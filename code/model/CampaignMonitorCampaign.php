@@ -27,7 +27,7 @@ class CampaignMonitorCampaign extends DataObject {
 	 * @var string
 	 */
 	private static $default_template = "CampaignMonitorCampaign";
-	
+
 	private static $db = array(
 		"HasBeenSent" => "Boolean",
 		"MessageFromNewsletterServer" => "Text",
@@ -116,7 +116,7 @@ class CampaignMonitorCampaign extends DataObject {
 				$fields->removeFieldFromTab("Root.Main", "CreateFromWebsite");
 				if(!$this->HasBeenSentCheck()) {
 					$fields->addFieldToTab("Root.Main", new LiteralField("CreateFromWebsiteRemake", "<h2>To edit this newsletter, please first delete it from your newsletter server</h2>"), "CampaignID");
-				}				
+				}
 			}
 			$fields->removeFieldFromTab("Root.Main", "Hash");
 			$fields->removeFieldFromTab("Root.Main", "CampaignMonitorCampaignStyleID");
@@ -158,7 +158,7 @@ class CampaignMonitorCampaign extends DataObject {
 	/**
 	 * returns link to view campaign
 	 * @var return
-	 */ 
+	 */
 	function Link($action = ""){
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("viewcampaign".$action."/".$this->ID."/");
@@ -171,7 +171,7 @@ class CampaignMonitorCampaign extends DataObject {
 	 * returns link to view preview campaign
 	 * this link is used to create templates / campaigns on Campaign Monitor
 	 * @var return
-	 */ 
+	 */
 	function PreviewLink($action = ""){
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("previewcampaign".$action."/".$this->ID."/?hash=".$this->Hash);
@@ -179,11 +179,11 @@ class CampaignMonitorCampaign extends DataObject {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * html for newsletter to be created
 	 * @var return
-	 */ 
+	 */
 	function getNewsletterContent(){
 		$extension = $this->extend("updateNewsletterContent", $content);
 		if(is_array($extension) && count($extension)) {
@@ -369,7 +369,7 @@ class CampaignMonitorCampaign extends DataObject {
 	/**
 	 * checks if the template and/or the campaign exists
 	 * @return boolean
-	 */ 
+	 */
 	public function ExistsOnCampaignMonitorCheck($forceRecheck = false){
 		//lazy check
 		if($this->HasBeenSent) {
