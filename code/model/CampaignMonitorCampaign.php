@@ -173,7 +173,6 @@ class CampaignMonitorCampaign extends DataObject {
 	 * @var return
 	 */ 
 	function PreviewLink($action = ""){
-		return "http://www.photowarehouse.co.nz/test.html";
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("previewcampaign".$action."/".$this->ID."/?hash=".$this->Hash);
 			return Director::absoluteURL($link);
