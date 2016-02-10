@@ -27,6 +27,7 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 		"listID" => "",
 		"listIDtoDelete" => "",
 		"campaignID" => "",
+		"templateID" => "",
 		"listTitle" => "Test List 9",
 		"unsubscribePage" => "http://unsub",
 		"confirmedOptIn" => false,
@@ -177,6 +178,10 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 	function testcampaigns(){
 		$this->setupTests();
 
+		$this->api->getTemplates();
+		flush(); ob_flush();
+
+
 		//campaign summary
 
 		$result = $this->api->getCampaigns();
@@ -196,22 +201,35 @@ class CampaignMonitorAPIConnector_TestController extends Controller {
 			$sortDirection = "ASC"
 		);
 
-		echo "<h3>creating a campaign</h3>";
+		echo "<h3>creating a campaign without template</h3>";
 		$obj = CampaignMonitorCampaign::create();
 		$randNumber = rand(0, 9999999);
 		$obj->Name = "test only ".$randNumber;
-		$obj->Subject = "test only".$randNumber;
+		$obj->Subject = "test only ".$randNumber;
+		$obj->CreateAsTemplate = false;
 		$obj->CreateFromWebsite = true;
 		$obj->write();
 		$result = $this->api->getSummary($obj->CampaignID);
+		echo "<h3>deleting campaign without template</h3>";
+		$obj->delete();
 
-		echo "<h3>deleting a campaign</h3>";
+		echo "<h3>creating a campaign with template</h3>";
+		$obj = CampaignMonitorCampaign::create();
+		$randNumber = rand(0, 9999999);
+		$obj->Name = "test only ".$randNumber;
+		$obj->Subject = "test only ".$randNumber;
+		$obj->CreateAsTemplate = true;
+		$obj->CreateFromWebsite = true;
+		$obj->write();
+		$result = $this->api->getSummary($obj->TemplateID);
+		echo "<h3>deleting campaign with template</h3>";
 		$obj->delete();
 
 		echo "<h2>end of campaign tests</h2>";
 		$this->index();
 
 	}
+
 
 	function testsubscribers() {
 
