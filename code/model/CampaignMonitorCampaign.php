@@ -107,6 +107,7 @@ class CampaignMonitorCampaign extends DataObject {
 		//pages
 		$pages = CampaignMonitorSignupPage::get()->map("ID", "Title")->toArray();
 		$fields->removeFieldFromTab("Root.Main", "Pages");
+		$fields->replaceField("CreateAsTemplate", new OptionsetField("CreateAsTemplate", "Type", array(0 => "Create as Campaign", 1 => "Create as Template")));
 		if(count($pages))  {
 			$fields->addFieldToTab("Root.Pages", new CheckboxSetField("Pages", "Shown on the following pages ...", $pages));
 		}
@@ -173,7 +174,6 @@ class CampaignMonitorCampaign extends DataObject {
 	 * @var return
 	 */ 
 	function PreviewLink($action = ""){
-		return "http://www.photowarehouse.co.nz/test.html";
 		if($page = $this->Pages()->First()) {
 			$link = $page->Link("previewcampaign".$action."/".$this->ID."/?hash=".$this->Hash);
 			return Director::absoluteURL($link);
