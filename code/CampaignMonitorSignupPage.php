@@ -10,6 +10,20 @@
 class CampaignMonitorSignupPage extends Page {
 
 	/**
+	 * standard SS variable
+	 * @Var String
+	 */
+	private static $singular_name = "Newsletter sign-up page";
+		function i18n_singular_name() { return _t("AccountPage.NEWSLETTER_PAGE", "Newsletter sign-up page");}
+
+	/**
+	 * standard SS variable
+	 * @Var String
+	 */
+	private static $plural_name = "Newsletter sign-up pages";
+		function i18n_plural_name() { return _t("AccountPage.NEWSLETTER_PAGE", "Newsletter sign-up pages");}
+		
+	/**
 	 *
 	 * @inherited
 	 */
