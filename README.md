@@ -37,7 +37,7 @@ Installation Instructions
 
 1. Find out how to add modules to SS and add module as per usual.
    You will need to add this module using composer
-   e.g. `composer require sunnysideup/campaingmonitor`
+   e.g. `composer require sunnysideup/campaignmonitor`
 
 2. Review configs and add entries to mysite/_config/config.yml
 (or similar) as necessary.
