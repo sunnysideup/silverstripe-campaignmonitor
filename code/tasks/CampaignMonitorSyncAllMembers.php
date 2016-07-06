@@ -17,7 +17,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 
 
 	/**
-	 * The default page of where the products are added.
+	 * The default page of where the members are added.
 	 * @var Int
 	 */
 	private static $mailing_list_id = "";
@@ -90,7 +90,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 					elseif(isset($this->previouslyBouncedSubscribers[$member->Email])) {
 						DB::alteration_message("deleting bounced member: ".$member->Email, "deleted");
 						if(!$this->debug) {
-							$api->deleteSubscriber($this->mailingListID, $member->Email);
+							$api->deleteSubscriber(Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"), $member->Email);
 						}
 					}
 					else {
@@ -186,7 +186,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask {
 		$api = $this->getAPI();
 		for($i = 1; $i < 100; $i++) {
 			$list = $api->getBouncedSubscribers(
-				$listID = $this->mailingListID,
+				$listID = Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"),
 				$daysAgo = 3650,
 				$page = $i,
 				$pageSize = 999,
