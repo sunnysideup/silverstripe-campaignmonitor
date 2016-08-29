@@ -1,25 +1,26 @@
 {
-	"name": "sunnysideup/campaignmonitor",
-	"type": "silverstripe-module",
-	"description": "connect with campaign monitor",
-	"homepage": "http://www.silverstripe-webdevelopment.com",
-	"keywords": ["campaignmonitor", "silverstripe"],
-	"license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
-	"authors":[
-		{
-			"name": "Nicolaas Francken",
-			"homepage": "https://github.com/sunnysideup",
-			"email" : "modules@sunnysideup.co.nz",
-			"role" : "lead developer"
-		}
-	],
-	"require":{
-		"silverstripe/framework": "~3.1",
-		"silverstripe/cms": "~3.1",
-		"campaignmonitor/createsend-php": "3.1",
-		"pelago/emogrifier": "*"
-	},
-	"extra": {
-		"installer-name": "campaignmonitor"
-	}
+    "name": "sunnysideup/campaignmonitor",
+    "type": "silverstripe-module",
+    "description": "connect with campaign monitor",
+    "keywords": [
+        "campaignmonitor",
+        "silverstripe"
+    ],
+    "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "~3.1",
+        "silverstripe/cms": "~3.1",
+        "campaignmonitor/createsend-php": "3.1",
+        "pelago/emogrifier": "*"
+    },
+    "extra": {
+        "installer-name": "campaignmonitor"
+    }
 }
