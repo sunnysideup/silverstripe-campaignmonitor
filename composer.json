@@ -3,8 +3,10 @@
     "type": "silverstripe-module",
     "description": "connect with campaign monitor",
     "keywords": [
-        "campaignmonitor",
-        "silverstripe"
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
+        "campaignmonitor"
     ],
     "license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
     "authors": [
