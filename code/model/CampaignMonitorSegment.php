@@ -7,42 +7,40 @@
  *
  **/
 
-class CampaignMonitorSegment extends DataObject {
+class CampaignMonitorSegment extends DataObject
+{
+    private static $db = array(
+        "Title" => "Varchar(64)",
+        "SegmentID" => "Varchar(32)",
+        "ListID" => "Varchar(32)"
+    );
 
-	private static $db = array(
-		"Title" => "Varchar(64)",
-		"SegmentID" => "Varchar(32)",
-		"ListID" => "Varchar(32)"
-	);
+    private static $summary_fields = array(
+        "Title" => "Title"
+    );
 
-	private static $summary_fields = array(
-		"Title" => "Title"
-	);
+    private static $indexes = array(
+        "SegmentID" => true,
+        "ListID" => true
+    );
 
-	private static $indexes = array(
-		"SegmentID" => true,
-		"ListID" => true
-	);
-
-	private static $has_one = array(
-		"CampaignMonitorSignupPage" => "CampaignMonitorSignupPage"
-	);
-
-
-	function canCreate($member = null) {
-		return false;
-	}
-
-	function canDelete($member = null) {
-		return false;
-	}
-
-	function canEdit($member = null) {
-		return false;
-	}
+    private static $has_one = array(
+        "CampaignMonitorSignupPage" => "CampaignMonitorSignupPage"
+    );
 
 
+    public function canCreate($member = null)
+    {
+        return false;
+    }
 
+    public function canDelete($member = null)
+    {
+        return false;
+    }
+
+    public function canEdit($member = null)
+    {
+        return false;
+    }
 }
-
-
