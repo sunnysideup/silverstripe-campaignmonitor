@@ -29,7 +29,7 @@ class CampaignMonitorSignupPage extends Page
     {
         return _t("AccountPage.NEWSLETTER_PAGE", "Newsletter sign-up pages");
     }
-        
+
     /**
      *
      * @inherited
@@ -520,7 +520,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
     public function init()
     {
         parent::init();
-        Requirements::themedCSS("CampaignMonitorSignupPage");
+        Requirements::themedCSS("CampaignMonitorSignupPage", "campaignmonitor");
     }
 
     /**
@@ -817,7 +817,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
     {
         return $this->isThankYou;
     }
-    
+
     /**
      *
      * @return Boolean
@@ -826,7 +826,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
     {
         return $this->isConfirm;
     }
-    
+
     /**
      *
      * @return Boolean
@@ -835,7 +835,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
     {
         return $this->isUnsubscribe;
     }
-    
+
     /**
      *
      * @return Boolean
@@ -971,20 +971,20 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
     private function JSHackForPreSections()
     {
         $js = <<<javascript
-			jQuery(document).ready(
-				function(){
-					jQuery('pre').hide();
-					jQuery('#CampaignMonitorStats').on(
-						'click',
-						'a',
-						function(event){
-							event.preventDefault();
-							jQuery(this).parent().next('pre').slideToggle();
-						}
-					);
-					jQuery("#MyListStatsAreHere").click();
-				}
-			);
+            jQuery(document).ready(
+                function(){
+                    jQuery('pre').hide();
+                    jQuery('#CampaignMonitorStats').on(
+                        'click',
+                        'a',
+                        function(event){
+                            event.preventDefault();
+                            jQuery(this).parent().next('pre').slideToggle();
+                        }
+                    );
+                    jQuery("#MyListStatsAreHere").click();
+                }
+            );
 
 javascript;
         return $js;
