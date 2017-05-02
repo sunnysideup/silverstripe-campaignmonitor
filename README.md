@@ -15,7 +15,7 @@
 
  * [Developer Docs](docs/en/INDEX.md)
  * [User Guide](docs/en/userguide.md)
- * [API Docs](http://docs.ssmods.com/sunnysideup/campaignmonitor)
+ * [API Docs](http://docs.ssmods.com/sunnysideup/campaignmonitor/classes.xhtml)
 
 ## Requirements
 
