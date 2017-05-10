@@ -296,7 +296,9 @@ class CampaignMonitorSignupPage extends Page
         if ($this->ReadyToReceiveSubscribtions()) {
             $listID = $this->ListID;
             $email = Convert::raw2sql($email);
-            if ($member = Member::get()->filter(array("Email" => $email))->first()) {
+            $member = Member::get()->filter(array("Email" => $email))->first();
+            if ($member && $member->exists()) {
+                //do nothing
             } else {
                 $member = new Member();
                 $member->Email = $email;
@@ -602,7 +604,8 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
             //no member logged in: if the member already exists then you can't sign up.
             if (!$member) {
                 $memberAlreadyLoggedIn = false;
-                $existingMember = Member::get()->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))->First();
+                $filter = array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"]));
+                $existingMember = Member::get()->filter($filter)->First();
                 //if($isSubscribe && $existingMember){
                     //$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
                     //$this->redirectBack();
@@ -611,7 +614,7 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
                 $member = $existingMember;
                 if (!$member) {
                     $newlyCreatedMember = true;
-                    $member = new Member();
+                    $member = Member::create($filter);
                 }
             }
 
