@@ -33,6 +33,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     protected $debug = true;
 
     /**
+     * @var Boolean
+     */
+    protected $enabled = false;
+
+    /**
      * @var array
      */
     protected $previouslyExported = array();
