@@ -310,10 +310,33 @@ class CampaignMonitorAPIConnector extends Object
         user_error("This method is still to be implemented, see samples for an example");
     }
 
-
-    public function getSuppressionlist()
+    /**
+     * list of people that are definitely suppressed...
+     * @param  int $page     page number
+     * @param  int $pageSize size of page
+     * @param  string $sortByField (email)
+     * @param  string $sortDirection (asc)
+     *
+     * @return [type]                 [description]
+     */
+    public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        $wrap = new CS_REST_Clients(
+            $this->Config()->get("client_id"),
+            $this->getAuth()
+        );
+        $result = $wrap->get_suppressionlist(
+            $page,
+            $pageSize,
+            $sortByField,
+            $sortDirection
+        );
+        return $this->returnResult(
+            $result,
+            "GET /api/v3/clients/{id}/suppressionlist",
+            "Get suppression list"
+        );
+
     }
 
     public function getTemplates()
@@ -810,6 +833,59 @@ class CampaignMonitorAPIConnector extends Object
             $result,
             "GET /api/v3.1/lists/{ID}/unsubscribed",
             "Got unsubscribed subscribers"
+        );
+    }
+
+    /**
+     * Gets all unsubscribed subscribers who have unsubscribed since the given date
+     *
+     * @param Int $listID
+     * @param string $daysAgo The date to start getting subscribers from
+     * @param int $page The page number to get
+     * @param int $pageSize The number of records per page
+     * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
+     * @param string $sortDirection ('ASC', 'DESC')
+     *
+     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * {
+     *     'ResultsOrderedBy' => The field the results are ordered by
+     *     'OrderDirection' => The order direction
+     *     'PageNumber' => The page number for the result set
+     *     'PageSize' => The page size used
+     *     'RecordsOnThisPage' => The number of records returned
+     *     'TotalNumberOfRecords' => The total number of records available
+     *     'NumberOfPages' => The total number of pages for this collection
+     *     'Results' => array(
+     *         {
+     *             'EmailAddress' => The email address of the subscriber
+     *             'Name' => The name of the subscriber
+     *             'Date' => The date that the subscriber was unsubscribed from the list
+     *             'State' => The current state of the subscriber, will be 'Unsubscribed'
+     *             'CustomFields' => array (
+     *                 {
+     *                     'Key' => The personalisation tag of the custom field
+     *                     'Value' => The value of the custom field for this subscriber
+     *                 }
+     *             )
+     *         }
+     *     )
+     * }
+     */
+    public function getDeletedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "email", $sortDirection = "asc")
+    {
+        //require_once '../../csrest_lists.php';
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        $result = $wrap->get_deleted_subscribers(
+            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            $page,
+            $pageSize,
+            $sortByField,
+            $sortDirection
+        );
+        return $this->returnResult(
+            $result,
+            "GET /api/v3/lists/{ID}/delete",
+            "Got deleted subscribers"
         );
     }
 
@@ -1329,10 +1405,9 @@ class CampaignMonitorAPIConnector extends Object
         }
         //require_once '../../csrest_subscribers.php';
         $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
-        $request = array();
         $result = $wrap->update(
-            $request[] = $oldEmailAddress,
-            $request[] = array(
+            $oldEmailAddress,
+            array(
                 'EmailAddress' => $member->Email,
                 'Name' => $member->getName(),
                 'CustomFields' => $customFields,
