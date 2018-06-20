@@ -198,7 +198,7 @@ class CampaignMonitorCampaign extends DataObject
             $cssFileLocations = $this->getCSSFileLocations();
             foreach ($cssFileLocations as $cssFileLocation) {
                 $cssFileHandler = fopen($cssFileLocation, 'r');
-                $allCSS .= fread($cssFileHandler,  filesize($cssFileLocation));
+                $allCSS .= fread($cssFileHandler, filesize($cssFileLocation));
                 fclose($cssFileHandler);
             }
             $isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');

@@ -336,7 +336,6 @@ class CampaignMonitorAPIConnector extends Object
             "GET /api/v3/clients/{id}/suppressionlist",
             "Get suppression list"
         );
-
     }
 
     public function getTemplates()

@@ -129,7 +129,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                         user_error("can find css file $file");
                     }
                 }
-                 // if $link_tag rel == stylesheet
+                // if $link_tag rel == stylesheet
                  //   get href value and load CSS
             }
         } else {

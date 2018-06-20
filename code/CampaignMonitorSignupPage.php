@@ -144,47 +144,58 @@ class CampaignMonitorSignupPage extends Page
         }
         $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
         $gridFieldTemplatesAvailable->setDescription("Ask your developer on how to add more templates");
-        $fields->addFieldToTab('Root.AlternativeContent',
-            new TabSet("AlternativeContentSubHeader",
-                    new Tab('Confirm',
+        $fields->addFieldToTab(
+            'Root.AlternativeContent',
+            new TabSet(
+                "AlternativeContentSubHeader",
+                    new Tab(
+                        'Confirm',
                     new TextField('ConfirmTitle', 'Title'),
                     new TextField('ConfirmMenuTitle', 'Menu Title'),
                     new HtmlEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
                 ),
-                new Tab('ThankYou',
+                new Tab(
+                    'ThankYou',
                     new TextField('ThankYouTitle', 'Title'),
                     new TextField('ThankYouMenuTitle', 'Menu Title'),
                     new HtmlEditorField('ThankYouMessage', 'Thank you message after submitting form')
                 ),
-                new Tab('SadToSeeYouGo',
+                new Tab(
+                    'SadToSeeYouGo',
                     new TextField('SadToSeeYouGoTitle', 'Title'),
                     new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
                     new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
                 )
             )
         );
-        $fields->addFieldToTab('Root.Newsletters',
-            new TabSet('Options',
-                new Tab('MainSettings',
+        $fields->addFieldToTab(
+            'Root.Newsletters',
+            new TabSet(
+                'Options',
+                new Tab(
+                    'MainSettings',
                     new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorAPIConnector", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
                 ),
-                new Tab('StartForm',
+                new Tab(
+                    'StartForm',
                     new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
                     new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
                     new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
                     new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
                 ),
-                new Tab('Newsletters',
+                new Tab(
+                    'Newsletters',
                     new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
                     new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
                     new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter("HasBeenSent", 1)->limit(10000)->map()->toArray()),
                     $campaignField,
                     $gridFieldTemplatesAvailable
                 ),
-                new Tab('Advanced',
+                new Tab(
+                    'Advanced',
                     new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
                     new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
                     new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
@@ -607,9 +618,9 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
                 $filter = array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"]));
                 $existingMember = Member::get()->filter($filter)->First();
                 //if($isSubscribe && $existingMember){
-                    //$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
-                    //$this->redirectBack();
-                    //return;
+                //$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
+                //$this->redirectBack();
+                //return;
                 //}
                 $member = $existingMember;
                 if (!$member) {
