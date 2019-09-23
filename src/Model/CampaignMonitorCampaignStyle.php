@@ -159,28 +159,28 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $templates = [];
-        foreach ($this->getFoldersToSearch() as $folder) {
-            $finder = new FileFinder();
-            $finder->setOption('name_regex', '/^.*\.ss$/');
-            $found = $finder->find($folder);
-            foreach ($found as $key => $value) {
-                $template = pathinfo($value);
-                $templates[$template['filename']] = $template['filename'];
-            }
-        }
-        foreach ($templates as $template) {
-            $filter = ['TemplateName' => $template];
-            $obj = self::get()->filter($filter)->first();
-            if (! $obj) {
-                $obj = self::create($filter + ['Title' => $template]);
-                $obj->write();
-            }
-        }
-        $excludes = $obj = self::get()->exclude(['TemplateName' => $templates]);
-        foreach ($excludes as $exclude) {
-            $exclude->delete();
-        }
+        // $templates = [];
+        // foreach ($this->getFoldersToSearch() as $folder) {
+        //     $finder = new FileFinder();
+        //     $finder->setOption('name_regex', '/^.*\.ss$/');
+        //     $found = $finder->find($folder);
+        //     foreach ($found as $key => $value) {
+        //         $template = pathinfo($value);
+        //         $templates[$template['filename']] = $template['filename'];
+        //     }
+        // }
+        // foreach ($templates as $template) {
+        //     $filter = ['TemplateName' => $template];
+        //     $obj = self::get()->filter($filter)->first();
+        //     if (! $obj) {
+        //         $obj = self::create($filter + ['Title' => $template]);
+        //         $obj->write();
+        //     }
+        // }
+        // $excludes = $obj = self::get()->exclude(['TemplateName' => $templates]);
+        // foreach ($excludes as $exclude) {
+        //     $exclude->delete();
+        // }
     }
 
     public function onBeforeWrite()
