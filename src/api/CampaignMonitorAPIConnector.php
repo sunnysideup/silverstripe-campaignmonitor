@@ -4,7 +4,16 @@
  * Main Holder page for Recipes
  *@author nicolaas [at] sunnysideup.co.nz
  */
-class CampaignMonitorAPIConnector extends Object
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD:  extends Object (ignore case)
+  * NEW:  extends ViewableData (COMPLEX)
+  * EXP: This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+class CampaignMonitorAPIConnector extends ViewableData
 {
 
     /**
@@ -212,8 +221,26 @@ class CampaignMonitorAPIConnector extends Object
     {
         if ($this->getAllowCaching()) {
             $name = "CampaignMonitorAPIConnector_".$name;
-            $cache = SS_Cache::factory($name);
-            $value = $cache->load($name);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: Cache::factory( (case sensitive)
+  * NEW: SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '.  (COMPLEX)
+  * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '. $name);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: $cache->load( (case sensitive)
+  * NEW: $cache->has( (COMPLEX)
+  * EXP: See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache, you may also need to add $cache->get( !!!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            $value = $cache->has($name);
             if (!$value) {
                 return null;
             }
@@ -230,8 +257,26 @@ class CampaignMonitorAPIConnector extends Object
         if ($this->getAllowCaching()) {
             $serializedValue = serialize($unserializedValue);
             $name = "CampaignMonitorAPIConnector_".$name;
-            $cache = SS_Cache::factory($name);
-            $cache->save($serializedValue, $name);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: Cache::factory( (case sensitive)
+  * NEW: SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '.  (COMPLEX)
+  * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '. $name);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: $cache->save( (case sensitive)
+  * NEW: $cache->set( (COMPLEX)
+  * EXP: Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            $cache->set($serializedValue, $name);
             return true;
         }
     }
@@ -1452,9 +1497,9 @@ class CampaignMonitorAPIConnector extends Object
     ) {
         //require_once '../../csrest_subscribers.php';
         $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
-        $importArray = array();
+        $importArray = [];
         foreach ($membersSet as $member) {
-            $customFieldsForMember = array();
+            $customFieldsForMember = [];
             if (isset($customFields[$member->ID])) {
                 $customFieldsForMember = $customFields[$member->ID];
             } elseif (isset($customFields[$member->Email])) {
@@ -1613,7 +1658,7 @@ class CampaignMonitorAPIConnector extends Object
         return false;
     }
 
-    private static $_get_subscriber = array();
+    private static $_get_subscriber = [];
 
     /**
      * Gets a subscriber details, including custom fields

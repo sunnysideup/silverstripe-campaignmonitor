@@ -58,7 +58,16 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function getFoldersToSearch()
     {
         $array = array(
-            Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/templates/Email/",
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: SSViewer::get_theme_folder() (ignore case)
+  * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
+  * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            Director::baseFolder() ."/".SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')."_campaignmonitor/templates/Email/",
             Director::baseFolder()."/campaignmonitor/templates/Email/"
         );
         foreach ($array as $key => $folder) {
@@ -75,7 +84,16 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function getCSSFoldersToSearch()
     {
         $array = array(
-            Director::baseFolder() ."/".SSViewer::get_theme_folder()."_campaignmonitor/css/",
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD: SSViewer::get_theme_folder() (ignore case)
+  * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
+  * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            Director::baseFolder() ."/".SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')."_campaignmonitor/css/",
             Director::baseFolder()."/campaignmonitor/css/"
 
         );
@@ -115,7 +133,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function getCSSFilesAsArray()
     {
         $dom = new DOMDocument();
-        $cssFiles = array();
+        $cssFiles = [];
         $fileLocation = $this->getFileLocation();
         if ($fileLocation) {
             @$dom->loadHTMLFile($fileLocation);
@@ -150,7 +168,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $templates = array();
+        $templates = [];
         foreach ($this->getFoldersToSearch() as $folder) {
             $finder = new SS_FileFinder();
             $finder->setOption('name_regex', '/^.*\.ss$/');

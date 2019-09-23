@@ -1,11 +1,11 @@
 ---
 Name: campaignmonitor
-Before: 'mysite/*'
+Before: 'app/*'
 After: 'framework/*','cms/*'
 ---
 
 
-Member:
+SilverStripe\Security\Member:
   extensions:
     - CampaignMonitorMemberDOD
 
