@@ -19,38 +19,34 @@ use PageController;
 
 
 
-use SilverStripe\View\Requirements;
-use SilverStripe\Security\Member;
+use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
-use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Control\HTTP;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Convert;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\Form;
-use SilverStripe\Core\Convert;
-use SilverStripe\Security\Security;
-use SilverStripe\Control\HTTPRequest;
-use SilverStripe\Control\Director;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use SilverStripe\Control\HTTP;
-use SilverStripe\Security\Permission;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DB;
-
-
-
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
+use SilverStripe\View\Requirements;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 /**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: _Controller extends Page_Controller (case sensitive)
-  * NEW: Controller extends PageController (COMPLEX)
-  * EXP: Remove the underscores in your classname - check all references!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
+ * ### @@@@ START REPLACEMENT @@@@ ###
+ * WHY: upgrade to SS4
+ * OLD: _Controller extends Page_Controller (case sensitive)
+ * NEW: Controller extends PageController (COMPLEX)
+ * EXP: Remove the underscores in your classname - check all references!
+ * ### @@@@ STOP REPLACEMENT @@@@ ###
+ */
 class CampaignMonitorSignupPageController extends PageController
 {
-
     /**
      * retains email for processing
      * @var boolean
@@ -71,47 +67,33 @@ class CampaignMonitorSignupPageController extends PageController
 
     /**
      * retains email for processing
-     * @var String
+     * @var string
      */
     protected $email = '';
 
     /**
      * holder for selected campaign
      *
-     * @var Null | CampaignMonitorCampaign
+     * @var null | CampaignMonitorCampaign
      */
     protected $campaign = '';
 
-    private static $allowed_actions = array(
-        "SignupForm" => true,
-        "subscribe" => true,
-        "unsubscribe" => true,
-        "thankyou" => true,
-        "confirm" => true,
-        "sadtoseeyougo" => true,
-        "preloademail" => true,
-        "viewcampaign" => true,
-        "viewcampaigntextonly" => true,
-        "previewcampaign" => true,
-        "previewcampaigntextonly" => true,
-        "stats" => true,
-        "resetoldcampaigns" => true,
-        "resetsignup" => true
-    );
-
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * OLD:     public function init() (ignore case)
-  * NEW:     protected function init() (COMPLEX)
-  * EXP: Controller init functions are now protected  please check that is a controller.
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    protected function init()
-    {
-        parent::init();
-        Requirements::themedCSS("sunnysideup/campaignmonitor: CampaignMonitorSignupPage", "campaignmonitor");
-    }
+    private static $allowed_actions = [
+        'SignupForm' => true,
+        'subscribe' => true,
+        'unsubscribe' => true,
+        'thankyou' => true,
+        'confirm' => true,
+        'sadtoseeyougo' => true,
+        'preloademail' => true,
+        'viewcampaign' => true,
+        'viewcampaigntextonly' => true,
+        'previewcampaign' => true,
+        'previewcampaigntextonly' => true,
+        'stats' => true,
+        'resetoldcampaigns' => true,
+        'resetsignup' => true,
+    ];
 
     /**
      * creates a subscription form...
@@ -124,22 +106,22 @@ class CampaignMonitorSignupPageController extends PageController
             $member = Member::currentUser();
             $emailField = null;
             $emailRequired = true;
-            if (!$member) {
+            if (! $member) {
                 $member = new Member();
             } else {
                 $this->email = $member->Email;
                 if ($this->email) {
                     $emailRequired = false;
-                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class), $this->email);
+                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', Email::class), $this->email);
                 }
             }
-            if (!$emailField) {
-                $emailField = new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class), $this->email);
+            if (! $emailField) {
+                $emailField = new EmailField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', Email::class), $this->email);
             }
             if ($this->ShowAllNewsletterForSigningUp) {
-                $signupField = $member->getCampaignMonitorSignupField(null, "SubscribeManyChoices");
+                $signupField = $member->getCampaignMonitorSignupField(null, 'SubscribeManyChoices');
             } else {
-                $signupField = $member->getCampaignMonitorSignupField($this->ListID, "SubscribeChoice");
+                $signupField = $member->getCampaignMonitorSignupField($this->ListID, 'SubscribeChoice');
             }
             $fields = new FieldList(
                 $emailField,
@@ -147,7 +129,7 @@ class CampaignMonitorSignupPageController extends PageController
             );
             // Create action
             $actions = new FieldList(
-                new FormAction('subscribe', _t("CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS", "Update Subscriptions"))
+                new FormAction('subscribe', _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions'))
             );
             // Create Validators
             if ($emailRequired) {
@@ -159,17 +141,16 @@ class CampaignMonitorSignupPageController extends PageController
             if ($member->exists()) {
                 $form->loadDataFrom($member);
             } else {
-                $form->Fields()->fieldByName("CampaignMonitorEmail")->setValue($this->email);
+                $form->Fields()->fieldByName('CampaignMonitorEmail')->setValue($this->email);
             }
             return $form;
-        } else {
-            return _t("CampaignMonitorSignupPage.NOTREADY", "You can not suscribe to this newsletter at present.");
         }
+        return _t('CampaignMonitorSignupPage.NOTREADY', 'You can not suscribe to this newsletter at present.');
     }
 
     /**
      * action subscription form
-     * @param Array $array
+     * @param array $data
      * @param Form $form
      *
      * return redirect
@@ -183,16 +164,16 @@ class CampaignMonitorSignupPageController extends PageController
             $member = Member::currentUser();
 
             //subscribe or unsubscribe?
-            if (isset($data["SubscribeManyChoices"])) {
+            if (isset($data['SubscribeManyChoices'])) {
                 $isSubscribe = true;
             } else {
-                $isSubscribe = isset($data["SubscribeChoice"]) && $data["SubscribeChoice"] == "Subscribe";
+                $isSubscribe = isset($data['SubscribeChoice']) && $data['SubscribeChoice'] === 'Subscribe';
             }
 
             //no member logged in: if the member already exists then you can't sign up.
-            if (!$member) {
+            if (! $member) {
                 $memberAlreadyLoggedIn = false;
-                $filter = array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"]));
+                $filter = ['Email' => Convert::raw2sql($data['CampaignMonitorEmail'])];
                 $existingMember = Member::get()->filter($filter)->First();
                 //if($isSubscribe && $existingMember){
                 //$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
@@ -200,7 +181,7 @@ class CampaignMonitorSignupPageController extends PageController
                 //return;
                 //}
                 $member = $existingMember;
-                if (!$member) {
+                if (! $member) {
                     $newlyCreatedMember = true;
                     $member = Member::create($filter);
                 }
@@ -221,8 +202,8 @@ class CampaignMonitorSignupPageController extends PageController
             }
 
             //are any choices being made
-            if (!isset($data["SubscribeChoice"]) && !isset($data["SubscribeManyChoices"])) {
-                $form->addErrorMessage('SubscribeChoice', _t("CAMPAIGNMONITORSIGNUPPAGE.NO_NAME", "Please choose your subscription."), 'warning');
+            if (! isset($data['SubscribeChoice']) && ! isset($data['SubscribeManyChoices'])) {
+                $form->addErrorMessage('SubscribeChoice', _t('CAMPAIGNMONITORSIGNUPPAGE.NO_NAME', 'Please choose your subscription.'), 'warning');
                 $this->redirectBack();
                 return;
             }
@@ -231,7 +212,7 @@ class CampaignMonitorSignupPageController extends PageController
             if ($isSubscribe) {
                 if ($newlyCreatedMember) {
                     $form->saveInto($member);
-                    $member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
+                    $member->Email = Convert::raw2sql($data['CampaignMonitorEmail']);
                     $member->SetPassword = true;
                     $member->Password = Member::create_new_password();
                     $member->write();
@@ -239,35 +220,33 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             }
             $outcome = $member->processCampaignMonitorSignupField($this->dataRecord, $data, $form);
-            if ($outcome == "subscribe") {
-                return $this->redirect($this->link("thankyou"));
-            } else {
-                return $this->redirect($this->link("sadtoseeyougo"));
+            if ($outcome === 'subscribe') {
+                return $this->redirect($this->link('thankyou'));
             }
-        } else {
-            user_error("No list to subscribe to", E_USER_WARNING);
+            return $this->redirect($this->link('sadtoseeyougo'));
         }
+        user_error('No list to subscribe to', E_USER_WARNING);
     }
 
     /**
      * immediately unsubscribe if you are logged in.
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function unsubscribe($request)
     {
         $member = Member::currentUser();
         if ($member) {
             $member->removeCampaignMonitorList($this->ListID);
-            $this->Content = $member->Email." has been removed from this list: ".$this->getListTitle();
+            $this->Content = $member->Email . ' has been removed from this list: ' . $this->getListTitle();
         } else {
-            Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST", "Please login first."));
+            Security::permissionFailure($this, _t('CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST', 'Please login first.'));
         }
-        return array();
+        return [];
     }
 
     /**
      * action
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function confirm($request)
     {
@@ -275,12 +254,12 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->ConfirmMenuTitle;
         $this->Content = $this->ConfirmMessage;
         $this->isConfirm = true;
-        return array();
+        return [];
     }
 
     /**
      * action
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function thankyou($request)
     {
@@ -288,12 +267,12 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->ThankYouMenuTitle;
         $this->Content = $this->ThankYouMessage;
         $this->isThankYou = true;
-        return array();
+        return [];
     }
 
     /**
      * action
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function sadtoseeyougo($request)
     {
@@ -301,45 +280,44 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->SadToSeeYouGoMenuTitle;
         $this->Content = $this->SadToSeeYouGoMessage;
         $this->isUnsubscribe = true;
-        return array();
+        return [];
     }
 
     /**
      * action
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function preloademail(HTTPRequest $request)
     {
         $data = $request->requestVars();
-        if (isset($data["CampaignMonitorEmail"])) {
-            $email = Convert::raw2sql($data["CampaignMonitorEmail"]);
+        if (isset($data['CampaignMonitorEmail'])) {
+            $email = Convert::raw2sql($data['CampaignMonitorEmail']);
             if ($email) {
                 $this->email = $email;
                 if (Director::is_ajax()) {
-                    if (!$this->addSubscriber($email)) {
+                    if (! $this->addSubscriber($email)) {
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: Session:: (case sensitive)
-  * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-                        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
+                        /**
+                         * ### @@@@ START REPLACEMENT @@@@ ###
+                         * WHY: upgrade to SS4
+                         * OLD: Session:: (case sensitive)
+                         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+                         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
+                         * ### @@@@ STOP REPLACEMENT @@@@ ###
+                         */
+                        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: ->RenderWith( (ignore case)
-  * NEW: ->RenderWith( (COMPLEX)
-  * EXP: Check that the template location is still valid!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-                        return $this->RenderWith("CampaignMonitorStartForm_AjaxResult");
-                    } else {
-                        return "ERROR";
+                        /**
+                         * ### @@@@ START REPLACEMENT @@@@ ###
+                         * WHY: upgrade to SS4
+                         * OLD: ->RenderWith( (ignore case)
+                         * NEW: ->RenderWith( (COMPLEX)
+                         * EXP: Check that the template location is still valid!
+                         * ### @@@@ STOP REPLACEMENT @@@@ ###
+                         */
+                        return $this->RenderWith('CampaignMonitorStartForm_AjaxResult');
                     }
+                    return 'ERROR';
                 }
             }
         } else {
@@ -347,71 +325,65 @@ class CampaignMonitorSignupPageController extends PageController
                 $this->email = $m->Email;
             }
         }
-        return array();
+        return [];
     }
 
     /**
-     *
      * action to show one campaign...
      */
     public function viewcampaign($request)
     {
-        $id = intval($request->param("ID"));
+        $id = intval($request->param('ID'));
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
-        if (!$this->campaign) {
-            return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
+        if (! $this->campaign) {
+            return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
-        return array();
+        return [];
     }
 
     /**
-     *
      * action to show one campaign TEXT ONLY...
      */
     public function viewcampaigntextonly($request)
     {
-        $id = intval($request->param("ID"));
+        $id = intval($request->param('ID'));
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
-        if (!$this->campaign) {
-            return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "Message not found."));
+        if (! $this->campaign) {
+            return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
-        return array();
+        return [];
     }
 
     /**
-     *
      * action to preview one campaign...
      */
     public function previewcampaign($request)
     {
-        $id = intval($request->param("ID"));
+        $id = intval($request->param('ID'));
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
-            if (isset($_GET["hash"]) && strlen($_GET["hash"]) == 7 &&  $_GET["hash"] == $this->campaign->Hash) {
+            if (isset($_GET['hash']) && strlen($_GET['hash']) === 7 && $_GET['hash'] === $this->campaign->Hash) {
                 return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
             }
         }
-        return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
+        return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'No preview available.'));
     }
 
     /**
-     *
      * action to preview one campaign TEXT ONLY...
      */
     public function previewcampaigntextonly($request)
     {
-        $id = intval($request->param("ID"));
+        $id = intval($request->param('ID'));
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
             return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
         }
-        return $this->httpError(404, _t("CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND", "No preview available."));
+        return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'No preview available.'));
     }
 
-
     /**
-     *
-     * @return String
+     * @return string
      */
     public function Email()
     {
@@ -419,8 +391,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     *
-     * @return Boolean
+     * @return boolean
      */
     public function IsThankYou()
     {
@@ -428,8 +399,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     *
-     * @return Boolean
+     * @return boolean
      */
     public function IsConfirm()
     {
@@ -437,8 +407,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     *
-     * @return Boolean
+     * @return boolean
      */
     public function IsUnsubscribe()
     {
@@ -446,23 +415,18 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     *
-     * @return Boolean
+     * @return boolean
      */
     public function HasCampaign()
     {
         return $this->campaign ? true : false;
     }
 
-    /**
-     *
-     * @return Null | CampaignMonitorCampaign
-     */
+
     public function Campaign()
     {
         return $this->campaign;
     }
-
 
     /**
      * same as $this->CampaignMonitorCampaigns()
@@ -476,11 +440,11 @@ class CampaignMonitorSignupPageController extends PageController
             $campaigns = $this->CampaignMonitorCampaigns();
             return CampaignMonitorCampaign::get()
                 ->filter(
-                    array(
-                        "ID" => $campaigns->map("ID", "ID")->toArray(),
-                        "Hide" => 0,
-                        "HasBeenSent" => 1
-                    )
+                    [
+                        'ID' => $campaigns->map('ID', 'ID')->toArray(),
+                        'Hide' => 0,
+                        'HasBeenSent' => 1,
+                    ]
                 );
         }
     }
@@ -491,56 +455,56 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function stats()
     {
-        if (Permission::check("Admin")) {
+        if (Permission::check('Admin')) {
             //run tests here
             $api = $this->getAPI();
-            $html = "<div id=\"CampaignMonitorStats\">";
-            $html .= "<h1>Debug Response</h1>";
-            $html .= "<h2>Main Client Stuff</h2>";
-            $html .= "<h3>Link to confirm page</h3>".Director::absoluteUrl($this->Link("confirm"))."";
-            $html .= "<h3>Link to thank-you-page</h3>".Director::absoluteUrl($this->Link("thankyou"))."";
-            $html .= "<h3>Link to sad-to-see-you-go page</h3>".Director::absoluteUrl($this->Link("sadtoseeyougo"))."";
-            $html .= "<h3><a href=\"#\">All Campaigns</a></a></h3><pre>".print_r($api->getCampaigns(), 1)."</pre>";
-            $html .= "<h3><a href=\"#\">All Lists</a></h3><pre>".print_r($api->getLists(), 1)."</pre>";
+            $html = '<div id="CampaignMonitorStats">';
+            $html .= '<h1>Debug Response</h1>';
+            $html .= '<h2>Main Client Stuff</h2>';
+            $html .= '<h3>Link to confirm page</h3>' . Director::absoluteUrl($this->Link('confirm')) . '';
+            $html .= '<h3>Link to thank-you-page</h3>' . Director::absoluteUrl($this->Link('thankyou')) . '';
+            $html .= '<h3>Link to sad-to-see-you-go page</h3>' . Director::absoluteUrl($this->Link('sadtoseeyougo')) . '';
+            $html .= '<h3><a href="#">All Campaigns</a></a></h3><pre>' . print_r($api->getCampaigns(), 1) . '</pre>';
+            $html .= '<h3><a href="#">All Lists</a></h3><pre>' . print_r($api->getLists(), 1) . '</pre>';
             if ($this->ListID) {
-                $html .= "<h2>List</h2";
-                $html .= "<h3><a href=\"#\" id=\"MyListStatsAreHere\">List Stats</a></h3><pre>".print_r($api->getListStats($this->ListID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">List Details</a></h3><pre>".print_r($api->getList($this->ListID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Active Subscribers (latest ones)</a></h3><pre>".print_r($api->getActiveSubscribers($this->ListID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Unconfirmed Subscribers (latest ones)</a></h3><pre>".print_r($api->getUnconfirmedSubscribers($this->ListID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Bounced Subscribers (latest ones)</a></h3><pre>".print_r($api->getBouncedSubscribers($this->ListID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Unsubscribed Subscribers (latest ones)</a></h3><pre>".print_r($api->getUnsubscribedSubscribers($this->ListID), 1)."</pre>";
+                $html .= '<h2>List</h2';
+                $html .= '<h3><a href="#" id="MyListStatsAreHere">List Stats</a></h3><pre>' . print_r($api->getListStats($this->ListID), 1) . '</pre>';
+                $html .= '<h3><a href="#">List Details</a></h3><pre>' . print_r($api->getList($this->ListID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Active Subscribers (latest ones)</a></h3><pre>' . print_r($api->getActiveSubscribers($this->ListID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Unconfirmed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnconfirmedSubscribers($this->ListID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Bounced Subscribers (latest ones)</a></h3><pre>' . print_r($api->getBouncedSubscribers($this->ListID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Unsubscribed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnsubscribedSubscribers($this->ListID), 1) . '</pre>';
             } else {
-                $html .= "<h2 style=\"color: red;\">ERROR: No Lists selected</h2";
+                $html .= '<h2 style="color: red;">ERROR: No Lists selected</h2';
             }
-            Requirements::customScript($this->JSHackForPreSections(), "CampaignMonitorStats");
-            $html .= "</div>";
+            Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
+            $html .= '</div>';
             $this->Content = $html;
         } else {
-            Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.TESTFAILURE", "This function is only available for administrators"), 1);
+            Security::permissionFailure($this, _t('CAMPAIGNMONITORSIGNUPPAGE.TESTFAILURE', 'This function is only available for administrators'), 1);
         }
-        return array();
+        return [];
     }
 
     /**
      * returns a bunch of stats about a campaign
      * IF the user is an admin AND a campaign is selected
-     * @return String (html) | false
+     * @return string (html) | false
      */
     public function CampaignStats()
     {
-        if (Permission::check("CMS_ACCESS_CMSMain")) {
+        if (Permission::check('CMS_ACCESS_CMSMain')) {
             if ($this->campaign) {
                 //run tests here
                 $api = $this->getAPI();
-                $html = "<div id=\"CampaignMonitorStats\">";
-                $html .= "<h2>Campaign Stats</h2>";
-                $html .= "<h3><a href=\"#\">Campaign: ".$this->campaign->Subject."</a></h3>";
-                $html .= "<h3><a href=\"#\">Summary</a></h3><pre>".print_r($api->getSummary($this->campaign->CampaignID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Email Client Usage</a></h3><pre>".print_r($api->getEmailClientUsage($this->campaign->CampaignID), 1)."</pre>";
-                $html .= "<h3><a href=\"#\">Unsubscribes</a></h3><pre>".print_r($api->getUnsubscribes($this->campaign->CampaignID), 1)."</pre>";
-                Requirements::customScript($this->JSHackForPreSections(), "CampaignMonitorStats");
-                $html .= "</div>";
+                $html = '<div id="CampaignMonitorStats">';
+                $html .= '<h2>Campaign Stats</h2>';
+                $html .= '<h3><a href="#">Campaign: ' . $this->campaign->Subject . '</a></h3>';
+                $html .= '<h3><a href="#">Summary</a></h3><pre>' . print_r($api->getSummary($this->campaign->CampaignID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Email Client Usage</a></h3><pre>' . print_r($api->getEmailClientUsage($this->campaign->CampaignID), 1) . '</pre>';
+                $html .= '<h3><a href="#">Unsubscribes</a></h3><pre>' . print_r($api->getUnsubscribes($this->campaign->CampaignID), 1) . '</pre>';
+                Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
+                $html .= '</div>';
                 $this->Content = $html;
             }
         } else {
@@ -550,21 +514,21 @@ class CampaignMonitorSignupPageController extends PageController
 
     /**
      * action
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function resetsignup($request)
     {
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: Session:: (case sensitive)
-  * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->clear("CampaignMonitorStartForm_AjaxResult_".$this->ID);
-        return array();
+        /**
+         * ### @@@@ START REPLACEMENT @@@@ ###
+         * WHY: upgrade to SS4
+         * OLD: Session:: (case sensitive)
+         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
+         * ### @@@@ STOP REPLACEMENT @@@@ ###
+         */
+        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->clear('CampaignMonitorStartForm_AjaxResult_' . $this->ID);
+        return [];
     }
 
     /**
@@ -573,22 +537,34 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function resetoldcampaigns()
     {
-        if (!Permission::check("CMS_ACCESS_CMSMain")) {
+        if (! Permission::check('CMS_ACCESS_CMSMain')) {
             Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need CMS rights to access it. Enter your credentials below and we will send you right along.'));
         } else {
-            DB::query("DELETE FROM \"CampaignMonitorCampaign\";");
-            DB::query("DELETE FROM \"CampaignMonitorCampaign_Pages\";");
-            die("old campaigns have been deleted");
+            DB::query('DELETE FROM "CampaignMonitorCampaign";');
+            DB::query('DELETE FROM "CampaignMonitorCampaign_Pages";');
+            die('old campaigns have been deleted');
         }
     }
 
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * OLD:     public function init() (ignore case)
+     * NEW:     protected function init() (COMPLEX)
+     * EXP: Controller init functions are now protected  please check that is a controller.
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
+    protected function init()
+    {
+        parent::init();
+        Requirements::themedCSS('sunnysideup/campaignmonitor: CampaignMonitorSignupPage', 'campaignmonitor');
+    }
 
     /**
-     * @return String
+     * @return string
      */
     private function JSHackForPreSections()
     {
-        $js = <<<javascript
+        return <<<javascript
             jQuery(document).ready(
                 function(){
                     jQuery('pre').hide();
@@ -605,6 +581,5 @@ class CampaignMonitorSignupPageController extends PageController
             );
 
 javascript;
-        return $js;
     }
 }

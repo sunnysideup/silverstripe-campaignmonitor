@@ -2,12 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
-
-
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use SilverStripe\ORM\DataExtension;
-
-
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -16,13 +12,12 @@ use SilverStripe\ORM\DataExtension;
 
 class CampaignMonitorGroupDOD extends DataExtension
 {
-
     /**
      * Is this a group for newsletter signing up.
-     * @return Boolean
+     * @return boolean
      */
     public function IsCampaignMonitorSubscriberGroup()
     {
-        return CampaignMonitorSignupPage::get()->filter(array("GroupID" => $this->owner->ID))->count() ? true : false;
+        return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->owner->ID])->count() ? true : false;
     }
 }

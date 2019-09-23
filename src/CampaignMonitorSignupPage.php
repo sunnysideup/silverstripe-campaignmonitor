@@ -34,41 +34,39 @@ use Page;
 
 
 
-use SilverStripe\Security\Group;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use SilverStripe\Core\Injector\Injector;
-use Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\HiddenField;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
-use SilverStripe\Forms\Tab;
-use SilverStripe\Forms\TabSet;
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
-use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
-use SilverStripe\Forms\LiteralField;
-use SilverStripe\Forms\DropdownField;
+use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
-use SilverStripe\Control\Controller;
-use SilverStripe\View\Requirements;
-use SilverStripe\Control\Email\Email;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
-use SilverStripe\Core\Convert;
-use SilverStripe\Security\Member;
-use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DB;
-
-
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
+use SilverStripe\View\Requirements;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
+use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
 
 /**
  * Page for Signing Up to Campaign Monitor List
@@ -79,61 +77,51 @@ use SilverStripe\ORM\DB;
  */
 class CampaignMonitorSignupPage extends Page
 {
+    /**
+     * @var CampaignMonitorAPIConnector | Null
+     */
+    protected static $_api = null;
 
     /**
      * standard SS variable
      * @Var String
      */
-    private static $singular_name = "Newsletter sign-up page";
-    public function i18n_singular_name()
-    {
-        return _t("AccountPage.NEWSLETTER_PAGE", "Newsletter sign-up page");
-    }
+    private static $singular_name = 'Newsletter sign-up page';
 
     /**
      * standard SS variable
      * @Var String
      */
-    private static $plural_name = "Newsletter sign-up pages";
-    public function i18n_plural_name()
-    {
-        return _t("AccountPage.NEWSLETTER_PAGE", "Newsletter sign-up pages");
-    }
+    private static $plural_name = 'Newsletter sign-up pages';
 
     /**
-     *
      * @inherited
      */
-    private static $icon = "campaignmonitor/images/treeicons/CampaignMonitorSignupPage";
+    private static $icon = 'campaignmonitor/images/treeicons/CampaignMonitorSignupPage';
 
     /**
-     *
      * @inherited
      */
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * OLD: private static $db (case sensitive)
-  * NEW: 
-    private static $table_name = '[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]';
-
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * OLD: private static $db (case sensitive)
+     * NEW:
     private static $db (COMPLEX)
-  * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    
+     * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
     private static $table_name = 'CampaignMonitorSignupPage';
 
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: private static $db = (case sensitive)
-  * NEW: private static $db = (COMPLEX)
-  * EXP: Make sure to add a private static $table_name!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    private static $db = array(
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * WHY: upgrade to SS4
+     * OLD: private static $db = (case sensitive)
+     * NEW: private static $db = (COMPLEX)
+     * EXP: Make sure to add a private static $table_name!
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
+    private static $db = [
         'ListID' => 'Varchar(32)',
 
         'ConfirmTitle' => 'Varchar(255)',
@@ -155,54 +143,58 @@ class CampaignMonitorSignupPage extends Page
         'ShowOldNewsletters' => 'Boolean',
         'ShowAllNewsletterForSigningUp' => 'Boolean',
 
-    );
+    ];
 
     /**
-     *
      * @inherited
      */
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: private static $has_one = (case sensitive)
-  * NEW: private static $has_one = (COMPLEX)
-  * EXP: Make sure to add a private static $table_name!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    private static $has_one = array(
-        "Group" => Group::class
-    );
+    /**
+     * ### @@@@ START REPLACEMENT @@@@ ###
+     * WHY: upgrade to SS4
+     * OLD: private static $has_one = (case sensitive)
+     * NEW: private static $has_one = (COMPLEX)
+     * EXP: Make sure to add a private static $table_name!
+     * ### @@@@ STOP REPLACEMENT @@@@ ###
+     */
+    private static $has_one = [
+        'Group' => Group::class,
+    ];
 
     /**
-     *
      * @inherited
      */
-    private static $has_many = array(
-        "CampaignMonitorSegments" => CampaignMonitorSegment::class,
-        "CampaignMonitorCustomFields" => CampaignMonitorCustomField::class
-    );
+    private static $has_many = [
+        'CampaignMonitorSegments' => CampaignMonitorSegment::class,
+        'CampaignMonitorCustomFields' => CampaignMonitorCustomField::class,
+    ];
 
     /**
-     *
      * @inherited
      */
-    private static $belongs_many_many = array(
-        "CampaignMonitorCampaigns" => CampaignMonitorCampaign::class
-    );
+    private static $belongs_many_many = [
+        'CampaignMonitorCampaigns' => CampaignMonitorCampaign::class,
+    ];
 
     /**
-     *
      * @inherited
      */
-    private static $description = "Page to suscribe and review newsletter list(s)";
+    private static $description = 'Page to suscribe and review newsletter list(s)';
 
     /**
-     *
-     * @var CampaignMonitorAPIConnector | Null
+     * @var array|null
      */
-    protected static $_api = null;
+    private static $drop_down_list = [];
 
+    public function i18n_singular_name()
+    {
+        return _t('AccountPage.NEWSLETTER_PAGE', 'Newsletter sign-up page');
+    }
+
+    public function i18n_plural_name()
+    {
+        return _t('AccountPage.NEWSLETTER_PAGE', 'Newsletter sign-up pages');
+    }
 
     /**
      * Campaign monitor pages that are ready to receive "sign-ups"
@@ -210,25 +202,24 @@ class CampaignMonitorSignupPage extends Page
      */
     public static function get_ready_ones()
     {
-        $listPages = CampaignMonitorSignupPage::get();
-        $array = array(0 => 0);
+        $listPages = self::get();
+        $array = [0 => 0];
         foreach ($listPages as $listPage) {
             if ($listPage->ReadyToReceiveSubscribtions()) {
                 $array[$listPage->ID] = $listPage->ID;
             }
         }
-        return CampaignMonitorSignupPage::get()->filter(array("ID" => $array));
+        return self::get()->filter(['ID' => $array]);
     }
 
     /**
-     *
      * @inherited
      */
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
         if ($this->GroupID) {
-            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/'.$this->GroupID.'/edit">open related security group</a></h2>';
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">open related security group</a></h2>';
         } else {
             $groupLink = '<p>No Group has been selected yet.</p>';
         }
@@ -236,26 +227,26 @@ class CampaignMonitorSignupPage extends Page
         $campaignExample = CampaignMonitorCampaign::get()->Last();
         $campaignExampleLink = $this->Link();
         if ($campaignExample) {
-            $campaignExampleLink = $this->Link("viewcampaign/".$campaignExample->CampaignID);
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
         }
         if ($this->ID) {
             $config = GridFieldConfig_RelationEditor::create();
             $campaignField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
         } else {
-            $campaignField = new HiddenField("CampaignList");
+            $campaignField = new HiddenField('CampaignList');
         }
         $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
-        $gridFieldTemplatesAvailable->setDescription("Ask your developer on how to add more templates");
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
         $fields->addFieldToTab(
             'Root.AlternativeContent',
             new TabSet(
-                "AlternativeContentSubHeader",
-                    new Tab(
-                        'Confirm',
-                    new TextField('ConfirmTitle', 'Title'),
-                    new TextField('ConfirmMenuTitle', 'Menu Title'),
-                    new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
-                ),
+                'AlternativeContentSubHeader',
+                new Tab(
+                    'Confirm',
+                        new TextField('ConfirmTitle', 'Title'),
+                        new TextField('ConfirmMenuTitle', 'Menu Title'),
+                        new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
+                    ),
                 new Tab(
                     'ThankYou',
                     new TextField('ThankYouTitle', 'Title'),
@@ -276,9 +267,9 @@ class CampaignMonitorSignupPage extends Page
                 'Options',
                 new Tab(
                     'MainSettings',
-                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get(CampaignMonitorAPIConnector::class, "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
-                    new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
+                    new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
                 ),
                 new Tab(
@@ -292,73 +283,38 @@ class CampaignMonitorSignupPage extends Page
                     'Newsletters',
                     new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
                     new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-                    new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter("HasBeenSent", 1)->limit(10000)->map()->toArray()),
+                    new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->limit(10000)->map()->toArray()),
                     $campaignField,
                     $gridFieldTemplatesAvailable
                 ),
                 new Tab(
                     'Advanced',
-                    new LiteralField('MyControllerTest', '<h3><a href="'.$testControllerLink.'">Test Connections</a></h3>'),
-                    new LiteralField('MyStats', '<h3><a href="'.$this->Link("stats").'">Stats and Debug information</a></h3>'),
-                    new LiteralField('MyCampaignReset', '<h3><a href="'.$this->Link("resetoldcampaigns").'">Delete All Campaigns from Website</a></h3>'),
-                    new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="'.$campaignExampleLink.'">an example</a></h3>'),
+                    new LiteralField('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                    new LiteralField('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                    new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                    new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
                     $gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
                     $gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
                     new LiteralField('GroupLink', $groupLink)
                 )
             )
         );
-        if (!Config::inst()->get("CampaignMonitorWrapper", "campaign_monitor_url")) {
+        if (! Config::inst()->get('CampaignMonitorWrapper', 'campaign_monitor_url')) {
             //$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
         }
         return $fields;
     }
 
     /**
-     *
      * @return CampaignMonitorAPIConnector
      */
     public function getAPI()
     {
-        if (!self::$_api) {
+        if (! self::$_api) {
             self::$_api = CampaignMonitorAPIConnector::create();
             self::$_api->init();
         }
         return self::$_api;
-    }
-
-    /**
-     *
-     * @var Null | Array
-     */
-    private static $drop_down_list = [];
-
-    /**
-     * returns available list for client
-     * @return array
-     */
-    protected function makeDropdownListFromLists()
-    {
-        if (!isset(self::$drop_down_list[$this->ID])) {
-            $array = [];
-            $api = $this->getAPI();
-            $lists = $api->getLists();
-            if (is_array($lists) && count($lists)) {
-                foreach ($lists as $list) {
-                    $array[$list->ListID] = $list->Name;
-                }
-            }
-            //remove subscription list IDs from other pages
-            $subscribePages = CampaignMonitorSignupPage::get()
-                ->exclude("ID", $this->ID);
-            foreach ($subscribePages as $page) {
-                if (isset($array[$page->ListID])) {
-                    unset($array[$page->ListID]);
-                }
-            }
-            self::$drop_down_list[$this->ID] = $array;
-        }
-        return self::$drop_down_list[$this->ID];
     }
 
     /**
@@ -368,66 +324,65 @@ class CampaignMonitorSignupPage extends Page
      * Or does a basic sign up if ajax submitted.
      *
      * @param Controller $controller
-     * @param String $formName
+     * @param string $formName
      *
      * @return Form
      */
-    public function CampaignMonitorStartForm(Controller $controller, $formName = "CampaignMonitorStarterForm")
+    public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
     {
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: Session:: (case sensitive)
-  * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-        if ($email = SilverStripe\Control\Controller::curr()->getRequest()->getSession()->get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
+        /**
+         * ### @@@@ START REPLACEMENT @@@@ ###
+         * WHY: upgrade to SS4
+         * OLD: Session:: (case sensitive)
+         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
+         * ### @@@@ STOP REPLACEMENT @@@@ ###
+         */
+        if ($email = SilverStripe\Control\Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: ->RenderWith( (ignore case)
-  * NEW: ->RenderWith( (COMPLEX)
-  * EXP: Check that the template location is still valid!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-            return $this->RenderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));
-        } else {
+            /**
+             * ### @@@@ START REPLACEMENT @@@@ ###
+             * WHY: upgrade to SS4
+             * OLD: ->RenderWith( (ignore case)
+             * NEW: ->RenderWith( (COMPLEX)
+             * EXP: Check that the template location is still valid!
+             * ### @@@@ STOP REPLACEMENT @@@@ ###
+             */
+            return $this->RenderWith('CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
+        }
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD: THIRDPARTY_DIR . '/jquery/jquery.js' (case sensitive)
-  * NEW: 'silverstripe/admin: thirdparty/jquery/jquery.js' (COMPLEX)
-  * EXP: Check for best usage and inclusion of Jquery
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-            Requirements::javascript('sunnysideup/campaignmonitor: silverstripe/admin: thirdparty/jquery/jquery.js');
-            //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
-            Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
-            if (!$this->ReadyToReceiveSubscribtions()) {
-                //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
-                return false;
-            }
-            $fields = new FieldList(new EmailField("CampaignMonitorEmail", _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class)));
-            $actions = new FieldList(new FormAction("campaignmonitorstarterformstartaction", $this->SignUpButtonLabel));
-            $form = new Form(
+        /**
+         * ### @@@@ START REPLACEMENT @@@@ ###
+         * WHY: upgrade to SS4
+         * OLD: THIRDPARTY_DIR . '/jquery/jquery.js' (case sensitive)
+         * NEW: 'silverstripe/admin: thirdparty/jquery/jquery.js' (COMPLEX)
+         * EXP: Check for best usage and inclusion of Jquery
+         * ### @@@@ STOP REPLACEMENT @@@@ ###
+         */
+        Requirements::javascript('sunnysideup/campaignmonitor: silverstripe/admin: thirdparty/jquery/jquery.js');
+        //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
+        Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
+        if (! $this->ReadyToReceiveSubscribtions()) {
+            //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
+            return false;
+        }
+        $fields = new FieldList(new EmailField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', Email::class)));
+        $actions = new FieldList(new FormAction('campaignmonitorstarterformstartaction', $this->SignUpButtonLabel));
+        $form = new Form(
                 $controller,
                 $formName,
                 $fields,
                 $actions
             );
-            $form->setFormAction($this->Link("preloademail"));
-            return $form;
-        }
+        $form->setFormAction($this->Link('preloademail'));
+        return $form;
     }
 
     /**
      * adds a subcriber to the list without worrying about making it a user ...
      *
-     * @param String $email
+     * @param string $email
      *
      * @returns
      */
@@ -436,7 +391,7 @@ class CampaignMonitorSignupPage extends Page
         if ($this->ReadyToReceiveSubscribtions()) {
             $listID = $this->ListID;
             $email = Convert::raw2sql($email);
-            $member = Member::get()->filter(array("Email" => $email))->first();
+            $member = Member::get()->filter(['Email' => $email])->first();
             if ($member && $member->exists()) {
                 //do nothing
             } else {
@@ -451,17 +406,17 @@ class CampaignMonitorSignupPage extends Page
             }
             $api = $this->getAPI();
             $result = $api->addSubscriber($listID, $member);
-            if ($result == $email) {
+            if ($result === $email) {
                 return null;
             }
-            return "ERROR: could not subscribe";
+            return 'ERROR: could not subscribe';
         }
-        return "ERROR: not ready";
+        return 'ERROR: not ready';
     }
 
     /**
      * name of the list connected to.
-     * @return String
+     * @return string
      */
     public function getListTitle()
     {
@@ -471,12 +426,12 @@ class CampaignMonitorSignupPage extends Page
                 return $a[$this->ListID];
             }
         }
-        return "";
+        return '';
     }
 
     /**
      * tells us if the page is ready to receive subscriptions
-     * @return Boolean
+     * @return boolean
      */
     public function ReadyToReceiveSubscribtions()
     {
@@ -485,36 +440,35 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * check list and group IDs
-     *
      */
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
         //check list
-        if (!$this->getListTitle()) {
+        if (! $this->getListTitle()) {
             $this->ListID = 0;
         }
         $gp = null;
         //check group
         if ($this->GroupID) {
             $gp = $this->Group();
-            if (!$gp || !$gp->exists()) {
+            if (! $gp || ! $gp->exists()) {
                 $this->GroupID = 0;
             }
         }
 
         //add group
         if ($this->ListID) {
-            if (!$this->GroupID) {
+            if (! $this->GroupID) {
                 $gp = new Group();
                 $this->GroupID = $gp->ID;
                 $gp->write();
             }
-            $title = _t("CampaignMonitor.NEWSLETTER", "NEWSLETTER");
+            $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
             if ($myListName = $this->getListTitle()) {
-                $title .= ": ".$myListName;
+                $title .= ': ' . $myListName;
             }
-            $gp->Title = (string)$title;
+            $gp->Title = (string) $title;
             $gp->write();
         }
         if ($gp) {
@@ -527,7 +481,6 @@ class CampaignMonitorSignupPage extends Page
      * depending on the setting
      *
      * add / remove segments ...
-     *
      */
     public function onAfterWrite()
     {
@@ -535,7 +488,7 @@ class CampaignMonitorSignupPage extends Page
         if ($this->ShowOldNewsletters) {
             $this->AddOldCampaigns();
         } else {
-            $this->CampaignMonitorCampaigns()->filter(array("HasBeenSent" => 1))->removeAll();
+            $this->CampaignMonitorCampaigns()->filter(['HasBeenSent' => 1])->removeAll();
         }
         //add segments
         $segmentsAdded = [];
@@ -543,17 +496,17 @@ class CampaignMonitorSignupPage extends Page
         if ($segments && is_array($segments) && count($segments)) {
             foreach ($segments as $segment) {
                 $segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
-                $filterArray = array("SegmentID" => $segment->SegmentID, "ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID);
+                $filterArray = ['SegmentID' => $segment->SegmentID, 'ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID];
                 $obj = CampaignMonitorSegment::get()->filter($filterArray)->first();
-                if (!$obj) {
+                if (! $obj) {
                     $obj = CampaignMonitorSegment::create($filterArray);
                 }
                 $obj->Title = $segment->Title;
                 $obj->write();
             }
         }
-        $unwantedSegments = CampaignMonitorSegment::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
-            ->exclude(array("SegmentID" => $segmentsAdded));
+        $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+            ->exclude(['SegmentID' => $segmentsAdded]);
         foreach ($unwantedSegments as $unwantedSegment) {
             $unwantedSegment->delete();
         }
@@ -566,8 +519,8 @@ class CampaignMonitorSignupPage extends Page
                 $customCustomFieldsAdded[$obj->Code] = $obj->Code;
             }
         }
-        $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(array("ListID" => $this->ListID, "CampaignMonitorSignupPageID" => $this->ID))
-            ->exclude(array("Code" => $customCustomFieldsAdded));
+        $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+            ->exclude(['Code' => $customCustomFieldsAdded]);
         foreach ($unwantedCustomFields as $unwantedCustomField) {
             $unwantedCustomField->delete();
         }
@@ -584,26 +537,54 @@ class CampaignMonitorSignupPage extends Page
     {
         parent::requireDefaultRecords();
         $update = [];
-        $page = CampaignMonitorSignupPage::get()->First();
+        $page = self::get()->First();
 
         if ($page) {
-            if (!$page->SignUpHeader) {
+            if (! $page->SignUpHeader) {
                 $page->SignUpHeader = 'Sign Up Now';
-                $update[]= "created default entry for SignUpHeader";
+                $update[] = 'created default entry for SignUpHeader';
             }
-            if (strlen($page->SignUpIntro) < strlen("<p> </p>")) {
+            if (strlen($page->SignUpIntro) < strlen('<p> </p>')) {
                 $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
-                $update[]= "created default entry for SignUpIntro";
+                $update[] = 'created default entry for SignUpIntro';
             }
-            if (!$page->SignUpButtonLabel) {
+            if (! $page->SignUpButtonLabel) {
                 $page->SignUpButtonLabel = 'Register Now';
-                $update[]= "created default entry for SignUpButtonLabel";
+                $update[] = 'created default entry for SignUpButtonLabel';
             }
             if (count($update)) {
                 $page->writeToStage('Stage');
                 $page->publish('Stage', 'Live');
-                DB::alteration_message($page->ClassName." created/updated: ".implode(" --- ", $update), 'created');
+                DB::alteration_message($page->ClassName . ' created/updated: ' . implode(' --- ', $update), 'created');
             }
         }
+    }
+
+    /**
+     * returns available list for client
+     * @return array
+     */
+    protected function makeDropdownListFromLists()
+    {
+        if (! isset(self::$drop_down_list[$this->ID])) {
+            $array = [];
+            $api = $this->getAPI();
+            $lists = $api->getLists();
+            if (is_array($lists) && count($lists)) {
+                foreach ($lists as $list) {
+                    $array[$list->ListID] = $list->Name;
+                }
+            }
+            //remove subscription list IDs from other pages
+            $subscribePages = self::get()
+                ->exclude('ID', $this->ID);
+            foreach ($subscribePages as $page) {
+                if (isset($array[$page->ListID])) {
+                    unset($array[$page->ListID]);
+                }
+            }
+            self::$drop_down_list[$this->ID] = $array;
+        }
+        return self::$drop_down_list[$this->ID];
     }
 }
