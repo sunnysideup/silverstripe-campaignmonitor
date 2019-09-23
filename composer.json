@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/campaignmonitor",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "connect with campaign monitor",
     "keywords": [
         "Silverstripe-CMS",
@@ -17,12 +17,32 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~3.6",
-        "silverstripe/cms": "~3.6",
         "campaignmonitor/createsend-php": "~5.1",
-        "pelago/emogrifier": "*"
+        "pelago/emogrifier": "*",
+        "silverstripe/framework": "",
+        "silverstripe/assets": "",
+        "silverstripe/config": "",
+        "silverstripe/admin": "",
+        "silverstripe/cms": "",
+        "silverstripe/asset-admin": "",
+        "silverstripe/campaign-admin": "",
+        "silverstripe/versioned-admin": "",
+        "silverstripe/errorpage": "",
+        "silverstripe/graphql": "",
+        "silverstripe/reports": "",
+        "silverstripe/siteconfig": "",
+        "silverstripe/versioned": ""
     },
     "extra": {
-        "installer-name": "campaignmonitor"
+        "expose": [
+            "client/javascript",
+            "client/images",
+            "client/css"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\CampaignMonitor\\": "src/"
+        }
     }
 }

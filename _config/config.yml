@@ -1,13 +1,19 @@
 ---
 Name: campaignmonitor
-Before: 'mysite/*'
-After: 'framework/*','cms/*'
+Before:
+  - 'app/*'
 ---
-
-
-Member:
+SilverStripe\Security\Member:
   extensions:
-    - CampaignMonitorMemberDOD
+    - Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
+Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
+  campaign_monitor_signup_fieldname: CampaignMonitorSubscriptions
 
-CampaignMonitorMemberDOD:
-  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
+---
+Name: CampaignMonitorAPIConnector
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.CampaignMonitorAPIConnector:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: 'CampaignMonitorAPIConnector'

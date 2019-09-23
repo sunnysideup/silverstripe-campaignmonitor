@@ -1,6 +1,6 @@
 ---
 Name: campaignmonitortest
 ---
-Director:
+SilverStripe\Control\Director:
   rules:
-    'create-send-test//$Action/$ID/$OtherID': 'CampaignMonitorAPIConnector_TestController'
+    create-send-test//$Action/$ID/$OtherID: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController

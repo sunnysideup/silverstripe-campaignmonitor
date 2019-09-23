@@ -1,5 +1,19 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Decorators;
+
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\ORM\DataExtension;
+use SilverStripe\Security\Group;
+use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * TO DO: only apply the on afterwrite to people in the subscriber group.
@@ -8,12 +22,11 @@
 
 class CampaignMonitorMemberDOD extends DataExtension
 {
-
     /**
      * name of the field to use for sign-ups
-     * @var String
+     * @var string
      */
-    private static $campaign_monitor_signup_fieldname = "CampaignMonitorSubscriptions";
+    private static $campaign_monitor_signup_fieldname = 'CampaignMonitorSubscriptions';
 
     /**
      * array of fields where the member value is set as the default for the
@@ -23,28 +36,12 @@ class CampaignMonitorMemberDOD extends DataExtension
      *     CustomFieldCode => MemberFieldOrMethod
      * @var array
      */
-    private static $custom_fields_member_field_or_method_map = array();
+    private static $custom_fields_member_field_or_method_map = [];
 
     /**
-     *
-     *
      * @var null | CampaignMonitorAPIConnector
-     *
      */
     private static $_api = null;
-
-    /**
-     *
-     * @return CampaignMonitorAPIConnector
-     */
-    private function getCMAPI()
-    {
-        if (!self::$_api) {
-            self::$_api = CampaignMonitorAPIConnector::create();
-            self::$_api->init();
-        }
-        return self::$_api;
-    }
 
     /**
      * returns a form field for signing up to all available lists
@@ -56,44 +53,44 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return FormField
      */
-    public function getCampaignMonitorSignupField($listPage = null, $fieldName = "", $fieldTitle = "")
+    public function getCampaignMonitorSignupField($listPage = null, $fieldName = '', $fieldTitle = '')
     {
-        if (!is_object($listPage)) {
-            $listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
+        if (! is_object($listPage)) {
+            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
         $field = null;
-        if (!$fieldName) {
-            $fieldName = Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname");
+        if (! $fieldName) {
+            $fieldName = Config::inst()->get(self::class, 'campaign_monitor_signup_fieldname');
         }
         $api = $this->getCMAPI();
         $currentValues = null;
         if ($listPage) {
             if ($listPage->ReadyToReceiveSubscribtions()) {
-                $currentSelection = "Subscribe";
-                $optionArray = array();
-                $optionArray["Subscribe"] = _t("CampaignMonitorSignupPage.SUBSCRIBE_TO", "subscribe to")." ".$listPage->getListTitle();
-                $optionArray["Unsubscribe"] = _t("CampaignMonitorSignupPage.UNSUBSCRIBE_FROM", "unsubscribe from ")." ".$listPage->getListTitle();
+                $currentSelection = 'Subscribe';
+                $optionArray = [];
+                $optionArray['Subscribe'] = _t('CampaignMonitorSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
+                $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
                 if ($this->owner->exists()) {
                     if ($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
                         $currentValues = $api->getSubscriber($listPage->ListID, $this->owner);
                         //$currentSelection = "Unsubscribe";
                     }
                 }
-                if (!$fieldTitle) {
-                    $fieldTitle = _t("CampaignMonitorSignupPage.SIGNUP_FOR", "Sign up for ")." ".$listPage->getListTitle();
+                if (! $fieldTitle) {
+                    $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $listPage->getListTitle();
                 }
                 $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
                 $field = CompositeField::create($subscribeField);
-                $field->addExtraClass("CMFieldsCustomFieldsHolder");
+                $field->addExtraClass('CMFieldsCustomFieldsHolder');
                 //add custom fields
-                $linkedMemberFields = Config::inst()->get("CampaignMonitorMemberDOD", "custom_fields_member_field_or_method_map");
-                $customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
+                $linkedMemberFields = Config::inst()->get(self::class, 'custom_fields_member_field_or_method_map');
+                $customFields = $listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
                 foreach ($customFields as $customField) {
                     $valueSet = false;
-                    $customFormField = $customField->getFormField("CMCustomField");
+                    $customFormField = $customField->getFormField('CMCustomField');
                     if ($currentValues && isset($currentValues->CustomFields)) {
                         foreach ($currentValues->CustomFields as $customFieldObject) {
-                            if ($customFieldObject->Key == $customField->Title) {
+                            if ($customFieldObject->Key === $customField->Title) {
                                 if ($value = $customFieldObject->Value) {
                                     $valueSet = true;
                                 }
@@ -101,12 +98,12 @@ class CampaignMonitorMemberDOD extends DataExtension
                             }
                         }
                     }
-                    if (isset($linkedMemberFields[$customFormField->Code]) && !$valueSet) {
+                    if (isset($linkedMemberFields[$customFormField->Code]) && ! $valueSet) {
                         $fieldOrMethod = $linkedMemberFields[$custom->Code];
                         if ($this->owner->hasMethod($fieldOrMethod)) {
-                            $value = $this->owner->$fieldOrMethod();
+                            $value = $this->owner->{$fieldOrMethod}();
                         } else {
-                            $value = $this->owner->$fieldOrMethod;
+                            $value = $this->owner->{$fieldOrMethod};
                         }
                         if ($value) {
                             $customFormField->setValue($value);
@@ -116,11 +113,11 @@ class CampaignMonitorMemberDOD extends DataExtension
                 }
             }
         } else {
-            if (!$fieldTitle) {
-                $fieldTitle = _t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up");
+            if (! $fieldTitle) {
+                $fieldTitle = _t('CampaignMonitorMemberDOD.NEWSLETTERSIGNUP', 'Newsletter sign-up');
             }
             $lists = CampaignMonitorSignupPage::get_ready_ones();
-            $array = array();
+            $array = [];
             foreach ($lists as $list) {
                 $array[$list->ListID] = $list->getListTitle();
             }
@@ -133,87 +130,86 @@ class CampaignMonitorMemberDOD extends DataExtension
                 $field->setDefaultItems($this->owner->CampaignMonitorSignupPageIDs());
             }
         }
-        if (!$field) {
+        if (! $field) {
             $field = ReadonlyField::create(
                 $fieldName,
                 $fieldTitle,
-                _t("CampaignMonitorMemberDOD.NO_LISTS_AVAILABLE", "No lists available right now.  Please come back soon.")
+                _t('CampaignMonitorMemberDOD.NO_LISTS_AVAILABLE', 'No lists available right now.  Please come back soon.')
             );
         }
         return $field;
     }
 
-
     /**
      * action subscription form
-     * @param CampaignMonitorSignUpPage $page
-     * @param Array $array
+     * @param CampaignMonitorSignUpPage $listPage
+     * @param array $data
      * @param Form $form
      *
      * return string: can be subscribe / unsubscribe / error
      */
     public function processCampaignMonitorSignupField($listPage, $data, $form)
     {
-        $typeOfAction = "unsubscribe";
+        $typeOfAction = 'unsubscribe';
         //many choices
-        if (isset($data["SubscribeManyChoices"])) {
+        if (isset($data['SubscribeManyChoices'])) {
             $listPages = CampaignMonitorSignupPage::get_ready_ones();
             foreach ($listPages as $listPage) {
-                if (isset($data["SubscribeManyChoices"][$listPage->ListID]) && $data["SubscribeManyChoices"][$listPage->ListID]) {
+                if (isset($data['SubscribeManyChoices'][$listPage->ListID]) && $data['SubscribeManyChoices'][$listPage->ListID]) {
                     $this->owner->addCampaignMonitorList($listPage->ListID);
-                    $typeOfAction = "subscribe";
+                    $typeOfAction = 'subscribe';
                 } else {
                     $this->owner->removeCampaignMonitorList($listPage->ListID);
                 }
             }
         }
         //one choice
-        elseif (isset($data["SubscribeChoice"])) {
-            if ($data["SubscribeChoice"] == "Subscribe") {
-                $customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
-                $customFieldsArray = array();
+        elseif (isset($data['SubscribeChoice'])) {
+            if ($data['SubscribeChoice'] === 'Subscribe') {
+                $customFields = $listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
+                $customFieldsArray = [];
                 foreach ($customFields as $customField) {
-                    if (isset($data["CMCustomField".$customField->Code])) {
-                        $customFieldsArray[$customField->Code] = $data["CMCustomField".$customField->Code];
+                    if (isset($data['CMCustomField' . $customField->Code])) {
+                        $customFieldsArray[$customField->Code] = $data['CMCustomField' . $customField->Code];
                     }
                 }
                 $this->owner->addCampaignMonitorList($listPage->ListID, $customFieldsArray);
-                $typeOfAction = "subscribe";
+                $typeOfAction = 'subscribe';
             } else {
                 $this->owner->removeCampaignMonitorList($listPage->ListID);
             }
         } else {
-            user_error("Subscriber field missing", E_USER_WARNING);
+            user_error('Subscriber field missing', E_USER_WARNING);
         }
         return $typeOfAction;
     }
 
     /**
      * immediately unsubscribe if you are logged in.
-     * @param HTTPRequest
+     * @param HTTPRequest $request
      */
     public function unsubscribe($request)
     {
         $member = Member::currentUser();
         if ($member) {
             $member->removeCampaignMonitorList($this->ListID);
-            $this->Content = $member->Email." has been removed from this list: ".$this->getListTitle();
+            $this->Content = $member->Email . ' has been removed from this list: ' . $this->getListTitle();
         } else {
-            Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST", "Please login first."));
+            Security::permissionFailure($this, _t('CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST', 'Please login first.'));
         }
-        return array();
+        return [];
     }
 
     /**
      * is this user currently signed up to one or more newsletters
      *
-     * @return Boolean
+     * @return boolean
      */
     public function IsCampaignMonitorSubscriber()
     {
         CampaignMonitorSignupPage::get_ready_ones()
-            ->where("MemberID = ".$this->owner->ID)
-            ->innerJoin("Group_Members", "CampaignMonitorSignupPage ON CampaignMonitorSignupPage.GroupID = Group_Members.GroupID")
+            ->where('MemberID = ' . $this->owner->ID)
+            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage ON CampaignMonitorSignupPage.GroupID = Group_Members.GroupID')
             ->count() ? true : false;
     }
 
@@ -222,14 +218,14 @@ class CampaignMonitorMemberDOD extends DataExtension
      * add to CM database...
      * @param CampaignMonitorSignupPage | Int $listPage
      * @param array $customFields
-     * @return Boolean - returns true on success
+     * @return boolean - returns true on success
      */
-    public function addCampaignMonitorList($listPage, $customFields = array())
+    public function addCampaignMonitorList($listPage, $customFields = [])
     {
         $api = $this->getCMAPI();
         $outcome = 0;
         if (is_string($listPage)) {
-            $listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
+            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
         //internal database
         if ($listPage && $listPage->GroupID) {
@@ -245,7 +241,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             if ($api->getSubscriber($listPage->ListID, $this->owner)) {
                 if ($api->updateSubscriber(
                     $listPage->ListID,
-                    $oldEmailAddress = "",
+                    $oldEmailAddress = '',
                     $this->owner,
                     $customFields,
                     $resubscribe = true,
@@ -253,7 +249,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 )) {
                     $outcome++;
                 }
-            } elseif (!$api->addSubscriber(
+            } elseif (! $api->addSubscriber(
                 $listPage->ListID,
                 $this->owner,
                 $customFields,
@@ -270,7 +266,6 @@ class CampaignMonitorMemberDOD extends DataExtension
     }
 
     /**
-     *
      * remove from Group
      * remove from CM database...
      * @param CampaignMonitorSignupPage | Int $listPage
@@ -281,7 +276,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $api = $this->getCMAPI();
         $outcome = 0;
         if (is_string($listPage)) {
-            $listPage = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listPage))->first();
+            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
         if ($listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
@@ -293,7 +288,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             }
         }
         if ($listPage->ListID) {
-            if (!$api->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
+            if (! $api->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
                 $outcome++;
             }
         }
@@ -307,20 +302,32 @@ class CampaignMonitorMemberDOD extends DataExtension
      * returns a list of list IDs
      * that the user is currently subscribed to.
      *
-     * @return Array
+     * @return array
      */
     public function CampaignMonitorSignupPageIDs()
     {
         $api = $this->getCMAPI();
         $lists = $api->getListsForEmail($this->owner);
-        $array = array();
+        $array = [];
         if ($lists && count($lists)) {
             foreach ($lists as $listArray) {
-                if (in_array($listArray["SubscriberState"], array("Active", "Bounced"))) {
-                    $array[$listArray["ListID"]] = $listArray["ListID"];
+                if (in_array($listArray['SubscriberState'], ['Active', 'Bounced'], true)) {
+                    $array[$listArray['ListID']] = $listArray['ListID'];
                 }
             }
         }
         return $array;
+    }
+
+    /**
+     * @return CampaignMonitorAPIConnector
+     */
+    private function getCMAPI()
+    {
+        if (! self::$_api) {
+            self::$_api = CampaignMonitorAPIConnector::create();
+            self::$_api->init();
+        }
+        return self::$_api;
     }
 }
