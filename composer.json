@@ -33,7 +33,13 @@
         "silverstripe/siteconfig": "",
         "silverstripe/versioned": ""
     },
-    "extra": [],
+    "extra": {
+        "expose": [
+            "client/javascript",
+            "client/images",
+            "client/css"
+        ]
+    },
     "autoload": {
         "psr-4": {
             "Sunnysideup\\CampaignMonitor\\": "src/"
