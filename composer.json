@@ -33,7 +33,5 @@
         "silverstripe/siteconfig": "",
         "silverstripe/versioned": ""
     },
-    "extra": {
-        "installer-name": "campaignmonitor"
-    }
+    "extra": []
 }
