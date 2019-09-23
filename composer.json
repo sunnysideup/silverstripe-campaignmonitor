@@ -17,9 +17,21 @@
         }
     ],
     "require": {
-        "silverstripe/cms": "~3.6",
         "campaignmonitor/createsend-php": "~5.1",
-        "pelago/emogrifier": "*"
+        "pelago/emogrifier": "*",
+        "silverstripe/framework": "",
+        "silverstripe/assets": "",
+        "silverstripe/config": "",
+        "silverstripe/admin": "",
+        "silverstripe/cms": "",
+        "silverstripe/asset-admin": "",
+        "silverstripe/campaign-admin": "",
+        "silverstripe/versioned-admin": "",
+        "silverstripe/errorpage": "",
+        "silverstripe/graphql": "",
+        "silverstripe/reports": "",
+        "silverstripe/siteconfig": "",
+        "silverstripe/versioned": ""
     },
     "extra": {
         "installer-name": "campaignmonitor"
