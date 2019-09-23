@@ -94,7 +94,7 @@ A full list of api calls can be found in the CampaignMonitorAPIConnector.
  * adding a quick sign-up form on all your pages:
 
 ```php
-    class Page_Controller extends ContentController {
+    class PageController extends ContentController {
 
         private static $allowed_actions = array (
             "CampaignMonitorStartForm" => true
@@ -120,5 +120,3 @@ and add this in the your template:
 ```html
     $CampaignMonitorStartForm
 ```
-
-
