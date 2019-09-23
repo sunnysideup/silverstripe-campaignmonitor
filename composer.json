@@ -19,7 +19,7 @@
     "require": {
         "campaignmonitor/createsend-php": "~5.1",
         "pelago/emogrifier": "*",
-        "silverstripe/cms": "~4.0",
+        "silverstripe/cms": "~4.0"
     },
     "extra": {
         "expose": [
