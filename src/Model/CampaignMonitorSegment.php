@@ -33,7 +33,7 @@ class CampaignMonitorSegment extends DataObject
         'CampaignMonitorSignupPage' => CampaignMonitorSignupPage::class,
     ];
 
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
         return false;
     }

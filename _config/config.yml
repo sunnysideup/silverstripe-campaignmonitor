@@ -1,7 +1,7 @@
 ---
 Name: campaignmonitor
-Before: 'app/*'
-After: 'framework/*','cms/*'
+Before:
+  - 'app/*'
 ---
 SilverStripe\Security\Member:
   extensions:
