@@ -1,5 +1,16 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Tasks;
+
+use BuildTask;
+use DB;
+use Director;
+use Member;
+use Config;
+use CampaignMonitorAPIConnector;
+use PWUpdateGetData;
+
+
 /**
  * Moves all Members to a Campaign Monitor List
  *

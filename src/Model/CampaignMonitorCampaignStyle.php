@@ -1,5 +1,15 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Model;
+
+use DataObject;
+use TextField;
+use ReadonlyField;
+use Director;
+use DOMDocument;
+use SS_FileFinder;
+
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *

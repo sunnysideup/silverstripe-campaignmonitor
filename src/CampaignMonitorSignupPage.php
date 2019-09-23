@@ -1,5 +1,41 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor;
+
+use Page;
+use Injector;
+use CampaignMonitorCampaign;
+use GridFieldConfig_RelationEditor;
+use GridField;
+use HiddenField;
+use CampaignMonitorCampaignStyle;
+use GridFieldConfig_RecordEditor;
+use TabSet;
+use Tab;
+use TextField;
+use HTMLEditorField;
+use LiteralField;
+use Config;
+use DropdownField;
+use CheckboxField;
+use CheckboxSetField;
+use GridFieldConfig_RecordViewer;
+use CampaignMonitorAPIConnector;
+use Controller;
+use Requirements;
+use FieldList;
+use EmailField;
+use FormAction;
+use Form;
+use Convert;
+use Member;
+use Group;
+use CampaignMonitorSegment;
+use CampaignMonitorCustomField;
+use CampaignMonitorAddOldCampaigns;
+use DB;
+
+
 /**
  * Page for Signing Up to Campaign Monitor List
  *

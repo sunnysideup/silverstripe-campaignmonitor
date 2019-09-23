@@ -1,5 +1,26 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor;
+
+use PageController;
+use Requirements;
+use Member;
+use ReadonlyField;
+use EmailField;
+use FieldList;
+use FormAction;
+use RequiredFields;
+use Form;
+use Convert;
+use Security;
+use SS_HTTPRequest;
+use Director;
+use CampaignMonitorCampaign;
+use HTTP;
+use Permission;
+use DB;
+
+
 
 /**
   * ### @@@@ START REPLACEMENT @@@@ ###
