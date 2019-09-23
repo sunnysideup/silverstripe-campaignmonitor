@@ -16,22 +16,21 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\ViewableData;
-
+use Psr\SimpleCache\CacheInterface;
 /**
  * Main Holder page for Recipes
  *@author nicolaas [at] sunnysideup.co.nz
  */
+ use SilverStripe\Core\Config\Configurable;
+ use SilverStripe\Core\Extensible;
+ use SilverStripe\Core\Injector\Injectable;
 
-/**
- * ### @@@@ START REPLACEMENT @@@@ ###
- * WHY: upgrade to SS4
- * OLD:  extends Object (ignore case)
- * NEW:  extends ViewableData (COMPLEX)
- * EXP: This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable
- * ### @@@@ STOP REPLACEMENT @@@@ ###
- */
-class CampaignMonitorAPIConnector extends ViewableData
+class CampaignMonitorAPIConnector
 {
+    use Extensible;
+    use Injectable;
+    use Configurable;
+
     /**
      * @var boolean
      */
@@ -1668,31 +1667,13 @@ class CampaignMonitorAPIConnector extends ViewableData
     protected function getFromCache($name)
     {
         if ($this->getAllowCaching()) {
-            $name = 'CampaignMonitorAPIConnector_' . $name;
+            $cache = Injector::inst()->get(CacheInterface::class . '.CampaignMonitorAPIConnector');
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: Cache::factory( (case sensitive)
-             * NEW: SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '.  (COMPLEX)
-             * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . '.' . $name);
-
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: $cache->load( (case sensitive)
-             * NEW: $cache->has( (COMPLEX)
-             * EXP: See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache, you may also need to add $cache->get( !!!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            $value = $cache->has($name);
-            if (! $value) {
+            $has = $cache->has($name);
+            if (! $has) {
                 return null;
             }
-            return unserialize($value);
+            return unserialize($cache->get($name));
         }
     }
 
@@ -1704,27 +1685,9 @@ class CampaignMonitorAPIConnector extends ViewableData
     {
         if ($this->getAllowCaching()) {
             $serializedValue = serialize($unserializedValue);
-            $name = 'CampaignMonitorAPIConnector_' . $name;
+            $cache = Injector::inst()->get(CacheInterface::class . '.CampaignMonitorAPIConnector');
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: Cache::factory( (case sensitive)
-             * NEW: SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '.  (COMPLEX)
-             * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class . '.' . $name);
-
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: $cache->save( (case sensitive)
-             * NEW: $cache->set( (COMPLEX)
-             * EXP: Cache key and value need to be swapped!!! Put key first. See: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            $cache->set($serializedValue, $name);
+            $cache->set($name, $serializedValue);
             return true;
         }
     }

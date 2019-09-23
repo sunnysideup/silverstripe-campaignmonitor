@@ -40,24 +40,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     private static $default_template = self::class;
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * OLD: private static $db (case sensitive)
-     * NEW:
-    private static $db (COMPLEX)
-     * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $table_name = 'CampaignMonitorCampaign';
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * WHY: upgrade to SS4
-     * OLD: private static $db = (case sensitive)
-     * NEW: private static $db = (COMPLEX)
-     * EXP: Make sure to add a private static $table_name!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $db = [
         'HasBeenSent' => 'Boolean',
         'MessageFromNewsletterServer' => 'Text',
@@ -90,14 +74,6 @@ class CampaignMonitorCampaign extends DataObject
         'CreateFromWebsite' => 'Create on newsletter server',
     ];
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * WHY: upgrade to SS4
-     * OLD: private static $has_one = (case sensitive)
-     * NEW: private static $has_one = (COMPLEX)
-     * EXP: Make sure to add a private static $table_name!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $has_one = [
         'CampaignMonitorCampaignStyle' => CampaignMonitorCampaignStyle::class,
     ];
@@ -251,14 +227,6 @@ class CampaignMonitorCampaign extends DataObject
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: ->RenderWith( (ignore case)
-             * NEW: ->RenderWith( (COMPLEX)
-             * EXP: Check that the template location is still valid!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
             $html = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', false);
@@ -302,14 +270,6 @@ class CampaignMonitorCampaign extends DataObject
             return $style->getHTMLContent($this);
         }
 
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: upgrade to SS4
-         * OLD: ->RenderWith( (ignore case)
-         * NEW: ->RenderWith( (COMPLEX)
-         * EXP: Check that the template location is still valid!
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
         return $this->RenderWith(self::class);
     }
 

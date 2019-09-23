@@ -37,14 +37,6 @@ use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
-/**
- * ### @@@@ START REPLACEMENT @@@@ ###
- * WHY: upgrade to SS4
- * OLD: _Controller extends Page_Controller (case sensitive)
- * NEW: Controller extends PageController (COMPLEX)
- * EXP: Remove the underscores in your classname - check all references!
- * ### @@@@ STOP REPLACEMENT @@@@ ###
- */
 class CampaignMonitorSignupPageController extends PageController
 {
     /**
@@ -297,24 +289,8 @@ class CampaignMonitorSignupPageController extends PageController
                 if (Director::is_ajax()) {
                     if (! $this->addSubscriber($email)) {
 
-                        /**
-                         * ### @@@@ START REPLACEMENT @@@@ ###
-                         * WHY: upgrade to SS4
-                         * OLD: Session:: (case sensitive)
-                         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-                         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
-                         * ### @@@@ STOP REPLACEMENT @@@@ ###
-                         */
-                        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
+                        $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
 
-                        /**
-                         * ### @@@@ START REPLACEMENT @@@@ ###
-                         * WHY: upgrade to SS4
-                         * OLD: ->RenderWith( (ignore case)
-                         * NEW: ->RenderWith( (COMPLEX)
-                         * EXP: Check that the template location is still valid!
-                         * ### @@@@ STOP REPLACEMENT @@@@ ###
-                         */
                         return $this->RenderWith('CampaignMonitorStartForm_AjaxResult');
                     }
                     return 'ERROR';
@@ -519,15 +495,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function resetsignup($request)
     {
 
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: upgrade to SS4
-         * OLD: Session:: (case sensitive)
-         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
-        SilverStripe\Control\Controller::curr()->getRequest()->getSession()->clear('CampaignMonitorStartForm_AjaxResult_' . $this->ID);
+        $this->getRequest()->getSession()->clear('CampaignMonitorStartForm_AjaxResult_' . $this->ID);
         return [];
     }
 
@@ -546,17 +514,10 @@ class CampaignMonitorSignupPageController extends PageController
         }
     }
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * OLD:     public function init() (ignore case)
-     * NEW:     protected function init() (COMPLEX)
-     * EXP: Controller init functions are now protected  please check that is a controller.
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     protected function init()
     {
         parent::init();
-        Requirements::themedCSS('sunnysideup/campaignmonitor: CampaignMonitorSignupPage', 'campaignmonitor');
+        Requirements::themedCSS('CampaignMonitorSignupPage', 'campaignmonitor');
     }
 
     /**

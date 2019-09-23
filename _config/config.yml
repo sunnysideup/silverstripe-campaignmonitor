@@ -8,3 +8,12 @@ SilverStripe\Security\Member:
     - Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
 Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
   campaign_monitor_signup_fieldname: CampaignMonitorSubscriptions
+
+---
+Name: CampaignMonitorAPIConnector
+---
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.CampaignMonitorAPIConnector:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: 'CampaignMonitorAPIConnector'

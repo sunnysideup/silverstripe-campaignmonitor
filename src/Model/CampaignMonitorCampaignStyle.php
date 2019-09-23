@@ -18,6 +18,10 @@ use SilverStripe\ORM\DataObject;
 
 class CampaignMonitorCampaignStyle extends DataObject
 {
+    private static $folders_to_search = [];
+
+    private static $css_folders_to_search = [];
+
     private static $db = [
         'Title' => 'Varchar(100)',
         'TemplateName' => 'Varchar(200)',
@@ -65,53 +69,32 @@ class CampaignMonitorCampaignStyle extends DataObject
     /**
      * @return array
      */
-    public function getFoldersToSearch()
+    public function getFoldersToSearch() : array
     {
-        $array = [
-
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: SSViewer::get_theme_folder() (ignore case)
-             * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-             * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/templates/Email/',
-            Director::baseFolder() . '/campaignmonitor/templates/Email/',
-        ];
-        foreach ($array as $key => $folder) {
-            if (! file_exists($folder)) {
-                unset($array[$key]);
-            }
+        $array = $this->Config()->folders_to_search;
+        if(empty($array)) {
+            $array = [];
         }
+        foreach($array as $key => $folder) {
+            $array[$key] = Director::baseFolder() . '/'.$folder;
+        }
+
         return $array;
     }
 
     /**
      * @return array
      */
-    public function getCSSFoldersToSearch()
+    public function getCSSFoldersToSearch() : array
     {
-        $array = [
-
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: SSViewer::get_theme_folder() (ignore case)
-             * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-             * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
-            Director::baseFolder() . '/campaignmonitor/css/',
-
-        ];
-        foreach ($array as $key => $folder) {
-            if (! file_exists($folder)) {
-                unset($array[$key]);
-            }
+        $array = $this->Config()->css_folders_to_search;
+        if(empty($array)) {
+            $array = [];
         }
+        foreach($array as $key => $folder) {
+            $array[$key] = Director::baseFolder() . '/'.$folder;
+        }
+
         return $array;
     }
 

@@ -18,23 +18,22 @@ use Page;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use SilverStripe\Control\Controller;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -103,24 +102,9 @@ class CampaignMonitorSignupPage extends Page
      * @inherited
      */
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * OLD: private static $db (case sensitive)
-     * NEW:
-    private static $db (COMPLEX)
-     * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
+
     private static $table_name = 'CampaignMonitorSignupPage';
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * WHY: upgrade to SS4
-     * OLD: private static $db = (case sensitive)
-     * NEW: private static $db = (COMPLEX)
-     * EXP: Make sure to add a private static $table_name!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $db = [
         'ListID' => 'Varchar(32)',
 
@@ -149,14 +133,6 @@ class CampaignMonitorSignupPage extends Page
      * @inherited
      */
 
-    /**
-     * ### @@@@ START REPLACEMENT @@@@ ###
-     * WHY: upgrade to SS4
-     * OLD: private static $has_one = (case sensitive)
-     * NEW: private static $has_one = (COMPLEX)
-     * EXP: Make sure to add a private static $table_name!
-     * ### @@@@ STOP REPLACEMENT @@@@ ###
-     */
     private static $has_one = [
         'Group' => Group::class,
     ];
@@ -331,38 +307,14 @@ class CampaignMonitorSignupPage extends Page
     public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
     {
 
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: upgrade to SS4
-         * OLD: Session:: (case sensitive)
-         * NEW: SilverStripe\Control\Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-         * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly.
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
-        if ($email = SilverStripe\Control\Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
+        if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: upgrade to SS4
-             * OLD: ->RenderWith( (ignore case)
-             * NEW: ->RenderWith( (COMPLEX)
-             * EXP: Check that the template location is still valid!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
             return $this->RenderWith('CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
 
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: upgrade to SS4
-         * OLD: THIRDPARTY_DIR . '/jquery/jquery.js' (case sensitive)
-         * NEW: 'silverstripe/admin: thirdparty/jquery/jquery.js' (COMPLEX)
-         * EXP: Check for best usage and inclusion of Jquery
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
-        Requirements::javascript('sunnysideup/campaignmonitor: silverstripe/admin: thirdparty/jquery/jquery.js');
+        Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
         //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
-        Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
+        Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
         if (! $this->ReadyToReceiveSubscribtions()) {
             //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
             return false;
