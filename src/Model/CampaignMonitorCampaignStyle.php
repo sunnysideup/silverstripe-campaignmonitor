@@ -64,7 +64,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         return $fields;
     }
 
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = [])
     {
         return false;
     }
