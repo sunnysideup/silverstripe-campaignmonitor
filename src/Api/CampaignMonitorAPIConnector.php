@@ -1,5 +1,25 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Api;
+
+
+use CS_REST_General;
+use CS_REST_Clients;
+use CS_REST_Templates;
+
+use CS_REST_Lists;
+
+use CS_REST_Campaigns;
+
+use CS_REST_Subscribers;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Security\Member;
+use SilverStripe\View\ViewableData;
+
+
+
 /**
  * Main Holder page for Recipes
  *@author nicolaas [at] sunnysideup.co.nz
@@ -230,7 +250,7 @@ class CampaignMonitorAPIConnector extends ViewableData
   * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
   * ### @@@@ STOP REPLACEMENT @@@@ ###
   */
-            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '. $name);
+            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class .'.'. $name);
 
 /**
   * ### @@@@ START REPLACEMENT @@@@ ###
@@ -266,7 +286,7 @@ class CampaignMonitorAPIConnector extends ViewableData
   * EXP: Check cache implementation - see: https://docs.silverstripe.org/en/4/changelogs/4.0.0#cache
   * ### @@@@ STOP REPLACEMENT @@@@ ###
   */
-            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class '. $name);
+            $cache = SS_SilverStripe\Core\Injector\Injector::inst()->get(Psr\SimpleCache\CacheInterface::class .'.'. $name);
 
 /**
   * ### @@@@ START REPLACEMENT @@@@ ###
@@ -1081,7 +1101,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
         $fromEmail = $campaignMonitorCampaign->FromEmail;
         if (!$fromEmail) {
-            $fromEmail = Config::inst()->get('Email', 'admin_email');
+            $fromEmail = Config::inst()->get(Email::class, 'admin_email');
         }
 
         $replyTo = $campaignMonitorCampaign->ReplyTo;

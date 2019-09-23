@@ -2,12 +2,19 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-use DataObject;
-use TextField;
-use ReadonlyField;
-use Director;
+
+
+
+
 use DOMDocument;
-use SS_FileFinder;
+
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Control\Director;
+use SilverStripe\Assets\FileFinder;
+use SilverStripe\ORM\DataObject;
+
 
 
 /**
@@ -29,7 +36,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     );
 
     private static $has_many = array(
-        "CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
+        "CampaignMonitorCampaigns" => CampaignMonitorCampaign::class
     );
 
     private static $searchable_fields = array(
@@ -44,7 +51,7 @@ class CampaignMonitorCampaignStyle extends DataObject
 
     private static $plural_name = "Campaign Templates";
 
-    private static $default_template = "CampaignMonitorCampaign";
+    private static $default_template = CampaignMonitorCampaign::class;
 
     public function getCMSFields()
     {
@@ -122,7 +129,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function getFileLocation()
     {
         if (!$this->TemplateName) {
-            $this->TemplateName = "CampaignMonitorCampaign";
+            $this->TemplateName = CampaignMonitorCampaign::class;
         }
         foreach ($this->getFoldersToSearch() as $folder) {
             $fileLocation = $folder.$this->TemplateName.".ss";
@@ -180,7 +187,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         parent::requireDefaultRecords();
         $templates = [];
         foreach ($this->getFoldersToSearch() as $folder) {
-            $finder = new SS_FileFinder();
+            $finder = new FileFinder();
             $finder->setOption('name_regex', '/^.*\.ss$/');
             $found = $finder->find($folder);
             foreach ($found as $key => $value) {
@@ -205,7 +212,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        if ($this->TemplateName == "CampaignMonitorCampaign") {
+        if ($this->TemplateName == CampaignMonitorCampaign::class) {
             $this->Title = "Default Template";
         }
     }

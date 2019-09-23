@@ -2,13 +2,22 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
-use BuildTask;
-use DB;
-use Director;
-use Member;
-use Config;
-use CampaignMonitorAPIConnector;
+
+
+
+
+
+
 use PWUpdateGetData;
+use SilverStripe\ORM\DB;
+use SilverStripe\Control\Director;
+use SilverStripe\Security\Member;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorSyncAllMembers;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Dev\BuildTask;
+
 
 
 /**
@@ -106,7 +115,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     } elseif (isset($this->previouslyBouncedSubscribers[$member->Email])) {
                         DB::alteration_message("deleting bounced member: ".$member->Email, "deleted");
                         if (!$this->debug) {
-                            $api->deleteSubscriber(Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"), $member->Email);
+                            $api->deleteSubscriber(Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"), $member->Email);
                         }
                     } else {
                         if (!isset($alreadyCompleted[$member->Email])) {
@@ -163,11 +172,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getActiveSubscribers(
-                $listID = Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"),
+                $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"),
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = "Email",
+                $sortByField = Email::class,
                 $sortDirection = "ASC"
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
@@ -201,11 +210,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getBouncedSubscribers(
-                $listID = Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"),
+                $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"),
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = "Email",
+                $sortByField = Email::class,
                 $sortDirection = "ASC"
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
@@ -234,11 +243,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getUnsubscribedSubscribers(
-                $listID = Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"),
+                $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"),
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = "Email",
+                $sortByField = Email::class,
                 $sortDirection = "ASC"
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
@@ -277,7 +286,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $alreadyListed = true;
                         DB::alteration_message("".$email." is already listed");
                         foreach ($valuesArray as $key => $value) {
-                            if ($key != "Email") {
+                            if ($key != Email::class) {
                                 if (!isset($this->previouslyExported[$email][$key])) {
                                     if ($value == "tba" || $value == "No" || strlen(trim($value)) < 1) {
                                         //do nothing
@@ -304,7 +313,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     if ($updateDetails) {
                         if (!$this->debug) {
                             $api->updateSubscriber(
-                                $listID = Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"),
+                                $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"),
                                 $oldEmailAddress = $email,
                                 $memberArray[$email],
                                 $finalCustomFields[$email],
@@ -325,7 +334,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     if (count($memberArray) == count($finalCustomFields)) {
                         DB::alteration_message("<h3>adding: ".count($memberArray)." subscribers</h3>", "created");
                         if (!$this->debug) {
-                            $api->addSubscribers(Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"), $memberArray, $finalCustomFields, true, false, false);
+                            $api->addSubscribers(Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"), $memberArray, $finalCustomFields, true, false, false);
                         }
                     } else {
                         DB::alteration_message("Error, memberArray (".count($memberArray).") count is not the same as finalCustomFields (".count($finalCustomFields).") count.", "deleted");
@@ -336,7 +345,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 foreach ($unsubscribeArray as $email => $member) {
                     DB::alteration_message("Now doing Blacklisting: ".$member->Email, "deleted");
                     if (!$this->debug) {
-                        $api->unsubscribeSubscriber(Config::inst()->get("CampaignMonitorSyncAllMembers", "mailing_list_id"), $member);
+                        $api->unsubscribeSubscriber(Config::inst()->get(CampaignMonitorSyncAllMembers::class, "mailing_list_id"), $member);
                     }
                 }
             } else {

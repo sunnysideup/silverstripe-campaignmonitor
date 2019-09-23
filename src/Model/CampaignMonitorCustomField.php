@@ -2,8 +2,15 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-use DataObject;
-use CampaignMonitorSignupPage;
+
+
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\DateField;
+use SilverStripe\ORM\DataObject;
+
 
 
 /**
@@ -39,7 +46,7 @@ class CampaignMonitorCustomField extends DataObject
     );
 
     private static $has_one = array(
-        "CampaignMonitorSignupPage" => "CampaignMonitorSignupPage"
+        "CampaignMonitorSignupPage" => CampaignMonitorSignupPage::class
     );
 
     private static $default_sort = array(
@@ -52,10 +59,10 @@ class CampaignMonitorCustomField extends DataObject
      */
     private static $field_translator = array(
         "MultiSelectOne" => "OptionSetField",
-        "Text" => "TextField",
-        "Number" => "NumericField",
-        "MultiSelectMany" => "CheckboxSetField",
-        "Date" => "DateField"
+        "Text" => TextField::class,
+        "Number" => NumericField::class,
+        "MultiSelectMany" => CheckboxSetField::class,
+        "Date" => DateField::class
     );
 
 

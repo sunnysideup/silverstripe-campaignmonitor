@@ -10,3 +10,4 @@ mappings:
   CampaignMonitorCampaign: Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign
   CampaignMonitorSegment: Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment
   CampaignMonitorCustomField: Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField
+  CampaignMonitorAPIConnector: Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector

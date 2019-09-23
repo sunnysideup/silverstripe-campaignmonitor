@@ -2,7 +2,10 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-use DataObject;
+
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use SilverStripe\ORM\DataObject;
+
 
 
 /**
@@ -30,7 +33,7 @@ class CampaignMonitorSegment extends DataObject
     );
 
     private static $has_one = array(
-        "CampaignMonitorSignupPage" => "CampaignMonitorSignupPage"
+        "CampaignMonitorSignupPage" => CampaignMonitorSignupPage::class
     );
 
 

@@ -1,4 +1,9 @@
 	<?php
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\ORM\DB;
+use SilverStripe\Dev\BuildTask;
+
 
 
 
