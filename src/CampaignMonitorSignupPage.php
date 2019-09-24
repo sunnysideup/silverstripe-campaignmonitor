@@ -96,7 +96,7 @@ class CampaignMonitorSignupPage extends Page
     /**
      * @inherited
      */
-    private static $icon = 'campaignmonitor/images/treeicons/CampaignMonitorSignupPage';
+    private static $icon = 'sunnysideup/campaignmonitor: client/images/treeicons/CampaignMonitorSignupPage-file.gif';
 
     /**
      * @inherited
@@ -237,13 +237,17 @@ class CampaignMonitorSignupPage extends Page
                 )
             )
         );
+        $url = Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url');
+        if(! $url) {
+            $url = 'https://www.campaignmonitor.com';
+        }
         $fields->addFieldToTab(
             'Root.Newsletters',
             new TabSet(
                 'Options',
                 new Tab(
                     'MainSettings',
-                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
+                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . $url . '">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
@@ -457,8 +461,11 @@ class CampaignMonitorSignupPage extends Page
                 $obj->write();
             }
         }
-        $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-            ->exclude(['SegmentID' => $segmentsAdded]);
+        $unwantedSegments = CampaignMonitorSegment::get()
+            ->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID]);
+        if(count($segmentsAdded)) {
+            $unwantedSegments = $unwantedSegments->exclude(['SegmentID' => $segmentsAdded]);
+        }
         foreach ($unwantedSegments as $unwantedSegment) {
             $unwantedSegment->delete();
         }
@@ -471,8 +478,11 @@ class CampaignMonitorSignupPage extends Page
                 $customCustomFieldsAdded[$obj->Code] = $obj->Code;
             }
         }
-        $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-            ->exclude(['Code' => $customCustomFieldsAdded]);
+        $unwantedCustomFields = CampaignMonitorCustomField::get()
+            ->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID]);
+        if(count($customCustomFieldsAdded)) {
+            $unwantedCustomFields = $unwantedCustomFields->exclude(['Code' => $customCustomFieldsAdded]);
+        }
         foreach ($unwantedCustomFields as $unwantedCustomField) {
             $unwantedCustomField->delete();
         }

@@ -1606,14 +1606,14 @@ class CampaignMonitorAPIConnector
                 }
             } else {
                 # If you receive '121: Expired OAuth Token', refresh the access token
-                if ($result->response->Code === 121) {
+                if (isset($result->response->Code) && $result->response->Code === 121) {
                     $wrap = new CS_REST_General($auth);
                     list($new_access_token, $new_expires_in, $new_refresh_token) = $wrap->refresh_token();
+                    $auth = [
+                        'access_token' => $new_access_token,
+                        'refresh_token' => $new_refresh_token,
+                    ];
                 }
-                $auth = [
-                    'access_token' => $new_access_token,
-                    'refresh_token' => $new_refresh_token,
-                ];
                 if ($this->debug) {
                     'An error occurred:\n';
                     $result->response->error . ': ' . $result->response->error_description . "\n";
