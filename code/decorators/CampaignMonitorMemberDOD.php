@@ -194,14 +194,11 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function unsubscribe($request)
     {
-        $member = Member::currentUser();
-        if ($member) {
-            $member->removeCampaignMonitorList($this->ListID);
-            $this->Content = $member->Email." has been removed from this list: ".$this->getListTitle();
-        } else {
-            Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST", "Please login first."));
+        $lists = CampaignMonitorSignupPage::get_ready_ones();
+        $array = array();
+        foreach ($lists as $list) {
+            $this->owner->removeCampaignMonitorList($list->ListID);
         }
-        return array();
     }
 
     /**

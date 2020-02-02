@@ -1278,7 +1278,7 @@ class CampaignMonitorAPIConnector extends Object
      * Gets the lists across a client to which a subscriber with a particular
      * email address belongs.
      *
-     * @param string | Member $email Subscriber's email address (or Member)
+     * @param string|Member $member Subscriber's email address (or Member)
      *
      * @return CS_REST_Wrapper_Result A successful response will be an object of the form
      * array(
@@ -1310,7 +1310,7 @@ class CampaignMonitorAPIConnector extends Object
      * Adds a new subscriber to the specified list
      *
      * @param Int $listID
-     * @param Member $member
+     * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param Array $customFields
      * @param array $customFields The subscriber details to use during creation.
      * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
@@ -1347,7 +1347,7 @@ class CampaignMonitorAPIConnector extends Object
         $result = $wrap->add(
             $request = array(
                 'EmailAddress' => $member->Email,
-                'Name' => $member->getName(),
+                'Name' => trim($member->FirstName . ' ' . $member->Surname),
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders
@@ -1367,7 +1367,7 @@ class CampaignMonitorAPIConnector extends Object
      *
      * @param Int $listID
      * @param String $oldEmailAddress
-     * @param Member $member
+     * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields The subscriber details to use during creation.
      * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
      * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
@@ -1384,7 +1384,7 @@ class CampaignMonitorAPIConnector extends Object
     public function updateSubscriber(
         $listID,
         $oldEmailAddress = "",
-        Member $member,
+        $member,
         $customFields = array(),
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
@@ -1408,7 +1408,7 @@ class CampaignMonitorAPIConnector extends Object
             $oldEmailAddress,
             array(
                 'EmailAddress' => $member->Email,
-                'Name' => $member->getName(),
+                'Name' => trim($member->FirstName . ' ' . $member->Surname),
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
@@ -1427,11 +1427,11 @@ class CampaignMonitorAPIConnector extends Object
      * given email not existing in the list.
      *
      * @param Int $listID
-     * @param ArraySet $memberSet - list of mebers
+     * @param ArraySet $memberSet - list of Member|object with Email, FirstName, Surname fields.
      * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
-     * @param $resubscribe Whether we should resubscribe any existing subscribers
-     * @param $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
-     * @param $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
+     * @param bool $resubscribe Whether we should resubscribe any existing subscribers
+     * @param bool $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
+     * @param bool $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -1473,7 +1473,7 @@ class CampaignMonitorAPIConnector extends Object
             if ($member instanceof Member) {
                 $importArray[] = array(
                     'EmailAddress' => $member->Email,
-                    'Name' => $member->getName(),
+                    'Name' => trim($member->FirstName . ' ' . $member->Surname),
                     'CustomFields' => $customFieldsForMember
                 );
             }
@@ -1493,7 +1493,7 @@ class CampaignMonitorAPIConnector extends Object
 
     /**
      * @param Int $listID
-     * @param Member | String $member - email address or Member Object
+     * @param Member|string $member - email address or Member Object
      *
      * @return CS_REST_Wrapper_Result A successful response will be empty
      */
@@ -1515,7 +1515,7 @@ class CampaignMonitorAPIConnector extends Object
      * Unsubscribes the given subscriber from the current list
      *
      * @param Int $listID
-     * @param Member | String $member
+     * @param Member|string $member
      *
      * @return CS_REST_Wrapper_Result A successful response will be empty
      */
@@ -1537,7 +1537,7 @@ class CampaignMonitorAPIConnector extends Object
      * Is this user part of this list at all?
      *
      * @param Int $listID
-     * @param Member | String $member
+     * @param Member|string $member
      *
      * @return Boolean
      */
