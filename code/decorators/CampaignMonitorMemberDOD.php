@@ -194,11 +194,14 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function unsubscribe($request)
     {
-        $lists = CampaignMonitorSignupPage::get_ready_ones();
-        $array = array();
-        foreach ($lists as $list) {
-            $this->owner->removeCampaignMonitorList($list->ListID);
+        $member = Member::currentUser();
+        if ($member) {
+            $member->removeCampaignMonitorList($this->ListID);
+            $this->Content = $member->Email." has been removed from this list: ".$this->getListTitle();
+        } else {
+            Security::permissionFailure($this, _t("CAMPAIGNMONITORSIGNUPPAGE.LOGINFIRST", "Please login first."));
         }
+        return array();
     }
 
     /**
@@ -231,9 +234,9 @@ class CampaignMonitorMemberDOD extends DataExtension
         //internal database
         if ($listPage && $listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
-                $groups = $this->owner->Groups();
-                if ($groups) {
-                    $this->owner->Groups()->add($gp);
+                $groups = $this->getGroupsHackAlternative();
+                if ($groups->count()) {
+                    $this->addMemberToGroupHack($gp->ID);
                     $outcome++;
                 }
             }
@@ -282,9 +285,9 @@ class CampaignMonitorMemberDOD extends DataExtension
         }
         if ($listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
-                $groups = $this->owner->Groups();
+                $groups = $this->getGroupsHackAlternative();
                 if ($groups) {
-                    $this->owner->Groups()->remove($gp);
+                    $this->removeMemberFromGroupHack($gp->ID);
                     $outcome++;
                 }
             }
@@ -299,6 +302,46 @@ class CampaignMonitorMemberDOD extends DataExtension
         }
         return false;
     }
+
+    /**
+     * $this->owner->Groups() throws errors with large numbers of members
+     * This is the alternative, but it return a DataList rather than relationship list.
+     * @return DataList
+     */
+    protected function getGroupsHackAlternative()
+    {
+        $sql = 'SELECT GroupID FROM Group_Members WHERE MemberID = '.$this->owner->ID;
+        $rows = DB::query($sql);
+        foreach ($rows as $row) {
+            $ids[$row['GroupID']] = $row['GroupID'];
+        }
+
+        return Group::get()->filter(['ID' => $ids]);
+    }
+
+    /**
+     * @param int $groupID
+     * @return mixed
+     */
+    protected function removeMemberFromGroupHack(int $groupID)
+    {
+        $sql = 'DELETE FROM GroupID WHERE MemberID = '.$this->owner->ID.' AND GroupID = '.$groupID;
+
+        return DB::query($sql);
+    }
+
+    /**
+     * @param int $groupID
+     * @return mixed
+     */
+    protected function addMemberToGroupHack(int $groupID)
+    {
+        $sql = 'INSERT IGNORE INTO GroupID (MemberID, GroupID) VALUES('.$this->owner->ID.','.$groupID.')';
+
+        return DB::query($sql);
+    }
+
+
 
     /**
      * returns a list of list IDs
