@@ -325,7 +325,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     protected function removeMemberFromGroupHack(int $groupID)
     {
-        $sql = 'DELETE FROM GroupID WHERE MemberID = '.$this->owner->ID.' AND GroupID = '.$groupID;
+        $sql = 'DELETE FROM Group_Members WHERE MemberID = '.$this->owner->ID.' AND GroupID = '.$groupID;
 
         return DB::query($sql);
     }
@@ -336,7 +336,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     protected function addMemberToGroupHack(int $groupID)
     {
-        $sql = 'INSERT IGNORE INTO GroupID (MemberID, GroupID) VALUES('.$this->owner->ID.','.$groupID.')';
+        $sql = 'INSERT IGNORE INTO Group_Members (MemberID, GroupID) VALUES('.$this->owner->ID.','.$groupID.')';
 
         return DB::query($sql);
     }
