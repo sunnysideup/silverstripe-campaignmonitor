@@ -336,3 +336,4 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         }
     }
 }
+

@@ -150,3 +150,4 @@ class CampaignMonitorCustomField extends DataObject
         return $field;
     }
 }
+

@@ -44,3 +44,4 @@ class CampaignMonitorSegment extends DataObject
         return false;
     }
 }
+

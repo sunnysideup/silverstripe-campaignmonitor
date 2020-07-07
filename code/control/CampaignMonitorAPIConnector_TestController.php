@@ -380,3 +380,4 @@ class CampaignMonitorAPIConnector_TestController extends Controller
         $this->api->setDebug(true);
     }
 }
+

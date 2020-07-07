@@ -17,3 +17,4 @@ class CampaignMonitorGroupDOD extends DataExtension
         return CampaignMonitorSignupPage::get()->filter(array("GroupID" => $this->owner->ID))->count() ? true : false;
     }
 }
+

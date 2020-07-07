@@ -1,6 +1,4 @@
-	<?php
-
-
+<?php
 
 class CampaignMonitorAddOldCampaigns extends BuildTask
 {

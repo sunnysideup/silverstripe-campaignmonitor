@@ -1691,3 +1691,4 @@ class CampaignMonitorAPIConnector extends Object
         );
     }
 }
+

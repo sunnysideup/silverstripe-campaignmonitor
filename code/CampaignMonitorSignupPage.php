@@ -478,3 +478,4 @@ class CampaignMonitorSignupPage extends Page
         }
     }
 }
+

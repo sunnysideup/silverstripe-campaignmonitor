@@ -182,3 +182,4 @@ class CampaignMonitorCampaignStyle extends DataObject
         }
     }
 }
+

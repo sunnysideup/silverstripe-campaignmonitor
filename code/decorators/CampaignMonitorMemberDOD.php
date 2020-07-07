@@ -321,3 +321,4 @@ class CampaignMonitorMemberDOD extends DataExtension
         return $array;
     }
 }
+

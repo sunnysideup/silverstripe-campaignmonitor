@@ -421,3 +421,4 @@ class CampaignMonitorCampaign extends DataObject
         return $this->_existsOnCampaignMonitorCheck;
     }
 }
+
