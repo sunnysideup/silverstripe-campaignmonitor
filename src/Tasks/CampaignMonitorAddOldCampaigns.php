@@ -2,10 +2,15 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
-use BuildTask;
-use CampaignMonitorCampaign;
-use CampaignMonitorAPIConnector;
-use DB;
+
+
+
+
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\ORM\DB;
+use SilverStripe\Dev\BuildTask;
+
 
 
 class CampaignMonitorAddOldCampaigns extends BuildTask

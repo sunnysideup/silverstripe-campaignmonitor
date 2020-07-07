@@ -3,11 +3,8 @@ Name: campaignmonitor
 Before: 'app/*'
 After: 'framework/*','cms/*'
 ---
-
-
 SilverStripe\Security\Member:
   extensions:
-    - CampaignMonitorMemberDOD
-
-CampaignMonitorMemberDOD:
-  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
+    - Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
+Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
+  campaign_monitor_signup_fieldname: CampaignMonitorSubscriptions

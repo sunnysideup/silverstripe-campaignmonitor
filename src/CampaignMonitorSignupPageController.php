@@ -3,23 +3,42 @@
 namespace Sunnysideup\CampaignMonitor;
 
 use PageController;
-use Requirements;
-use Member;
-use ReadonlyField;
-use EmailField;
-use FieldList;
-use FormAction;
-use RequiredFields;
-use Form;
-use Convert;
-use Security;
-use SS_HTTPRequest;
-use Director;
-use Controller;
-use CampaignMonitorCampaign;
-use HTTP;
-use Permission;
-use DB;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+use SilverStripe\View\Requirements;
+use SilverStripe\Security\Member;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\RequiredFields;
+use SilverStripe\Forms\Form;
+use SilverStripe\Core\Convert;
+use SilverStripe\Security\Security;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Control\Director;
+use SilverStripe\Control\Controller;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use SilverStripe\Control\HTTP;
+use SilverStripe\Security\Permission;
+use SilverStripe\ORM\DB;
+
 
 
 
@@ -113,11 +132,11 @@ class CampaignMonitorSignupPageController extends PageController
                 $this->email = $member->Email;
                 if ($this->email) {
                     $emailRequired = false;
-                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", 'Email'), $this->email);
+                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class), $this->email);
                 }
             }
             if (!$emailField) {
-                $emailField = new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", 'Email'), $this->email);
+                $emailField = new EmailField('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class), $this->email);
             }
             if ($this->ShowAllNewsletterForSigningUp) {
                 $signupField = $member->getCampaignMonitorSignupField(null, "SubscribeManyChoices");
@@ -309,7 +328,7 @@ class CampaignMonitorSignupPageController extends PageController
      * action
      * @param HTTPRequest
      */
-    public function preloademail(SS_HTTPRequest $request)
+    public function preloademail(HTTPRequest $request)
     {
         $data = $request->requestVars();
         if (isset($data["CampaignMonitorEmail"])) {

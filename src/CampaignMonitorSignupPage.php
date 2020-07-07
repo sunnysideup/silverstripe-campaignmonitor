@@ -3,37 +3,71 @@
 namespace Sunnysideup\CampaignMonitor;
 
 use Page;
-use Injector;
-use CampaignMonitorCampaign;
-use GridFieldConfig_RelationEditor;
-use GridField;
-use HiddenField;
-use CampaignMonitorCampaignStyle;
-use GridFieldConfig_RecordEditor;
-use TabSet;
-use Tab;
-use TextField;
-use HTMLEditorField;
-use LiteralField;
-use Config;
-use DropdownField;
-use CheckboxField;
-use CheckboxSetField;
-use GridFieldConfig_RecordViewer;
-use CampaignMonitorAPIConnector;
-use Controller;
-use Requirements;
-use FieldList;
-use EmailField;
-use FormAction;
-use Form;
-use Convert;
-use Member;
-use Group;
-use CampaignMonitorSegment;
-use CampaignMonitorCustomField;
-use CampaignMonitorAddOldCampaigns;
-use DB;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+use SilverStripe\Security\Group;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\HiddenField;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
+use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
+use SilverStripe\Forms\Tab;
+use SilverStripe\Forms\TabSet;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
+use SilverStripe\Control\Controller;
+use SilverStripe\View\Requirements;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Forms\EmailField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\Form;
+use SilverStripe\Core\Convert;
+use SilverStripe\Security\Member;
+use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
+use SilverStripe\ORM\DB;
+
 
 
 /**
@@ -119,7 +153,7 @@ class CampaignMonitorSignupPage extends Page
      * @inherited
      */
     private static $has_one = array(
-        "Group" => "Group"
+        "Group" => Group::class
     );
 
     /**
@@ -127,8 +161,8 @@ class CampaignMonitorSignupPage extends Page
      * @inherited
      */
     private static $has_many = array(
-        "CampaignMonitorSegments" => "CampaignMonitorSegment",
-        "CampaignMonitorCustomFields" => "CampaignMonitorCustomField"
+        "CampaignMonitorSegments" => CampaignMonitorSegment::class,
+        "CampaignMonitorCustomFields" => CampaignMonitorCustomField::class
     );
 
     /**
@@ -136,7 +170,7 @@ class CampaignMonitorSignupPage extends Page
      * @inherited
      */
     private static $belongs_many_many = array(
-        "CampaignMonitorCampaigns" => "CampaignMonitorCampaign"
+        "CampaignMonitorCampaigns" => CampaignMonitorCampaign::class
     );
 
     /**
@@ -180,7 +214,7 @@ class CampaignMonitorSignupPage extends Page
         } else {
             $groupLink = '<p>No Group has been selected yet.</p>';
         }
-        $testControllerLink = Injector::inst()->get("CampaignMonitorAPIConnector_TestController")->Link();
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnector_TestController::class)->Link();
         $campaignExample = CampaignMonitorCampaign::get()->Last();
         $campaignExampleLink = $this->Link();
         if ($campaignExample) {
@@ -224,7 +258,7 @@ class CampaignMonitorSignupPage extends Page
                 'Options',
                 new Tab(
                     'MainSettings',
-                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get("CampaignMonitorAPIConnector", "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
+                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="'. Config::inst()->get(CampaignMonitorAPIConnector::class, "campaign_monitor_url") .'">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', array(0 => "-- please select --") + $this->makeDropdownListFromLists()),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
@@ -359,7 +393,7 @@ class CampaignMonitorSignupPage extends Page
                 //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
                 return false;
             }
-            $fields = new FieldList(new EmailField("CampaignMonitorEmail", _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", "Email")));
+            $fields = new FieldList(new EmailField("CampaignMonitorEmail", _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL", Email::class)));
             $actions = new FieldList(new FormAction("campaignmonitorstarterformstartaction", $this->SignUpButtonLabel));
             $form = new Form(
                 $controller,

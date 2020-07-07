@@ -2,15 +2,26 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
-use DataExtension;
-use CampaignMonitorAPIConnector;
-use CampaignMonitorSignupPage;
-use Config;
-use OptionsetField;
-use CompositeField;
-use CheckboxSetField;
-use ReadonlyField;
-use Group;
+
+
+
+
+
+
+
+
+
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Security\Group;
+use SilverStripe\ORM\DataExtension;
+
 
 
 /**
@@ -76,7 +87,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         }
         $field = null;
         if (!$fieldName) {
-            $fieldName = Config::inst()->get("CampaignMonitorMemberDOD", "campaign_monitor_signup_fieldname");
+            $fieldName = Config::inst()->get(CampaignMonitorMemberDOD::class, "campaign_monitor_signup_fieldname");
         }
         $api = $this->getCMAPI();
         $currentValues = null;
@@ -99,7 +110,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 $field = CompositeField::create($subscribeField);
                 $field->addExtraClass("CMFieldsCustomFieldsHolder");
                 //add custom fields
-                $linkedMemberFields = Config::inst()->get("CampaignMonitorMemberDOD", "custom_fields_member_field_or_method_map");
+                $linkedMemberFields = Config::inst()->get(CampaignMonitorMemberDOD::class, "custom_fields_member_field_or_method_map");
                 $customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
                 foreach ($customFields as $customField) {
                     $valueSet = false;

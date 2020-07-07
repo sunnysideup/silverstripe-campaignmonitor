@@ -2,8 +2,11 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
-use DataExtension;
-use CampaignMonitorSignupPage;
+
+
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use SilverStripe\ORM\DataExtension;
+
 
 
 /**

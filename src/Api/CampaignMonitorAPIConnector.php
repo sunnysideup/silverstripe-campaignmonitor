@@ -2,16 +2,22 @@
 
 namespace Sunnysideup\CampaignMonitor\Api;
 
-use ViewableData;
+
 use CS_REST_General;
 use CS_REST_Clients;
 use CS_REST_Templates;
-use SiteConfig;
+
 use CS_REST_Lists;
-use Config;
+
 use CS_REST_Campaigns;
-use Member;
+
 use CS_REST_Subscribers;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Control\Email\Email;
+use SilverStripe\Security\Member;
+use SilverStripe\View\ViewableData;
+
 
 
 /**
@@ -1095,7 +1101,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
         $fromEmail = $campaignMonitorCampaign->FromEmail;
         if (!$fromEmail) {
-            $fromEmail = Config::inst()->get('Email', 'admin_email');
+            $fromEmail = Config::inst()->get(Email::class, 'admin_email');
         }
 
         $replyTo = $campaignMonitorCampaign->ReplyTo;

@@ -2,12 +2,19 @@
 
 namespace Sunnysideup\CampaignMonitor\Control;
 
-use Controller;
-use Config;
-use Director;
-use CampaignMonitorCampaign;
-use Member;
-use CampaignMonitorAPIConnector;
+
+
+
+
+
+
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\Control\Director;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use SilverStripe\Security\Member;
+use SilverStripe\Control\Controller;
+
 
 
 
@@ -72,7 +79,7 @@ class CampaignMonitorAPIConnector_TestController extends Controller
     protected function init()
     {
         parent::init();
-        if (!Config::inst()->get("CampaignMonitorAPIConnector", "client_id")) {
+        if (!Config::inst()->get(CampaignMonitorAPIConnector::class, "client_id")) {
             user_error("To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id");
         }
         $this->egData["listTitle"] = $this->egData["listTitle"].rand(0, 999999999999);

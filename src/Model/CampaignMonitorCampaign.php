@@ -2,15 +2,28 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-use DataObject;
-use CampaignMonitorSignupPage;
-use OptionsetField;
-use CheckboxSetField;
-use LiteralField;
-use Director;
-use Config;
-use Requirements;
-use CampaignMonitorAPIConnector;
+
+
+
+
+
+
+
+
+
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\CheckboxSetField;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\Requirements;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\ORM\DataObject;
+
 
 
 /**
@@ -40,7 +53,7 @@ class CampaignMonitorCampaign extends DataObject
      *
      * @var string
      */
-    private static $default_template = "CampaignMonitorCampaign";
+    private static $default_template = CampaignMonitorCampaign::class;
     
 
 /**
@@ -89,11 +102,11 @@ class CampaignMonitorCampaign extends DataObject
     );
 
     private static $has_one = array(
-        "CampaignMonitorCampaignStyle" => "CampaignMonitorCampaignStyle"
+        "CampaignMonitorCampaignStyle" => CampaignMonitorCampaignStyle::class
     );
 
     private static $many_many = array(
-        "Pages" => "CampaignMonitorSignupPage"
+        "Pages" => CampaignMonitorSignupPage::class
     );
 
     private static $searchable_fields = array(
@@ -228,9 +241,9 @@ class CampaignMonitorCampaign extends DataObject
                 $allCSS .= fread($cssFileHandler, filesize($cssFileLocation));
                 fclose($cssFileHandler);
             }
-            $isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
+            $isThemeEnabled = Config::inst()->get(SSViewer::class, 'theme_enabled');
             if (!$isThemeEnabled) {
-                Config::modify()->update('SSViewer', 'theme_enabled', true);
+                Config::modify()->update(SSViewer::class, 'theme_enabled', true);
             }
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
@@ -245,7 +258,7 @@ class CampaignMonitorCampaign extends DataObject
   */
             $html = $this->RenderWith($templateName);
             if (!$isThemeEnabled) {
-                Config::modify()->update('SSViewer', 'theme_enabled', false);
+                Config::modify()->update(SSViewer::class, 'theme_enabled', false);
             }
             $emogrifier = new \Pelago\Emogrifier($html, $allCSS);
             $addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
@@ -305,7 +318,7 @@ class CampaignMonitorCampaign extends DataObject
   * EXP: Check that the template location is still valid!
   * ### @@@@ STOP REPLACEMENT @@@@ ###
   */
-        return $this->RenderWith("CampaignMonitorCampaign");
+        return $this->RenderWith(CampaignMonitorCampaign::class);
     }
 
     protected $countOfWrites = 0;
