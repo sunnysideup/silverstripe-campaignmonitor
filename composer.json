@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/campaignmonitor",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "connect with campaign monitor",
     "keywords": [
         "Silverstripe-CMS",
