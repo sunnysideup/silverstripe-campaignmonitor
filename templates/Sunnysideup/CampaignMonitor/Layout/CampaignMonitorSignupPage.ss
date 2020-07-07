@@ -1,1 +1,1 @@
-<% include CampaignMonitorSignupPageContent %>
+<% include Sunnysideup\CampaignMonitor\IncludesCampaignMonitorSignupPageContent %>
