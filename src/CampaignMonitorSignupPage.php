@@ -316,7 +316,7 @@ class CampaignMonitorSignupPage extends Page
   * EXP: Check for best usage and inclusion of Jquery
   * ### @@@@ STOP REPLACEMENT @@@@ ###
   */
-            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
+            Requirements::javascript('sunnysideup/campaignmonitor: silverstripe/admin: thirdparty/jquery/jquery.js');
             //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
             Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
             if (!$this->ReadyToReceiveSubscribtions()) {
