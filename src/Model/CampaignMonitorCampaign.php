@@ -69,7 +69,7 @@ class CampaignMonitorCampaign extends DataObject
         "FromName" => "Varchar(100)",
         "FromEmail" => "Varchar(100)",
         "ReplyTo" => "Varchar(100)",
-        "SentDate" => "SS_Datetime",
+        "SentDate" => "DBDatetime",
         "WebVersionURL" => "Varchar(255)",
         "WebVersionTextURL" => "Varchar(255)",
         "Hide" => "Boolean",

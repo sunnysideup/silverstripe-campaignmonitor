@@ -13,9 +13,10 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Control\Director;
 use SilverStripe\Assets\FileFinder;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 use SilverStripe\ORM\DataObject;
-
-
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ThemeResourceLoader;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -74,19 +75,17 @@ class CampaignMonitorCampaignStyle extends DataObject
      */
     public function getFoldersToSearch()
     {
-        $array = array(
+        $array = [];
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: SSViewer::get_theme_folder() (ignore case)
-  * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-  * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-            //Director::baseFolder() ."/".SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')."_campaignmonitor/templates/Email/",
-            Director::baseFolder()."/campaignmonitor/templates/Email/"
-        );
+        $activeThemes = SSViewer::get_themes();
+        foreach ($activeThemes as $activeTheme) {
+            if(strpos($activeTheme, '$') === false){
+                $array[] = ThemeResourceLoader::inst()->getPath($activeTheme)."/templates/Sunnysideup/CampaignMonitor/Email";
+            }
+        }
+
+        $array[] = ModuleResourceLoader::resourcePath('sunnysideup/campaignmonitor: templates/Sunnysideup/CampaignMonitor/Email');
+
         foreach ($array as $key => $folder) {
             if (!file_exists($folder)) {
                 unset($array[$key]);
@@ -203,9 +202,11 @@ class CampaignMonitorCampaignStyle extends DataObject
                 $obj->write();
             }
         }
-        $excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(array("TemplateName" => $templates));
-        foreach ($excludes as $exclude) {
-            $exclude->delete();
+        if(!empty($templates)){
+            $excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(array("TemplateName" => $templates));
+            foreach ($excludes as $exclude) {
+                $exclude->delete();
+            }
         }
     }
 
