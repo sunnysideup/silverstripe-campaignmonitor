@@ -1,5 +1,18 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Decorators;
+
+use DataExtension;
+use CampaignMonitorAPIConnector;
+use CampaignMonitorSignupPage;
+use Config;
+use OptionsetField;
+use CompositeField;
+use CheckboxSetField;
+use ReadonlyField;
+use Group;
+
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * TO DO: only apply the on afterwrite to people in the subscriber group.

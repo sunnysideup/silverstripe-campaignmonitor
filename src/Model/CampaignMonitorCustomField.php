@@ -1,5 +1,11 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Model;
+
+use DataObject;
+use CampaignMonitorSignupPage;
+
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  *

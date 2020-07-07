@@ -1,5 +1,11 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Decorators;
+
+use DataExtension;
+use CampaignMonitorSignupPage;
+
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  *

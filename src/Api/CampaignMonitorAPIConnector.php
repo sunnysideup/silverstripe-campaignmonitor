@@ -1,5 +1,19 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Api;
+
+use ViewableData;
+use CS_REST_General;
+use CS_REST_Clients;
+use CS_REST_Templates;
+use SiteConfig;
+use CS_REST_Lists;
+use Config;
+use CS_REST_Campaigns;
+use Member;
+use CS_REST_Subscribers;
+
+
 /**
  * Main Holder page for Recipes
  *@author nicolaas [at] sunnysideup.co.nz

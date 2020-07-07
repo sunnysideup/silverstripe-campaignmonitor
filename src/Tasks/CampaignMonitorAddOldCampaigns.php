@@ -1,5 +1,13 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Tasks;
+
+use BuildTask;
+use CampaignMonitorCampaign;
+use CampaignMonitorAPIConnector;
+use DB;
+
+
 class CampaignMonitorAddOldCampaigns extends BuildTask
 {
     protected $title = "Retrieves a list of campaigns from Campaign Monitor.";

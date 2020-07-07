@@ -1,5 +1,18 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Model;
+
+use DataObject;
+use CampaignMonitorSignupPage;
+use OptionsetField;
+use CheckboxSetField;
+use LiteralField;
+use Director;
+use Config;
+use Requirements;
+use CampaignMonitorAPIConnector;
+
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *

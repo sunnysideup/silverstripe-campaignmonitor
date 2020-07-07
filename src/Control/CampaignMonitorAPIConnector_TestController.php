@@ -1,5 +1,15 @@
 <?php
 
+namespace Sunnysideup\CampaignMonitor\Control;
+
+use Controller;
+use Config;
+use Director;
+use CampaignMonitorCampaign;
+use Member;
+use CampaignMonitorAPIConnector;
+
+
 
 /**
  * simple class to see that everything is working ...
