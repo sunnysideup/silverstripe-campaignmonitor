@@ -300,7 +300,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $this->email = $email;
                 if (Director::is_ajax()) {
                     if (!$this->addSubscriber($email)) {
-                        $this->->getRequest()->getSession()->set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
+                        $this->getRequest()->getSession()->set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
 
 /**
   * ### @@@@ START REPLACEMENT @@@@ ###

@@ -37,7 +37,7 @@ class CampaignMonitorSegment extends DataObject
     );
 
 
-    public function canCreate($member = null)
+    public function canCreate($member = null, $context = array())
     {
         return false;
     }
