@@ -21,5 +21,10 @@
         "pelago/emogrifier": "*",
         "silverstripe/recipe-cms": "^4.4"
     },
-    "extra": []
+    "extra": [],
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\CampaignMonitor\\": "src/"
+        }
+    }
 }
