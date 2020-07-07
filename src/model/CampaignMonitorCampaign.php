@@ -21,7 +21,7 @@ class CampaignMonitorCampaign extends DataObject
      *
      * @var array
      */
-    private static $emogrifier_remove_allowed_media_types = array();
+    private static $emogrifier_remove_allowed_media_types = [];
 
     /**
      *
@@ -100,7 +100,7 @@ class CampaignMonitorCampaign extends DataObject
 
     private static $default_sort = "Hide ASC, SentDate DESC";
 
-    public function canDelete($member = null)
+    public function canDelete($member = null, $context = [])
     {
         return $this->HasBeenSentCheck() ? false : parent::canDelete($member);
     }
@@ -217,13 +217,22 @@ class CampaignMonitorCampaign extends DataObject
             }
             $isThemeEnabled = Config::inst()->get('SSViewer', 'theme_enabled');
             if (!$isThemeEnabled) {
-                Config::inst()->update('SSViewer', 'theme_enabled', true);
+                Config::modify()->update('SSViewer', 'theme_enabled', true);
             }
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
-            $html = $this->renderWith($templateName);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: ->RenderWith( (ignore case)
+  * NEW: ->RenderWith( (COMPLEX)
+  * EXP: Check that the template location is still valid!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            $html = $this->RenderWith($templateName);
             if (!$isThemeEnabled) {
-                Config::inst()->update('SSViewer', 'theme_enabled', false);
+                Config::modify()->update('SSViewer', 'theme_enabled', false);
             }
             $emogrifier = new \Pelago\Emogrifier($html, $allCSS);
             $addMediaTypes = $this->Config()->get("emogrifier_add_allowed_media_types");
@@ -274,7 +283,16 @@ class CampaignMonitorCampaign extends DataObject
         if ($style = $this->CampaignMonitorCampaignStyle()) {
             return $style->getHTMLContent($this);
         }
-        return $this->renderWith("CampaignMonitorCampaign");
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: ->RenderWith( (ignore case)
+  * NEW: ->RenderWith( (COMPLEX)
+  * EXP: Check that the template location is still valid!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+        return $this->RenderWith("CampaignMonitorCampaign");
     }
 
     protected $countOfWrites = 0;

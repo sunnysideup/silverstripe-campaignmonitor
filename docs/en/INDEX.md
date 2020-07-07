@@ -39,7 +39,7 @@ Installation Instructions
    You will need to add this module using composer
    e.g. `composer require sunnysideup/campaingmonitor`
 
-2. Review configs and add entries to mysite/_config/config.yml
+2. Review configs and add entries to app/_config/config.yml
 (or similar) as necessary.
 In the _config/ folder of this module
 you can usually find some examples of config options (if any).

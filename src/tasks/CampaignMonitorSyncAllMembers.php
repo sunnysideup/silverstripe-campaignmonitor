@@ -40,25 +40,25 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     /**
      * @var array
      */
-    protected $previouslyExported = array();
+    protected $previouslyExported = [];
 
     /**
      * @var array
      */
-    protected $previouslyUnsubscribedSubscribers = array();
+    protected $previouslyUnsubscribedSubscribers = [];
 
     /**
      * @var array
      */
-    protected $previouslyBouncedSubscribers = array();
+    protected $previouslyBouncedSubscribers = [];
 
     /**
      *
      */
     public function run($request)
     {
-        increase_time_limit_to(3600);
-        increase_memory_limit_to('5120M');
+        Silverstripe\Core\Environment::increaseTimeLimitTo(3600);
+        Silverstripe\Core\Environment::increaseMemoryLimitTo('5120M');
         $this->getUnsubscribedSubscribers();
         $this->getExistingFolkListed();
         $this->getBouncedSubscribers();
@@ -78,10 +78,10 @@ class CampaignMonitorSyncAllMembers extends BuildTask
             $maxIterations = 1000000;
             DB::alteration_message("Running in live mode going to check $maxIterations loops of $limit records.");
         }
-        $customFields = array();
-        $memberArray = array();
-        $unsubscribeArray = array();
-        $alreadyCompleted = array();
+        $customFields = [];
+        $memberArray = [];
+        $unsubscribeArray = [];
+        $alreadyCompleted = [];
         for ($i = 0; $i < $maxIterations; $i++) {
             $members = Member::get()
                 ->limit($limit, $i * $limit);
@@ -117,9 +117,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     }
                 }
                 $this->exportNow($memberArray, $customFields, $unsubscribeArray);
-                $customFields = array();
-                $memberArray = array();
-                $unsubscribeArray = array();
+                $customFields = [];
+                $memberArray = [];
+                $unsubscribeArray = [];
             } else {
                 $i = $maxIterations + 1;
             }
@@ -148,7 +148,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function getExistingFolkListed()
     {
-        $array = array();
+        $array = [];
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getActiveSubscribers(
@@ -166,7 +166,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
             }
             if (isset($list->Results)) {
                 foreach ($list->Results as $obj) {
-                    $finalCustomFields = array();
+                    $finalCustomFields = [];
                     foreach ($obj->CustomFields as $customFieldObject) {
                         $finalCustomFields[str_replace(array("[", "]"), "", $customFieldObject->Key)] = $customFieldObject->Value;
                     }
@@ -186,7 +186,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function getBouncedSubscribers()
     {
-        $array = array();
+        $array = [];
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getBouncedSubscribers(
@@ -219,7 +219,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function getUnsubscribedSubscribers()
     {
-        $array = array();
+        $array = [];
         $api = $this->getAPI();
         for ($i = 1; $i < 100; $i++) {
             $list = $api->getUnsubscribedSubscribers(
@@ -258,7 +258,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         PWUpdateGetData::flush("<hr />", "deleted");
         if (count($memberArray)) {
             if (count($memberArray) == count($customFields)) {
-                $finalCustomFields = array();
+                $finalCustomFields = [];
                 foreach ($customFields as $email => $valuesArray) {
                     $updateDetails = false;
                     $alreadyListed = false;
@@ -283,7 +283,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     } else {
                         DB::alteration_message("Adding entry: ".implode("; ", $customFields[$email]).".", "created");
                     }
-                    $finalCustomFields[$email] = array();
+                    $finalCustomFields[$email] = [];
                     $k = 0;
                     foreach ($valuesArray as $key => $value) {
                         $finalCustomFields[$email][$k]["Key"] = $key;

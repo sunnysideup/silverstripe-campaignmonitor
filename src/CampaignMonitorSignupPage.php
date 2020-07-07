@@ -166,19 +166,19 @@ class CampaignMonitorSignupPage extends Page
                         'Confirm',
                     new TextField('ConfirmTitle', 'Title'),
                     new TextField('ConfirmMenuTitle', 'Menu Title'),
-                    new HtmlEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
+                    new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
                 ),
                 new Tab(
                     'ThankYou',
                     new TextField('ThankYouTitle', 'Title'),
                     new TextField('ThankYouMenuTitle', 'Menu Title'),
-                    new HtmlEditorField('ThankYouMessage', 'Thank you message after submitting form')
+                    new HTMLEditorField('ThankYouMessage', 'Thank you message after submitting form')
                 ),
                 new Tab(
                     'SadToSeeYouGo',
                     new TextField('SadToSeeYouGoTitle', 'Title'),
                     new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
-                    new HtmlEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
+                    new HTMLEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
                 )
             )
         );
@@ -197,7 +197,7 @@ class CampaignMonitorSignupPage extends Page
                     'StartForm',
                     new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
                     new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
-                    new HtmlEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
+                    new HTMLEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
                     new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
                 ),
                 new Tab(
@@ -243,7 +243,7 @@ class CampaignMonitorSignupPage extends Page
      *
      * @var Null | Array
      */
-    private static $drop_down_list = array();
+    private static $drop_down_list = [];
 
     /**
      * returns available list for client
@@ -252,7 +252,7 @@ class CampaignMonitorSignupPage extends Page
     protected function makeDropdownListFromLists()
     {
         if (!isset(self::$drop_down_list[$this->ID])) {
-            $array = array();
+            $array = [];
             $api = $this->getAPI();
             $lists = $api->getLists();
             if (is_array($lists) && count($lists)) {
@@ -286,10 +286,37 @@ class CampaignMonitorSignupPage extends Page
      */
     public function CampaignMonitorStartForm(Controller $controller, $formName = "CampaignMonitorStarterForm")
     {
-        if ($email = Session::get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
-            return $this->renderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: Session:: (case sensitive)
+  * NEW: Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+        if ($email = Controller::curr()->getRequest()->getSession()->get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: ->RenderWith( (ignore case)
+  * NEW: ->RenderWith( (COMPLEX)
+  * EXP: Check that the template location is still valid!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            return $this->RenderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));
         } else {
-            Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: THIRDPARTY_DIR . '/jquery/jquery.js' (case sensitive)
+  * NEW: 'silverstripe/admin: thirdparty/jquery/jquery.js' (COMPLEX)
+  * EXP: Check for best usage and inclusion of Jquery
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
             Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
             if (!$this->ReadyToReceiveSubscribtions()) {
@@ -328,6 +355,15 @@ class CampaignMonitorSignupPage extends Page
                 $member = new Member();
                 $member->Email = $email;
                 $member->SetPassword = true;
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: create_new_password (ignore case)
+  * NEW: create_new_password (COMPLEX)
+  * EXP: This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
                 $member->Password = Member::create_new_password();
                 $member->write();
             }
@@ -423,7 +459,7 @@ class CampaignMonitorSignupPage extends Page
             $this->CampaignMonitorCampaigns()->filter(array("HasBeenSent" => 1))->removeAll();
         }
         //add segments
-        $segmentsAdded = array();
+        $segmentsAdded = [];
         $segments = $this->api->getSegments($this->ListID);
         if ($segments && is_array($segments) && count($segments)) {
             foreach ($segments as $segment) {
@@ -443,7 +479,7 @@ class CampaignMonitorSignupPage extends Page
             $unwantedSegment->delete();
         }
         //add custom fields
-        $customCustomFieldsAdded = array();
+        $customCustomFieldsAdded = [];
         $customCustomFields = $this->api->getListCustomFields($this->ListID);
         if ($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
             foreach ($customCustomFields as $customCustomField) {
@@ -468,7 +504,7 @@ class CampaignMonitorSignupPage extends Page
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
-        $update = array();
+        $update = [];
         $page = CampaignMonitorSignupPage::get()->First();
 
         if ($page) {

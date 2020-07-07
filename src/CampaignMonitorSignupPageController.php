@@ -1,6 +1,15 @@
 <?php
 
-class CampaignMonitorSignupPage_Controller extends Page_Controller
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: _Controller extends Page_Controller (case sensitive)
+  * NEW: Controller extends PageController (COMPLEX)
+  * EXP: Remove the underscores in your classname - check all references!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+class CampaignMonitorSignupPageController extends PageController
 {
 
     /**
@@ -174,7 +183,16 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
 
             //are any choices being made
             if (!isset($data["SubscribeChoice"]) && !isset($data["SubscribeManyChoices"])) {
-                $form->addErrorMessage('SubscribeChoice', _t("CAMPAIGNMONITORSIGNUPPAGE.NO_NAME", "Please choose your subscription."), 'warning');
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: $form->addErrorMessage( (case sensitive)
+  * NEW: $form->sessionError( (COMPLEX)
+  * EXP: SilverStripe\Forms\Form->addErrorMessage(): Removed. Use `sessionMessage()` or `sessionError()` to add a form level message, throw a `ValidationException` during submission, or add a custom validator.
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+                $form->sessionError('SubscribeChoice', _t("CAMPAIGNMONITORSIGNUPPAGE.NO_NAME", "Please choose your subscription."), 'warning');
                 $this->redirectBack();
                 return;
             }
@@ -185,6 +203,15 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
                     $form->saveInto($member);
                     $member->Email = Convert::raw2sql($data["CampaignMonitorEmail"]);
                     $member->SetPassword = true;
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: create_new_password (ignore case)
+  * NEW: create_new_password (COMPLEX)
+  * EXP: This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
                     $member->Password = Member::create_new_password();
                     $member->write();
                     $member->logIn($keepMeLoggedIn = false);
@@ -269,8 +296,26 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
                 $this->email = $email;
                 if (Director::is_ajax()) {
                     if (!$this->addSubscriber($email)) {
-                        Session::set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
-                        return $this->renderWith("CampaignMonitorStartForm_AjaxResult");
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: Session:: (case sensitive)
+  * NEW: Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+                        Controller::curr()->getRequest()->getSession()->set("CampaignMonitorStartForm_AjaxResult_".$this->ID, $data["CampaignMonitorEmail"]);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: ->RenderWith( (ignore case)
+  * NEW: ->RenderWith( (COMPLEX)
+  * EXP: Check that the template location is still valid!
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+                        return $this->RenderWith("CampaignMonitorStartForm_AjaxResult");
                     } else {
                         return "ERROR";
                     }
@@ -488,7 +533,16 @@ class CampaignMonitorSignupPage_Controller extends Page_Controller
      */
     public function resetsignup($request)
     {
-        Session::clear("CampaignMonitorStartForm_AjaxResult_".$this->ID);
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: automated upgrade
+  * OLD: Session:: (case sensitive)
+  * NEW: Controller::curr()->getRequest()->getSession()-> (COMPLEX)
+  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+        Controller::curr()->getRequest()->getSession()->clear("CampaignMonitorStartForm_AjaxResult_".$this->ID);
         return array();
     }
 

@@ -23,7 +23,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      *     CustomFieldCode => MemberFieldOrMethod
      * @var array
      */
-    private static $custom_fields_member_field_or_method_map = array();
+    private static $custom_fields_member_field_or_method_map = [];
 
     /**
      *
@@ -70,7 +70,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         if ($listPage) {
             if ($listPage->ReadyToReceiveSubscribtions()) {
                 $currentSelection = "Subscribe";
-                $optionArray = array();
+                $optionArray = [];
                 $optionArray["Subscribe"] = _t("CampaignMonitorSignupPage.SUBSCRIBE_TO", "subscribe to")." ".$listPage->getListTitle();
                 $optionArray["Unsubscribe"] = _t("CampaignMonitorSignupPage.UNSUBSCRIBE_FROM", "unsubscribe from ")." ".$listPage->getListTitle();
                 if ($this->owner->exists()) {
@@ -120,7 +120,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 $fieldTitle = _t("CampaignMonitorMemberDOD.NEWSLETTERSIGNUP", "Newsletter sign-up");
             }
             $lists = CampaignMonitorSignupPage::get_ready_ones();
-            $array = array();
+            $array = [];
             foreach ($lists as $list) {
                 $array[$list->ListID] = $list->getListTitle();
             }
@@ -171,7 +171,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         elseif (isset($data["SubscribeChoice"])) {
             if ($data["SubscribeChoice"] == "Subscribe") {
                 $customFields = $listPage->CampaignMonitorCustomFields()->filter(array("Visible" => 1));
-                $customFieldsArray = array();
+                $customFieldsArray = [];
                 foreach ($customFields as $customField) {
                     if (isset($data["CMCustomField".$customField->Code])) {
                         $customFieldsArray[$customField->Code] = $data["CMCustomField".$customField->Code];
@@ -195,7 +195,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     public function unsubscribe($request)
     {
         $lists = CampaignMonitorSignupPage::get_ready_ones();
-        $array = array();
+        $array = [];
         foreach ($lists as $list) {
             $this->owner->removeCampaignMonitorList($list->ListID);
         }
@@ -310,7 +310,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         $api = $this->getCMAPI();
         $lists = $api->getListsForEmail($this->owner);
-        $array = array();
+        $array = [];
         if ($lists && count($lists)) {
             foreach ($lists as $listArray) {
                 if (in_array($listArray["SubscriberState"], array("Active", "Bounced"))) {
