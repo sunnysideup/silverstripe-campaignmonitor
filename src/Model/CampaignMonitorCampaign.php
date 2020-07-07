@@ -11,7 +11,6 @@ namespace Sunnysideup\CampaignMonitor\Model;
 
 
 
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use SilverStripe\Forms\OptionsetField;
@@ -54,19 +53,7 @@ class CampaignMonitorCampaign extends DataObject
      * @var string
      */
     private static $default_template = CampaignMonitorCampaign::class;
-    
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * OLD: private static $db (case sensitive)
-  * NEW: 
-    private static $table_name = '[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]';
-
-    private static $db (COMPLEX)
-  * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    
     private static $table_name = 'CampaignMonitorCampaign';
 
     private static $db = array(
@@ -221,7 +208,7 @@ class CampaignMonitorCampaign extends DataObject
         }
         return "";
     }
-    
+
     /**
      * html for newsletter to be created
      * @var return

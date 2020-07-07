@@ -110,18 +110,6 @@ class CampaignMonitorSignupPage extends Page
      *
      * @inherited
      */
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * OLD: private static $db (case sensitive)
-  * NEW: 
-    private static $table_name = '[SEARCH_REPLACE_CLASS_NAME_GOES_HERE]';
-
-    private static $db (COMPLEX)
-  * EXP: Check that is class indeed extends DataObject and that it is not a data-extension!
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-    
     private static $table_name = 'CampaignMonitorSignupPage';
 
     private static $db = array(
@@ -356,15 +344,6 @@ class CampaignMonitorSignupPage extends Page
      */
     public function CampaignMonitorStartForm(Controller $controller, $formName = "CampaignMonitorStarterForm")
     {
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: Session:: (case sensitive)
-  * NEW: Controller::curr()->getRequest()->getSession()-> (COMPLEX)
-  * EXP: If THIS is a controller than you can write: $this->getRequest(). You can also try to access the HTTPRequest directly. 
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
         if ($email = Controller::curr()->getRequest()->getSession()->get("CampaignMonitorStartForm_AjaxResult_".$this->ID)) {
 
 /**
@@ -377,18 +356,9 @@ class CampaignMonitorSignupPage extends Page
   */
             return $this->RenderWith("CampaignMonitorStartForm_AjaxResult", array("Email" => $email));
         } else {
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: THIRDPARTY_DIR . '/jquery/jquery.js' (case sensitive)
-  * NEW: 'silverstripe/admin: thirdparty/jquery/jquery.js' (COMPLEX)
-  * EXP: Check for best usage and inclusion of Jquery
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-            Requirements::javascript('sunnysideup/campaignmonitor: silverstripe/admin: thirdparty/jquery/jquery.js');
+            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
-            Requirements::javascript(SS_CAMPAIGNMONITOR_DIR . '/javascript/CampaignMonitorStartForm.js');
+            Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
             if (!$this->ReadyToReceiveSubscribtions()) {
                 //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
                 return false;
@@ -424,17 +394,8 @@ class CampaignMonitorSignupPage extends Page
             } else {
                 $member = new Member();
                 $member->Email = $email;
-                $member->SetPassword = true;
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: create_new_password (ignore case)
-  * NEW: create_new_password (COMPLEX)
-  * EXP: This is depracated in SS4: https://github.com/silverstripe/silverstripe-framework/commit/f16d7e1838d834575738086326d1191db3a5cfd8, consider if there is a better way to implement this functionality
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-                $member->Password = Member::create_new_password();
+                //$member->SetPassword = true;
+                //$member->Password = Member::create_new_password();
                 $member->write();
             }
             if ($group = $this->Group()) {
