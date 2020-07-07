@@ -17,7 +17,6 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~3.6",
         "silverstripe/cms": "~3.6",
         "campaignmonitor/createsend-php": "~5.1",
         "pelago/emogrifier": "*"
