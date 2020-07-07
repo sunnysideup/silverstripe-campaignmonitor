@@ -1,0 +1,89 @@
+2020-07-07 12:53
+
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /var/www/upgrades/ss_campaignmonitor
+php /var/www/upgrades/upgrader_tool/vendor/silverstripe/upgrader/bin/upgrade-code inspect /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src  --root-dir=/var/www/upgrades/ss_campaignmonitor --write -vvv
+Array
+(
+    [0] => Running post-upgrade on "/var/www/upgrades/ss_campaignmonitor/campaignmonitor/src"
+    [1] => [2020-07-07 12:53:12] Applying ApiChangeWarningsRule to CampaignMonitorSyncAllMembers.php...
+    [2] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorCampaignStyle.php on line 219
+    [3] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorSegment.php on line 54
+    [4] => PHP Fatal error:  Cannot declare class Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController, because the name is already in use in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/CampaignMonitorSignupPageController.php on line 630
+)
+
+
+------------------------------------------------------------------------
+To continue, please use the following parameter: startFrom=InspectAPIChanges-1
+e.g. php runme.php startFrom=InspectAPIChanges-1
+------------------------------------------------------------------------
+            
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /var/www/upgrades/ss_campaignmonitor
+php /var/www/upgrades/upgrader_tool/vendor/silverstripe/upgrader/bin/upgrade-code inspect /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src  --root-dir=/var/www/upgrades/ss_campaignmonitor --write -vvv
+Array
+(
+    [0] => Running post-upgrade on "/var/www/upgrades/ss_campaignmonitor/campaignmonitor/src"
+    [1] => [2020-07-07 12:54:26] Applying ApiChangeWarningsRule to CampaignMonitorSyncAllMembers.php...
+    [2] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorCampaignStyle.php on line 219
+    [3] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorSegment.php on line 54
+    [4] => PHP Fatal error:  Cannot declare class Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController, because the name is already in use in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/CampaignMonitorSignupPageController.php on line 630
+)
+
+
+------------------------------------------------------------------------
+To continue, please use the following parameter: startFrom=InspectAPIChanges-1
+e.g. php runme.php startFrom=InspectAPIChanges-1
+------------------------------------------------------------------------
+            
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /var/www/upgrades/ss_campaignmonitor
+php /var/www/upgrades/upgrader_tool/vendor/silverstripe/upgrader/bin/upgrade-code inspect /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src  --root-dir=/var/www/upgrades/ss_campaignmonitor --write -vvv
+Array
+(
+    [0] => Running post-upgrade on "/var/www/upgrades/ss_campaignmonitor/campaignmonitor/src"
+    [1] => [2020-07-07 12:55:13] Applying ApiChangeWarningsRule to CampaignMonitorSyncAllMembers.php...
+    [2] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorCampaignStyle.php on line 219
+    [3] => PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorSegment.php on line 54
+    [4] => PHP Fatal error:  Cannot declare class Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController, because the name is already in use in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/CampaignMonitorSignupPageController.php on line 630
+)
+
+
+------------------------------------------------------------------------
+To continue, please use the following parameter: startFrom=InspectAPIChanges-1
+e.g. php runme.php startFrom=InspectAPIChanges-1
+------------------------------------------------------------------------
+            
+# running php upgrade inspect see: https://github.com/silverstripe/silverstripe-upgrader
+cd /var/www/upgrades/ss_campaignmonitor
+php /var/www/upgrades/upgrader_tool/vendor/silverstripe/upgrader/bin/upgrade-code inspect /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src  --root-dir=/var/www/upgrades/ss_campaignmonitor --write -vvv
+Writing changes for 0 files
+Running post-upgrade on "/var/www/upgrades/ss_campaignmonitor/campaignmonitor/src"
+[2020-07-07 12:56:35] Applying ApiChangeWarningsRule to CampaignMonitorSyncAllMembers.php...
+PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorCampaignStyle.php on line 219
+PHP Warning:  Declaration of Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment::canCreate($member = NULL) should be compatible with SilverStripe\ORM\DataObject::canCreate($member = NULL, $context = Array) in /var/www/upgrades/ss_campaignmonitor/campaignmonitor/src/Model/CampaignMonitorSegment.php on line 54
+[2020-07-07 12:56:36] Applying UpdateVisibilityRule to CampaignMonitorSyncAllMembers.php...
+[2020-07-07 12:56:36] Applying ApiChangeWarningsRule to CampaignMonitorAddOldCampaigns.php...
+[2020-07-07 12:56:36] Applying UpdateVisibilityRule to CampaignMonitorAddOldCampaigns.php...
+[2020-07-07 12:56:37] Applying ApiChangeWarningsRule to CampaignMonitorAPIConnector_TestController.php...
+[2020-07-07 12:56:37] Applying UpdateVisibilityRule to CampaignMonitorAPIConnector_TestController.php...
+[2020-07-07 12:56:37] Applying ApiChangeWarningsRule to CampaignMonitorMemberDOD.php...
+[2020-07-07 12:56:38] Applying UpdateVisibilityRule to CampaignMonitorMemberDOD.php...
+[2020-07-07 12:56:38] Applying ApiChangeWarningsRule to CampaignMonitorGroupDOD.php...
+[2020-07-07 12:56:38] Applying UpdateVisibilityRule to CampaignMonitorGroupDOD.php...
+[2020-07-07 12:56:38] Applying ApiChangeWarningsRule to CampaignMonitorAPIConnector.php...
+[2020-07-07 12:56:39] Applying UpdateVisibilityRule to CampaignMonitorAPIConnector.php...
+[2020-07-07 12:56:40] Applying ApiChangeWarningsRule to CampaignMonitorCampaign.php...
+[2020-07-07 12:56:41] Applying UpdateVisibilityRule to CampaignMonitorCampaign.php...
+[2020-07-07 12:56:41] Applying ApiChangeWarningsRule to CampaignMonitorCampaignStyle.php...
+[2020-07-07 12:56:41] Applying UpdateVisibilityRule to CampaignMonitorCampaignStyle.php...
+[2020-07-07 12:56:41] Applying ApiChangeWarningsRule to CampaignMonitorSegment.php...
+[2020-07-07 12:56:41] Applying UpdateVisibilityRule to CampaignMonitorSegment.php...
+[2020-07-07 12:56:41] Applying ApiChangeWarningsRule to CampaignMonitorCustomField.php...
+[2020-07-07 12:56:42] Applying UpdateVisibilityRule to CampaignMonitorCustomField.php...
+[2020-07-07 12:56:42] Applying ApiChangeWarningsRule to CampaignMonitorSignupPageController.php...
+[2020-07-07 12:56:43] Applying UpdateVisibilityRule to CampaignMonitorSignupPageController.php...
+[2020-07-07 12:56:43] Applying ApiChangeWarningsRule to CampaignMonitorSignupPage.php...
+[2020-07-07 12:56:44] Applying UpdateVisibilityRule to CampaignMonitorSignupPage.php...
+Writing changes for 0 files
+✔✔✔
