@@ -3,4 +3,4 @@ Name: campaignmonitortest
 ---
 SilverStripe\Control\Director:
   rules:
-    create-send-test//$Action/$ID/$OtherID: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController
+    create-send-test//$Action/$ID/$OtherID: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnectorTestController

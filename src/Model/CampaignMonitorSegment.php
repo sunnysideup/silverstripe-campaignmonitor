@@ -2,11 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use SilverStripe\ORM\DataObject;
-
-
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -17,27 +14,26 @@ use SilverStripe\ORM\DataObject;
 
 class CampaignMonitorSegment extends DataObject
 {
-    private static $db = array(
-        "Title" => "Varchar(64)",
-        "SegmentID" => "Varchar(32)",
-        "ListID" => "Varchar(32)"
-    );
+    private static $db = [
+        'Title' => 'Varchar(64)',
+        'SegmentID' => 'Varchar(32)',
+        'ListID' => 'Varchar(32)',
+    ];
 
-    private static $summary_fields = array(
-        "Title" => "Title"
-    );
+    private static $summary_fields = [
+        'Title' => 'Title',
+    ];
 
-    private static $indexes = array(
-        "SegmentID" => true,
-        "ListID" => true
-    );
+    private static $indexes = [
+        'SegmentID' => true,
+        'ListID' => true,
+    ];
 
-    private static $has_one = array(
-        "CampaignMonitorSignupPage" => CampaignMonitorSignupPage::class
-    );
+    private static $has_one = [
+        'CampaignMonitorSignupPage' => CampaignMonitorSignupPage::class,
+    ];
 
-
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return false;
     }
@@ -52,4 +48,3 @@ class CampaignMonitorSegment extends DataObject
         return false;
     }
 }
-

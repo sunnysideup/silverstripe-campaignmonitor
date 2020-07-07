@@ -2,25 +2,22 @@
 
 namespace Sunnysideup\CampaignMonitor\Api;
 
-
-use CS_REST_General;
+use CS_REST_Campaigns;
 use CS_REST_Clients;
-use CS_REST_Templates;
+use CS_REST_General;
 
 use CS_REST_Lists;
 
-use CS_REST_Campaigns;
-
 use CS_REST_Subscribers;
+
+use CS_REST_Templates;
 use Metadata\Cache\CacheInterface;
-use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Control\Email\Email;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Security\Member;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\ViewableData;
-
-
 
 /**
  * Main Holder page for Recipes
@@ -28,68 +25,62 @@ use SilverStripe\View\ViewableData;
  */
 class CampaignMonitorAPIConnector extends ViewableData
 {
+    /**
+     * @var boolean
+     */
+    protected $debug = false;
+
+    /**
+     * @var boolean
+     */
+    protected $allowCaching = false;
+
+    /**
+     * @var int
+     */
+    protected $httpStatusCode = 0;
 
     /**
      * REQUIRED!
      * this is the CM url for logging in.
      * which can be used by the client.
-     * @var String
+     * @var string
      */
-    private static $campaign_monitor_url = "";
+    private static $campaign_monitor_url = '';
 
     /**
      * REQUIRED!
-     * @var String
+     * @var string
      */
-    private static $client_id = "";
-
+    private static $client_id = '';
 
     /**
      * OPTION 1: API KEY!
-     * @var String
+     * @var string
      */
-    private static $api_key = "";
-
+    private static $api_key = '';
 
     /**
      * OPTION 2: OAUTH OPTION
-     * @var String
+     * @var string
      */
-    private static $client_secret = "";
+    private static $client_secret = '';
 
     /**
      * OPTION 2: OAUTH OPTION
-     * @var String
+     * @var string
      */
-    private static $redirect_uri = "";
+    private static $redirect_uri = '';
 
     /**
      * OPTION 2: OAUTH OPTION
-     * @var String
+     * @var string
      */
-    private static $code = "";
+    private static $code = '';
+
+    private static $_get_subscriber = [];
 
     /**
-     *
-     * @var Boolean
-     */
-    protected $debug = false;
-
-    /**
-     *
-     * @var Boolean
-     */
-    protected $allowCaching = false;
-
-    /**
-     *
-     * @var Int
-     */
-    protected $httpStatusCode = 0;
-
-
-    /**
-     *
      * must be called to use this API.
      */
     public function init()
@@ -101,7 +92,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * turn debug on or off
      *
-     * @param Boolean
+     * @param $b
      */
     public function setDebug($b)
     {
@@ -109,8 +100,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     *
-     * @param Boolean $b
+     * @param boolean $b
      */
     public function setAllowCaching($b)
     {
@@ -118,8 +108,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     *
-     * @return Boolean
+     * @return boolean
      */
     public function getAllowCaching()
     {
@@ -127,94 +116,9 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     * provides the Authorisation Array
-     * @return Array
-     */
-    protected function getAuth()
-    {
-        if ($auth = $this->getFromCache("getAuth")) {
-            return $auth;
-        } else {
-            if ($apiKey = $this->Config()->get("api_key")) {
-                $auth = array('api_key' => $apiKey);
-            } else {
-                $client_id = $this->Config()->get("client_id");
-                $client_secret = $this->Config()->get("client_secret");
-                $redirect_uri = $this->Config()->get("redirect_uri");
-                $code = $this->Config()->get("code");
-
-                $result = CS_REST_General::exchange_token($client_id, $client_secret, $redirect_uri, $code);
-
-                if ($result->was_successful()) {
-                    $auth = array(
-                        'access_token' => $result->response->access_token,
-                        'refresh_token' => $result->response->refresh_token
-                    );
-                    //TODO: do we need to check expiry date?
-                    //$expires_in = $result->response->expires_in;
-                    # Save $access_token, $expires_in, and $refresh_token.
-                    if ($this->debug) {
-                        "access token: ".$result->response->access_token."\n";
-                        "expires in (seconds): ".$result->response->expires_in."\n";
-                        "refresh token: ".$result->response->refresh_token."\n";
-                    }
-                } else {
-                    # If you receive '121: Expired OAuth Token', refresh the access token
-                    if ($result->response->Code == 121) {
-                        $wrap = new CS_REST_General($auth);
-                        list($new_access_token, $new_expires_in, $new_refresh_token) = $wrap->refresh_token();
-                    }
-                    $auth = array(
-                        'access_token' => $new_access_token,
-                        'refresh_token' => $new_refresh_token
-                    );
-                    if ($this->debug) {
-                        'An error occurred:\n';
-                        $result->response->error.': '.$result->response->error_description."\n";
-                    }
-                }
-            }
-            $this->saveToCache($auth, "getAuth");
-            return $auth;
-        }
-    }
-
-    /**
-     * returns the result or NULL in case of an error
-     * @param CS_REST_Wrapper_Result
-     * @return Mixed | Null
-     */
-    protected function returnResult($result, $apiCall, $description)
-    {
-        if ($this->debug) {
-            echo "<h1>$description ( $apiCall ) ...</h1>";
-            if ($result->was_successful()) {
-                echo "<h2>SUCCESS</h2>";
-            } else {
-                echo "<h2>FAILURE: ".$result->http_status_code."</h2>";
-            }
-            echo "<pre>";
-            print_r($result);
-            echo "</pre>";
-            echo "<hr /><hr /><hr />";
-            ob_flush();
-            flush();
-        }
-        if ($result->was_successful()) {
-            if (isset($result->response)) {
-                return $result->response;
-            }
-            return true;
-        } else {
-            $this->httpStatusCode = $result->http_status_code;
-            return null;
-        }
-    }
-
-    /**
      * returns the HTTP code for the response.
      * This can be handy for debuging purposes.
-     * @return Int
+     * @return int
      */
     public function getHttpStatusCode()
     {
@@ -222,51 +126,12 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /*******************************************************
-     * caching
-     *
-     *******************************************************/
-
-    /**
-     * @param String $name
-     * @return Mixed
-     */
-    protected function getFromCache($name)
-    {
-        if ($this->getAllowCaching()) {
-            $name = "CampaignMonitorAPIConnector_".$name;
-            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
-            $value = $cache->has($name) ? $cache->get($name) : null;
-            if (!$value) {
-                return null;
-            }
-            return unserialize($value);
-        }
-    }
-
-    /**
-     * @param Mixed $unserializedValue
-     * @param String $name
-     */
-    protected function saveToCache($unserializedValue, $name)
-    {
-        if ($this->getAllowCaching()) {
-            $serializedValue = serialize($unserializedValue);
-            $name = "CampaignMonitorAPIConnector_".$name;
-            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
-            $cache->set($name, $serializedValue);
-            return true;
-        }
-    }
-
-
-    /*******************************************************
      * client
      *
      *******************************************************/
 
     /**
-     *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * array(
      *     {
      *         'WebVersionURL' => The web version url of the campaign
@@ -284,30 +149,30 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getCampaigns()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
+        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_campaigns();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/clients/{id}/campaigns",
-            "Got sent campaigns"
+            'GET /api/v3.1/clients/{id}/campaigns',
+            'Got sent campaigns'
         );
     }
 
     public function getDrafts()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
+        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_drafts();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/clients/{id}/drafts",
-            "Got draft campaigns"
+            'GET /api/v3.1/clients/{id}/drafts',
+            'Got draft campaigns'
         );
     }
 
     /**
      * Gets all subscriber lists the current client has created
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * array(
      *     {
      *         'ListID' => The id of the list
@@ -318,18 +183,18 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getLists()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
+        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_lists();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/clients/{id}/lists",
-            "Got Lists"
+            'GET /api/v3.1/clients/{id}/lists',
+            'Got Lists'
         );
     }
 
     public function getScheduled()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     /**
@@ -344,7 +209,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
         $wrap = new CS_REST_Clients(
-            $this->Config()->get("client_id"),
+            $this->Config()->get('client_id'),
             $this->getAuth()
         );
         $result = $wrap->get_suppressionlist(
@@ -355,22 +220,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3/clients/{id}/suppressionlist",
-            "Get suppression list"
+            'GET /api/v3/clients/{id}/suppressionlist',
+            'Get suppression list'
         );
     }
 
     public function getTemplates()
     {
         $wrap = new CS_REST_Clients(
-            $this->Config()->get("client_id"),
+            $this->Config()->get('client_id'),
             $this->getAuth()
         );
         $result = $wrap->get_templates();
         return $this->returnResult(
             $result,
-            "GET /api/v3/clients/{id}/templates",
-            "Get Templates"
+            'GET /api/v3/clients/{id}/templates',
+            'Get Templates'
         );
     }
 
@@ -383,36 +248,33 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get();
         return $this->returnResult(
             $result,
-            "GET /api/v3/templates/{ID}",
-            "Got Summary"
+            'GET /api/v3/templates/{ID}',
+            'Got Summary'
         );
     }
 
     /**
-     *
      * @param CampaignMonitorCampaign $campaignMonitorCampaign
      *
-     * @return CS_REST_Wrapper_Result
+     * @return \CS_REST_Wrapper_Result
      */
     public function createTemplate($campaignMonitorCampaign)
     {
-        $siteConfig = SiteConfig::current_site_config();
-
-        $name = "Template for ".$campaignMonitorCampaign->Name;
-        if (!$name) {
-            $name = "no name set";
+        $name = 'Template for ' . $campaignMonitorCampaign->Name;
+        if (! $name) {
+            $name = 'no name set';
         }
 
         $wrap = new CS_REST_Templates(null, $this->getAuth());
         $result = $wrap->create(
-            $this->Config()->get("client_id"),
-            array(
+            $this->Config()->get('client_id'),
+            [
                 'Name' => $name,
                 'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
-                'ZipFileURL' => ''
-            )
+                'ZipFileURL' => '',
+            ]
         );
-        if (isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
             $code = $result->response;
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = true;
@@ -420,62 +282,59 @@ class CampaignMonitorAPIConnector extends ViewableData
         } else {
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = false;
-            $code = "Error";
+            $code = 'Error';
             if (is_object($result->response)) {
-                $code = $result->response->Code.":".$result->response->Message;
+                $code = $result->response->Code . ':' . $result->response->Message;
             }
             $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
         }
         $campaignMonitorCampaign->write();
         return $this->returnResult(
             $result,
-            "POST /api/v3/templates/{clientID}",
-            "Created Template"
+            'POST /api/v3/templates/{clientID}',
+            'Created Template'
         );
     }
 
     /**
-     *
      * @param CampaignMonitorCampaign $campaignMonitorCampaign
      * @param string $templateID
      *
-     * @return CS_REST_Wrapper_Result
+     * @return \CS_REST_Wrapper_Result
      */
     public function updateTemplate($campaignMonitorCampaign, $templateID)
     {
-        $siteConfig = SiteConfig::current_site_config();
-
-        $name = "Template for ".$campaignMonitorCampaign->Name;
-        if (!$name) {
-            $name = "no name set";
+        $name = 'Template for ' . $campaignMonitorCampaign->Name;
+        if (! $name) {
+            $name = 'no name set';
         }
         $wrap = new CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->create(
-            $this->Config()->get("client_id"),
-            array(
+            $this->Config()->get('client_id'),
+            [
                 'Name' => $name,
                 'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
-                'ZipFileURL' => ''
-            )
+                'ZipFileURL' => '',
+            ]
         );
-        if (isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
             $code = $result->response;
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = true;
         } else {
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = false;
-            $code = "Error";
+            $code = 'Error';
             if (is_object($result->response)) {
-                $code = $result->response->Code.":".$result->response->Message;
+                $code = $result->response->Code . ':' . $result->response->Message;
             }
             $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
         }
         $campaignMonitorCampaign->write();
         return $this->returnResult(
             $result,
-            "PUT /api/v3/templates/{ID}",
-            "Updated Template"
+            'PUT /api/v3/templates/{ID}',
+            'Updated Template'
         );
     }
 
@@ -485,8 +344,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
-            "DELETE /api/v3/templates/{ID}",
-            "Deleted Template"
+            'DELETE /api/v3/templates/{ID}',
+            'Deleted Template'
         );
     }
 
@@ -505,7 +364,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
      * @param string $unsubscribeSetting - Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
      *
-     * @return CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
+     * @return \CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
      */
     public function createList($title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting = null)
     {
@@ -513,23 +372,23 @@ class CampaignMonitorAPIConnector extends ViewableData
         $wrap = new CS_REST_Lists(null, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
-        if (!$unsubscribeSetting) {
+        if (! $unsubscribeSetting) {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
         $result = $wrap->create(
-            $this->Config()->get("client_id"),
-            array(
+            $this->Config()->get('client_id'),
+            [
                 'Title' => $title,
                 'UnsubscribePage' => $unsubscribePage,
                 'ConfirmedOptIn' => $confirmedOptIn,
                 'ConfirmationSuccessPage' => $confirmationSuccessPage,
-                'UnsubscribeSetting' => $unsubscribeSetting
-            )
+                'UnsubscribeSetting' => $unsubscribeSetting,
+            ]
         );
         return $this->returnResult(
             $result,
-            "POST /api/v3.1/lists/{clientID}",
-            "Created with ID"
+            'POST /api/v3.1/lists/{clientID}',
+            'Created with ID'
         );
     }
 
@@ -541,40 +400,40 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $title - field type
      * @param array $options - options for dropdown field type
      *
-     * @return CS_REST_Wrapper_Result A successful response will be the key of the newly created custom field
+     * @return \CS_REST_Wrapper_Result A successful response will be the key of the newly created custom field
      */
-    public function createCustomField($listID, $visible, $type, $title, $options = array())
+    public function createCustomField($listID, $visible, $type, $title, $options = [])
     {
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         switch ($type) {
-            case "text":
+            case 'text':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_TEXT;
                 break;
-            case "number":
+            case 'number':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_NUMBER;
                 break;
-            case "multi_select_one":
+            case 'multi_select_one':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTONE;
                 break;
-            case "multi_select_many":
+            case 'multi_select_many':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_MULTI_SELECTMANY;
                 break;
-            case "date":
+            case 'date':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_DATE;
                 break;
             default:
-                user_error("You must select one from text, number, multi_select_one, multi_select_many, date)");
+                user_error('You must select one from text, number, multi_select_one, multi_select_many, date)');
         }
-        $result = $wrap->create_custom_field(array(
+        $result = $wrap->create_custom_field([
             'FieldName' => $title,
             'DataType' => $type,
             'Options' => $options,
-            'VisibleInPreferenceCenter' => $visible ? true : false
-        ));
+            'VisibleInPreferenceCenter' => $visible ? true : false,
+        ]);
         return $this->returnResult(
             $result,
-            "POST /api/v3/lists/{ID}/customfields",
-            "Created Custom Field for $listID "
+            'POST /api/v3/lists/{ID}/customfields',
+            "Created Custom Field for ${listID} "
         );
     }
 
@@ -584,7 +443,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $listID - list ID
      * @param string $key
      *
-     * @return CS_REST_Wrapper_Result
+     * @return \CS_REST_Wrapper_Result
      */
     public function deleteCustomField($listID, $key)
     {
@@ -592,15 +451,15 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->delete_custom_field($key);
         return $this->returnResult(
             $result,
-            "DELETE /api/v3/lists/{ID}/{Key}",
-            "Delete Custom Field for $listID with key $key"
+            'DELETE /api/v3/lists/{ID}/{Key}',
+            "Delete Custom Field for ${listID} with key ${key}"
         );
     }
 
     /**
      * Deletes an existing list from the system
-     * @param Int $listID
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @param int $listID
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function deleteList($listID)
     {
@@ -609,17 +468,17 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
-            "DELETE /api/v3.1/lists/{ID}",
-            "Deleted with code"
+            'DELETE /api/v3.1/lists/{ID}',
+            'Deleted with code'
         );
     }
 
     /**
      * Gets the basic details of the current list
      *
-     * @param Int $listID
+     * @param int $listID
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ListID' => The id of the list
      *     'Title' => The title of the list
@@ -639,22 +498,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}",
-            "Got list details"
+            'GET /api/v3.1/lists/{ID}',
+            'Got list details'
         );
     }
 
     /**
      * Gets all active subscribers added since the given date
      *
-     * @param Int $listID
+     * @param int $listID
      * @param string $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -679,12 +538,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC")
+    public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_active_subscribers(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -692,22 +551,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/active",
-            "Got active subscribers"
+            'GET /api/v3.1/lists/{ID}/active',
+            'Got active subscribers'
         );
     }
 
     /**
      * Gets all unconfirmed subscribers added since the given date
      *
-     * @param Int $listID
+     * @param int $listID
      * @param string $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -732,12 +591,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC")
+    public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unconfirmed_subscribers(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -745,22 +604,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/unconfirmed",
-            "Got unconfimred subscribers"
+            'GET /api/v3.1/lists/{ID}/unconfirmed',
+            'Got unconfimred subscribers'
         );
     }
 
     /**
      * Gets all bounced subscribers who have bounced out since the given date
      *
-     * @param Int $listID
+     * @param int $listID
      * @param string $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -785,12 +644,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC")
+    public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_bounced_subscribers(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -798,23 +657,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/bounced",
-            "Got bounced subscribers"
+            'GET /api/v3.1/lists/{ID}/bounced',
+            'Got bounced subscribers'
         );
     }
-
 
     /**
      * Gets all unsubscribed subscribers who have unsubscribed since the given date
      *
-     * @param Int $listID
+     * @param int $listID
      * @param string $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -839,12 +697,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "DATE", $sortDirection = "DESC")
+    public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unsubscribed_subscribers(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -852,22 +710,22 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/unsubscribed",
-            "Got unsubscribed subscribers"
+            'GET /api/v3.1/lists/{ID}/unsubscribed',
+            'Got unsubscribed subscribers'
         );
     }
 
     /**
      * Gets all unsubscribed subscribers who have unsubscribed since the given date
      *
-     * @param Int $listID
+     * @param int $listID
      * @param string $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -892,12 +750,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getDeletedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = "email", $sortDirection = "asc")
+    public function getDeletedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'email', $sortDirection = 'asc')
     {
         //require_once '../../csrest_lists.php';
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_deleted_subscribers(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -905,8 +763,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3/lists/{ID}/delete",
-            "Got deleted subscribers"
+            'GET /api/v3/lists/{ID}/delete',
+            'Got deleted subscribers'
         );
     }
 
@@ -922,28 +780,28 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param boolean $addUnsubscribesToSuppList -  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list.
      * @param boolean $acrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
      *
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function updateList($listID, $title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting, $addUnsubscribesToSuppList = true, $scrubActiveWithSuppList = true)
     {
         //require_once '../../csrest_lists.php';
-        if (!$unsubscribeSetting) {
+        if (! $unsubscribeSetting) {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
         $wrap = new CS_REST_Lists($listID, $this->getAuth());
-        $result = $wrap->update(array(
+        $result = $wrap->update([
             'Title' => $title,
             'UnsubscribePage' => $unsubscribePage,
             'ConfirmedOptIn' => $confirmedOptIn,
             'ConfirmationSuccessPage' => $confirmationSuccessPage,
             'UnsubscribeSetting' => $unsubscribeSetting,
             'AddUnsubscribesToSuppList' => $addUnsubscribesToSuppList,
-            'ScrubActiveWithSuppList' => $scrubActiveWithSuppList
-        ));
+            'ScrubActiveWithSuppList' => $scrubActiveWithSuppList,
+        ]);
         return $this->returnResult(
             $result,
-            "PUT /api/v3.1/lists/{ID}",
-            "Updated with code"
+            'PUT /api/v3.1/lists/{ID}',
+            'Updated with code'
         );
     }
 
@@ -956,17 +814,17 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_segments();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{listid}/segments",
-            "Got segment details"
+            'GET /api/v3.1/lists/{listid}/segments',
+            'Got segment details'
         );
     }
 
     /**
      * Gets statistics for list subscriptions, deletions, bounces and unsubscriptions
      *
-     * @param Int $listID
+     * @param int $listID
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'TotalActiveSubscribers'
      *     'NewActiveSubscribersToday'
@@ -1001,8 +859,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_stats();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/stats",
-            "Got Lists Stats"
+            'GET /api/v3.1/lists/{ID}/stats',
+            'Got Lists Stats'
         );
     }
 
@@ -1012,8 +870,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_custom_fields();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/lists/{ID}/customfields",
-            "Got Lists Custom Fields"
+            'GET /api/v3.1/lists/{ID}/customfields',
+            'Got Lists Custom Fields'
         );
     }
 
@@ -1023,46 +881,44 @@ class CampaignMonitorAPIConnector extends ViewableData
      *******************************************************/
 
     /**
-     *
-     *
      * @param CampaignMonitorCampaign $campaignMonitorCampaign
-     * @param array listIDs
-     * @param array segmentIDs
-     * @param string templateID - OPTIONAL!
-     * @param array templateContent - OPTIONAL!
+     * @param array $listIDs
+     * @param array $segmentIDs
+     * @param string $templateID - OPTIONAL!
+     * @param array $templateContent - OPTIONAL!
      */
     public function createCampaign(
         $campaignMonitorCampaign,
-        $listIDs = array(),
-        $segmentIDs = array(),
-        $templateID = "",
-        $templateContent = array()
+        $listIDs = [],
+        $segmentIDs = [],
+        $templateID = '',
+        $templateContent = []
     ) {
         //require_once '../../csrest_lists.php';
         $siteConfig = SiteConfig::current_site_config();
 
         $subject = $campaignMonitorCampaign->Subject;
-        if (!$subject) {
-            $subject = "no subject set";
+        if (! $subject) {
+            $subject = 'no subject set';
         }
 
         $name = $campaignMonitorCampaign->Name;
-        if (!$name) {
-            $name = "no name set";
+        if (! $name) {
+            $name = 'no name set';
         }
 
         $fromName = $campaignMonitorCampaign->FromName;
-        if (!$fromName) {
+        if (! $fromName) {
             $fromName = $siteConfig->Title;
         }
 
         $fromEmail = $campaignMonitorCampaign->FromEmail;
-        if (!$fromEmail) {
+        if (! $fromEmail) {
             $fromEmail = Config::inst()->get(Email::class, 'admin_email');
         }
 
         $replyTo = $campaignMonitorCampaign->ReplyTo;
-        if (!$replyTo) {
+        if (! $replyTo) {
             $replyTo = $fromEmail;
         }
 
@@ -1071,35 +927,35 @@ class CampaignMonitorAPIConnector extends ViewableData
         $wrap = new CS_REST_Campaigns(null, $this->getAuth());
         if ($templateID) {
             $result = $wrap->create_from_template(
-                $this->Config()->get("client_id"),
-                array(
+                $this->Config()->get('client_id'),
+                [
                     'Subject' => $subject,
                     'Name' => $name,
                     'FromName' => $fromName,
                     'FromEmail' => $fromEmail,
                     'ReplyTo' => $replyTo,
-                    'ListIDs' => array($listID),
-                    'SegmentIDs' => array(),
+                    'ListIDs' => [$listID],
+                    'SegmentIDs' => [],
                     'TemplateID' => $templateID,
-                    'TemplateContent' => $templateContent
-                )
+                    'TemplateContent' => $templateContent,
+                ]
             );
         } else {
             $result = $wrap->create(
-                $this->Config()->get("client_id"),
-                array(
+                $this->Config()->get('client_id'),
+                [
                     'Subject' => $subject,
                     'Name' => $name,
                     'FromName' => $fromName,
                     'FromEmail' => $fromEmail,
                     'ReplyTo' => $replyTo,
                     'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
-                    'TextUrl' => $campaignMonitorCampaign->PreviewLink("textonly"),
-                    'ListIDs' => array($listID)
-                )
+                    'TextUrl' => $campaignMonitorCampaign->PreviewLink('textonly'),
+                    'ListIDs' => [$listID],
+                ]
             );
         }
-        if (isset($result->http_status_code) && ($result->http_status_code == 201 || $result->http_status_code == 201)) {
+        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
             $code = $result->response;
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = true;
@@ -1107,17 +963,17 @@ class CampaignMonitorAPIConnector extends ViewableData
         } else {
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = false;
-            $code = "Error";
+            $code = 'Error';
             if (is_object($result->response)) {
-                $code = $result->response->Code.":".$result->response->Message;
+                $code = $result->response->Code . ':' . $result->response->Message;
             }
             $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
         }
         $campaignMonitorCampaign->write();
         return $this->returnResult(
             $result,
-            "CREATE /api/v3/campaigns/{clientID}",
-            "Created Campaign"
+            'CREATE /api/v3/campaigns/{clientID}',
+            'Created Campaign'
         );
     }
 
@@ -1127,8 +983,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
-            "DELETE /api/v3/campaigns/{id}",
-            "Deleted Campaign"
+            'DELETE /api/v3/campaigns/{id}',
+            'Deleted Campaign'
         );
     }
 
@@ -1139,12 +995,12 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function getBounces()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     public function getClicks()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     /**
@@ -1152,7 +1008,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param int $campaignID
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'Recipients' => The total recipients of the campaign
      *     'TotalOpened' => The total number of opens recorded
@@ -1175,17 +1031,17 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_summary();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/campaigns/{id}/summary",
-            "Got Summary"
+            'GET /api/v3.1/campaigns/{id}/summary',
+            'Got Summary'
         );
     }
 
     /**
      * Gets the email clients that subscribers used to open the campaign
      *
-     * @param Int $campaignID
+     * @param int $campaignID
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * array(
      *     {
      *         Client => The email client name
@@ -1201,29 +1057,29 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_email_client_usage();
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/campaigns/{id}/emailclientusage",
-            "Got email client usage"
+            'GET /api/v3.1/campaigns/{id}/emailclientusage',
+            'Got email client usage'
         );
     }
 
     public function getListsAndSegments()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     public function getOpens()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     public function getRecipients()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     public function getSpam()
     {
-        user_error("This method is still to be implemented, see samples for an example");
+        user_error('This method is still to be implemented, see samples for an example');
     }
 
     /**
@@ -1236,7 +1092,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -1255,12 +1111,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *     )
      * }
      */
-    public function getUnsubscribes($campaignID, $daysAgo = 3650, $page =1, $pageSize = 999, $sortByField = "EMAIL", $sortDirection = "ASC")
+    public function getUnsubscribes($campaignID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'EMAIL', $sortDirection = 'ASC')
     {
         //require_once '../../csrest_campaigns.php';
         $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_unsubscribes(
-            date('Y-m-d', strtotime('-'.$daysAgo.' days')),
+            date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
             $pageSize,
             $sortByField,
@@ -1268,12 +1124,10 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/campaigns/{id}/unsubscribes",
-            "Got unsubscribes"
+            'GET /api/v3.1/campaigns/{id}/unsubscribes',
+            'Got unsubscribes'
         );
     }
-
-
 
     /*******************************************************
      * user
@@ -1302,7 +1156,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param string|Member $member Subscriber's email address (or Member)
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * array(
      *     {
      *         'ListID' => The id of the list
@@ -1318,22 +1172,21 @@ class CampaignMonitorAPIConnector extends ViewableData
             $member = $member->Email;
         }
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get("client_id"), $this->getAuth());
+        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_lists_for_email($member);
         return $this->returnResult(
             $result,
-            "/api/v3.1/clients/{id}/listsforemail",
-            "Got lists to which email address ".$member." is subscribed"
+            '/api/v3.1/clients/{id}/listsforemail',
+            'Got lists to which email address ' . $member . ' is subscribed'
         );
     }
-
 
     /**
      * Adds a new subscriber to the specified list
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
-     * @param Array $customFields
+     * @param array $customFields
      * @param array $customFields The subscriber details to use during creation.
      * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
      * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
@@ -1345,40 +1198,40 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function addSubscriber(
         $listID,
         $member,
-        $customFields = array(),
+        $customFields = [],
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
     ) {
         //require_once '../../csrest_subscribers.php';
         $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         foreach ($customFields as $key => $customFieldValue) {
-            if (!is_array($customFields[$key])) {
-                $customFields[] = array(
-                    "Key" => $key,
-                    "Value" => $customFieldValue,
-                    "Clear" => $customFieldValue ? false : true
-                );
+            if (! is_array($customFields[$key])) {
+                $customFields[] = [
+                    'Key' => $key,
+                    'Value' => $customFieldValue,
+                    'Clear' => $customFieldValue ? false : true,
+                ];
                 unset($customFields[$key]);
             }
         }
         $result = $wrap->add(
-            $request = array(
+            $request = [
                 'EmailAddress' => $member->Email,
                 'Name' => trim($member->FirstName . ' ' . $member->Surname),
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
-                'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders
-            )
+                'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
+            ]
         );
         return $this->returnResult(
             $result,
-            "POST /api/v3.1/subscribers/{list id}.{format}",
-            "Subscribed with code ..."
+            'POST /api/v3.1/subscribers/{list id}.{format}',
+            'Subscribed with code ...'
         );
     }
 
@@ -1387,8 +1240,8 @@ class CampaignMonitorAPIConnector extends ViewableData
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param Int $listID
-     * @param String $oldEmailAddress
+     * @param int $listID
+     * @param string $oldEmailAddress
      * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields The subscriber details to use during creation.
      * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
@@ -1401,26 +1254,26 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function updateSubscriber(
         $listID,
-        $oldEmailAddress = "",
+        $oldEmailAddress = '',
         $member,
-        $customFields = array(),
+        $customFields = [],
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
     ) {
-        if (!$oldEmailAddress) {
+        if (! $oldEmailAddress) {
             $oldEmailAddress = $member->Email;
         }
         foreach ($customFields as $key => $customFieldValue) {
-            if (!is_array($customFields[$key])) {
-                $customFields[] = array(
-                    "Key" => $key,
-                    "Value" => $customFieldValue,
-                    "Clear" => $customFieldValue ? false : true
-                );
+            if (! is_array($customFields[$key])) {
+                $customFields[] = [
+                    'Key' => $key,
+                    'Value' => $customFieldValue,
+                    'Clear' => $customFieldValue ? false : true,
+                ];
                 unset($customFields[$key]);
             }
         }
@@ -1428,18 +1281,18 @@ class CampaignMonitorAPIConnector extends ViewableData
         $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->update(
             $oldEmailAddress,
-            array(
+            [
                 'EmailAddress' => $member->Email,
                 'Name' => trim($member->FirstName . ' ' . $member->Surname),
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-            )
+            ]
         );
         return $this->returnResult(
             $result,
-            "PUT /api/v3.1/subscribers/{list id}.{format}?email={email}",
-            "updated with email $oldEmailAddress ..."
+            'PUT /api/v3.1/subscribers/{list id}.{format}?email={email}',
+            "updated with email ${oldEmailAddress} ..."
         );
     }
 
@@ -1448,8 +1301,8 @@ class CampaignMonitorAPIConnector extends ViewableData
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param Int $listID
-     * @param ArraySet $memberSet - list of Member|object with Email, FirstName, Surname fields.
+     * @param int $listID
+     * @param ArraySet $membersSet - list of Member|object with Email, FirstName, Surname fields.
      * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
      * @param bool $resubscribe Whether we should resubscribe any existing subscribers
      * @param bool $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
@@ -1462,12 +1315,12 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
 
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function addSubscribers(
         $listID,
         $membersSet,
-        $customFields = array(),
+        $customFields = [],
         $resubscribe,
         $queueSubscriptionBasedAutoResponders = false,
         $restartSubscriptionBasedAutoResponders = false
@@ -1483,21 +1336,21 @@ class CampaignMonitorAPIConnector extends ViewableData
                 $customFieldsForMember = $customFields[$member->Email];
             }
             foreach ($customFieldsForMember as $key => $customFieldValue) {
-                if (!is_array($customFieldsForMember[$key])) {
-                    $customFieldsForMember[] = array(
-                        "Key" => $key,
-                        "Value" => $customFieldValue,
-                        "Clear" => $customFieldValue ? false : true
-                    );
+                if (! is_array($customFieldsForMember[$key])) {
+                    $customFieldsForMember[] = [
+                        'Key' => $key,
+                        'Value' => $customFieldValue,
+                        'Clear' => $customFieldValue ? false : true,
+                    ];
                     unset($customFieldsForMember[$key]);
                 }
             }
             if ($member instanceof Member) {
-                $importArray[] = array(
+                $importArray[] = [
                     'EmailAddress' => $member->Email,
                     'Name' => trim($member->FirstName . ' ' . $member->Surname),
-                    'CustomFields' => $customFieldsForMember
-                );
+                    'CustomFields' => $customFieldsForMember,
+                ];
             }
         }
         $result = $wrap->import(
@@ -1508,16 +1361,16 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
         return $this->returnResult(
             $result,
-            "POST /api/v3.1/subscribers/{list id}/import.{format}",
-            "review details ..."
+            'POST /api/v3.1/subscribers/{list id}/import.{format}',
+            'review details ...'
         );
     }
 
     /**
-     * @param Int $listID
+     * @param int $listID
      * @param Member|string $member - email address or Member Object
      *
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function deleteSubscriber($listID, $member)
     {
@@ -1528,18 +1381,18 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->delete($member);
         return $this->returnResult(
             $result,
-            "DELETE /api/v3.1/subscribers/{list id}.{format}?email={emailAddress}",
-            "Unsubscribed with code  ..."
+            'DELETE /api/v3.1/subscribers/{list id}.{format}?email={emailAddress}',
+            'Unsubscribed with code  ...'
         );
     }
 
     /**
      * Unsubscribes the given subscriber from the current list
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member|string $member
      *
-     * @return CS_REST_Wrapper_Result A successful response will be empty
+     * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
     public function unsubscribeSubscriber($listID, $member)
     {
@@ -1550,18 +1403,18 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->unsubscribe($member);
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/subscribers/{list id}/unsubscribe.{format}",
-            "Unsubscribed with code  ..."
+            'GET /api/v3.1/subscribers/{list id}/unsubscribe.{format}',
+            'Unsubscribed with code  ...'
         );
     }
 
     /**
      * Is this user part of this list at all?
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member|string $member
      *
-     * @return Boolean
+     * @return boolean
      */
     public function getSubscriberExistsForThisList($listID, $member)
     {
@@ -1571,12 +1424,12 @@ class CampaignMonitorAPIConnector extends ViewableData
         $outcome = $this->getSubscriber($listID, $member);
         if ($outcome && isset($outcome->State)) {
             if ($this->debug) {
-                echo "<h3>Subscriber Exists For This List</h3>";
+                echo '<h3>Subscriber Exists For This List</h3>';
             }
             return true;
         }
         if ($this->debug) {
-            echo "<h3>Subscriber does *** NOT *** Exist For This List</h3>";
+            echo '<h3>Subscriber does *** NOT *** Exist For This List</h3>';
         }
         return false;
     }
@@ -1584,10 +1437,10 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * Can we send e-mails to this person in the future for this list?
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member | String $member
      *
-     * @return Boolean
+     * @return boolean
      */
     public function getSubscriberCanReceiveEmailsForThisList($listID, $member)
     {
@@ -1596,15 +1449,15 @@ class CampaignMonitorAPIConnector extends ViewableData
         }
         $outcome = $this->getSubscriber($listID, $member);
         if ($outcome && isset($outcome->State)) {
-            if ($outcome->State == "Active") {
+            if ($outcome->State === 'Active') {
                 if ($this->debug) {
-                    echo "<h3>Subscriber Can Receive Emails For This List</h3>";
+                    echo '<h3>Subscriber Can Receive Emails For This List</h3>';
                 }
                 return true;
             }
         }
         if ($this->debug) {
-            echo "<h3>Subscriber Can *** NOT *** Receive Emails For This List</h3>";
+            echo '<h3>Subscriber Can *** NOT *** Receive Emails For This List</h3>';
         }
         return false;
     }
@@ -1612,38 +1465,36 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * This e-mail / user has been banned from a list.
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member | String $member
      *
-     * @return Boolean
+     * @return boolean
      */
     public function getSubscriberCanNoLongerReceiveEmailsForThisList($listID, $member)
     {
         $subscriberExistsForThisList = $this->getSubscriberExistsForThisList($listID, $member);
         $subscriberCanReceiveEmailsForThisList = $this->getSubscriberCanReceiveEmailsForThisList($listID, $member);
         if ($subscriberExistsForThisList) {
-            if (!$subscriberCanReceiveEmailsForThisList) {
+            if (! $subscriberCanReceiveEmailsForThisList) {
                 if ($this->debug) {
-                    echo "<h3>Subscriber Can No Longer Receive Emails For This List</h3>";
+                    echo '<h3>Subscriber Can No Longer Receive Emails For This List</h3>';
                 }
                 return true;
             }
         }
         if ($this->debug) {
-            echo "<h3>Subscriber Can *** STILL *** Receive Emails For This List</h3>";
+            echo '<h3>Subscriber Can *** STILL *** Receive Emails For This List</h3>';
         }
         return false;
     }
 
-    private static $_get_subscriber = [];
-
     /**
      * Gets a subscriber details, including custom fields
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member | String $member
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'EmailAddress' => The subscriber email address
      *     'Name' => The subscribers name
@@ -1656,14 +1507,13 @@ class CampaignMonitorAPIConnector extends ViewableData
      *         }
      *     )
      * }
-     *
      */
     public function getSubscriber($listID, $member, $cacheIsOK = true)
     {
         if ($member instanceof Member) {
             $member = $member->Email;
         }
-        $key = $listID."_".$member;
+        $key = $listID . '_' . $member;
         if (isset(self::$_get_subscriber[$key]) && $cacheIsOK) {
             //do nothing
         } else {
@@ -1671,8 +1521,8 @@ class CampaignMonitorAPIConnector extends ViewableData
             $result = $wrap->get($member);
             self::$_get_subscriber[$key] = $this->returnResult(
                 $result,
-                "GET /api/v3.1/subscribers/{list id}.{format}?email={email}",
-                "got subscribed subscriber"
+                'GET /api/v3.1/subscribers/{list id}.{format}?email={email}',
+                'got subscribed subscriber'
             );
         }
         return self::$_get_subscriber[$key];
@@ -1681,10 +1531,10 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * Gets a subscriber details, including custom fields
      *
-     * @param Int $listID
+     * @param int $listID
      * @param Member | String $member
      *
-     * @return CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
      * {
      *     'EmailAddress' => The subscriber email address
      *     'Name' => The subscribers name
@@ -1697,7 +1547,6 @@ class CampaignMonitorAPIConnector extends ViewableData
      *         }
      *     )
      * }
-     *
      */
     public function getHistory($listID, $member)
     {
@@ -1708,9 +1557,130 @@ class CampaignMonitorAPIConnector extends ViewableData
         $result = $wrap->get_history($member);
         return $this->returnResult(
             $result,
-            "GET /api/v3.1/subscribers/{list id}/history.{format}?email={email}",
-            "got subscriber history"
+            'GET /api/v3.1/subscribers/{list id}/history.{format}?email={email}',
+            'got subscriber history'
         );
     }
-}
 
+    /**
+     * provides the Authorisation Array
+     * @return array
+     */
+    protected function getAuth()
+    {
+        if ($auth = $this->getFromCache('getAuth')) {
+            return $auth;
+        }
+        if ($apiKey = $this->Config()->get('api_key')) {
+            $auth = ['api_key' => $apiKey];
+        } else {
+            $client_id = $this->Config()->get('client_id');
+            $client_secret = $this->Config()->get('client_secret');
+            $redirect_uri = $this->Config()->get('redirect_uri');
+            $code = $this->Config()->get('code');
+
+            $result = CS_REST_General::exchange_token($client_id, $client_secret, $redirect_uri, $code);
+
+            if ($result->was_successful()) {
+                $auth = [
+                    'access_token' => $result->response->access_token,
+                    'refresh_token' => $result->response->refresh_token,
+                ];
+                //TODO: do we need to check expiry date?
+                //$expires_in = $result->response->expires_in;
+                # Save $access_token, $expires_in, and $refresh_token.
+                if ($this->debug) {
+                    'access token: ' . $result->response->access_token . "\n";
+                    'expires in (seconds): ' . $result->response->expires_in . "\n";
+                    'refresh token: ' . $result->response->refresh_token . "\n";
+                }
+            } else {
+                # If you receive '121: Expired OAuth Token', refresh the access token
+                if ($result->response->Code === 121) {
+                    $wrap = new CS_REST_General($auth);
+                    list($new_access_token, , $new_refresh_token) = $wrap->refresh_token();
+
+                    $auth = [
+                        'access_token' => $new_access_token,
+                        'refresh_token' => $new_refresh_token,
+                    ];
+                }
+
+                if ($this->debug) {
+                    'An error occurred:\n';
+                    $result->response->error . ': ' . $result->response->error_description . "\n";
+                }
+            }
+        }
+        $this->saveToCache($auth, 'getAuth');
+        return $auth;
+    }
+
+    /**
+     * returns the result or NULL in case of an error
+     * @param \CS_REST_Wrapper_Result $result
+     * @return mixed | Null
+     */
+    protected function returnResult($result, $apiCall, $description)
+    {
+        if ($this->debug) {
+            echo "<h1>${description} ( ${apiCall} ) ...</h1>";
+            if ($result->was_successful()) {
+                echo '<h2>SUCCESS</h2>';
+            } else {
+                echo '<h2>FAILURE: ' . $result->http_status_code . '</h2>';
+            }
+            echo '<pre>';
+            print_r($result);
+            echo '</pre>';
+            echo '<hr /><hr /><hr />';
+            ob_flush();
+            flush();
+        }
+        if ($result->was_successful()) {
+            if (isset($result->response)) {
+                return $result->response;
+            }
+            return true;
+        }
+        $this->httpStatusCode = $result->http_status_code;
+        return null;
+    }
+
+    /*******************************************************
+     * caching
+     *
+     *******************************************************/
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    protected function getFromCache($name)
+    {
+        if ($this->getAllowCaching()) {
+            $name = 'CampaignMonitorAPIConnector_' . $name;
+            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
+            $value = $cache->has($name) ? $cache->get($name) : null;
+            if (! $value) {
+                return null;
+            }
+            return unserialize($value);
+        }
+    }
+
+    /**
+     * @param mixed $unserializedValue
+     * @param string $name
+     */
+    protected function saveToCache($unserializedValue, $name)
+    {
+        if ($this->getAllowCaching()) {
+            $serializedValue = serialize($unserializedValue);
+            $name = 'CampaignMonitorAPIConnector_' . $name;
+            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
+            $cache->set($name, $serializedValue);
+            return true;
+        }
+    }
+}

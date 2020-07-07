@@ -2,17 +2,13 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-
-
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
-use SilverStripe\Forms\OptionsetField;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DateField;
+use SilverStripe\Forms\NumericField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
-
-
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -23,49 +19,53 @@ use SilverStripe\ORM\DataObject;
 
 class CampaignMonitorCustomField extends DataObject
 {
-    private static $db = array(
-        "Code" => "Varchar(64)",
-        "Title" => "Varchar(64)",
-        "Type" => "Varchar(32)",
-        "Options" => "Text",
-        "Visible" => "Boolean",
-        "ListID" => "Varchar(32)"
-    );
+    private static $db = [
+        'Code' => 'Varchar(64)',
+        'Title' => 'Varchar(64)',
+        'Type' => 'Varchar(32)',
+        'Options' => 'Text',
+        'Visible' => 'Boolean',
+        'ListID' => 'Varchar(32)',
+    ];
 
-    private static $casting = array(
-        "Key" => "Varchar"
-    );
+    private static $casting = [
+        'Key' => 'Varchar',
+    ];
 
-    private static $summary_fields = array(
-        "Title" => "Title",
-        "Visible.Nice" => "Visible"
-    );
+    private static $summary_fields = [
+        'Title' => 'Title',
+        'Visible.Nice' => 'Visible',
+    ];
 
-    private static $indexes = array(
-        "ListID" => true,
-        "Code" => true
-    );
+    private static $indexes = [
+        'ListID' => true,
+        'Code' => true,
+    ];
 
-    private static $has_one = array(
-        "CampaignMonitorSignupPage" => CampaignMonitorSignupPage::class
-    );
+    private static $has_one = [
+        'CampaignMonitorSignupPage' => CampaignMonitorSignupPage::class,
+    ];
 
-    private static $default_sort = array(
-        "Visible" => "DESC"
-    );
+    private static $default_sort = [
+        'Visible' => 'DESC',
+    ];
 
     /**
      * form field matcher between CM and SS CMField => SSField
      * @return array
      */
-    private static $field_translator = array(
-        "MultiSelectOne" => OptionsetField::class,
-        "Text" => TextField::class,
-        "Number" => NumericField::class,
-        "MultiSelectMany" => CheckboxSetField::class,
-        "Date" => DateField::class
-    );
+    private static $field_translator = [
+        'MultiSelectOne' => OptionsetField::class,
+        'Text' => TextField::class,
+        'Number' => NumericField::class,
+        'MultiSelectMany' => CheckboxSetField::class,
+        'Date' => DateField::class,
+    ];
 
+    /**
+     * @var array
+     */
+    private $_fieldTranslator = [];
 
     public function canCreate($member = null, $context = [])
     {
@@ -90,29 +90,28 @@ class CampaignMonitorCustomField extends DataObject
 
     public function getKey()
     {
-        return "[".$this->Code."]";
+        return '[' . $this->Code . ']';
     }
 
     public function getOptionsAsArray()
     {
-        return array("" => _t("CampaignMonitor.PLEASE_SELECT", "-- please select --"))+explode(",", $this->Options);
+        return ['' => _t('CampaignMonitor.PLEASE_SELECT', '-- please select --')] + explode(',', $this->Options);
     }
 
     /**
-     *
      * @return CampaignMonitorCustomField
      */
     public static function create_from_campaign_monitor_object($customFieldsObject, $listID)
     {
-        $filterOptions = array(
-            "ListID" => $listID,
-            "Code" => self::key_to_code($customFieldsObject->Key)
-        );
+        $filterOptions = [
+            'ListID' => $listID,
+            'Code' => self::key_to_code($customFieldsObject->Key),
+        ];
         $obj = CampaignMonitorCustomField::get()->filter($filterOptions)->first();
-        if (!$obj) {
+        if (! $obj) {
             $obj = CampaignMonitorCustomField::create($filterOptions);
         }
-        $page = CampaignMonitorSignupPage::get()->filter(array("ListID" => $listID))->first();
+        $page = CampaignMonitorSignupPage::get()->filter(['ListID' => $listID])->first();
         if ($page) {
             $obj->CampaignMonitorSignupPageID = $page->ID;
         }
@@ -120,48 +119,42 @@ class CampaignMonitorCustomField extends DataObject
         $obj->Code = self::key_to_code($customFieldsObject->Key);
         $obj->Title = $customFieldsObject->FieldName;
         $obj->Type = $customFieldsObject->DataType;
-        $obj->Options = implode(",", $customFieldsObject->FieldOptions);
+        $obj->Options = implode(',', $customFieldsObject->FieldOptions);
         $obj->Visible = $customFieldsObject->VisibleInPreferenceCenter;
         $obj->write();
         return $obj;
     }
 
-    private static function key_to_code($key)
-    {
-        return str_replace(array("[", "]"), "", $key);
-    }
-
-    /**
-     * @var array
-     */
-    private $_fieldTranslator = [];
-
     /**
      * @param string $namePrefix
      * @param string $nameAppendix
      * @param string $title
-     * @param null | array $options
+     * @param array|null $options
      */
-    public function getFormField($namePrefix = "", $nameAppendix = "", $title = "", $options = null)
+    public function getFormField($namePrefix = '', $nameAppendix = '', $title = '', $options = null)
     {
         //sort out names, title
-        if (!$title) {
+        if (! $title) {
             $title = $this->Title;
         }
-        $name = $namePrefix.$this->Code.$nameAppendix;
+        $name = $namePrefix . $this->Code . $nameAppendix;
         //create field
-        if (!count($this->_fieldTranslator)) {
-            $this->_fieldTranslator = $this->Config()->get("field_translator");
+        if (! count($this->_fieldTranslator)) {
+            $this->_fieldTranslator = $this->Config()->get('field_translator');
         }
         $fieldName = $this->_fieldTranslator[$this->Type];
         $field = $fieldName::create($name, $title);
         //add options
-        if (!$options && $this->Options) {
-            $optionsArray = explode(",", $this->Options);
+        if (! $options && $this->Options) {
+            $optionsArray = explode(',', $this->Options);
             $optionsArray = array_combine($optionsArray, $optionsArray);
             $field->setSource($optionsArray);
         }
         return $field;
     }
-}
 
+    private static function key_to_code($key)
+    {
+        return str_replace(['[', ']'], '', $key);
+    }
+}

@@ -4,7 +4,7 @@
     <project name="Sunny Side Up Development" source="${basedir}" workdir="${basedir}/docs/build/phpdox/xml">
         <collector publiconly="false" backend="parser" encoding="auto">
             <include mask="*.php" />
-            <exclude mask="CampaignMonitorAPIConnector_TestController.php" />
+            <exclude mask="CampaignMonitorAPIConnectorTestController.php" />
             <inheritance resolve="true" />
         </collector>
         <generator output="${basedir}/docs">

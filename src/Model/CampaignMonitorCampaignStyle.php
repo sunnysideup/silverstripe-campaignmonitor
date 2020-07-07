@@ -2,18 +2,13 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
-
-
-
-
 use DOMDocument;
 
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\Control\Director;
 use SilverStripe\Assets\FileFinder;
+use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\ThemeResourceLoader;
@@ -26,46 +21,46 @@ use SilverStripe\View\ThemeResourceLoader;
 
 class CampaignMonitorCampaignStyle extends DataObject
 {
-    private static $db = array(
-        "Title" => "Varchar(100)",
-        "TemplateName" => "Varchar(200)",
-        "CSSFiles" => "Text"
-    );
+    private static $db = [
+        'Title' => 'Varchar(100)',
+        'TemplateName' => 'Varchar(200)',
+        'CSSFiles' => 'Text',
+    ];
 
-    private static $indexes = array(
-        "Title" => true
-    );
+    private static $indexes = [
+        'Title' => true,
+    ];
 
-    private static $has_many = array(
-        "CampaignMonitorCampaigns" => CampaignMonitorCampaign::class
-    );
+    private static $has_many = [
+        'CampaignMonitorCampaigns' => CampaignMonitorCampaign::class,
+    ];
 
-    private static $searchable_fields = array(
-        "Title" => "PartialMatchFilter"
-    );
+    private static $searchable_fields = [
+        'Title' => 'PartialMatchFilter',
+    ];
 
-    private static $summary_fields = array(
-        "Title" => "Title"
-    );
+    private static $summary_fields = [
+        'Title' => 'Title',
+    ];
 
-    private static $singular_name = "Campaign Template";
+    private static $singular_name = 'Campaign Template';
 
-    private static $plural_name = "Campaign Templates";
+    private static $plural_name = 'Campaign Templates';
 
     private static $default_template = CampaignMonitorCampaign::class;
 
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $fields->addFieldToTab("Root.Debug", TextField::create("TemplateName"));
-        $fields->addFieldToTab("Root.Debug", ReadonlyField::create("FileLocation"));
-        $fields->addFieldToTab("Root.Debug", ReadonlyField::create("CSSFiles"));
-        $fields->addFieldToTab("Root.Debug", ReadonlyField::create("CampaignMonitorCampaigns", "Used in ", implode(",", $this->CampaignMonitorCampaigns()->map()->toArray())));
-        $fields->removeFieldFromTab("Root", "CampaignMonitorCampaigns");
+        $fields->addFieldToTab('Root.Debug', TextField::create('TemplateName'));
+        $fields->addFieldToTab('Root.Debug', ReadonlyField::create('FileLocation'));
+        $fields->addFieldToTab('Root.Debug', ReadonlyField::create('CSSFiles'));
+        $fields->addFieldToTab('Root.Debug', ReadonlyField::create('CampaignMonitorCampaigns', 'Used in ', implode(',', $this->CampaignMonitorCampaigns()->map()->toArray())));
+        $fields->removeFieldFromTab('Root', 'CampaignMonitorCampaigns');
         return $fields;
     }
 
-    public function canCreate($member = null, $context = array())
+    public function canCreate($member = null, $context = [])
     {
         return false;
     }
@@ -79,15 +74,15 @@ class CampaignMonitorCampaignStyle extends DataObject
 
         $activeThemes = SSViewer::get_themes();
         foreach ($activeThemes as $activeTheme) {
-            if(strpos($activeTheme, '$') === false){
-                $array[] = ThemeResourceLoader::inst()->getPath($activeTheme)."/templates/Sunnysideup/CampaignMonitor/Email";
+            if (strpos($activeTheme, '$') === false) {
+                $array[] = ThemeResourceLoader::inst()->getPath($activeTheme) . '/templates/Sunnysideup/CampaignMonitor/Email';
             }
         }
 
         $array[] = ModuleResourceLoader::resourcePath('sunnysideup/campaignmonitor: templates/Sunnysideup/CampaignMonitor/Email');
 
         foreach ($array as $key => $folder) {
-            if (!file_exists($folder)) {
+            if (! file_exists($folder)) {
                 unset($array[$key]);
             }
         }
@@ -99,22 +94,22 @@ class CampaignMonitorCampaignStyle extends DataObject
      */
     public function getCSSFoldersToSearch()
     {
-        $array = array(
+        $array = [
 
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: automated upgrade
-  * OLD: SSViewer::get_theme_folder() (ignore case)
-  * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-  * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
-            Director::baseFolder() ."/".SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE')."_campaignmonitor/css/",
-            Director::baseFolder()."/campaignmonitor/css/"
+            /**
+             * ### @@@@ START REPLACEMENT @@@@ ###
+             * WHY: automated upgrade
+             * OLD: SSViewer::get_theme_folder() (ignore case)
+             * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
+             * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
+             * ### @@@@ STOP REPLACEMENT @@@@ ###
+             */
+            Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
+            Director::baseFolder() . '/campaignmonitor/css/',
 
-        );
+        ];
         foreach ($array as $key => $folder) {
-            if (!file_exists($folder)) {
+            if (! file_exists($folder)) {
                 unset($array[$key]);
             }
         }
@@ -122,28 +117,27 @@ class CampaignMonitorCampaignStyle extends DataObject
     }
 
     /**
-     *
      * @return string | null
      */
     public function getFileLocation()
     {
-        if (!$this->TemplateName) {
+        if (! $this->TemplateName) {
             $this->TemplateName = CampaignMonitorCampaign::class;
         }
+        $fileLocation = '';
         foreach ($this->getFoldersToSearch() as $folder) {
-            $fileLocation = $folder.$this->TemplateName.".ss";
+            $fileLocation = $folder . $this->TemplateName . '.ss';
             if (file_exists($fileLocation)) {
                 return $fileLocation;
-            } else {
-                //just try the next one ...
             }
+            //just try the next one ...
         }
-        user_error("can not find template, last one tried: $fileLocation");
+        user_error("can not find template, last one tried: ${fileLocation}");
     }
 
     public function getCSSFiles()
     {
-        return implode(", ", $this->getCSSFilesAsArray());
+        return implode(', ', $this->getCSSFilesAsArray());
     }
 
     public function getCSSFilesAsArray()
@@ -155,23 +149,23 @@ class CampaignMonitorCampaignStyle extends DataObject
             @$dom->loadHTMLFile($fileLocation);
             $linkTags = $dom->getElementsByTagName('link');
             foreach ($linkTags as $linkTag) {
-                if (strtolower($linkTag->getAttribute("rel")) == "stylesheet") {
-                    $file = Director::baseFolder()."/".$linkTag->getAttribute("href");
+                if (strtolower($linkTag->getAttribute('rel')) === 'stylesheet') {
+                    $file = Director::baseFolder() . '/' . $linkTag->getAttribute('href');
                     if (file_exists($file)) {
                         $cssFiles[$file] = $file;
                     } else {
-                        user_error("can find css file $file");
+                        user_error("can find css file ${file}");
                     }
                 }
                 // if $link_tag rel == stylesheet
                  //   get href value and load CSS
             }
         } else {
-            user_error("Can not find template file");
+            user_error('Can not find template file');
         }
-        if (count($cssFiles) == 0) {
+        if (count($cssFiles) === 0) {
             foreach ($this->getCSSFoldersToSearch() as $folder) {
-                $file = $folder."CampaignMonitorCampaign.css";
+                $file = $folder . 'CampaignMonitorCampaign.css';
                 if (file_exists($file)) {
                     $cssFiles[$file] = $file;
                     break;
@@ -189,21 +183,21 @@ class CampaignMonitorCampaignStyle extends DataObject
             $finder = new FileFinder();
             $finder->setOption('name_regex', '/^.*\.ss$/');
             $found = $finder->find($folder);
-            foreach ($found as $key => $value) {
+            foreach ($found as $value) {
                 $template = pathinfo($value);
                 $templates[$template['filename']] = $template['filename'];
             }
         }
         foreach ($templates as $template) {
-            $filter = array("TemplateName" => $template);
+            $filter = ['TemplateName' => $template];
             $obj = CampaignMonitorCampaignStyle::get()->filter($filter)->first();
-            if (!$obj) {
-                $obj = CampaignMonitorCampaignStyle::create($filter+array("Title" => $template));
+            if (! $obj) {
+                $obj = CampaignMonitorCampaignStyle::create($filter + ['Title' => $template]);
                 $obj->write();
             }
         }
-        if(!empty($templates)){
-            $excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(array("TemplateName" => $templates));
+        if (! empty($templates)) {
+            $excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(['TemplateName' => $templates]);
             foreach ($excludes as $exclude) {
                 $exclude->delete();
             }
@@ -213,9 +207,8 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        if ($this->TemplateName == CampaignMonitorCampaign::class) {
-            $this->Title = "Default Template";
+        if ($this->TemplateName === CampaignMonitorCampaign::class) {
+            $this->Title = 'Default Template';
         }
     }
 }
-

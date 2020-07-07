@@ -2,7 +2,7 @@ SilverStripe\ORM\DatabaseAdmin:
   classname_value_remapping:
     CampaignMonitorSyncAllMembers: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorSyncAllMembers
     CampaignMonitorAddOldCampaigns: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns
-    CampaignMonitorAPIConnector_TestController: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController
+    CampaignMonitorAPIConnector_TestController: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnectorTestController
     CampaignMonitorMemberDOD: Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
     CampaignMonitorGroupDOD: Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorGroupDOD
     CampaignMonitorAPIConnector: Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector
