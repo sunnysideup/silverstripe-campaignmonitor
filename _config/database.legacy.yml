@@ -1,0 +1,14 @@
+SilverStripe\ORM\DatabaseAdmin:
+  classname_value_remapping:
+    CampaignMonitorSyncAllMembers: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorSyncAllMembers
+    CampaignMonitorAddOldCampaigns: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns
+    CampaignMonitorAPIConnector_TestController: Sunnysideup\CampaignMonitor\Control\CampaignMonitorAPIConnector_TestController
+    CampaignMonitorMemberDOD: Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
+    CampaignMonitorGroupDOD: Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorGroupDOD
+    CampaignMonitorAPIConnector: Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector
+    CampaignMonitorCampaign: Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign
+    CampaignMonitorCampaignStyle: Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle
+    CampaignMonitorSegment: Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment
+    CampaignMonitorCustomField: Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField
+    CampaignMonitorSignupPageController: Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController
+    CampaignMonitorSignupPage: Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage
