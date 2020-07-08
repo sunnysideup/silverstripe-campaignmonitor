@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "campaignmonitor/createsend-php": "~5.1",
+        "campaignmonitor/createsend-php": "~6.1",
         "pelago/emogrifier": "*",
         "silverstripe/recipe-cms": "^4.4"
     },

@@ -2,15 +2,6 @@
 
 namespace Sunnysideup\CampaignMonitor\Api;
 
-use CS_REST_Campaigns;
-use CS_REST_Clients;
-use CS_REST_General;
-
-use CS_REST_Lists;
-
-use CS_REST_Subscribers;
-
-use CS_REST_Templates;
 use Metadata\Cache\CacheInterface;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
@@ -87,6 +78,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     {
         //require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/autoload.php';
         //require_once Director::baseFolder().'/'.SS_CAMPAIGNMONITOR_DIR.'/third_party/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
     }
 
     /**
@@ -149,7 +141,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getCampaigns()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
+        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_campaigns();
         return $this->returnResult(
             $result,
@@ -161,7 +154,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getDrafts()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
+        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_drafts();
         return $this->returnResult(
             $result,
@@ -183,7 +177,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getLists()
     {
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
+        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_lists();
         return $this->returnResult(
             $result,
@@ -208,7 +203,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
-        $wrap = new CS_REST_Clients(
+        $wrap = new \CS_REST_Clients(
             $this->Config()->get('client_id'),
             $this->getAuth()
         );
@@ -227,7 +222,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function getTemplates()
     {
-        $wrap = new CS_REST_Clients(
+        $wrap = new \CS_REST_Clients(
             $this->Config()->get('client_id'),
             $this->getAuth()
         );
@@ -241,7 +236,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function getTemplate($templatID)
     {
-        $wrap = new CS_REST_Templates(
+        $wrap = new \CS_REST_Templates(
             $templatID,
             $this->getAuth()
         );
@@ -265,7 +260,7 @@ class CampaignMonitorAPIConnector extends ViewableData
             $name = 'no name set';
         }
 
-        $wrap = new CS_REST_Templates(null, $this->getAuth());
+        $wrap = new \CS_REST_Templates(null, $this->getAuth());
         $result = $wrap->create(
             $this->Config()->get('client_id'),
             [
@@ -308,7 +303,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         if (! $name) {
             $name = 'no name set';
         }
-        $wrap = new CS_REST_Templates($templateID, $this->getAuth());
+        $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->create(
             $this->Config()->get('client_id'),
             [
@@ -340,7 +335,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function deleteTemplate($templateID)
     {
-        $wrap = new CS_REST_Templates($templateID, $this->getAuth());
+        $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
@@ -369,7 +364,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function createList($title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting = null)
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists(null, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists(null, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
         if (! $unsubscribeSetting) {
@@ -404,7 +400,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function createCustomField($listID, $visible, $type, $title, $options = [])
     {
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         switch ($type) {
             case 'text':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_TEXT;
@@ -447,7 +443,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function deleteCustomField($listID, $key)
     {
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->delete_custom_field($key);
         return $this->returnResult(
             $result,
@@ -464,7 +460,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function deleteList($listID)
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
@@ -494,7 +491,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getList($listID)
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get();
         return $this->returnResult(
             $result,
@@ -541,7 +539,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_active_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -594,7 +593,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unconfirmed_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -647,7 +647,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_bounced_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -700,7 +701,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unsubscribed_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -753,7 +755,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getDeletedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'email', $sortDirection = 'asc')
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_deleted_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -785,10 +788,11 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function updateList($listID, $title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting, $addUnsubscribesToSuppList = true, $scrubActiveWithSuppList = true)
     {
         //require_once '../../csrest_lists.php';
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         if (! $unsubscribeSetting) {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->update([
             'Title' => $title,
             'UnsubscribePage' => $unsubscribePage,
@@ -807,8 +811,8 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function getSegments($listID)
     {
-        //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
         $result = $wrap->get_segments();
@@ -855,7 +859,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getListStats($listID)
     {
         //require_once '../../csrest_lists.php';
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_stats();
         return $this->returnResult(
             $result,
@@ -866,7 +871,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function getListCustomFields($listID)
     {
-        $wrap = new CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_custom_fields();
         return $this->returnResult(
             $result,
@@ -895,6 +900,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         $templateContent = []
     ) {
         //require_once '../../csrest_lists.php';
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $siteConfig = SiteConfig::current_site_config();
 
         $subject = $campaignMonitorCampaign->Subject;
@@ -924,7 +930,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
         $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
-        $wrap = new CS_REST_Campaigns(null, $this->getAuth());
+        $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
         if ($templateID) {
             $result = $wrap->create_from_template(
                 $this->Config()->get('client_id'),
@@ -979,7 +985,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     public function deleteCampaign($campaignID)
     {
-        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->delete();
         return $this->returnResult(
             $result,
@@ -1027,7 +1033,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function getSummary($campaignID)
     {
-        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_summary();
         return $this->returnResult(
             $result,
@@ -1053,7 +1059,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function getEmailClientUsage($campaignID)
     {
-        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_email_client_usage();
         return $this->returnResult(
             $result,
@@ -1114,7 +1120,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function getUnsubscribes($campaignID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'EMAIL', $sortDirection = 'ASC')
     {
         //require_once '../../csrest_campaigns.php';
-        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_campaigns.php';
+        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_unsubscribes(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -1172,7 +1179,8 @@ class CampaignMonitorAPIConnector extends ViewableData
             $member = $member->Email;
         }
         //require_once '../../csrest_clients.php';
-        $wrap = new CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
+        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_lists_for_email($member);
         return $this->returnResult(
             $result,
@@ -1208,7 +1216,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $restartSubscriptionBasedAutoResponders = false
     ) {
         //require_once '../../csrest_subscribers.php';
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         foreach ($customFields as $key => $customFieldValue) {
             if (! is_array($customFields[$key])) {
                 $customFields[] = [
@@ -1278,7 +1287,8 @@ class CampaignMonitorAPIConnector extends ViewableData
             }
         }
         //require_once '../../csrest_subscribers.php';
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->update(
             $oldEmailAddress,
             [
@@ -1326,7 +1336,8 @@ class CampaignMonitorAPIConnector extends ViewableData
         $restartSubscriptionBasedAutoResponders = false
     ) {
         //require_once '../../csrest_subscribers.php';
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $importArray = [];
         foreach ($membersSet as $member) {
             $customFieldsForMember = [];
@@ -1377,7 +1388,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         if ($member instanceof Member) {
             $member = $member->Email;
         }
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->delete($member);
         return $this->returnResult(
             $result,
@@ -1399,7 +1410,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         if ($member instanceof Member) {
             $member = $member->Email;
         }
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->unsubscribe($member);
         return $this->returnResult(
             $result,
@@ -1517,7 +1528,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         if (isset(self::$_get_subscriber[$key]) && $cacheIsOK) {
             //do nothing
         } else {
-            $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+            $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
             $result = $wrap->get($member);
             self::$_get_subscriber[$key] = $this->returnResult(
                 $result,
@@ -1553,7 +1564,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         if ($member instanceof Member) {
             $member = $member->Email;
         }
-        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->get_history($member);
         return $this->returnResult(
             $result,
@@ -1597,7 +1608,7 @@ class CampaignMonitorAPIConnector extends ViewableData
             } else {
                 # If you receive '121: Expired OAuth Token', refresh the access token
                 if ($result->response->Code === 121) {
-                    $wrap = new CS_REST_General($auth);
+                    $wrap = new \CS_REST_General($auth);
                     list($new_access_token, , $new_refresh_token) = $wrap->refresh_token();
 
                     $auth = [
