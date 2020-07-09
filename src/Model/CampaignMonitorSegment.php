@@ -14,6 +14,8 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 class CampaignMonitorSegment extends DataObject
 {
+    private static $table_name = 'CampaignMonitorSegment';
+
     private static $db = [
         'Title' => 'Varchar(64)',
         'SegmentID' => 'Varchar(32)',

@@ -19,6 +19,8 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 class CampaignMonitorCustomField extends DataObject
 {
+    private static $table_name = 'CampaignMonitorCustomField';
+
     private static $db = [
         'Code' => 'Varchar(64)',
         'Title' => 'Varchar(64)',

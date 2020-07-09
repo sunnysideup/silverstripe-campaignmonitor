@@ -21,6 +21,8 @@ use SilverStripe\View\ThemeResourceLoader;
 
 class CampaignMonitorCampaignStyle extends DataObject
 {
+    private static $table_name = 'CampaignMonitorCampaignStyle';
+
     private static $db = [
         'Title' => 'Varchar(100)',
         'TemplateName' => 'Varchar(200)',
