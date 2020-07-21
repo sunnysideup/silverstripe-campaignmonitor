@@ -106,8 +106,8 @@ class CampaignMonitorCampaignStyle extends DataObject
              * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
              * ### @@@@ STOP REPLACEMENT @@@@ ###
              */
-            Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
-            Director::baseFolder() . '/campaignmonitor/css/',
+            // Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
+            // Director::baseFolder() . '/campaignmonitor/css/',
 
         ];
         foreach ($array as $key => $folder) {
