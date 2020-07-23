@@ -105,11 +105,11 @@ class CampaignMonitorSignupPageController extends PageController
                 $this->email = $member->Email;
                 if ($this->email) {
                     $emailRequired = false;
-                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', Email::class), $this->email);
+                    $emailField = new ReadonlyField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', 'Email'), $this->email);
                 }
             }
             if (! $emailField) {
-                $emailField = new EmailField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', Email::class), $this->email);
+                $emailField = new EmailField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', 'Email'), $this->email);
             }
             if ($this->ShowAllNewsletterForSigningUp) {
                 $signupField = $member->getCampaignMonitorSignupField(null, 'SubscribeManyChoices');
