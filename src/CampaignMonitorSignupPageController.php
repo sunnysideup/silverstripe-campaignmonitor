@@ -520,7 +520,8 @@ class CampaignMonitorSignupPageController extends PageController
     protected function init()
     {
         parent::init();
-        Requirements::themedCSS('sunnysideup/campaignmonitor: CampaignMonitorSignupPage', 'campaignmonitor');
+        //UPGRADE TO DO: fix this
+        //Requirements::themedCSS('sunnysideup/campaignmonitor: client/css/CampaignMonitorSignupPage');
     }
 
     /**
