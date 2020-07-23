@@ -85,7 +85,7 @@ class CampaignMonitorCampaign extends DataObject
     private static $searchable_fields = [
         'Subject' => 'PartialMatchFilter',
         'Content' => 'PartialMatchFilter',
-        'Hide' => 'ExactMatch',
+        'Hide' => 'ExactMatchFilter',
     ];
 
     private static $summary_fields = [
