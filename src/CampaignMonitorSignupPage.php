@@ -97,7 +97,7 @@ class CampaignMonitorSignupPage extends Page
     /**
      * @inherited
      */
-    private static $icon = 'campaignmonitor/images/treeicons/CampaignMonitorSignupPage';
+    private static $icon = 'sunnysideup/campaignmonitor: client/images/treeicons/CampaignMonitorSignupPage-file.gif';
 
     /**
      * @inherited
