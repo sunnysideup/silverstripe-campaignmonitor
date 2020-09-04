@@ -35,7 +35,6 @@ use Page;
 
 
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;

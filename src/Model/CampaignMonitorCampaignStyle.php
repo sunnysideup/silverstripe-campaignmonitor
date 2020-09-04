@@ -99,13 +99,13 @@ class CampaignMonitorCampaignStyle extends DataObject
         $array = [
 
             /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: automated upgrade
-             * OLD: SSViewer::get_theme_folder() (ignore case)
-             * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-             * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
+         * ### @@@@ START REPLACEMENT @@@@ ###
+         * WHY: automated upgrade
+         * OLD: SSViewer::get_theme_folder() (ignore case)
+         * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
+         * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
+         * ### @@@@ STOP REPLACEMENT @@@@ ###
+         */
             // Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
             // Director::baseFolder() . '/campaignmonitor/css/',
 
