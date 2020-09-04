@@ -372,7 +372,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function IsThankYou()
     {
@@ -380,7 +380,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function IsConfirm()
     {
@@ -388,7 +388,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function IsUnsubscribe()
     {
@@ -396,7 +396,7 @@ class CampaignMonitorSignupPageController extends PageController
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function HasCampaign()
     {

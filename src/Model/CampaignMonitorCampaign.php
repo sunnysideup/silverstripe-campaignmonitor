@@ -376,7 +376,7 @@ class CampaignMonitorCampaign extends DataObject
 
     /**
      * checks if the template and/or the campaign exists
-     * @return boolean
+     * @return bool
      */
     public function ExistsOnCampaignMonitorCheck($forceRecheck = false)
     {

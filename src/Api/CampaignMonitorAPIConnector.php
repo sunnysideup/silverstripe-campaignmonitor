@@ -92,7 +92,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     * @param boolean $b
+     * @param bool $b
      */
     public function setAllowCaching($b)
     {
@@ -100,7 +100,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getAllowCaching()
     {
@@ -355,7 +355,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param string $title - the page to redirect subscribers to when they unsubscribeThe list title
      * @param string $unsubscribePage - The page to redirect subscribers to when they unsubscribe
-     * @param boolean $confirmedOptIn - Whether this list requires confirmation of subscription
+     * @param bool $confirmedOptIn - Whether this list requires confirmation of subscription
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
      * @param string $unsubscribeSetting - Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
      *
@@ -777,11 +777,11 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param string $title - he page to redirect subscribers to when they unsubscribeThe list title
      * @param string $unsubscribePage - The page to redirect subscribers to when they unsubscribe
-     * @param boolean $confirmedOptIn - Whether this list requires confirmation of subscription
+     * @param bool $confirmedOptIn - Whether this list requires confirmation of subscription
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
      * @param string $unsubscribeSetting - Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
-     * @param boolean $addUnsubscribesToSuppList -  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list.
-     * @param boolean $acrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
+     * @param bool $addUnsubscribesToSuppList -  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list.
+     * @param bool $acrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
      *
      * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
@@ -1196,8 +1196,8 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields
      * @param array $customFields The subscriber details to use during creation.
-     * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-     * @param boolean $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param bool $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
+     * @param bool $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -1253,8 +1253,8 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $oldEmailAddress
      * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields The subscriber details to use during creation.
-     * @param boolean $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-     * @param boolean $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param bool $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
+     * @param bool $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -1425,7 +1425,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member|string $member
      *
-     * @return boolean
+     * @return bool
      */
     public function getSubscriberExistsForThisList($listID, $member)
     {
@@ -1451,7 +1451,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member | String $member
      *
-     * @return boolean
+     * @return bool
      */
     public function getSubscriberCanReceiveEmailsForThisList($listID, $member)
     {
@@ -1479,7 +1479,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member | String $member
      *
-     * @return boolean
+     * @return bool
      */
     public function getSubscriberCanNoLongerReceiveEmailsForThisList($listID, $member)
     {

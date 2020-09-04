@@ -196,7 +196,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     /**
      * is this user currently signed up to one or more newsletters
      *
-     * @return boolean
+     * @return bool
      */
     public function IsCampaignMonitorSubscriber()
     {
@@ -211,7 +211,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      * add to CM database...
      * @param CampaignMonitorSignupPage | Int $listPage
      * @param array $customFields
-     * @return boolean - returns true on success
+     * @return bool - returns true on success
      */
     public function addCampaignMonitorList($listPage, $customFields = [])
     {
@@ -262,7 +262,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      * remove from Group
      * remove from CM database...
      * @param CampaignMonitorSignupPage | Int $listPage
-     * @return boolean returns true if successful.
+     * @return bool returns true if successful.
      */
     public function removeCampaignMonitorList($listPage)
     {

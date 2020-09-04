@@ -14,7 +14,7 @@ class CampaignMonitorGroupDOD extends DataExtension
 {
     /**
      * Is this a group for newsletter signing up.
-     * @return boolean
+     * @return bool
      */
     public function IsCampaignMonitorSubscriberGroup()
     {

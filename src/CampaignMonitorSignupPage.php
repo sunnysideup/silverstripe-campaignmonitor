@@ -386,7 +386,7 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * tells us if the page is ready to receive subscriptions
-     * @return boolean
+     * @return bool
      */
     public function ReadyToReceiveSubscribtions()
     {

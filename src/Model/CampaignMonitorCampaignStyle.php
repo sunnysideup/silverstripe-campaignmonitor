@@ -119,7 +119,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     }
 
     /**
-     * @return string | null
+     * @return string|null
      */
     public function getFileLocation()
     {
