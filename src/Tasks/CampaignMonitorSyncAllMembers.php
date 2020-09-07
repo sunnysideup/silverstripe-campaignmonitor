@@ -160,7 +160,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = Email::class,
+                $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
@@ -194,7 +194,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = Email::class,
+                $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
@@ -224,7 +224,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $daysAgo = 3650,
                 $page = $i,
                 $pageSize = 999,
-                $sortByField = Email::class,
+                $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
             if (isset($list->NumberOfPages) && $list->NumberOfPages) {
