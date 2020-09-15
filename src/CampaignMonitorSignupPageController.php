@@ -6,21 +6,20 @@ use PageController;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use SilverStripe\Control\Director;
+
+
+
+
+
+
+
+
+
+
+
+
+
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
@@ -34,6 +33,7 @@ use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
@@ -96,7 +96,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         if ($this->ReadyToReceiveSubscribtions()) {
             // Create fields
-            $member = Member::currentUser();
+            $member = Security::currentUser();
             $emailField = null;
             $emailRequired = true;
             if (! $member) {
@@ -154,7 +154,7 @@ class CampaignMonitorSignupPageController extends PageController
             //true until proven otherwise.
             $newlyCreatedMember = false;
             //$api = $this->getAPI();
-            $member = Member::currentUser();
+            $member = Security::currentUser();
 
             //subscribe or unsubscribe?
             if (isset($data['SubscribeManyChoices'])) {
@@ -224,7 +224,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function unsubscribe($request)
     {
-        $member = Member::currentUser();
+        $member = Security::currentUser();
         if ($member) {
             $member->removeCampaignMonitorList($this->ListID);
             $this->Content = $member->Email . ' has been removed from this list: ' . $this->getListTitle();
@@ -302,7 +302,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             }
         } else {
-            if ($m = Member::currentUser()) {
+            if ($m = Security::currentUser()) {
                 $this->email = $m->Email;
             }
         }
