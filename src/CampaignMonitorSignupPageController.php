@@ -80,7 +80,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         if ($this->ReadyToReceiveSubscribtions()) {
             // Create fields
-            $member = Security::currentUser();
+            $member = Security::getCurrentUser();
             $emailField = null;
             $emailRequired = true;
             if (! $member) {
@@ -138,7 +138,7 @@ class CampaignMonitorSignupPageController extends PageController
             //true until proven otherwise.
             $newlyCreatedMember = false;
             //$api = $this->getAPI();
-            $member = Security::currentUser();
+            $member = Security::getCurrentUser();
 
             //subscribe or unsubscribe?
             if (isset($data['SubscribeManyChoices'])) {
@@ -208,7 +208,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function unsubscribe($request)
     {
-        $member = Security::currentUser();
+        $member = Security::getCurrentUser();
         if ($member) {
             $member->removeCampaignMonitorList($this->ListID);
             $this->Content = $member->Email . ' has been removed from this list: ' . $this->getListTitle();
@@ -286,7 +286,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             }
         } else {
-            if ($m = Security::currentUser()) {
+            if ($m = Security::getCurrentUser()) {
                 $this->email = $m->Email;
             }
         }
