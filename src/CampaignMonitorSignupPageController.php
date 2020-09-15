@@ -4,22 +4,7 @@ namespace Sunnysideup\CampaignMonitor;
 
 use PageController;
 
-
-
 use SilverStripe\Control\Director;
-
-
-
-
-
-
-
-
-
-
-
-
-
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
@@ -33,7 +18,6 @@ use SilverStripe\Forms\RequiredFields;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
-use SilverStripe\Security\Security;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
