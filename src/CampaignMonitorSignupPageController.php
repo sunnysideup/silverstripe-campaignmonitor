@@ -505,7 +505,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         parent::init();
         //UPGRADE TO DO: fix this
-        Requirements::themedCSS('CampaignMonitorSignupPage');
+        Requirements::themedCSS('client/css/CampaignMonitorSignupPage');
     }
 
     /**
