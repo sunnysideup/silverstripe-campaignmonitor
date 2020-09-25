@@ -199,7 +199,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param  string $sortByField (email)
      * @param  string $sortDirection (asc)
      *
-     * @return [type]                 [description]
+     * @return                  
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
