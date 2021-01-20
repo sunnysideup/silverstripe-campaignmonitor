@@ -193,6 +193,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $member->logIn($keepMeLoggedIn = false);
                 }
             }
+
             $outcome = $member->processCampaignMonitorSignupField($this->dataRecord, $data, $form);
             if ($outcome === 'subscribe') {
                 return $this->redirect($this->link('thankyou'));
@@ -271,16 +272,7 @@ class CampaignMonitorSignupPageController extends PageController
                 if (Director::is_ajax()) {
                     if (! $this->addSubscriber($email)) {
                         $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
-
-                        /**
-                         * ### @@@@ START REPLACEMENT @@@@ ###
-                         * WHY: automated upgrade
-                         * OLD: ->RenderWith( (ignore case)
-                         * NEW: ->RenderWith( (COMPLEX)
-                         * EXP: Check that the template location is still valid!
-                         * ### @@@@ STOP REPLACEMENT @@@@ ###
-                         */
-                        return $this->RenderWith('CampaignMonitorStartForm_AjaxResult');
+                        return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult');
                     }
                     return 'ERROR';
                 }

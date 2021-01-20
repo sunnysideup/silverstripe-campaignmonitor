@@ -199,7 +199,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param  string $sortByField (email)
      * @param  string $sortDirection (asc)
      *
-     * @return                  
+     * @return
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
@@ -1228,14 +1228,16 @@ class CampaignMonitorAPIConnector extends ViewableData
                 unset($customFields[$key]);
             }
         }
+        $request = [
+            'EmailAddress' => $member->Email,
+            'Name' => trim($member->FirstName . ' ' . $member->Surname),
+            'CustomFields' => $customFields,
+            'Resubscribe' => $resubscribe,
+            'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
+            "ConsentToTrack" => "no"
+        ];
         $result = $wrap->add(
-            $request = [
-                'EmailAddress' => $member->Email,
-                'Name' => trim($member->FirstName . ' ' . $member->Surname),
-                'CustomFields' => $customFields,
-                'Resubscribe' => $resubscribe,
-                'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-            ]
+            $request
         );
         return $this->returnResult(
             $result,
@@ -1297,6 +1299,7 @@ class CampaignMonitorAPIConnector extends ViewableData
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
+                "ConsentToTrack" => "no"
             ]
         );
         return $this->returnResult(
@@ -1361,6 +1364,7 @@ class CampaignMonitorAPIConnector extends ViewableData
                     'EmailAddress' => $member->Email,
                     'Name' => trim($member->FirstName . ' ' . $member->Surname),
                     'CustomFields' => $customFieldsForMember,
+                    "ConsentToTrack" => "no",
                 ];
             }
         }
