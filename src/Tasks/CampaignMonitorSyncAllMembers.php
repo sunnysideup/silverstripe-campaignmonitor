@@ -289,8 +289,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         if (! $this->debug) {
                             $api->updateSubscriber(
                                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
-                                $oldEmailAddress = $email,
                                 $memberArray[$email],
+                                $oldEmailAddress = $email,
                                 $finalCustomFields[$email],
                                 $resubscribe = true,
                                 $restartSubscriptionBasedAutoResponders = false
@@ -309,7 +309,14 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     if (count($memberArray) === count($finalCustomFields)) {
                         DB::alteration_message('<h3>adding: ' . count($memberArray) . ' subscribers</h3>', 'created');
                         if (! $this->debug) {
-                            $api->addSubscribers(Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'), $memberArray, $finalCustomFields, true, false, false);
+                            $api->addSubscribers(
+                                Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
+                                $memberArray,
+                                $resubscribe = true,
+                                $finalCustomFields,
+                                $queueSubscriptionBasedAutoResponders = false,
+                                $restartSubscriptionBasedAutoResponders = false
+                            );
                         }
                     } else {
                         DB::alteration_message('Error, memberArray (' . count($memberArray) . ') count is not the same as finalCustomFields (' . count($finalCustomFields) . ') count.', 'deleted');

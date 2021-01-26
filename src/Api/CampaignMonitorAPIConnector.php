@@ -199,7 +199,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param  string $sortByField (email)
      * @param  string $sortDirection (asc)
      *
-     * @return                  
+     * @return
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
@@ -361,7 +361,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @return \CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
      */
-    public function createList($title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting = null)
+    public function createList($title, $unsubscribePage, $confirmationSuccessPage, $confirmedOptIn = false, $unsubscribeSetting = null)
     {
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
@@ -785,8 +785,16 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @return \CS_REST_Wrapper_Result A successful response will be empty
      */
-    public function updateList($listID, $title, $unsubscribePage, $confirmedOptIn = false, $confirmationSuccessPage, $unsubscribeSetting, $addUnsubscribesToSuppList = true, $scrubActiveWithSuppList = true)
-    {
+    public function updateList(
+        $listID,
+        $title,
+        $unsubscribePage,
+        $confirmationSuccessPage,
+        $unsubscribeSetting,
+        $confirmedOptIn = false,
+        $addUnsubscribesToSuppList = true,
+        $scrubActiveWithSuppList = true
+    ) {
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         if (! $unsubscribeSetting) {
@@ -1267,8 +1275,8 @@ class CampaignMonitorAPIConnector extends ViewableData
      */
     public function updateSubscriber(
         $listID,
-        $oldEmailAddress = '',
         $member,
+        $oldEmailAddress = '',
         $customFields = [],
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
@@ -1330,8 +1338,8 @@ class CampaignMonitorAPIConnector extends ViewableData
     public function addSubscribers(
         $listID,
         $membersSet,
-        $customFields = [],
         $resubscribe,
+        $customFields = [],
         $queueSubscriptionBasedAutoResponders = false,
         $restartSubscriptionBasedAutoResponders = false
     ) {
@@ -1618,7 +1626,6 @@ class CampaignMonitorAPIConnector extends ViewableData
                 }
 
                 if ($this->debug) {
-                    'An error occurred:\n';
                     $result->response->error . ': ' . $result->response->error_description . "\n";
                 }
             }

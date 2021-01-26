@@ -234,8 +234,8 @@ class CampaignMonitorMemberDOD extends DataExtension
             if ($api->getSubscriber($listPage->ListID, $this->owner)) {
                 if ($api->updateSubscriber(
                     $listPage->ListID,
-                    $oldEmailAddress = '',
                     $this->owner,
+                    $oldEmailAddress = '',
                     $customFields,
                     $resubscribe = true,
                     $restartSubscriptionBasedAutoResponders = false

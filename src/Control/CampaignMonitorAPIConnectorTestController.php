@@ -105,8 +105,8 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         $result = $this->api->createList(
             $this->egData['listTitle'],
             $this->egData['unsubscribePage'],
-            $this->egData['confirmedOptIn'],
             $this->egData['confirmationSuccessPage'],
+            $this->egData['confirmedOptIn'],
             $this->egData['unsubscribeSetting']
         );
         $this->egData['listIDtoDelete'] = $result;
@@ -116,9 +116,9 @@ class CampaignMonitorAPIConnectorTestController extends Controller
             $this->egData['listIDtoDelete'],
             $this->egData['listTitle'] . 'updated_22',
             $this->egData['unsubscribePage'] . 'updated',
-            $this->egData['confirmedOptIn'],
             $this->egData['confirmationSuccessPage'] . 'updated',
             $this->egData['unsubscribeSetting'],
+            $this->egData['confirmedOptIn'],
             $addUnsubscribesToSuppList = true,
             $scrubActiveWithSuppList = true
         );
@@ -240,8 +240,8 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         $result = $this->api->createList(
             $this->egData['listTitle'],
             $this->egData['unsubscribePage'],
-            $this->egData['confirmedOptIn'],
             $this->egData['confirmationSuccessPage'],
+            $this->egData['confirmedOptIn'],
             $this->egData['unsubscribeSetting']
         );
         $this->egData['tempListID'] = $result;
@@ -274,8 +274,8 @@ class CampaignMonitorAPIConnectorTestController extends Controller
             );
             $this->api->updateSubscriber(
                 $this->egData['tempListID'],
-                $email,
                 $member[$i],
+                $email,
                 $customFields = [$customFieldKey => 'YES'],
                 $resubscribe = true,
                 $restartSubscriptionBasedAutoResponders = false
@@ -287,8 +287,8 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         $result = $this->api->addSubscribers(
             $this->egData["tempListID"],
             $membersSet,
-            $customFields = array(),
             $resubscribe,
+            $customFields = array(),
             $queueSubscriptionBasedAutoResponders = false,
             $restartSubscriptionBasedAutoResponders = false
         );
