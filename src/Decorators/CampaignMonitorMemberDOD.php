@@ -230,6 +230,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 }
             }
         }
+
         if ($listPage && $listPage->ListID) {
             if ($api->getSubscriber($listPage->ListID, $this->owner)) {
                 if ($api->updateSubscriber(

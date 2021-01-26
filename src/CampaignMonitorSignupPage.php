@@ -305,15 +305,7 @@ class CampaignMonitorSignupPage extends Page
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
 
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: automated upgrade
-             * OLD: ->RenderWith( (ignore case)
-             * NEW: ->RenderWith( (COMPLEX)
-             * EXP: Check that the template location is still valid!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
-             */
-            return $this->RenderWith('CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
+            return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
         //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
@@ -445,7 +437,7 @@ class CampaignMonitorSignupPage extends Page
         } else {
             $this->CampaignMonitorCampaigns()->filter(['HasBeenSent' => 1])->removeAll();
         }
-        //add segments
+        // //add segments
         $segmentsAdded = [];
         $segments = $this->api->getSegments($this->ListID);
         if ($segments && is_array($segments) && count($segments)) {
@@ -460,12 +452,14 @@ class CampaignMonitorSignupPage extends Page
                 $obj->write();
             }
         }
-        $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-            ->exclude(['SegmentID' => $segmentsAdded]);
-        foreach ($unwantedSegments as $unwantedSegment) {
-            $unwantedSegment->delete();
+        if(count($segmentsAdded)){
+            $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+                ->exclude(['SegmentID' => $segmentsAdded]);
+            foreach ($unwantedSegments as $unwantedSegment) {
+                $unwantedSegment->delete();
+            }
         }
-        //add custom fields
+        // //add custom fields
         $customCustomFieldsAdded = [];
         $customCustomFields = $this->api->getListCustomFields($this->ListID);
         if ($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
@@ -474,10 +468,12 @@ class CampaignMonitorSignupPage extends Page
                 $customCustomFieldsAdded[$obj->Code] = $obj->Code;
             }
         }
-        $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+        if(count($customCustomFieldsAdded)){
+            $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
             ->exclude(['Code' => $customCustomFieldsAdded]);
-        foreach ($unwantedCustomFields as $unwantedCustomField) {
-            $unwantedCustomField->delete();
+            foreach ($unwantedCustomFields as $unwantedCustomField) {
+                $unwantedCustomField->delete();
+            }
         }
     }
 
