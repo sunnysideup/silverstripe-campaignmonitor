@@ -21,21 +21,9 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 class CampaignMonitorSignupPageController extends PageController
 {
-
-
-    /**
-     * tells us if the page is ready to receive subscriptions
-     * @return bool
-     */
-    public function ReadyToReceiveSubscribtions()
-    {
-        return $this->ListID && $this->GroupID;
-    }
-
     /**
      * retains email for processing
      * @var boolean
@@ -83,6 +71,15 @@ class CampaignMonitorSignupPageController extends PageController
         'resetoldcampaigns' => true,
         'resetsignup' => true,
     ];
+
+    /**
+     * tells us if the page is ready to receive subscriptions
+     * @return bool
+     */
+    public function ReadyToReceiveSubscribtions()
+    {
+        return $this->ListID && $this->GroupID;
+    }
 
     /**
      * creates a subscription form...

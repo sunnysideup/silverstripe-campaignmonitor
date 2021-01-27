@@ -936,7 +936,7 @@ class CampaignMonitorAPIConnector extends ViewableData
             $replyTo = $fromEmail;
         }
         $page = $campaignMonitorCampaign->Pages()->first();
-        if($page) {
+        if ($page) {
             $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
             $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
@@ -1650,9 +1650,9 @@ class CampaignMonitorAPIConnector extends ViewableData
     protected function returnResult($result, $apiCall, $description)
     {
         if ($this->debug) {
-            if(is_string($result)) {
+            if (is_string($result)) {
                 echo "<h1>${description} ( ${apiCall} ) ...</h1>";
-                echo "<p style='color: red'>$result</p>";
+                echo "<p style='color: red'>${result}</p>";
             } else {
                 echo "<h1>${description} ( ${apiCall} ) ...</h1>";
                 if ($result->was_successful()) {
@@ -1668,7 +1668,7 @@ class CampaignMonitorAPIConnector extends ViewableData
                 flush();
             }
         }
-        if(is_string($result)) {
+        if (is_string($result)) {
             $this->httpStatusCode = 500;
             return null;
         }
@@ -1708,7 +1708,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param mixed $unserializedValue
      * @param string $name
      */
-    protected function saveToCache($unserializedValue, string $name) : bool
+    protected function saveToCache($unserializedValue, string $name): bool
     {
         if ($this->getAllowCaching()) {
             $serializedValue = serialize($unserializedValue);

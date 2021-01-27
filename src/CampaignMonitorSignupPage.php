@@ -39,7 +39,6 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController;
 
 /**
  * Page for Signing Up to Campaign Monitor List
@@ -50,13 +49,12 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController;
  */
 class CampaignMonitorSignupPage extends Page
 {
-
-    private static $controller_name = CampaignMonitorSignupPageController::class;
-
     /**
      * @var CampaignMonitorAPIConnector | Null
      */
     protected static $_api = null;
+
+    private static $controller_name = CampaignMonitorSignupPageController::class;
 
     /**
      * standard SS variable
@@ -285,7 +283,6 @@ class CampaignMonitorSignupPage extends Page
     public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
-
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
