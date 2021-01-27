@@ -304,7 +304,6 @@ class CampaignMonitorSignupPage extends Page
     public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
-
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
@@ -452,7 +451,7 @@ class CampaignMonitorSignupPage extends Page
                 $obj->write();
             }
         }
-        if(count($segmentsAdded)){
+        if (count($segmentsAdded)) {
             $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
                 ->exclude(['SegmentID' => $segmentsAdded]);
             foreach ($unwantedSegments as $unwantedSegment) {
@@ -468,9 +467,9 @@ class CampaignMonitorSignupPage extends Page
                 $customCustomFieldsAdded[$obj->Code] = $obj->Code;
             }
         }
-        if(count($customCustomFieldsAdded)){
+        if (count($customCustomFieldsAdded)) {
             $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-            ->exclude(['Code' => $customCustomFieldsAdded]);
+                ->exclude(['Code' => $customCustomFieldsAdded]);
             foreach ($unwantedCustomFields as $unwantedCustomField) {
                 $unwantedCustomField->delete();
             }

@@ -2,7 +2,7 @@
 # CAMPAIGN MONITOR
 ############################
 
-CampaignMonitorAPIConnector:
+Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector:
   ### REQUIRED ###
   ## e.g. http://mycompany.sendmail.com/
   campaign_monitor_url: ""
@@ -14,13 +14,13 @@ CampaignMonitorAPIConnector:
   redirect_uri: ""
   code: ""
 
-CampaignMonitorCampaign:
+Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign:
   emogrifier_add_allowed_media_types:
     - "screen"
   emogrifier_remove_allowed_media_types:
     - "print"
 
-CampaignMonitorMemberDOD:
+ Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
   campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
   custom_fields_member_field_or_method_map:
     "MyCustomField": "getMySpecialThingy"

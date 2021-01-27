@@ -1242,7 +1242,7 @@ class CampaignMonitorAPIConnector extends ViewableData
             'CustomFields' => $customFields,
             'Resubscribe' => $resubscribe,
             'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-            "ConsentToTrack" => "no"
+            'ConsentToTrack' => 'no',
         ];
         $result = $wrap->add(
             $request
@@ -1307,7 +1307,7 @@ class CampaignMonitorAPIConnector extends ViewableData
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-                "ConsentToTrack" => "no"
+                'ConsentToTrack' => 'no',
             ]
         );
         return $this->returnResult(
@@ -1372,7 +1372,7 @@ class CampaignMonitorAPIConnector extends ViewableData
                     'EmailAddress' => $member->Email,
                     'Name' => trim($member->FirstName . ' ' . $member->Surname),
                     'CustomFields' => $customFieldsForMember,
-                    "ConsentToTrack" => "no",
+                    'ConsentToTrack' => 'no',
                 ];
             }
         }
