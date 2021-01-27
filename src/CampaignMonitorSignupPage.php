@@ -39,6 +39,7 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController;
 
 /**
  * Page for Signing Up to Campaign Monitor List
@@ -49,6 +50,9 @@ use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
  */
 class CampaignMonitorSignupPage extends Page
 {
+
+    private static $controller_name = CampaignMonitorSignupPageController::class;
+
     /**
      * @var CampaignMonitorAPIConnector | Null
      */
@@ -120,6 +124,10 @@ class CampaignMonitorSignupPage extends Page
      */
     private static $belongs_many_many = [
         'CampaignMonitorCampaigns' => CampaignMonitorCampaign::class,
+    ];
+
+    private static $indexes = [
+        'ListID' => true,
     ];
 
     /**

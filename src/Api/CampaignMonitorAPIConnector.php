@@ -935,55 +935,59 @@ class CampaignMonitorAPIConnector extends ViewableData
         if (! $replyTo) {
             $replyTo = $fromEmail;
         }
+        $page = $campaignMonitorCampaign->Pages()->first();
+        if($page) {
+            $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
-        $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
-
-        $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
-        if ($templateID) {
-            $result = $wrap->create_from_template(
-                $this->Config()->get('client_id'),
-                [
-                    'Subject' => $subject,
-                    'Name' => $name,
-                    'FromName' => $fromName,
-                    'FromEmail' => $fromEmail,
-                    'ReplyTo' => $replyTo,
-                    'ListIDs' => [$listID],
-                    'SegmentIDs' => [],
-                    'TemplateID' => $templateID,
-                    'TemplateContent' => $templateContent,
-                ]
-            );
-        } else {
-            $result = $wrap->create(
-                $this->Config()->get('client_id'),
-                [
-                    'Subject' => $subject,
-                    'Name' => $name,
-                    'FromName' => $fromName,
-                    'FromEmail' => $fromEmail,
-                    'ReplyTo' => $replyTo,
-                    'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
-                    'TextUrl' => $campaignMonitorCampaign->PreviewLink('textonly'),
-                    'ListIDs' => [$listID],
-                ]
-            );
-        }
-        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
-            $code = $result->response;
-            $campaignMonitorCampaign->CreateFromWebsite = false;
-            $campaignMonitorCampaign->CreatedFromWebsite = true;
-            $campaignMonitorCampaign->CampaignID = $code;
-        } else {
-            $campaignMonitorCampaign->CreateFromWebsite = false;
-            $campaignMonitorCampaign->CreatedFromWebsite = false;
-            $code = 'Error';
-            if (is_object($result->response)) {
-                $code = $result->response->Code . ':' . $result->response->Message;
+            $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
+            if ($templateID) {
+                $result = $wrap->create_from_template(
+                    $this->Config()->get('client_id'),
+                    [
+                        'Subject' => $subject,
+                        'Name' => $name,
+                        'FromName' => $fromName,
+                        'FromEmail' => $fromEmail,
+                        'ReplyTo' => $replyTo,
+                        'ListIDs' => [$listID],
+                        'SegmentIDs' => [],
+                        'TemplateID' => $templateID,
+                        'TemplateContent' => $templateContent,
+                    ]
+                );
+            } else {
+                $result = $wrap->create(
+                    $this->Config()->get('client_id'),
+                    [
+                        'Subject' => $subject,
+                        'Name' => $name,
+                        'FromName' => $fromName,
+                        'FromEmail' => $fromEmail,
+                        'ReplyTo' => $replyTo,
+                        'HtmlUrl' => $campaignMonitorCampaign->PreviewLink(),
+                        'TextUrl' => $campaignMonitorCampaign->PreviewLink('textonly'),
+                        'ListIDs' => [$listID],
+                    ]
+                );
             }
-            $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
+            if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
+                $code = $result->response;
+                $campaignMonitorCampaign->CreateFromWebsite = false;
+                $campaignMonitorCampaign->CreatedFromWebsite = true;
+                $campaignMonitorCampaign->CampaignID = $code;
+            } else {
+                $campaignMonitorCampaign->CreateFromWebsite = false;
+                $campaignMonitorCampaign->CreatedFromWebsite = false;
+                $code = 'Error';
+                if (is_object($result->response)) {
+                    $code = $result->response->Code . ':' . $result->response->Message;
+                }
+                $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
+            }
+            $campaignMonitorCampaign->write();
+        } else {
+            $result = 'ERROR: no campagn monitor page with list id created yet.';
         }
-        $campaignMonitorCampaign->write();
         return $this->returnResult(
             $result,
             'CREATE /api/v3/campaigns/{clientID}',
@@ -1646,18 +1650,27 @@ class CampaignMonitorAPIConnector extends ViewableData
     protected function returnResult($result, $apiCall, $description)
     {
         if ($this->debug) {
-            echo "<h1>${description} ( ${apiCall} ) ...</h1>";
-            if ($result->was_successful()) {
-                echo '<h2>SUCCESS</h2>';
+            if(is_string($result)) {
+                echo "<h1>${description} ( ${apiCall} ) ...</h1>";
+                echo "<p style='color: red'>$result</p>";
             } else {
-                echo '<h2>FAILURE: ' . $result->http_status_code . '</h2>';
+                echo "<h1>${description} ( ${apiCall} ) ...</h1>";
+                if ($result->was_successful()) {
+                    echo '<h2>SUCCESS</h2>';
+                } else {
+                    echo '<h2>FAILURE: ' . $result->http_status_code . '</h2>';
+                }
+                echo '<pre>';
+                print_r($result);
+                echo '</pre>';
+                echo '<hr /><hr /><hr />';
+                ob_flush();
+                flush();
             }
-            echo '<pre>';
-            print_r($result);
-            echo '</pre>';
-            echo '<hr /><hr /><hr />';
-            ob_flush();
-            flush();
+        }
+        if(is_string($result)) {
+            $this->httpStatusCode = 500;
+            return null;
         }
         if ($result->was_successful()) {
             if (isset($result->response)) {
