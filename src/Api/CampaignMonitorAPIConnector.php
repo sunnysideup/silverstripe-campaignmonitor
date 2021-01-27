@@ -2,7 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Api;
 
-use Metadata\Cache\CacheInterface;
+use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
@@ -1678,31 +1678,37 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $name
      * @return mixed
      */
-    protected function getFromCache($name)
+    protected function getFromCache(string $name)
     {
         if ($this->getAllowCaching()) {
-            $name = 'CampaignMonitorAPIConnector_' . $name;
-            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
+            $cache = $this->getCache();
             $value = $cache->has($name) ? $cache->get($name) : null;
-            if (! $value) {
-                return null;
+            if ($value) {
+                return unserialize($value);
             }
-            return unserialize($value);
         }
+
+        return null;
     }
 
     /**
      * @param mixed $unserializedValue
      * @param string $name
      */
-    protected function saveToCache($unserializedValue, $name)
+    protected function saveToCache($unserializedValue, string $name) : bool
     {
         if ($this->getAllowCaching()) {
             $serializedValue = serialize($unserializedValue);
-            $name = 'CampaignMonitorAPIConnector_' . $name;
-            $cache = Injector::inst()->get(CacheInterface::class . '.' . $name);
+            $cache = $this->getCache();
             $cache->set($name, $serializedValue);
             return true;
         }
+
+        return false;
+    }
+
+    protected function getCache()
+    {
+        return Injector::inst()->get(CacheInterface::class . '.CampaignMonitor');
     }
 }

@@ -11,3 +11,11 @@ SilverStripe\Security\Member:
     - Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
 Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
   campaign_monitor_signup_fieldname: CampaignMonitorSubscriptions
+
+
+SilverStripe\Core\Injector\Injector:
+  Psr\SimpleCache\CacheInterface.CampaignMonitor:
+    factory: SilverStripe\Core\Cache\CacheFactory
+    constructor:
+      namespace: "CampaignMonitorNameSpace"
+      disable-container: true

@@ -7,33 +7,6 @@ use Page;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -304,6 +277,7 @@ class CampaignMonitorSignupPage extends Page
     public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
+
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
