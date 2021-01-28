@@ -1,6 +1,10 @@
 <h1 class="pageTitle">$Title</h1>
 <div class="mainMessage">$Content</div>
 <div id="SignupForm">$SignupForm</div>
+
+<% if $CurrentMember %><p><a href="Security/logout/">Log out (sign up as someone else).</a></p><% end_if %>
+
+
 <div id="CampaignMonitorCampaigns">
 <% if HasCampaign %>
 	<% with Campaign %>

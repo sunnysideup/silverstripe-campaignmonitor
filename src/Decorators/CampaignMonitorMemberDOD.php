@@ -146,7 +146,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * return string: can be subscribe / unsubscribe / error
      */
-    public function processCampaignMonitorSignupField($listPage, $data, $form)
+    public function processCampaignMonitorSignupField($listPage, $data, $form): string
     {
         $typeOfAction = 'unsubscribe';
         //many choices

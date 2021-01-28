@@ -100,6 +100,9 @@ class CampaignMonitorSignupPage extends Page
         'ShowOldNewsletters' => 'Boolean',
         'ShowAllNewsletterForSigningUp' => 'Boolean',
 
+        'ShowFirstNameFieldInForm' => 'Boolean',
+        'ShowSurnameFieldInForm' => 'Boolean',
+
     ];
 
     /**
@@ -126,6 +129,11 @@ class CampaignMonitorSignupPage extends Page
 
     private static $indexes = [
         'ListID' => true,
+    ];
+
+    private static $defaults = [
+        'ShowFirstNameFieldInForm' => true,
+        'ShowSurnameFieldInForm' => true,
     ];
 
     /**
@@ -222,6 +230,8 @@ class CampaignMonitorSignupPage extends Page
                     new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                    new CheckboxField('ShowFirstNameFieldInForm', ''),
+                    new CheckboxField('ShowSurnameFieldInForm', ''),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
                 ),
                 new Tab(
@@ -311,7 +321,7 @@ class CampaignMonitorSignupPage extends Page
      *
      * @returns
      */
-    public function addSubscriber($email)
+    public function addSubscriber(string $email)
     {
         if ($this->ReadyToReceiveSubscribtions()) {
             $listID = $this->ListID;
@@ -343,7 +353,7 @@ class CampaignMonitorSignupPage extends Page
      * name of the list connected to.
      * @return string
      */
-    public function getListTitle()
+    public function getListTitle(): string
     {
         if ($this->ListID) {
             $a = $this->makeDropdownListFromLists();
@@ -358,7 +368,7 @@ class CampaignMonitorSignupPage extends Page
      * tells us if the page is ready to receive subscriptions
      * @return bool
      */
-    public function ReadyToReceiveSubscribtions()
+    public function ReadyToReceiveSubscribtions(): bool
     {
         return $this->ListID && $this->GroupID;
     }
