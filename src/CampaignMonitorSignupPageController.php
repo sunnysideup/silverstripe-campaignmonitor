@@ -75,10 +75,10 @@ class CampaignMonitorSignupPageController extends PageController
         'preloademail' => true,
         'viewcampaign' => true,
         'viewcampaigntextonly' => true,
-        'previewcampaign' => true,
-        'previewcampaigntextonly' => true,
-        'stats' => true,
-        'resetoldcampaigns' => true,
+        'previewcampaign' => 'ADMIN',
+        'previewcampaigntextonly' => 'ADMIN',
+        'stats' => 'ADMIN',
+        'resetoldcampaigns' => 'ADMIN',
         'resetsignup' => true,
     ];
 
@@ -474,7 +474,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function CampaignStats()
     {
-        if (Permission::check('CMS_ACCESS_CMSMain')) {
+        if (Permission::check('Admin')) {
             if ($this->campaign) {
                 //run tests here
                 $api = $this->getAPI();
@@ -509,13 +509,12 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function resetoldcampaigns()
     {
-        if (! Permission::check('CMS_ACCESS_CMSMain')) {
-            Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need CMS rights to access it. Enter your credentials below and we will send you right along.'));
-        } else {
+        if (Permission::check('Admin')) {
             DB::query('DELETE FROM "CampaignMonitorCampaign";');
             DB::query('DELETE FROM "CampaignMonitorCampaign_Pages";');
             die('old campaigns have been deleted');
         }
+        Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need CMS rights to access it. Enter your credentials below and we will send you right along.'));
     }
 
     protected function getFieldsForSignupFormFormFields(?Member $member): array
@@ -575,8 +574,6 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $array = [
             'Email' => 'Email',
-            'FirstName' => 'First Name',
-            'Surname' => 'Surname',
         ];
         if ($this->ShowFirstNameFieldInForm) {
             $array['FirstName'] = _t('CAMPAIGNMONITORSIGNUPPAGE.FIRSTNAME', 'First Name');

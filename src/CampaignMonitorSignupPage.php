@@ -179,15 +179,16 @@ class CampaignMonitorSignupPage extends Page
     {
         $fields = parent::getCMSFields();
         if ($this->GroupID) {
-            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">open related security group</a></h2>';
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
         } else {
             $groupLink = '<p>No Group has been selected yet.</p>';
         }
         $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
         $campaignExample = CampaignMonitorCampaign::get()->Last();
-        $campaignExampleLink = $this->Link();
-        if ($campaignExample) {
+        if ($campaignExample && $campaignExample->CampaignID) {
             $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
         }
         if ($this->ID) {
             $config = GridFieldConfig_RelationEditor::create();
@@ -198,15 +199,9 @@ class CampaignMonitorSignupPage extends Page
         $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
         $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
         $fields->addFieldToTab(
-            'Root.AlternativeContent',
+            'Root.SubscriptionFeedback',
             new TabSet(
                 'AlternativeContentSubHeader',
-                new Tab(
-                    'Confirm',
-                    new TextField('ConfirmTitle', 'Title'),
-                    new TextField('ConfirmMenuTitle', 'Menu Title'),
-                    new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
-                ),
                 new Tab(
                     'ThankYou',
                     new TextField('ThankYouTitle', 'Title'),
@@ -218,7 +213,13 @@ class CampaignMonitorSignupPage extends Page
                     new TextField('SadToSeeYouGoTitle', 'Title'),
                     new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
                     new HTMLEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
-                )
+                ),
+                new Tab(
+                    'Confirm Subscription',
+                    new TextField('ConfirmTitle', 'Title'),
+                    new TextField('ConfirmMenuTitle', 'Menu Title'),
+                    new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
+                ),
             )
         );
         $fields->addFieldToTab(
@@ -230,8 +231,8 @@ class CampaignMonitorSignupPage extends Page
                     new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
-                    new CheckboxField('ShowFirstNameFieldInForm', ''),
-                    new CheckboxField('ShowSurnameFieldInForm', ''),
+                    new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
+                    new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
                 ),
                 new Tab(
@@ -250,17 +251,35 @@ class CampaignMonitorSignupPage extends Page
                     $gridFieldTemplatesAvailable
                 ),
                 new Tab(
+                    'Campaigns',
+                    new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                    new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
+                ),
+                new Tab(
+                    'Segments',
+                    new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
+                ),
+                new Tab(
+                    'CustomFields',
+                    new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
+                ),
+                new Tab(
                     'Advanced',
+                    new LiteralField('GroupLink', $groupLink),
                     new LiteralField('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
                     new LiteralField('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
                     new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
                     new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
-                    $gridField = new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
-                    $gridField = new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
-                    new LiteralField('GroupLink', $groupLink)
                 )
             )
         );
+        if ($campaignExample && $campaignExample->CampaignID) {
+        } else {
+            $fields->removeByName([
+                'MyCampaignReset',
+                'MyCampaignInfo',
+            ]);
+        }
         if (! Config::inst()->get('CampaignMonitorWrapper', 'campaign_monitor_url')) {
             //$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
         }
