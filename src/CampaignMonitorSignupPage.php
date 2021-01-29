@@ -215,7 +215,8 @@ class CampaignMonitorSignupPage extends Page
                     new HTMLEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
                 ),
                 new Tab(
-                    'Confirm Subscription',
+                    'Updating Subscription',
+                    new LiteralField('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
                     new TextField('ConfirmTitle', 'Title'),
                     new TextField('ConfirmMenuTitle', 'Menu Title'),
                     new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
@@ -228,7 +229,6 @@ class CampaignMonitorSignupPage extends Page
                 'Options',
                 new Tab(
                     'MainSettings',
-                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
@@ -243,15 +243,13 @@ class CampaignMonitorSignupPage extends Page
                     new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
                 ),
                 new Tab(
-                    'Newsletters',
+                    'Campaigns',
+                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
                     new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
                     new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-                    new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->limit(10000)->map()->toArray()),
+                    new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->limit(500)->map()->toArray()),
                     $campaignField,
-                    $gridFieldTemplatesAvailable
-                ),
-                new Tab(
-                    'Campaigns',
+                    $gridFieldTemplatesAvailable,
                     new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
                     new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
                 ),
@@ -273,17 +271,22 @@ class CampaignMonitorSignupPage extends Page
                 )
             )
         );
-        if ($campaignExample && $campaignExample->CampaignID) {
-        } else {
+        if ($this->HasCampaigns() === false) {
             $fields->removeByName([
                 'MyCampaignReset',
                 'MyCampaignInfo',
+                'Campaigns',
             ]);
         }
         if (! Config::inst()->get('CampaignMonitorWrapper', 'campaign_monitor_url')) {
-            //$fields->removeFieldFromTab("Root.Newsletters.Options", "CreateNewCampaign");
+            $fields->removeByName('CreateNewCampaign');
         }
         return $fields;
+    }
+
+    public function HasCampaigns()
+    {
+        return CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->count() > 0;
     }
 
     /**

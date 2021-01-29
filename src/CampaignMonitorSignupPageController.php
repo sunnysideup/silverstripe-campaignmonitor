@@ -146,10 +146,11 @@ class CampaignMonitorSignupPageController extends PageController
             $newlyCreatedMember = false;
             //$api = $this->getAPI();
             $member = Security::getCurrentUser();
-
+            $isConfirm = false;
+            $isSubscribe = false;
             //subscribe or unsubscribe?
             if (isset($data['SubscribeManyChoices'])) {
-                $isSubscribe = true;
+                $isConfirm = true;
             } else {
                 $isSubscribe = isset($data['SubscribeChoice']) && $data['SubscribeChoice'] === 'Subscribe';
             }
@@ -218,7 +219,9 @@ class CampaignMonitorSignupPageController extends PageController
             }
 
             $outcome = $member->processCampaignMonitorSignupField($this->dataRecord, $data, $form);
-            if ($isSubscribe && $outcome === 'subscribe') {
+            if ($isConfirm) {
+                return $this->redirect($this->link('confirm'));
+            } elseif ($isSubscribe && $outcome === 'subscribe') {
                 return $this->redirect($this->link('thankyou'));
             } elseif (! $isSubscribe && $outcome === 'unsubscribe') {
                 return $this->redirect($this->link('sadtoseeyougo'));
