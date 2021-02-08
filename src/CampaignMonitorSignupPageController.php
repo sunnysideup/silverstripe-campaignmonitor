@@ -425,7 +425,7 @@ class CampaignMonitorSignupPageController extends PageController
             return CampaignMonitorCampaign::get()
                 ->filter(
                     [
-                        'ID' => $campaigns->map('ID', 'ID')->toArray(),
+                        'ID' => $campaigns->columnUnique(),
                         'Hide' => 0,
                         'HasBeenSent' => 1,
                     ]
