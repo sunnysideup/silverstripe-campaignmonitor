@@ -6,11 +6,11 @@ use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
-use SilverStripe\View\ViewableData;
 
-use SilverStripe\ORM\SS_List;
+use SilverStripe\View\ViewableData;
 
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
@@ -156,7 +156,6 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     *
      * @return mixed
      */
     public function getDrafts()
@@ -229,7 +228,6 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     *
      * @return mixed
      */
     public function getTemplates()
@@ -246,9 +244,7 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
     }
 
-
     /**
-     *
      * @return mixed
      */
     public function getTemplate($templatID)
@@ -351,7 +347,6 @@ class CampaignMonitorAPIConnector extends ViewableData
     }
 
     /**
-     *
      * @param  int|string $templateID
      * @return mixed
      */
