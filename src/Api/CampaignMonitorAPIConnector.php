@@ -6,9 +6,13 @@ use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
+
 use SilverStripe\View\ViewableData;
+
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 /**
  * Main Holder page for Recipes
@@ -123,7 +127,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *******************************************************/
 
     /**
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * array(
      *     {
      *         'WebVersionURL' => The web version url of the campaign
@@ -151,6 +155,9 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getDrafts()
     {
         //require_once '../../csrest_clients.php';
@@ -166,7 +173,7 @@ class CampaignMonitorAPIConnector extends ViewableData
 
     /**
      * Gets all subscriber lists the current client has created
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * array(
      *     {
      *         'ListID' => The id of the list
@@ -199,7 +206,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param  string $sortByField (email)
      * @param  string $sortDirection (asc)
      *
-     * @return
+     * @return mixed
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
@@ -220,6 +227,9 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getTemplates()
     {
         $wrap = new \CS_REST_Clients(
@@ -234,6 +244,9 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
     }
 
+    /**
+     * @return mixed
+     */
     public function getTemplate($templatID)
     {
         $wrap = new \CS_REST_Templates(
@@ -251,9 +264,9 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * @param CampaignMonitorCampaign $campaignMonitorCampaign
      *
-     * @return \CS_REST_Wrapper_Result
+     * @return mixed
      */
-    public function createTemplate($campaignMonitorCampaign)
+    public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
     {
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
         if (! $name) {
@@ -295,9 +308,9 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param CampaignMonitorCampaign $campaignMonitorCampaign
      * @param string $templateID
      *
-     * @return \CS_REST_Wrapper_Result
+     * @return mixed
      */
-    public function updateTemplate($campaignMonitorCampaign, $templateID)
+    public function updateTemplate(CampaignMonitorCampaign $campaignMonitorCampaign, $templateID)
     {
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
         if (! $name) {
@@ -333,6 +346,10 @@ class CampaignMonitorAPIConnector extends ViewableData
         );
     }
 
+    /**
+     * @param  int|string $templateID
+     * @return mixed
+     */
     public function deleteTemplate($templateID)
     {
         $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
@@ -359,7 +376,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
      * @param string $unsubscribeSetting - Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be the ID of the newly created list
+     * @return mixed A successful response will be the ID of the newly created list
      */
     public function createList($title, $unsubscribePage, $confirmationSuccessPage, $confirmedOptIn = false, $unsubscribeSetting = null)
     {
@@ -396,7 +413,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $title - field type
      * @param array $options - options for dropdown field type
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be the key of the newly created custom field
+     * @return mixed A successful response will be the key of the newly created custom field
      */
     public function createCustomField($listID, $visible, $type, $title, $options = [])
     {
@@ -439,7 +456,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $listID - list ID
      * @param string $key
      *
-     * @return \CS_REST_Wrapper_Result
+     * @return mixed
      */
     public function deleteCustomField($listID, $key)
     {
@@ -455,7 +472,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * Deletes an existing list from the system
      * @param int $listID
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function deleteList($listID)
     {
@@ -475,7 +492,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param int $listID
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ListID' => The id of the list
      *     'Title' => The title of the list
@@ -511,7 +528,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -565,7 +582,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -619,7 +636,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -673,7 +690,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -727,7 +744,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -783,7 +800,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param bool $addUnsubscribesToSuppList -  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list.
      * @param bool $acrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function updateList(
         $listID,
@@ -836,7 +853,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param int $listID
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'TotalActiveSubscribers'
      *     'NewActiveSubscribersToday'
@@ -901,7 +918,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param array $templateContent - OPTIONAL!
      */
     public function createCampaign(
-        $campaignMonitorCampaign,
+        CampaignMonitorCampaign $campaignMonitorCampaign,
         $listIDs = [],
         $segmentIDs = [],
         $templateID = '',
@@ -1026,7 +1043,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param int $campaignID
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'Recipients' => The total recipients of the campaign
      *     'TotalOpened' => The total number of opens recorded
@@ -1059,7 +1076,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param int $campaignID
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * array(
      *     {
      *         Client => The email client name
@@ -1110,7 +1127,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
      * @param string $sortDirection ('ASC', 'DESC')
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'ResultsOrderedBy' => The field the results are ordered by
      *     'OrderDirection' => The order direction
@@ -1175,7 +1192,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *
      * @param string|Member $member Subscriber's email address (or Member)
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * array(
      *     {
      *         'ListID' => The id of the list
@@ -1218,7 +1235,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function addSubscriber(
         $listID,
@@ -1277,7 +1294,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function updateSubscriber(
         $listID,
@@ -1327,7 +1344,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * given email not existing in the list.
      *
      * @param int $listID
-     * @param ArraySet $membersSet - list of Member|object with Email, FirstName, Surname fields.
+     * @param SS_List $membersSet - list of Member|object with Email, FirstName, Surname fields.
      * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
      * @param bool $resubscribe Whether we should resubscribe any existing subscribers
      * @param bool $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
@@ -1340,7 +1357,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
 
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function addSubscribers(
         $listID,
@@ -1397,7 +1414,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member|string $member - email address or Member Object
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function deleteSubscriber($listID, $member)
     {
@@ -1419,7 +1436,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member|string $member
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be empty
+     * @return mixed A successful response will be empty
      */
     public function unsubscribeSubscriber($listID, $member)
     {
@@ -1521,7 +1538,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member | String $member
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'EmailAddress' => The subscriber email address
      *     'Name' => The subscribers name
@@ -1561,7 +1578,7 @@ class CampaignMonitorAPIConnector extends ViewableData
      * @param int $listID
      * @param Member | String $member
      *
-     * @return \CS_REST_Wrapper_Result A successful response will be an object of the form
+     * @return mixed         A successful response will be an object of the form
      * {
      *     'EmailAddress' => The subscriber email address
      *     'Name' => The subscribers name
@@ -1645,7 +1662,7 @@ class CampaignMonitorAPIConnector extends ViewableData
     /**
      * returns the result or NULL in case of an error
      * @param \CS_REST_Wrapper_Result $result
-     * @return mixed | Null
+     * @return mixed
      */
     protected function returnResult($result, $apiCall, $description)
     {

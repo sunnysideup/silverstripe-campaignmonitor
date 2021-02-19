@@ -279,7 +279,7 @@ class CampaignMonitorSignupPage extends Page
                 'Campaigns',
             ]);
         }
-        if (! Config::inst()->get('CampaignMonitorWrapper', 'campaign_monitor_url')) {
+        if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
             $fields->removeByName('CreateNewCampaign');
         }
         return $fields;

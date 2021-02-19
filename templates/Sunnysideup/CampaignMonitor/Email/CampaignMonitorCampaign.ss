@@ -5,6 +5,6 @@
   <% require themedCSS("CampaignMonitorCampaign") %>
 </head>
 <body>
-	$Content
+    $Content
 </body>
 </html>
