@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
+use SilverStripe\Forms\HiddenField;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\CompositeField;
@@ -25,6 +26,12 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @var string
      */
     private static $campaign_monitor_signup_fieldname = 'CampaignMonitorSubscriptions';
+
+    /**
+     * name of the field to use for sign-ups
+     * @var string
+     */
+    private static $campaign_monitor_allow_unsubscribe = true;
 
     /**
      * array of fields where the member value is set as the default for the
@@ -66,8 +73,10 @@ class CampaignMonitorMemberDOD extends DataExtension
             if ($listPage->ReadyToReceiveSubscribtions()) {
                 $currentSelection = 'Subscribe';
                 $optionArray = [];
-                $optionArray['Subscribe'] = _t('CampaignMonitorSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
-                $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
+                $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
+                if($fieldName = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
+                    $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
+                }
                 if ($this->owner->exists()) {
                     if ($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
                         $currentValues = $api->getSubscriber($listPage->ListID, $this->owner);
@@ -77,7 +86,15 @@ class CampaignMonitorMemberDOD extends DataExtension
                 if (! $fieldTitle) {
                     $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $listPage->getListTitle();
                 }
-                $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray, $currentSelection);
+                if(count($optionArray) === 1) {
+                    $subscribeField = HiddenField::create(
+                        $fieldName,
+                        $currentSelection
+                    );
+                } else {
+                    $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray);
+                }
+                $subscribeField->setValue($currentSelection);
                 $field = CompositeField::create($subscribeField);
                 $field->addExtraClass('CMFieldsCustomFieldsHolder');
                 //add custom fields

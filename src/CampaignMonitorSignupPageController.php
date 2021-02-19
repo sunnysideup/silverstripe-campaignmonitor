@@ -10,6 +10,7 @@ use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -112,9 +113,14 @@ class CampaignMonitorSignupPageController extends PageController
             foreach ($additionalFieldsAtEnd as $field) {
                 $fields->push($field);
             }
+            if (Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
+                $action = _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions');
+            } else {
+                $action = _t('CAMPAIGNMONITORSIGNUPPAGE.SIGN_UP_NOW', 'Signup');
+            }
             // Create action
             $actions = new FieldList(
-                new FormAction('subscribe', _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions'))
+                new FormAction('subscribe', $action)
             );
             // Create Validators
             $validator = new RequiredFields($this->getFieldsForSignupFormRequiredFields($member));
