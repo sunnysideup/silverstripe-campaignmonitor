@@ -2,10 +2,10 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
-use SilverStripe\Forms\HiddenField;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
@@ -74,7 +74,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 $currentSelection = 'Subscribe';
                 $optionArray = [];
                 $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
-                if($fieldName = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
+                if ($fieldName = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
                     $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
                 }
                 if ($this->owner->exists()) {
@@ -86,7 +86,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 if (! $fieldTitle) {
                     $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $listPage->getListTitle();
                 }
-                if(count($optionArray) === 1) {
+                if (count($optionArray) === 1) {
                     $subscribeField = HiddenField::create(
                         $fieldName,
                         $currentSelection

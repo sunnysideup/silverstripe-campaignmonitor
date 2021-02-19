@@ -49,11 +49,12 @@ use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
  */
 class CampaignMonitorSignupPage extends Page
 {
-    private static $campaign_monitor_allow_unsubscribe = true;
     /**
      * @var CampaignMonitorAPIConnector | Null
      */
     protected static $_api = null;
+
+    private static $campaign_monitor_allow_unsubscribe = true;
 
     private static $controller_name = CampaignMonitorSignupPageController::class;
 
