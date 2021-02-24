@@ -81,6 +81,8 @@ class CampaignMonitorSignupPage extends Page
     private static $table_name = 'CampaignMonitorSignupPage';
 
     private static $db = [
+        'CloseSubscriptions' => 'Boolean',
+
         'ListID' => 'Varchar(32)',
 
         'ConfirmTitle' => 'Varchar(255)',
@@ -233,6 +235,7 @@ class CampaignMonitorSignupPage extends Page
                     'MainSettings',
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                    new CheckboxField('CloseSubscriptions', 'Close subscription'),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
                     new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists')
@@ -394,6 +397,9 @@ class CampaignMonitorSignupPage extends Page
      */
     public function ReadyToReceiveSubscribtions(): bool
     {
+        if ($this->CloseSubscriptions) {
+            return false;
+        }
         return $this->ListID && $this->GroupID;
     }
 
