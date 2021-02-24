@@ -29,25 +29,26 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 class CampaignMonitorSignupPageController extends PageController
 {
     /**
-     * retains email for processing
      * @var boolean
      */
     protected $isThankYou = false;
 
     /**
-     * retains email for processing
      * @var boolean
      */
     protected $isUnsubscribe = false;
 
     /**
-     * retains email for processing
      * @var boolean
      */
     protected $isConfirm = false;
 
     /**
-     * retains email for processing
+     * @var boolean
+     */
+    protected $isSignUp = true;
+
+    /**
      * @var string
      */
     protected $email = '';
@@ -90,6 +91,11 @@ class CampaignMonitorSignupPageController extends PageController
     public function ReadyToReceiveSubscribtions()
     {
         return $this->ListID && $this->GroupID;
+    }
+
+    public function ShowForm(): bool
+    {
+        return $this->isSignUp;
     }
 
     /**
@@ -263,6 +269,7 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->ConfirmMenuTitle;
         $this->Content = $this->ConfirmMessage;
         $this->isConfirm = true;
+        $this->isSignUp = false;
         return [];
     }
 
@@ -276,6 +283,7 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->ThankYouMenuTitle;
         $this->Content = $this->ThankYouMessage;
         $this->isThankYou = true;
+        $this->isSignUp = false;
         return [];
     }
 
@@ -289,6 +297,7 @@ class CampaignMonitorSignupPageController extends PageController
         $this->MenuTitle = $this->SadToSeeYouGoMenuTitle;
         $this->Content = $this->SadToSeeYouGoMessage;
         $this->isUnsubscribe = true;
+        $this->isSignUp = false;
         return [];
     }
 
