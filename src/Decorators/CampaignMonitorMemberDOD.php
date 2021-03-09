@@ -74,7 +74,8 @@ class CampaignMonitorMemberDOD extends DataExtension
                 $currentSelection = 'Subscribe';
                 $optionArray = [];
                 $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
-                if ($fieldName = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
+                $hasUnsubscribe = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe');
+                if ($hasUnsubscribe) {
                     $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
                 }
                 if ($this->owner->exists()) {

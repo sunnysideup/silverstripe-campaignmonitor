@@ -197,7 +197,7 @@ class CampaignMonitorSignupPageController extends PageController
 
             //are any choices being made
             if (! isset($data['SubscribeChoice']) && ! isset($data['SubscribeManyChoices'])) {
-                $form->sessionError('SubscribeChoice', _t('CAMPAIGNMONITORSIGNUPPAGE.NO_NAME', 'Please choose your subscription.'), 'warning');
+                $form->sessionError('Please choose your subscription');
                 $this->redirectBack();
                 return;
             }
