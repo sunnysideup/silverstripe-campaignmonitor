@@ -413,11 +413,16 @@ class CampaignMonitorSignupPage extends Page
         if (! $this->getListTitle()) {
             $this->ListID = 0;
         }
+        $this->addOrRemoveGroup();
+    }
+
+    protected function addOrRemoveGroup()
+    {
         $gp = null;
         //check group
         if ($this->GroupID) {
             $gp = $this->Group();
-            if (! $gp || ! $gp->exists()) {
+            if ( ! ($gp && $gp->exists())) {
                 $this->GroupID = 0;
             }
         }

@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\CompositeField;
@@ -11,6 +12,7 @@ use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Group;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\Forms\Fields\CampaignMonitorSignupField;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
@@ -60,154 +62,53 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function getCampaignMonitorSignupField($listPage = null, $fieldName = '', $fieldTitle = '')
     {
-        if (! is_object($listPage)) {
-            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
-        }
-        $field = null;
-        if (! $fieldName) {
-            $fieldName = Config::inst()->get(CampaignMonitorMemberDOD::class, 'campaign_monitor_signup_fieldname');
-        }
-        $api = $this->getCMAPI();
-        $currentValues = null;
-        if ($listPage) {
-            if ($listPage->ReadyToReceiveSubscribtions()) {
-                $currentSelection = 'Subscribe';
-                $optionArray = [];
-                $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $listPage->getListTitle();
-                $hasUnsubscribe = Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe');
-                if ($hasUnsubscribe) {
-                    $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $listPage->getListTitle();
-                }
-                if ($this->owner->exists()) {
-                    if ($api->getSubscriberCanReceiveEmailsForThisList($listPage->ListID, $this->owner)) {
-                        $currentValues = $api->getSubscriber($listPage->ListID, $this->owner);
-                        //$currentSelection = "Unsubscribe";
-                    }
-                }
-                if (! $fieldTitle) {
-                    $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $listPage->getListTitle();
-                }
-                if (count($optionArray) === 1) {
-                    $subscribeField = HiddenField::create(
-                        $fieldName,
-                        $currentSelection
-                    );
-                } else {
-                    $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray);
-                }
-                $subscribeField->setValue($currentSelection);
-                $field = CompositeField::create($subscribeField);
-                $field->addExtraClass('CMFieldsCustomFieldsHolder');
-                //add custom fields
-                $linkedMemberFields = Config::inst()->get(CampaignMonitorMemberDOD::class, 'custom_fields_member_field_or_method_map');
-                $customFields = $listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
-                foreach ($customFields as $customField) {
-                    $valueSet = false;
-                    $customFormField = $customField->getFormField('CMCustomField');
-                    if ($currentValues && isset($currentValues->CustomFields)) {
-                        foreach ($currentValues->CustomFields as $customFieldObject) {
-                            if ($customFieldObject->Key === $customField->Title) {
-                                if ($value = $customFieldObject->Value) {
-                                    $valueSet = true;
-                                }
-                                $customFormField->setValue($value);
-                            }
-                        }
-                    }
-                    if (isset($linkedMemberFields[$customFormField->Code]) && ! $valueSet) {
-                        $fieldOrMethod = $linkedMemberFields[$customFormField->Code];
-                        if ($this->owner->hasMethod($fieldOrMethod)) {
-                            $value = $this->owner->{$fieldOrMethod}();
-                        } else {
-                            $value = $this->owner->{$fieldOrMethod};
-                        }
-                        if ($value) {
-                            $customFormField->setValue($value);
-                        }
-                    }
-                    $field->push($customFormField);
-                }
-            }
-        } else {
-            if (! $fieldTitle) {
-                $fieldTitle = _t('CampaignMonitorMemberDOD.NEWSLETTERSIGNUP', 'Newsletter sign-up');
-            }
-            $lists = CampaignMonitorSignupPage::get_ready_ones();
-            $array = [];
-            foreach ($lists as $list) {
-                $array[$list->ListID] = $list->getListTitle();
-            }
-            if (count($array)) {
-                $field = new CheckboxSetField(
-                    $fieldName,
-                    $fieldTitle,
-                    $array
-                );
-                $field->setDefaultItems($this->owner->CampaignMonitorSignupPageIDs());
-            }
-        }
-        if (! $field) {
-            $field = ReadonlyField::create(
-                $fieldName,
-                $fieldTitle,
-                _t('CampaignMonitorMemberDOD.NO_LISTS_AVAILABLE', 'No lists available right now.  Please come back soon.')
-            );
-        }
+        $field = new CampaigMonitorSignUpField($fieldName, $fieldTitle);
+        $field->setMember($this->owner);
+        $field->setListPage($listPage);
+        $field->getCampaignMonitorSignupField();
+
         return $field;
     }
 
-    /**
-     * action subscription form
-     * @param CampaignMonitorSignUpPage $listPage
-     * @param array $data
-     * @param \SilverStripe\Forms\Form $form
-     *
-     * return string: can be subscribe / unsubscribe / error
-     */
-    public function processCampaignMonitorSignupField($listPage, $data, $form): string
+    public function processCampaignMonitorSignupField($data, $form): string
     {
-        $typeOfAction = 'unsubscribe';
-        //many choices
-        if (isset($data['SubscribeManyChoices'])) {
-            $listPages = CampaignMonitorSignupPage::get_ready_ones();
-            foreach ($listPages as $listPage) {
-                if (isset($data['SubscribeManyChoices'][$listPage->ListID]) && $data['SubscribeManyChoices'][$listPage->ListID]) {
-                    $this->owner->addCampaignMonitorList($listPage->ListID);
-                    $typeOfAction = 'subscribe';
-                } else {
-                    $this->owner->removeCampaignMonitorList($listPage->ListID);
-                }
-            }
-        } elseif (isset($data['SubscribeChoice'])) {
-            //one choice
-            if ($data['SubscribeChoice'] === 'Subscribe') {
-                $customFields = $listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
-                $customFieldsArray = [];
-                foreach ($customFields as $customField) {
-                    if (isset($data['CMCustomField' . $customField->Code])) {
-                        $customFieldsArray[$customField->Code] = $data['CMCustomField' . $customField->Code];
-                    }
-                }
-                $this->owner->addCampaignMonitorList($listPage->ListID, $customFieldsArray);
-                $typeOfAction = 'subscribe';
-            } else {
-                $this->owner->removeCampaignMonitorList($listPage->ListID);
-            }
-        } else {
-            user_error('Subscriber field missing', E_USER_WARNING);
-        }
-        return $typeOfAction;
+        $field = $this->getCampaignMonitorSignupField();
+
+        return $field->processCampaignMonitorSignupField($data, $form);
+    }
+
+    public function updateCMSFields(FieldList $fields)
+    {
+        $owner = $this->owner;
+        $fields->addFieldsToTab(
+            'Root.Newsletter',
+            [
+                ReadonlyField::create(
+                    'IsCampaignMonitorSubscriberNice',
+                    'Has subcribed to any list - ever?',
+                    $this->IsCampaignMonitorSubscriber() ? 'yes' : 'no'
+                ),
+                ReadonlyField::create(
+                    'CampaignMonitorSignupPageIDsNice',
+                    'Currently Subscribed to',
+                    implode(',', $this->CampaignMonitorSignupPageIDs())
+                ),
+            ]
+        );
+
     }
 
     /**
-     * immediately unsubscribe if you are logged in.
+     * remove from all lists...
      * @param \SilverStripe\Control\HTTPRequest $request
      */
-    public function unsubscribe($request)
+    public function unsubscribe($request, ?int $listId = 0)
     {
         $lists = CampaignMonitorSignupPage::get_ready_ones();
         foreach ($lists as $list) {
-            $this->owner->removeCampaignMonitorList($list->ListID);
+            if($listId === 0 || $list->ListID === $listId) {
+                $this->owner->removeCampaignMonitorList($list->ListID);
+            }
         }
     }
 
@@ -216,7 +117,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return bool
      */
-    public function IsCampaignMonitorSubscriber()
+    public function IsCampaignMonitorSubscriber() : bool
     {
         CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->owner->ID)
@@ -231,50 +132,69 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @param array $customFields
      * @return bool - returns true on success
      */
-    public function addCampaignMonitorList($listPage, $customFields = [])
+    public function addCampaignMonitorList($listPage, $customFields = []) : bool
     {
         $api = $this->getCMAPI();
-        $outcome = 0;
+        $stepsCompleted = 0;
         if (is_string($listPage)) {
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
+        $a += $this->addToCampaignMonitorSecurityGroup($listPage);
+        $b += $this->addToCampaignMonitor($listPage);
+
+        if ($a && $b) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function addToCampaignMonitorSecurityGroup($listPage) : bool
+    {
         //internal database
         if ($listPage && $listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
                 $groups = $this->owner->Groups();
                 if ($groups) {
                     $this->owner->Groups()->add($gp);
-                    $outcome++;
+                    return true;
                 }
             }
         }
+        return false;
+    }
 
+    protected function addToCampaignMonitor($listPage) : bool
+    {
         if ($listPage && $listPage->ListID) {
-            if ($api->getSubscriber($listPage->ListID, $this->owner)) {
-                if ($api->updateSubscriber(
+            $$errors = true;
+            if ($this->isPartOfCampaignMonitorList($listPage)) {
+                $errors = $api->updateSubscriber(
                     $listPage->ListID,
                     $this->owner,
                     $oldEmailAddress = '',
                     $customFields,
                     $resubscribe = true,
                     $restartSubscriptionBasedAutoResponders = false
-                )) {
-                    $outcome++;
-                }
-            } elseif (! $api->addSubscriber(
-                $listPage->ListID,
-                $this->owner,
-                $customFields,
-                true,
-                false
-            )) {
-                $outcome++;
+                );
+            } else {
+                $errors = $api->addSubscriber(
+                    $listPage->ListID,
+                    $this->owner,
+                    $customFields,
+                    true,
+                    false
+                );
+            }
+            if(empty($errors)) {
+                return true;
             }
         }
-        if ($outcome > 1) {
-            return true;
-        }
         return false;
+    }
+
+    protected function isPartOfCampaignMonitorList($listPage) : bool
+    {
+        return $api->getSubscriber($listPage->ListID, $this->owner);
     }
 
     /**
@@ -283,7 +203,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @param CampaignMonitorSignupPage | Int $listPage
      * @return bool returns true if successful.
      */
-    public function removeCampaignMonitorList($listPage)
+    public function removeCampaignMonitorList($listPage) : bool
     {
         $api = $this->getCMAPI();
         $outcome = 0;
@@ -316,7 +236,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return array
      */
-    public function CampaignMonitorSignupPageIDs()
+    public function CampaignMonitorSignupPageIDs() : array
     {
         $api = $this->getCMAPI();
         $lists = $api->getListsForEmail($this->owner);
