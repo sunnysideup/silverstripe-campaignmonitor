@@ -25,9 +25,12 @@ use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 class CampaignMonitorSignupPageController extends PageController
 {
+    use CampaignMonitorApiTrait;
+
     /**
      * @var boolean
      */
@@ -119,7 +122,8 @@ class CampaignMonitorSignupPageController extends PageController
             foreach ($additionalFieldsAtEnd as $field) {
                 $fields->push($field);
             }
-            if (Config::inst()->get(CampaignMonitorSignupPage::class, 'campaign_monitor_allow_unsubscribe')) {
+            $allowUnsubscribe = Config::inst()->get(CampaignMonitorSignupFieldProvider::class, 'campaign_monitor_allow_unsubscribe');
+            if ($allowUnsubscribe) {
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions');
             } else {
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.SIGN_UP_NOW', 'Signup');
@@ -156,7 +160,7 @@ class CampaignMonitorSignupPageController extends PageController
         if ($this->ReadyToReceiveSubscribtions()) {
             //true until proven otherwise.
             $newlyCreatedMember = false;
-            //$api = $this->getAPI();
+            //$api = $this->getCMAPI();
             $member = Security::getCurrentUser();
             $isConfirm = false;
             $isSubscribe = false;
@@ -456,7 +460,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         if (Permission::check('Admin')) {
             //run tests here
-            $api = $this->getAPI();
+            $api = $this->getCMAPI();
             $html = '<div id="CampaignMonitorStats">';
             $html .= '<h1>Debug Response</h1>';
             $html .= '<h2>Main Client Stuff</h2>';
@@ -495,7 +499,7 @@ class CampaignMonitorSignupPageController extends PageController
         if (Permission::check('Admin')) {
             if ($this->campaign) {
                 //run tests here
-                $api = $this->getAPI();
+                $api = $this->getCMAPI();
                 $html = '<div id="CampaignMonitorStats">';
                 $html .= '<h2>Campaign Stats</h2>';
                 $html .= '<h3><a href="#">Campaign: ' . $this->campaign->Subject . '</a></h3>';

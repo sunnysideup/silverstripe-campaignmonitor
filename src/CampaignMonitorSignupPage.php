@@ -39,7 +39,7 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
-
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 /**
  * Page for Signing Up to Campaign Monitor List
  *
@@ -49,10 +49,7 @@ use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
  */
 class CampaignMonitorSignupPage extends Page
 {
-    /**
-     * @var CampaignMonitorAPIConnector | Null
-     */
-    protected static $_api = null;
+    use CampaignMonitorApiTrait;
 
     private static $campaign_monitor_allow_unsubscribe = true;
 
@@ -294,17 +291,6 @@ class CampaignMonitorSignupPage extends Page
         return CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->count() > 0;
     }
 
-    /**
-     * @return CampaignMonitorAPIConnector
-     */
-    public function getAPI()
-    {
-        if (! self::$_api) {
-            self::$_api = CampaignMonitorAPIConnector::create();
-            self::$_api->init();
-        }
-        return self::$_api;
-    }
 
     /**
      * you can add this function to other pages to have a form
@@ -366,7 +352,7 @@ class CampaignMonitorSignupPage extends Page
             if ($group = $this->Group()) {
                 $group->Members()->add($member);
             }
-            $api = $this->getAPI();
+            $api = $this->getCMAPI();
             $result = $api->addSubscriber($listID, $member);
             if ($result === $email) {
                 return null;
@@ -542,7 +528,7 @@ class CampaignMonitorSignupPage extends Page
     {
         if (! isset(self::$drop_down_list[$this->ID])) {
             $array = [];
-            $api = $this->getAPI();
+            $api = $this->getCMAPI();
             $lists = $api->getLists();
             if (is_array($lists) && count($lists)) {
                 foreach ($lists as $list) {

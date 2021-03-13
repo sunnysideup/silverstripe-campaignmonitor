@@ -9,17 +9,18 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
-
-use SilverStripe\View\ViewableData;
-
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 
-/**
- * Main Holder page for Recipes
- *@author nicolaas [at] sunnysideup.co.nz
- */
-class CampaignMonitorAPIConnector extends ViewableData
+class CampaignMonitorAPIConnector
 {
+
+    use Configurable;
+    use Extensible;
+    use Injectable;
+
     /**
      * @var boolean
      */

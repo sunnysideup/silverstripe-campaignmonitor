@@ -19,12 +19,5 @@ Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign:
     - "screen"
   emogrifier_remove_allowed_media_types:
     - "print"
-
- Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
-  campaign_monitor_signup_fieldname: "CampaignMonitorSubscriptions"
-  custom_fields_member_field_or_method_map:
-    "MyCustomField": "getMySpecialThingy"
-    "FirstName1": "FirstName"
-
-############################
-############################
+Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider:
+  campaign_monitor_allow_unsubscribe: false

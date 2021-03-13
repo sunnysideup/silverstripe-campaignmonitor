@@ -5,6 +5,7 @@ namespace Sunnysideup\CampaignMonitor\Decorators;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\FieldType\DBField;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
@@ -18,20 +19,40 @@ class CampaignMonitorGroupDOD extends DataExtension
      * Is this a group for newsletter signing up.
      * @return bool
      */
+    public function CampaignMonitorSubscriberGroupPage()
+    {
+        return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->owner->ID])->first();
+    }
+    /**
+     * Is this a group for newsletter signing up.
+     * @return bool
+     */
     public function IsCampaignMonitorSubscriberGroup() : bool
     {
-        return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->owner->ID])->count() ? true : false;
+        return $this->CampaignMonitorSubscriberGroupPage() ? true : false;
     }
 
     public function updateCMSFields(FieldList $fields)
     {
+        if($this->IsCampaignMonitorSubscriberGroup()) {
+            $page = $this->CampaignMonitorSubscriberGroupPage();
+            $value =
+            DBField::create_field(
+                'HTMLText',
+                'Yes, <a href="'.$page->CMSEditLink().'">
+                See '.$page->Title.' Page
+                </a>'
+            );
+        } else {
+            $value = 'no';
+        }
         $fields->addFieldsToTab(
             'Root.Newsletter',
             [
                 ReadonlyField::create(
                     'IsCampaignMonitorSubscriberGroupNice',
                     'Is newsletter group',
-                    $this->owner->IsCampaignMonitorSubscriberGroup() ?  'yes' : 'no'
+                    $value
                 )
             ]
         );

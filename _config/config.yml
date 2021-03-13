@@ -14,9 +14,6 @@ SilverStripe\Security\Group:
   extensions:
     - Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorGroupDOD
 
-Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD:
-  campaign_monitor_signup_fieldname: CampaignMonitorSubscriptions
-
 
 SilverStripe\Core\Injector\Injector:
   Psr\SimpleCache\CacheInterface.CampaignMonitor:

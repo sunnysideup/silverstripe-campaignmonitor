@@ -11,10 +11,11 @@ use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Group;
+use SilverStripe\Versioned\Versioned;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
-use Sunnysideup\CampaignMonitor\Forms\Fields\CampaignMonitorSignupField;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
-
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * TO DO: only apply the on afterwrite to people in the subscriber group.
@@ -23,32 +24,8 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 class CampaignMonitorMemberDOD extends DataExtension
 {
-    /**
-     * name of the field to use for sign-ups
-     * @var string
-     */
-    private static $campaign_monitor_signup_fieldname = 'CampaignMonitorSubscriptions';
 
-    /**
-     * name of the field to use for sign-ups
-     * @var string
-     */
-    private static $campaign_monitor_allow_unsubscribe = true;
-
-    /**
-     * array of fields where the member value is set as the default for the
-     * custom field ...
-     * The should be like this
-     *
-     *     CustomFieldCode => MemberFieldOrMethod
-     * @var array
-     */
-    private static $custom_fields_member_field_or_method_map = [];
-
-    /**
-     * @var CampaignMonitorAPIConnector|null
-     */
-    private static $_api = null;
+    use CampaignMonitorApiTrait;
 
     /**
      * returns a form field for signing up to all available lists
@@ -62,19 +39,17 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function getCampaignMonitorSignupField($listPage = null, $fieldName = '', $fieldTitle = '')
     {
-        $field = new CampaigMonitorSignUpField($fieldName, $fieldTitle);
-        $field->setMember($this->owner);
-        $field->setListPage($listPage);
-        $field->getCampaignMonitorSignupField();
-
-        return $field;
+        $provider = new CampaignMonitorSignupFieldProvider($fieldName, $fieldTitle);
+        $provider->setMember($this->owner);
+        $provider->setListPage($listPage);
+        return $provider->getCampaignMonitorSignupField();
     }
 
     public function processCampaignMonitorSignupField($data, $form): string
     {
-        $field = $this->getCampaignMonitorSignupField();
+        $provider = $this->getCampaignMonitorSignupField();
 
-        return $field->processCampaignMonitorSignupField($data, $form);
+        return $provider->processCampaignMonitorSignupField($data, $form);
     }
 
     public function updateCMSFields(FieldList $fields)
@@ -119,9 +94,10 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function IsCampaignMonitorSubscriber() : bool
     {
-        CampaignMonitorSignupPage::get_ready_ones()
+        $stage = Versioned::get_stage() == Versioned::LIVE ? '_Live' : '';
+        return CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->owner->ID)
-            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage ON CampaignMonitorSignupPage.GroupID = Group_Members.GroupID')
+            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage'.$stage.'.GroupID = Group_Members.GroupID')
             ->count() ? true : false;
     }
 
@@ -251,15 +227,4 @@ class CampaignMonitorMemberDOD extends DataExtension
         return $array;
     }
 
-    /**
-     * @return CampaignMonitorAPIConnector
-     */
-    private function getCMAPI()
-    {
-        if (! self::$_api) {
-            self::$_api = CampaignMonitorAPIConnector::create();
-            self::$_api->init();
-        }
-        return self::$_api;
-    }
 }
