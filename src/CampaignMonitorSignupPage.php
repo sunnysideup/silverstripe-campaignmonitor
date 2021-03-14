@@ -51,8 +51,6 @@ class CampaignMonitorSignupPage extends Page
 {
     use CampaignMonitorApiTrait;
 
-    private static $campaign_monitor_allow_unsubscribe = true;
-
     private static $controller_name = CampaignMonitorSignupPageController::class;
 
     /**
