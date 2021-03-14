@@ -448,7 +448,7 @@ class CampaignMonitorSignupPage extends Page
         }
         // //add segments
         $segmentsAdded = [];
-        $segments = $this->api->getSegments($this->ListID);
+        $segments = $this->getCMAPI()->getSegments($this->ListID);
         if ($segments && is_array($segments) && count($segments)) {
             foreach ($segments as $segment) {
                 $segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
@@ -470,7 +470,7 @@ class CampaignMonitorSignupPage extends Page
         }
         // //add custom fields
         $customCustomFieldsAdded = [];
-        $customCustomFields = $this->api->getListCustomFields($this->ListID);
+        $customCustomFields = $this->getCMAPI()->getListCustomFields($this->ListID);
         if ($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
             foreach ($customCustomFields as $customCustomField) {
                 $obj = CampaignMonitorCustomField::create_from_campaign_monitor_object($customCustomField, $this->ListID);
