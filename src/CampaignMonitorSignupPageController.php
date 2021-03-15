@@ -161,88 +161,78 @@ class CampaignMonitorSignupPageController extends PageController
             //true until proven otherwise.
             $newlyCreatedMember = false;
             //$api = $this->getCMAPI();
-            $member = Security::getCurrentUser();
-            $isConfirm = false;
-            $isSubscribe = false;
+            $fieldName = Config::inst()->get(CampaignMonitorSignupFieldProvider::class, 'campaign_monitor_signup_fieldname');
+            $type = $data[$fieldName.'Type'] ?? 'none';
+            $isMany = false;
+            $isOne = false;
             //subscribe or unsubscribe?
-            if (isset($data['SubscribeManyChoices'])) {
-                $isConfirm = true;
+            if ($type === 'many') {
+                $values = $data[$fieldName] ?? [];
+                $isMany = true;
+            } elseif($type === 'one') {
+                $values = $data[$fieldName] ?? 'error';
+                $isOne = true;
             } else {
-                $isSubscribe = isset($data['SubscribeChoice']) && $data['SubscribeChoice'] === 'Subscribe';
-            }
-
-            //no member logged in: if the member already exists then you can't sign up.
-            if (! $member) {
-                //$memberAlreadyLoggedIn = false;
-                $filter = ['Email' => Convert::raw2sql($data['CampaignMonitorEmail'])];
-                $existingMember = Member::get()->filter($filter)->First();
-                //if($isSubscribe && $existingMember){
-                //$form->addErrorMessage('Email', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use. Please log in for this email or try another email address."), 'warning');
-                //$this->redirectBack();
-                //return;
-                //}
-                $member = $existingMember;
-                if (! $member) {
-                    $newlyCreatedMember = true;
-                    $member = Member::create($filter);
-                }
-            }
-            //logged in: if the member already as someone else then you can't sign up.
-            //$memberAlreadyLoggedIn = true;
-            //$existingMember = Member::get()
-            //	->filter(array("Email" => Convert::raw2sql($data["CampaignMonitorEmail"])))
-            //	->exclude(array("ID" => $member->ID))
-            //	->First();
-            //if($isSubscribe && $existingMember) {
-            //$form->addErrorMessage('CampaignMonitorEmail', _t("CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS", "This email is already in use by someone else. Please log in for this email or try another email address."), 'warning');
-            //$this->redirectBack();
-            //return;
-            //}
-
-            //are any choices being made
-            if (! isset($data['SubscribeChoice']) && ! isset($data['SubscribeManyChoices'])) {
-                $form->sessionError('Please choose your subscription');
+                $values = '';
+                $form->sessionError('You can not subscribe right now.', 'error');
                 $this->redirectBack();
                 return;
             }
 
+            //no member logged in: if the member already exists then you can't sign up.
+            $loggedInMember = Security::getCurrentUser();
+            $filter = ['Email' => Convert::raw2sql($data['CampaignMonitorEmail'])];
+            $existingMember = Member::get()->filter($filter)->First();
+            $memberToEdit = null;
+            $newlyCreatedMember = true;
+            if ($loggedInMember && $loggedInMember->ID === $existingMember->ID) {
+                $memberToEdit = $loggedInMember;
+            }
+            if (! $loggedInMember && $existingMember) {
+                $form->sessionError(
+                    _t(
+                        "CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS",
+                        "This email is already in use by someone else. Please log in for this email or try another email address."),
+                    'error'
+                );
+                $this->redirectBack();
+                return;
+            } else {
+                $newlyCreatedMember = true;
+                $memberToEdit = Member::create($filter);
+            }
+
             //if this is a new member then we save the member
+            if($memberToEdit) {
+                $form->saveInto($memberToEdit);
+                $fields = $this->getFieldsForSignupFormFieldsIncluded(true);
 
-            $form->saveInto($member);
-            $fields = $this->getFieldsForSignupFormFieldsIncluded(true);
-
-            foreach ($fields as $field) {
-                if ($field !== 'Email') {
-                    if (isset($data['CampaignMonitor' . $field])) {
-                        $member->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
+                foreach ($fields as $field) {
+                    if ($field !== 'Email') {
+                        if (isset($data['CampaignMonitor' . $field])) {
+                            $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
+                        }
                     }
                 }
-            }
-            //$member->SetPassword = true;
-            //$member->Password = Member::create_new_password();
-
-            if ($isSubscribe) {
                 if ($newlyCreatedMember) {
-                    $member->write();
-                    Security::setCurrentUser($member);
+                    $memberToEdit->write();
+                    Security::setCurrentUser($memberToEdit);
                     $identityStore = Injector::inst()->get(IdentityStore::class);
-                    $identityStore->logIn($member, $rememberMe = false, null);
+                    $identityStore->logIn($memberToEdit, $rememberMe = false, null);
                 }
-            }
-            $loggedInMember = Security::getCurrentUser();
-            if ($loggedInMember && $loggedInMember->ID === $member->ID) {
-                $member->write();
+                $memberToEdit->write();
             }
 
-            $outcome = $member->processCampaignMonitorSignupField($this->dataRecord, $data, $form);
-            if ($isConfirm) {
+            $outcome = $memberToEdit->processCampaignMonitorSignupField($this->dataRecord, $data, $values);
+            if ($isMany) {
                 return $this->redirect($this->link('confirm'));
-            } elseif ($isSubscribe && $outcome === 'subscribe') {
+            } elseif ($isOne && $outcome === 'subscribe') {
                 return $this->redirect($this->link('thankyou'));
-            } elseif (! $isSubscribe && $outcome === 'unsubscribe') {
+            } elseif ($isOne && $outcome === 'unsubscribe') {
                 return $this->redirect($this->link('sadtoseeyougo'));
+            } else {
+                user_error('Could not process data succecssfully.');
             }
-            user_error('Could not process data succecssfully.');
         }
         user_error('No list to subscribe to', E_USER_WARNING);
     }
@@ -582,9 +572,9 @@ class CampaignMonitorSignupPageController extends PageController
                 );
             }
             if ($this->ShowAllNewsletterForSigningUp) {
-                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null, 'SubscribeManyChoices');
+                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
             } else {
-                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID, 'SubscribeChoice');
+                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
             }
             $this->fieldsForSignupFormCache[$memberId] = $fieldArray;
         }

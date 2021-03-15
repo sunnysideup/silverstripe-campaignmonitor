@@ -92,7 +92,9 @@ class CampaignMonitorSignupFieldProvider
         }
         $addCustomFields = false;
         $subscribeField = null;
+        $typeFieldValue = 'none';
         if ($this->listPage) {
+            $typeFieldValue = 'one';
             if ($this->listPage->ReadyToReceiveSubscribtions()) {
 
                 if (! $fieldTitle) {
@@ -109,10 +111,11 @@ class CampaignMonitorSignupFieldProvider
                 } elseif (count($optionArray) > 1)  {
                     $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray);
                 }
-                $subscribeField->setValue($currentSelection  . 'ccc');
+                $subscribeField->setValue($currentSelection);
                 $addCustomFields = true;
             }
         } else {
+            $typeFieldValue = 'many';
             if (! $fieldTitle) {
                 $fieldTitle = _t('CampaignMonitorMemberDOD.NEWSLETTERSIGNUP', 'Newsletter sign-up');
             }
@@ -136,13 +139,16 @@ class CampaignMonitorSignupFieldProvider
                 $fieldTitle,
                 _t('CampaignMonitorMemberDOD.NO_LISTS_AVAILABLE', 'No sign-up available right now.  Please come back soon.')
             );
+
         }
-        $parentField = CompositeField::create($subscribeField);
+        $parentField = CompositeField::create();
+        $parentField->push($subscribeField);
+        $parentField->push(HiddenField::create($fieldName . 'Type')->setValue($typeFieldValue));
         $parentField->addExtraClass('CMFieldsCustomFieldsHolder');
         if($addCustomFields) {
             $this->addCustomFieldsToField($parentField);
         }
-        return $subscribeField;
+        return $parentField;
     }
 
     protected function getOptionArray() : array
@@ -214,29 +220,28 @@ class CampaignMonitorSignupFieldProvider
 
     /**
      * action subscription form
-     * @param CampaignMonitorSignUpPage $this->listPage
-     * @param array $data
-     * @param \SilverStripe\Forms\Form $form
+     * @param array          $data
+     * @param array|string   $values
      *
-     * return string: can be subscribe / unsubscribe / error
+     * @return string: can be subscribe / unsubscribe / error
      */
-    public function processCampaignMonitorSignupField($data, $form): string
+    public function processCampaignMonitorSignupField($data, $values): string
     {
         $typeOfAction = 'unsubscribe';
         //many choices
-        if (isset($data['SubscribeManyChoices'])) {
-            $this->listPages = CampaignMonitorSignupPage::get_ready_ones();
-            foreach ($this->listPages as $this->listPage) {
-                if (isset($data['SubscribeManyChoices'][$this->listPage->ListID]) && $data['SubscribeManyChoices'][$this->listPage->ListID]) {
-                    $this->member->addCampaignMonitorList($this->listPage->ListID);
+        if (is_array($values)) {
+            $listPages = CampaignMonitorSignupPage::get_ready_ones();
+            foreach ($listPages as $listPage) {
+                if (isset($values[$listPage->ListID]) && $values[$listPage->ListID]) {
+                    $this->member->addCampaignMonitorList($listPage->ListID);
                     $typeOfAction = 'subscribe';
                 } else {
-                    $this->member->removeCampaignMonitorList($this->listPage->ListID);
+                    $this->member->removeCampaignMonitorList($listPage->ListID);
                 }
             }
-        } elseif (isset($data['SubscribeChoice'])) {
+        } elseif (is_string($values) && $values && $this->listPage->ListID) {
             //one choice
-            if ($data['SubscribeChoice'] === 'Subscribe') {
+            if ($values === 'Subscribe') {
                 $customFields = $this->listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
                 $customFieldsArray = [];
                 foreach ($customFields as $customField) {

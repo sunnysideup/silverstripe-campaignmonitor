@@ -15,6 +15,7 @@ use SilverStripe\Versioned\Versioned;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -27,6 +28,7 @@ class CampaignMonitorMemberDOD extends DataExtension
 
     use CampaignMonitorApiTrait;
 
+
     /**
      * returns a form field for signing up to all available lists
      * or if a list is provided, for that particular list.
@@ -37,19 +39,25 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return \SilverStripe\Forms\FormField
      */
-    public function getCampaignMonitorSignupField($listPage = null, $fieldName = '', $fieldTitle = '')
+    public function getCampaignMonitorSignupField($listPage = null, ?string $fieldName = '', ?string $fieldTitle = '')
     {
-        $provider = new CampaignMonitorSignupFieldProvider($fieldName, $fieldTitle);
-        $provider->setMember($this->owner);
-        $provider->setListPage($listPage);
-        return $provider->getCampaignMonitorSignupField();
+        $provider = $this->getCampaignMonitorSignupFieldProvider($listPage);
+        return $provider->getCampaignMonitorSignupField($fieldName, $fieldTitle);
     }
 
-    public function processCampaignMonitorSignupField($data, $form): string
+    public function processCampaignMonitorSignupField($listPage, $data, $values): string
     {
-        $provider = $this->getCampaignMonitorSignupField();
+        $provider = $this->getCampaignMonitorSignupFieldProvider($listPage);
+        return $provider->processCampaignMonitorSignupField($data, $values);
+    }
 
-        return $provider->processCampaignMonitorSignupField($data, $form);
+    protected function getCampaignMonitorSignupFieldProvider($listPage = null)
+    {
+        $provider = CampaignMonitorSignupFieldProvider::create();
+        $provider->setMember($this->owner);
+        $provider->setListPage($listPage);
+
+        return $provider;
     }
 
     public function updateCMSFields(FieldList $fields)
@@ -74,10 +82,9 @@ class CampaignMonitorMemberDOD extends DataExtension
     }
 
     /**
-     * remove from all lists...
-     * @param \SilverStripe\Control\HTTPRequest $request
+
      */
-    public function unsubscribe($request, ?int $listId = 0)
+    public function unsubscribeFromAllCampaignMonitorLists(?int $listId = 0)
     {
         $lists = CampaignMonitorSignupPage::get_ready_ones();
         foreach ($lists as $list) {
@@ -110,13 +117,15 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function addCampaignMonitorList($listPage, $customFields = []) : bool
     {
-        $api = $this->getCMAPI();
-        $stepsCompleted = 0;
         if (is_string($listPage)) {
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
-        $a += $this->addToCampaignMonitorSecurityGroup($listPage);
-        $b += $this->addToCampaignMonitor($listPage);
+
+        CampaignMonitorSubscriptionLog ::log($this->owner, $listPage, 'Subscribe', $customFields);
+
+        $a = $this->addToCampaignMonitorSecurityGroup($listPage, $customFields);
+        $b = $this->addToCampaignMonitor($listPage, $customFields);
+        $this->CampaignMonitorCustomFields = $customFields;
 
         if ($a && $b) {
             return true;
@@ -139,12 +148,12 @@ class CampaignMonitorMemberDOD extends DataExtension
         return false;
     }
 
-    protected function addToCampaignMonitor($listPage) : bool
+    protected function addToCampaignMonitor($listPage, ?array $customFields = []) : bool
     {
         if ($listPage && $listPage->ListID) {
-            $$errors = true;
+            $errors = true;
             if ($this->isPartOfCampaignMonitorList($listPage)) {
-                $errors = $api->updateSubscriber(
+                $errors = $this->getCMAPI()->updateSubscriber(
                     $listPage->ListID,
                     $this->owner,
                     $oldEmailAddress = '',
@@ -153,7 +162,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                     $restartSubscriptionBasedAutoResponders = false
                 );
             } else {
-                $errors = $api->addSubscriber(
+                $errors = $this->getCMAPI()->addSubscriber(
                     $listPage->ListID,
                     $this->owner,
                     $customFields,
@@ -170,7 +179,7 @@ class CampaignMonitorMemberDOD extends DataExtension
 
     protected function isPartOfCampaignMonitorList($listPage) : bool
     {
-        return $api->getSubscriber($listPage->ListID, $this->owner);
+        return $this->getCMAPI()->getSubscriber($listPage->ListID, $this->owner) ? true : false;
     }
 
     /**
@@ -181,11 +190,13 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function removeCampaignMonitorList($listPage) : bool
     {
-        $api = $this->getCMAPI();
         $outcome = 0;
         if (is_string($listPage)) {
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
+
+        CampaignMonitorSubscriptionLog ::log($this->owner, $listPage, 'Unsubscribe');
+
         if ($listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
                 $groups = $this->owner->Groups();
@@ -196,7 +207,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             }
         }
         if ($listPage->ListID) {
-            if (! $api->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
+            if (! $this->getCMAPI()->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
                 $outcome++;
             }
         }
@@ -214,8 +225,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function CampaignMonitorSignupPageIDs() : array
     {
-        $api = $this->getCMAPI();
-        $lists = $api->getListsForEmail($this->owner);
+        $lists = $this->getCMAPI()->getListsForEmail($this->owner);
         $array = [];
         if ($lists && count($lists)) {
             foreach ($lists as $listArray) {
