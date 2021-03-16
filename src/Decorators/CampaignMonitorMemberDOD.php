@@ -3,20 +3,17 @@
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Forms\CheckboxSetField;
-use SilverStripe\Forms\CompositeField;
-use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Group;
 use SilverStripe\Versioned\Versioned;
-use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * TO DO: only apply the on afterwrite to people in the subscriber group.
@@ -25,9 +22,11 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 class CampaignMonitorMemberDOD extends DataExtension
 {
-
     use CampaignMonitorApiTrait;
 
+    private static $has_many = [
+        'CampaignMonitorSubscriptionLogs' => CampaignMonitorSubscriptionLog::class,
+    ];
 
     /**
      * returns a form field for signing up to all available lists
@@ -51,18 +50,11 @@ class CampaignMonitorMemberDOD extends DataExtension
         return $provider->processCampaignMonitorSignupField($data, $values);
     }
 
-    protected function getCampaignMonitorSignupFieldProvider($listPage = null)
-    {
-        $provider = CampaignMonitorSignupFieldProvider::create();
-        $provider->setMember($this->owner);
-        $provider->setListPage($listPage);
-
-        return $provider;
-    }
-
     public function updateCMSFields(FieldList $fields)
     {
-        $owner = $this->owner;
+        $fields->removeByName([
+            'CampaignMonitorSubscriptionLogs',
+        ]);
         $fields->addFieldsToTab(
             'Root.Newsletter',
             [
@@ -72,23 +64,25 @@ class CampaignMonitorMemberDOD extends DataExtension
                     $this->IsCampaignMonitorSubscriber() ? 'yes' : 'no'
                 ),
                 ReadonlyField::create(
-                    'CampaignMonitorSignupPageIDsNice',
+                    'CampaignMonitorSignedUpArrayNice',
                     'Currently Subscribed to',
-                    implode(',', $this->CampaignMonitorSignupPageIDs())
+                    implode(',', $this->CampaignMonitorSignedUpArray())
+                ),
+                GridField::create(
+                    'CampaignMonitorSubscriptionLogs',
+                    'Logs',
+                    $this->owner->CampaignMonitorSubscriptionLogs(),
+                    GridFieldConfig_RelationEditor::create()
                 ),
             ]
         );
-
     }
 
-    /**
-
-     */
     public function unsubscribeFromAllCampaignMonitorLists(?int $listId = 0)
     {
         $lists = CampaignMonitorSignupPage::get_ready_ones();
         foreach ($lists as $list) {
-            if($listId === 0 || $list->ListID === $listId) {
+            if ($listId === 0 || $list->ListID === $listId) {
                 $this->owner->removeCampaignMonitorList($list->ListID);
             }
         }
@@ -99,12 +93,12 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return bool
      */
-    public function IsCampaignMonitorSubscriber() : bool
+    public function IsCampaignMonitorSubscriber(): bool
     {
-        $stage = Versioned::get_stage() == Versioned::LIVE ? '_Live' : '';
+        $stage = Versioned::get_stage() === Versioned::LIVE ? '_Live' : '';
         return CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->owner->ID)
-            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage'.$stage.'.GroupID = Group_Members.GroupID')
+            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage' . $stage . '.GroupID = Group_Members.GroupID')
             ->count() ? true : false;
     }
 
@@ -115,71 +109,27 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @param array $customFields
      * @return bool - returns true on success
      */
-    public function addCampaignMonitorList($listPage, $customFields = []) : bool
+    public function addCampaignMonitorList($listPage, $customFields = []): bool
     {
         if (is_string($listPage)) {
+            /** @var CampaignMonitorSignupPage */
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
+        } else {
+            /** @var CampaignMonitorSignupPage */
+            $listPage = $listPage;
         }
 
-        CampaignMonitorSubscriptionLog ::log($this->owner, $listPage, 'Subscribe', $customFields);
+        $logId = CampaignMonitorSubscriptionLog ::log_attempt($this->owner, $listPage, 'Subscribe', $customFields);
 
-        $a = $this->addToCampaignMonitorSecurityGroup($listPage, $customFields);
-        $b = $this->addToCampaignMonitor($listPage, $customFields);
-        $this->CampaignMonitorCustomFields = $customFields;
+        $successForGroups = $this->addToCampaignMonitorSecurityGroup($listPage);
+        $successForCm = $this->addToCampaignMonitor($listPage, $customFields);
 
-        if ($a && $b) {
+        CampaignMonitorSubscriptionLog::log_outcome($logId, $successForCm);
+
+        if ($successForGroups && $successForCm) {
             return true;
         }
         return false;
-    }
-
-    protected function addToCampaignMonitorSecurityGroup($listPage) : bool
-    {
-        //internal database
-        if ($listPage && $listPage->GroupID) {
-            if ($gp = Group::get()->byID($listPage->GroupID)) {
-                $groups = $this->owner->Groups();
-                if ($groups) {
-                    $this->owner->Groups()->add($gp);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    protected function addToCampaignMonitor($listPage, ?array $customFields = []) : bool
-    {
-        if ($listPage && $listPage->ListID) {
-            $errors = true;
-            if ($this->isPartOfCampaignMonitorList($listPage)) {
-                $errors = $this->getCMAPI()->updateSubscriber(
-                    $listPage->ListID,
-                    $this->owner,
-                    $oldEmailAddress = '',
-                    $customFields,
-                    $resubscribe = true,
-                    $restartSubscriptionBasedAutoResponders = false
-                );
-            } else {
-                $errors = $this->getCMAPI()->addSubscriber(
-                    $listPage->ListID,
-                    $this->owner,
-                    $customFields,
-                    true,
-                    false
-                );
-            }
-            if(empty($errors)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected function isPartOfCampaignMonitorList($listPage) : bool
-    {
-        return $this->getCMAPI()->getSubscriber($listPage->ListID, $this->owner) ? true : false;
     }
 
     /**
@@ -188,30 +138,33 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @param CampaignMonitorSignupPage | Int $listPage
      * @return bool returns true if successful.
      */
-    public function removeCampaignMonitorList($listPage) : bool
+    public function removeCampaignMonitorList($listPage): bool
     {
-        $outcome = 0;
         if (is_string($listPage)) {
+            /** @var CampaignMonitorSignupPage */
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
+        } else {
+            /** @var CampaignMonitorSignupPage */
+            $listPage = $listPage;
         }
 
-        CampaignMonitorSubscriptionLog ::log($this->owner, $listPage, 'Unsubscribe');
-
+        $logId = CampaignMonitorSubscriptionLog ::log_attempt($this->owner, $listPage, 'Unsubscribe');
+        $successForGroups = false;
+        $successForCm = false;
         if ($listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
                 $groups = $this->owner->Groups();
                 if ($groups) {
                     $this->owner->Groups()->remove($gp);
-                    $outcome++;
+                    $successForGroups = true;
                 }
             }
         }
         if ($listPage->ListID) {
-            if (! $this->getCMAPI()->unsubscribeSubscriber($listPage->ListID, $this->owner)) {
-                $outcome++;
-            }
+            $successForCm = $this->getCMAPI()->unsubscribeSubscriber($listPage->ListID, $this->owner);
+            CampaignMonitorSubscriptionLog::log_outcome($logId, $successForCm);
         }
-        if ($outcome > 1) {
+        if ($successForGroups && $successForCm) {
             return true;
         }
         return false;
@@ -223,18 +176,90 @@ class CampaignMonitorMemberDOD extends DataExtension
      *
      * @return array
      */
-    public function CampaignMonitorSignupPageIDs() : array
+    public function CampaignMonitorSignedUpArray(): array
     {
         $lists = $this->getCMAPI()->getListsForEmail($this->owner);
         $array = [];
         if ($lists && count($lists)) {
             foreach ($lists as $listArray) {
-                if (in_array($listArray['SubscriberState'], ['Active', 'Bounced'], true)) {
-                    $array[$listArray['ListID']] = $listArray['ListID'];
+                if (in_array($listArray->SubscriberState, ['Active', 'Bounced'], true)) {
+                    $array[$listArray->ListID] = $listArray->ListName;
                 }
             }
         }
         return $array;
     }
 
+    protected function getCampaignMonitorSignupFieldProvider($listPage = null)
+    {
+        $provider = CampaignMonitorSignupFieldProvider::create();
+        $provider->setMember($this->owner);
+        $provider->setListPage($listPage);
+
+        return $provider;
+    }
+
+    /**
+     * returns true on success
+     * @param  CampaignMonitorSignupPage $listPage
+     *
+     * @return bool
+     */
+    protected function addToCampaignMonitorSecurityGroup($listPage): bool
+    {
+        //internal database
+        if ($listPage && $listPage->GroupID) {
+            if ($gp = Group::get()->byID($listPage->GroupID)) {
+                $groups = $this->owner->Groups();
+                if ($groups) {
+                    $this->owner->Groups()->add($gp);
+                    return true;
+                }
+            }
+        } else {
+            user_error('Error, no subscription page supplied for group.');
+        }
+        return false;
+    }
+
+    /**
+     * returns true on success
+     * @param  CampaignMonitorSignupPage $listPage
+     * @param  array                     $customFields
+     *
+     * @return bool
+     */
+    protected function addToCampaignMonitor($listPage, ?array $customFields = []): bool
+    {
+        if ($listPage && $listPage->ListID) {
+            $success = false;
+            if ($this->isPartOfCampaignMonitorList($listPage)) {
+                $success = $this->getCMAPI()->updateSubscriber(
+                    $listPage->ListID,
+                    $this->owner,
+                    $oldEmailAddress = '',
+                    $customFields,
+                    $resubscribe = true,
+                    $restartSubscriptionBasedAutoResponders = false
+                );
+            } else {
+                $success = $this->getCMAPI()->addSubscriber(
+                    $listPage->ListID,
+                    $this->owner,
+                    $customFields,
+                    true,
+                    false
+                );
+            }
+            return $success;
+        }
+        user_error('Error, no subscription page supplied for campaign monitor subscription.');
+
+        return false;
+    }
+
+    protected function isPartOfCampaignMonitorList($listPage): bool
+    {
+        return $this->getCMAPI()->getSubscriber($listPage->ListID, $this->owner) ? true : false;
+    }
 }

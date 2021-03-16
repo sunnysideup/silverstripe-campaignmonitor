@@ -135,6 +135,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             //just try the next one ...
         }
         user_error("can not find template, last one tried: ${fileLocation}");
+        return 'error';
     }
 
     public function getCSSFiles()

@@ -6,7 +6,6 @@ use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 
 trait CampaignMonitorApiTrait
 {
-
     private static $cm_api = null;
 
     /**

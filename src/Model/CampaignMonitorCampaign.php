@@ -361,7 +361,7 @@ class CampaignMonitorCampaign extends DataObject
                     foreach ($result as $campaign) {
                         if ($this->CampaignID === $campaign->CampaignID) {
                             $this->HasBeenSent = true;
-                            $this->HasBeenSent->write();
+                            $this->write();
                             $this->_hasBeenSent = true;
                             break;
                         }

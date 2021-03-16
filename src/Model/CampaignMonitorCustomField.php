@@ -5,7 +5,6 @@ namespace Sunnysideup\CampaignMonitor\Model;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DateField;
 use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
@@ -37,6 +36,8 @@ class CampaignMonitorCustomField extends DataObject
 
     private static $summary_fields = [
         'Title' => 'Title',
+        'Type' => 'Type',
+        'Options' => 'Options',
         'Visible.Nice' => 'Visible',
     ];
 
@@ -65,6 +66,11 @@ class CampaignMonitorCustomField extends DataObject
         'Date' => DateField::class,
     ];
 
+    /**
+     * @var array
+     */
+    private $_fieldTranslator = [];
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -76,7 +82,7 @@ class CampaignMonitorCustomField extends DataObject
             'Visible',
             'ListID',
         ];
-        foreach($readOnlyFields as $readOnlyField) {
+        foreach ($readOnlyFields as $readOnlyField) {
             $fields->replaceField(
                 $readOnlyField,
                 $fields->dataFieldByName($readOnlyField)->performReadonlyTransformation()
@@ -85,11 +91,6 @@ class CampaignMonitorCustomField extends DataObject
 
         return $fields;
     }
-
-    /**
-     * @var array
-     */
-    private $_fieldTranslator = [];
 
     public function canCreate($member = null, $context = [])
     {

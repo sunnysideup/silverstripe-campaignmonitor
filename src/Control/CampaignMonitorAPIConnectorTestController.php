@@ -8,6 +8,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
  * simple class to see that everything is working ...
@@ -15,6 +16,8 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 class CampaignMonitorAPIConnectorTestController extends Controller
 {
+    use CampaignMonitorApiTrait;
+
     /**
      * example data
      * @var array
@@ -360,11 +363,9 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
     protected function setupTests()
     {
-        $this->api = CampaignMonitorAPIConnector::create();
-        $this->api->init();
+        $this->api = $this->getCMAPI();
 
         if ($this->showAll) {
-            $this->api->setDebug(true);
             $this->egData['limit'] = 100;
         }
 

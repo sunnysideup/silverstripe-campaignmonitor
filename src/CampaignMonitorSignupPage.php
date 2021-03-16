@@ -25,6 +25,7 @@ use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
@@ -38,8 +39,10 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
+
 /**
  * Page for Signing Up to Campaign Monitor List
  *
@@ -117,6 +120,7 @@ class CampaignMonitorSignupPage extends Page
     private static $has_many = [
         'CampaignMonitorSegments' => CampaignMonitorSegment::class,
         'CampaignMonitorCustomFields' => CampaignMonitorCustomField::class,
+        'CampaignMonitorSubscriptionLogs' => CampaignMonitorSubscriptionLog::class,
     ];
 
     /**
@@ -177,6 +181,17 @@ class CampaignMonitorSignupPage extends Page
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
+
+        $fields->addFieldToTab(
+            'Root.Log',
+            GridField::create(
+                'CampaignMonitorSubscriptionLogs',
+                'Logs',
+                $this->CampaignMonitorSubscriptionLogs(),
+                GridFieldConfig_RelationEditor::create()
+            ),
+        );
+
         if ($this->GroupID) {
             $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
         } else {
@@ -230,6 +245,7 @@ class CampaignMonitorSignupPage extends Page
                     'MainSettings',
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                    new ReadonlyField('ListIDNice', 'List ID', $this->ListID),
                     new CheckboxField('CloseSubscriptions', 'Close subscription'),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
                     new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
@@ -288,7 +304,6 @@ class CampaignMonitorSignupPage extends Page
     {
         return CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->count() > 0;
     }
-
 
     /**
      * you can add this function to other pages to have a form
@@ -400,36 +415,6 @@ class CampaignMonitorSignupPage extends Page
         $this->addOrRemoveGroup();
     }
 
-    protected function addOrRemoveGroup()
-    {
-        $gp = null;
-        //check group
-        if ($this->GroupID) {
-            $gp = $this->Group();
-            if ( ! ($gp && $gp->exists())) {
-                $this->GroupID = 0;
-            }
-        }
-
-        //add group
-        if ($this->ListID) {
-            if (! $this->GroupID) {
-                $gp = new Group();
-                $this->GroupID = $gp->ID;
-                $gp->write();
-            }
-            $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
-            if ($myListName = $this->getListTitle()) {
-                $title .= ': ' . $myListName;
-            }
-            $gp->Title = (string) $title;
-            $gp->write();
-        }
-        if ($gp) {
-            $this->GroupID = $gp->ID;
-        }
-    }
-
     /**
      * add old campaings or remove them
      * depending on the setting
@@ -515,6 +500,36 @@ class CampaignMonitorSignupPage extends Page
                 $page->publish('Stage', 'Live');
                 DB::alteration_message($page->ClassName . ' created/updated: ' . implode(' --- ', $update), 'created');
             }
+        }
+    }
+
+    protected function addOrRemoveGroup()
+    {
+        $gp = null;
+        //check group
+        if ($this->GroupID) {
+            $gp = $this->Group();
+            if (! ($gp && $gp->exists())) {
+                $this->GroupID = 0;
+            }
+        }
+
+        //add group
+        if ($this->ListID) {
+            if (! $this->GroupID) {
+                $gp = new Group();
+                $this->GroupID = $gp->ID;
+                $gp->write();
+            }
+            $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
+            if ($myListName = $this->getListTitle()) {
+                $title .= ': ' . $myListName;
+            }
+            $gp->Title = (string) $title;
+            $gp->write();
+        }
+        if ($gp) {
+            $this->GroupID = $gp->ID;
         }
     }
 

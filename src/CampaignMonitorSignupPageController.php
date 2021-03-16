@@ -11,22 +11,22 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
-use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
+
 class CampaignMonitorSignupPageController extends PageController
 {
     use CampaignMonitorApiTrait;
@@ -162,14 +162,14 @@ class CampaignMonitorSignupPageController extends PageController
             $newlyCreatedMember = false;
             //$api = $this->getCMAPI();
             $fieldName = Config::inst()->get(CampaignMonitorSignupFieldProvider::class, 'campaign_monitor_signup_fieldname');
-            $type = $data[$fieldName.'Type'] ?? 'none';
+            $type = $data[$fieldName . 'Type'] ?? 'none';
             $isMany = false;
             $isOne = false;
             //subscribe or unsubscribe?
             if ($type === 'many') {
                 $values = $data[$fieldName] ?? [];
                 $isMany = true;
-            } elseif($type === 'one') {
+            } elseif ($type === 'one') {
                 $values = $data[$fieldName] ?? 'error';
                 $isOne = true;
             } else {
@@ -181,35 +181,64 @@ class CampaignMonitorSignupPageController extends PageController
 
             //no member logged in: if the member already exists then you can't sign up.
             $loggedInMember = Security::getCurrentUser();
-            $filter = ['Email' => Convert::raw2sql($data['CampaignMonitorEmail'])];
-            $existingMember = Member::get()->filter($filter)->First();
+            if ($loggedInMember) {
+                $data['CampaignMonitorEmail'] = $loggedInMember->Email;
+            } else {
+                $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
+            }
+            $memberFilter = ['Email' => $data['CampaignMonitorEmail']];
+            $submittedMember = Member::get()->filter($memberFilter)->First();
             $memberToEdit = null;
             $newlyCreatedMember = true;
-            if ($loggedInMember && $loggedInMember->ID === $existingMember->ID) {
-                $memberToEdit = $loggedInMember;
-            }
-            if (! $loggedInMember && $existingMember) {
-                $form->sessionError(
-                    _t(
-                        "CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS",
-                        "This email is already in use by someone else. Please log in for this email or try another email address."),
-                    'error'
-                );
-                $this->redirectBack();
-                return;
+            if ($loggedInMember) {
+                if ($submittedMember) {
+                    if ($loggedInMember->ID === $submittedMember->ID) {
+                        $memberToEdit = $loggedInMember;
+                    } else {
+                        $form->sessionError(
+                            _t(
+                                'CAMPAIGNMONITORSIGNUPPAGE.LOG_OUT_FIRST',
+                                'Please log out first.'
+                            ),
+                            'error'
+                        );
+                        $this->redirectBack();
+                        return;
+                    }
+                } else {
+                    $form->sessionError(
+                        _t(
+                            'CAMPAIGNMONITORSIGNUPPAGE.NON_MATCH_ERROR',
+                            'There was an error, please try again.'
+                        ),
+                        'error'
+                    );
+                    $this->redirectBack();
+                    return;
+                }
             } else {
+                if ($submittedMember) {
+                    $form->sessionError(
+                        _t(
+                            'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
+                            'Please log in for this email or try another email address.'
+                        ),
+                        'error'
+                    );
+                    $this->redirectBack();
+                    return;
+                }
                 $newlyCreatedMember = true;
-                $memberToEdit = Member::create($filter);
+                $memberToEdit = Member::create($memberFilter);
             }
 
             //if this is a new member then we save the member
-            if($memberToEdit) {
-                $form->saveInto($memberToEdit);
+            if ($memberToEdit) {
                 $fields = $this->getFieldsForSignupFormFieldsIncluded(true);
 
                 foreach ($fields as $field) {
                     if ($field !== 'Email') {
-                        if (isset($data['CampaignMonitor' . $field])) {
+                        if (! empty($data['CampaignMonitor' . $field])) {
                             $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
                         }
                     }
@@ -230,9 +259,8 @@ class CampaignMonitorSignupPageController extends PageController
                 return $this->redirect($this->link('thankyou'));
             } elseif ($isOne && $outcome === 'unsubscribe') {
                 return $this->redirect($this->link('sadtoseeyougo'));
-            } else {
-                user_error('Could not process data succecssfully.');
             }
+            user_error('Could not process data succecssfully.');
         }
         user_error('No list to subscribe to', E_USER_WARNING);
     }
@@ -425,9 +453,9 @@ class CampaignMonitorSignupPageController extends PageController
      * same as $this->CampaignMonitorCampaigns()
      * but sorted correctly.
      *
-     * @return \SilverStripe\ORM\DataList -  CampaignMonitorCampaigns
+     * @return DataList|null -  CampaignMonitorCampaigns
      */
-    public function PreviousCampaignMonitorCampaigns()
+    public function PreviousCampaignMonitorCampaigns(): ?DataList
     {
         if ($this->ShowOldNewsletters) {
             $campaigns = $this->CampaignMonitorCampaigns();
@@ -440,6 +468,8 @@ class CampaignMonitorSignupPageController extends PageController
                     ]
                 );
         }
+
+        return null;
     }
 
     /**
@@ -482,7 +512,6 @@ class CampaignMonitorSignupPageController extends PageController
     /**
      * returns a bunch of stats about a campaign
      * IF the user is an admin AND a campaign is selected
-     * @return string (html) | false
      */
     public function CampaignStats()
     {
@@ -500,8 +529,6 @@ class CampaignMonitorSignupPageController extends PageController
                 $html .= '</div>';
                 $this->Content = $html;
             }
-        } else {
-            return false;
         }
     }
 
@@ -549,37 +576,36 @@ class CampaignMonitorSignupPageController extends PageController
             $memberId = 0;
             $member = new Member();
         }
-        if (empty($this->fieldsForSignupFormCache[$memberId])) {
-            $this->fieldsForSignupFormCache[$memberId] = [];
-            $fieldArray = [];
-            foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $title) {
-                $fieldArray['Fields'][$field] = null;
-                $fieldArray['Required'][$field] = true;
-                $fieldType = TextField::class;
-                $this->memberDbValues[$field] = $member->{$field};
-                if ($field === 'Email') {
-                    if ($memberId) {
-                        $fieldArray['Required'][$field] = false;
-                        $fieldType = ReadonlyField::class;
-                    } else {
-                        $fieldType = EmailField::class;
-                    }
+
+        $fieldArray = [];
+        foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $title) {
+            $fieldArray['Fields'][$field] = null;
+            $fieldArray['Required'][$field] = true;
+            $fieldType = TextField::class;
+            $this->memberDbValues[$field] = $member->{$field};
+            $disabledEmailPhrase = '';
+            if ($field === 'Email') {
+                if ($memberId) {
+                    $disabledEmailPhrase = 'disabled';
+                    // $fieldArray['Required'][$field] = false;
                 }
-                $fieldArray['Fields'][$field] = new $fieldType(
-                    'CampaignMonitor' . $field,
-                    $title,
-                    $this->memberDbValues[$field]
-                );
             }
-            if ($this->ShowAllNewsletterForSigningUp) {
-                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
-            } else {
-                $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
+            $fieldArray['Fields'][$field] = (new $fieldType(
+                'CampaignMonitor' . $field,
+                $title,
+                $this->memberDbValues[$field]
+            ));
+            if ($disabledEmailPhrase) {
+                $fieldArray['Fields'][$field]->setAttribute('disabled', $disabledEmailPhrase);
             }
-            $this->fieldsForSignupFormCache[$memberId] = $fieldArray;
+        }
+        if ($this->ShowAllNewsletterForSigningUp) {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
+        } else {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
         }
 
-        return $this->fieldsForSignupFormCache[$memberId];
+        return $fieldArray;
     }
 
     protected function getFieldsForSignupFormFieldsIncluded(?bool $keysOnly = false): array

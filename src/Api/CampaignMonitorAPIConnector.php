@@ -5,18 +5,17 @@ namespace Sunnysideup\CampaignMonitor\Api;
 use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\SS_List;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
 
 class CampaignMonitorAPIConnector
 {
-
     use Configurable;
     use Extensible;
     use Injectable;
@@ -89,9 +88,9 @@ class CampaignMonitorAPIConnector
     /**
      * turn debug on or off
      *
-     * @param $b
+     * @param bool $b
      */
-    public function setDebug($b)
+    public function setDebug(?bool $b = true)
     {
         $this->debug = $b;
     }
@@ -416,7 +415,7 @@ class CampaignMonitorAPIConnector
      *
      * @return mixed A successful response will be the key of the newly created custom field
      */
-    public function createCustomField($listID, $visible, $type, $title, $options = [])
+    public function createCustomField(string $listID, $visible, $type, $title, $options = [])
     {
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         switch ($type) {
@@ -472,8 +471,8 @@ class CampaignMonitorAPIConnector
 
     /**
      * Deletes an existing list from the system
-     * @param int $listID
-     * @return mixed A successful response will be empty
+     * @param string $listID
+     * @return mixed An unsuccessful response will be empty! A good result with contains something / be true
      */
     public function deleteList($listID)
     {
@@ -491,7 +490,7 @@ class CampaignMonitorAPIConnector
     /**
      * Gets the basic details of the current list
      *
-     * @param int $listID
+     * @param string $listID
      *
      * @return mixed         A successful response will be an object of the form
      * {
@@ -522,8 +521,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all active subscribers added since the given date
      *
-     * @param int $listID
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param string $listID
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -576,8 +575,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all unconfirmed subscribers added since the given date
      *
-     * @param int $listID
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param string $listID
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -630,8 +629,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all bounced subscribers who have bounced out since the given date
      *
-     * @param int $listID
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param string $listID
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -684,8 +683,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all unsubscribed subscribers who have unsubscribed since the given date
      *
-     * @param int $listID
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param string $listID
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -738,8 +737,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all unsubscribed subscribers who have unsubscribed since the given date
      *
-     * @param int $listID
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param string $listID
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -770,8 +769,14 @@ class CampaignMonitorAPIConnector
      *     )
      * }
      */
-    public function getDeletedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'email', $sortDirection = 'asc')
-    {
+    public function getDeletedSubscribers(
+        string $listID,
+        ?int $daysAgo = 3650,
+        ?int $page = 1,
+        ?int $pageSize = 999,
+        ?string $sortByField = 'email',
+        ?string $sortDirection = 'asc'
+    ) {
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -793,25 +798,26 @@ class CampaignMonitorAPIConnector
      * Updates the details of an existing list
      * Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional
      *
-     * @param string $title - he page to redirect subscribers to when they unsubscribeThe list title
+     * @param string $listID
+     * @param string $title - the page to redirect subscribers to when they unsubscribeThe list title
      * @param string $unsubscribePage - The page to redirect subscribers to when they unsubscribe
-     * @param bool $confirmedOptIn - Whether this list requires confirmation of subscription
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
      * @param string $unsubscribeSetting - Unsubscribe setting must be CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS or CS_REST_LIST_UNSUBSCRIBE_SETTING_ONLY_THIS_LIST.  See the documentation for details: http://www.campaignmonitor.com/api/lists/#creating_a_list
+     * @param bool $confirmedOptIn - Whether this list requires confirmation of subscription
      * @param bool $addUnsubscribesToSuppList -  When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether unsubscribes from this list should be added to the suppression list.
-     * @param bool $acrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
+     * @param bool $scrubActiveWithSuppList - When UnsubscribeSetting is CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS, whether active subscribers should be scrubbed against the suppression list.
      *
-     * @return mixed A successful response will be empty
+     * @return mixed An unsuccessful response will be empty! A good result with contains something / be true
      */
     public function updateList(
-        $listID,
-        $title,
-        $unsubscribePage,
-        $confirmationSuccessPage,
-        $unsubscribeSetting,
-        $confirmedOptIn = false,
-        $addUnsubscribesToSuppList = true,
-        $scrubActiveWithSuppList = true
+        string $listID,
+        string $title,
+        string $unsubscribePage,
+        string $confirmationSuccessPage,
+        string $unsubscribeSetting,
+        ?bool $confirmedOptIn = false,
+        ?bool $addUnsubscribesToSuppList = true,
+        ?bool $scrubActiveWithSuppList = true
     ) {
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
@@ -852,7 +858,7 @@ class CampaignMonitorAPIConnector
     /**
      * Gets statistics for list subscriptions, deletions, bounces and unsubscriptions
      *
-     * @param int $listID
+     * @param string $listID
      *
      * @return mixed         A successful response will be an object of the form
      * {
@@ -1122,7 +1128,7 @@ class CampaignMonitorAPIConnector
      * Gets all unsubscribes recorded for a campaign since the provided date
      *
      * @param int $campaignID ID of the Campaign
-     * @param string $daysAgo The date to start getting subscribers from
+     * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
      * @param string $sortByField ('EMAIL', 'NAME', 'DATE')
@@ -1147,8 +1153,14 @@ class CampaignMonitorAPIConnector
      *     )
      * }
      */
-    public function getUnsubscribes($campaignID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'EMAIL', $sortDirection = 'ASC')
-    {
+    public function getUnsubscribes(
+        int $campaignID,
+        ?int $daysAgo = 3650,
+        ?int $page = 1,
+        ?int $pageSize = 999,
+        ?string $sortByField = 'EMAIL',
+        ?string $sortDirection = 'ASC'
+) {
         //require_once '../../csrest_campaigns.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_campaigns.php';
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
@@ -1222,12 +1234,12 @@ class CampaignMonitorAPIConnector
     /**
      * Adds a new subscriber to the specified list
      *
-     * @param int $listID
-     * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
+     * @param string $listID
+     * @param Member $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields
      * @param array $customFields The subscriber details to use during creation.
      * @param bool $resubscribe Whether we should resubscribe this subscriber if they already exist in the list
-     * @param bool $RestartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param bool $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -1236,28 +1248,19 @@ class CampaignMonitorAPIConnector
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return mixed A successful response will be empty
+     * @return mixed A bad response will be empty
      */
     public function addSubscriber(
-        $listID,
-        $member,
-        $customFields = [],
-        $resubscribe = true,
-        $restartSubscriptionBasedAutoResponders = false
+        string $listID,
+        Member $member,
+        ?array $customFields = [],
+        ?bool $resubscribe = true,
+        ?bool $restartSubscriptionBasedAutoResponders = false
     ) {
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
-        foreach ($customFields as $key => $customFieldValue) {
-            if (! is_array($customFields[$key])) {
-                $customFields[] = [
-                    'Key' => $key,
-                    'Value' => $customFieldValue,
-                    'Clear' => $customFieldValue ? false : true,
-                ];
-                unset($customFields[$key]);
-            }
-        }
+        $customFields = $this->cleanCustomFields($customFields);
         $request = [
             'EmailAddress' => $member->Email,
             'Name' => trim($member->FirstName . ' ' . $member->Surname),
@@ -1281,7 +1284,7 @@ class CampaignMonitorAPIConnector
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param int $listID
+     * @param string $listID
      * @param string $oldEmailAddress
      * @param Member|object $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields The subscriber details to use during creation.
@@ -1295,7 +1298,7 @@ class CampaignMonitorAPIConnector
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
      *
-     * @return mixed A successful response will be empty
+     * @return mixed An unsuccessful response will be empty! A good result with contains something / be true
      */
     public function updateSubscriber(
         $listID,
@@ -1308,16 +1311,7 @@ class CampaignMonitorAPIConnector
         if (! $oldEmailAddress) {
             $oldEmailAddress = $member->Email;
         }
-        foreach ($customFields as $key => $customFieldValue) {
-            if (! is_array($customFields[$key])) {
-                $customFields[] = [
-                    'Key' => $key,
-                    'Value' => $customFieldValue,
-                    'Clear' => $customFieldValue ? false : true,
-                ];
-                unset($customFields[$key]);
-            }
-        }
+        $customFields = $this->cleanCustomFields($customFields);
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
@@ -1344,7 +1338,7 @@ class CampaignMonitorAPIConnector
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param int $listID
+     * @param string $listID
      * @param SS_List $membersSet - list of Member|object with Email, FirstName, Surname fields.
      * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
      * @param bool $resubscribe Whether we should resubscribe any existing subscribers
@@ -1358,7 +1352,7 @@ class CampaignMonitorAPIConnector
      *        'Clear' => true/false (pass true to remove this custom field. in the case of a [multi-option, select many] field, pass an option in the 'Value' field to clear that option or leave Value blank to remove all options)
      *    )
 
-     * @return mixed A successful response will be empty
+     * @return mixed A bad response will be empty
      */
     public function addSubscribers(
         $listID,
@@ -1379,16 +1373,7 @@ class CampaignMonitorAPIConnector
             } elseif (isset($customFields[$member->Email])) {
                 $customFieldsForMember = $customFields[$member->Email];
             }
-            foreach ($customFieldsForMember as $key => $customFieldValue) {
-                if (! is_array($customFieldsForMember[$key])) {
-                    $customFieldsForMember[] = [
-                        'Key' => $key,
-                        'Value' => $customFieldValue,
-                        'Clear' => $customFieldValue ? false : true,
-                    ];
-                    unset($customFieldsForMember[$key]);
-                }
-            }
+            $customFieldsForMember = $this->cleanCustomFields($customFieldsForMember);
             if ($member instanceof Member) {
                 $importArray[] = [
                     'EmailAddress' => $member->Email,
@@ -1412,10 +1397,10 @@ class CampaignMonitorAPIConnector
     }
 
     /**
-     * @param int $listID
+     * @param string $listID
      * @param Member|string $member - email address or Member Object
      *
-     * @return mixed A successful response will be empty
+     * @return mixed An unsuccessful response will be empty! A good result with contains something / be true
      */
     public function deleteSubscriber($listID, $member)
     {
@@ -1434,10 +1419,10 @@ class CampaignMonitorAPIConnector
     /**
      * Unsubscribes the given subscriber from the current list
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member|string $member
      *
-     * @return mixed A successful response will be empty
+     * @return mixed An unsuccessful response will be empty! A good result with contains something / be true
      */
     public function unsubscribeSubscriber($listID, $member)
     {
@@ -1456,7 +1441,7 @@ class CampaignMonitorAPIConnector
     /**
      * Is this user part of this list at all?
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member|string $member
      *
      * @return bool
@@ -1482,7 +1467,7 @@ class CampaignMonitorAPIConnector
     /**
      * Can we send e-mails to this person in the future for this list?
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member | String $member
      *
      * @return bool
@@ -1510,7 +1495,7 @@ class CampaignMonitorAPIConnector
     /**
      * This e-mail / user has been banned from a list.
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member | String $member
      *
      * @return bool
@@ -1536,7 +1521,7 @@ class CampaignMonitorAPIConnector
     /**
      * Gets a subscriber details, including custom fields
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member | String $member
      *
      * @return mixed         A successful response will be an object of the form
@@ -1576,7 +1561,7 @@ class CampaignMonitorAPIConnector
     /**
      * Gets a subscriber details, including custom fields
      *
-     * @param int $listID
+     * @param string $listID
      * @param Member | String $member
      *
      * @return mixed         A successful response will be an object of the form
@@ -1662,6 +1647,7 @@ class CampaignMonitorAPIConnector
 
     /**
      * returns the result or NULL in case of an error
+     * NULL RESULT IS ERROR!
      * @param \CS_REST_Wrapper_Result $result
      * @return mixed
      */
@@ -1741,5 +1727,40 @@ class CampaignMonitorAPIConnector
     protected function getCache()
     {
         return Injector::inst()->get(CacheInterface::class . '.CampaignMonitor');
+    }
+
+    /**
+     * @param  mixed                $customFields (should be an array)
+     * @return array
+     */
+    protected function cleanCustomFields($customFields): array
+    {
+        if (! is_array($customFields)) {
+            $customFields = [];
+        }
+        $customFieldsBetter = [];
+        foreach ($customFields as $key => $value) {
+            if (isset($customFields[$key]['Key']) && isset($customFields[$key]['Value'])) {
+                $customFieldsBetter[] = $customFields[$key];
+            } else {
+                if (is_array($value)) {
+                    foreach ($value as $innerValue) {
+                        $customFieldsBetter[] = [
+                            'Key' => $key,
+                            'Value' => $innerValue,
+                            // 'Clear' => empty($value) ? true : false,
+                        ];
+                    }
+                } else {
+                    $customFieldsBetter[] = [
+                        'Key' => $key,
+                        'Value' => $value,
+                        // 'Clear' => empty($value) ? true : false,
+                    ];
+                }
+            }
+        }
+
+        return $customFieldsBetter;
     }
 }
