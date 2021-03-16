@@ -87,15 +87,6 @@ class CampaignMonitorSignupPageController extends PageController
         'resetsignup' => true,
     ];
 
-    /**
-     * tells us if the page is ready to receive subscriptions
-     * @return bool
-     */
-    public function ReadyToReceiveSubscribtions()
-    {
-        return $this->ListID && $this->GroupID;
-    }
-
     public function ShowForm(): bool
     {
         return $this->isSignUp;
@@ -146,6 +137,18 @@ class CampaignMonitorSignupPageController extends PageController
             return $form;
         }
         return _t('CampaignMonitorSignupPage.NOTREADY', 'You can not suscribe to this newsletter at present.');
+    }
+
+    /**
+     * we need this in controller and dataobject
+     * @return bool
+     */
+    public function ReadyToReceiveSubscribtions(): bool
+    {
+        if ($this->CloseSubscriptions) {
+            return false;
+        }
+        return $this->ListID && $this->GroupID;
     }
 
     /**
@@ -478,7 +481,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function stats()
     {
-        if (Permission::check('Admin')) {
+        if (Permission::check('ADMIN')) {
             //run tests here
             $api = $this->getCMAPI();
             $html = '<div id="CampaignMonitorStats">';

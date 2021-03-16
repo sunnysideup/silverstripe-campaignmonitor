@@ -25,6 +25,10 @@ class CampaignMonitorSubscriptionLog extends DataObject
         'CampaignMonitorOutcome' => 'Enum("Success, Error, Not Recorded", "Not Recorded")',
     ];
 
+    private static $singular_name = 'Sign-Up Log';
+
+    private static $plural_name = 'Sign-Ups Log';
+
     private static $default_sort = 'Created DESC';
 
     private static $summary_fields = [
