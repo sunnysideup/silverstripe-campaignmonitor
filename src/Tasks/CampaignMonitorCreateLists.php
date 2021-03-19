@@ -111,7 +111,7 @@ class CampaignMonitorCreateLists extends BuildTask
             $page = $className::create();
         }
         $page->ListID = $listId;
-        $page->ShowInSearch = false;
+        $page->ShowInSearch = true;
         $page->ShowInMenus = false;
         $page->Title = 'Sign up for ' . $listName;
         $page->MenuTitle = $listName;

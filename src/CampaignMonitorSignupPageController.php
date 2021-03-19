@@ -124,14 +124,25 @@ class CampaignMonitorSignupPageController extends PageController
                 new FormAction('subscribe', $action)
             );
             // Create Validators
-            $validator = new RequiredFields($this->getFieldsForSignupFormRequiredFields($member));
-            $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
-            if ($member && $member->exists()) {
-                $form->loadDataFrom($member);
+            if ($this->MakeAllFieldsRequired) {
+                $requiredList = $fields->dataFieldNames();
             } else {
-                foreach ($this->getFieldsForSignupFormFieldsIncluded(true) as $field) {
-                    $form->Fields()->fieldByName('CampaignMonitor' . $field)
-                        ->setValue($this->memberDbValues[$field] ?? '');
+                $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
+            }
+            $validator = new RequiredFields([]);
+            $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
+            $data = $this->getRequest()->getSession()->get("FormData.{$form->getName()}.data");
+            if($data) {
+                $form->loadDataFrom($data);
+            } else {
+                if ($member && $member->exists()) {
+                    foreach ($this->getFieldsForSignupFormFieldsIncluded(true) as $field) {
+                        $value = $this->memberDbValues['CampaignMonitor' . $field] ?? '';
+                        if ($value) {
+                            $form->Fields()->fieldByName('CampaignMonitor' . $field)
+                                ->setValue($value);
+                        }
+                    }
                 }
             }
             return $form;
@@ -161,6 +172,16 @@ class CampaignMonitorSignupPageController extends PageController
     public function subscribe($data, $form)
     {
         if ($this->ReadyToReceiveSubscribtions()) {
+
+            $session = $this->getRequest()->getSession();
+            $loggedInMember = Security::getCurrentUser();
+            if ($loggedInMember) {
+                $data['CampaignMonitorEmail'] = $loggedInMember->Email;
+            } else {
+                $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
+            }
+            $session->set("FormData.{$form->getName()}.data", $data);
+
             //true until proven otherwise.
             $newlyCreatedMember = false;
             //$api = $this->getCMAPI();
@@ -183,12 +204,7 @@ class CampaignMonitorSignupPageController extends PageController
             }
 
             //no member logged in: if the member already exists then you can't sign up.
-            $loggedInMember = Security::getCurrentUser();
-            if ($loggedInMember) {
-                $data['CampaignMonitorEmail'] = $loggedInMember->Email;
-            } else {
-                $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
-            }
+
             $memberFilter = ['Email' => $data['CampaignMonitorEmail']];
             $submittedMember = Member::get()->filter($memberFilter)->First();
             $memberToEdit = null;
@@ -256,6 +272,7 @@ class CampaignMonitorSignupPageController extends PageController
             }
 
             $outcome = $memberToEdit->processCampaignMonitorSignupField($this->dataRecord, $data, $values);
+            $session->clear("FormData.{$form->getName()}.data");
             if ($isMany) {
                 return $this->redirect($this->link('confirm'));
             } elseif ($isOne && $outcome === 'subscribe') {
@@ -336,7 +353,7 @@ class CampaignMonitorSignupPageController extends PageController
         if (isset($data['CampaignMonitorEmail'])) {
             $email = Convert::raw2sql($data['CampaignMonitorEmail']);
             if ($email) {
-                $this->memberDbValues['Email'] = $email;
+                $this->memberDbValues['CampaignMonitorEmail'] = $email;
                 if (Director::is_ajax()) {
                     if (! $this->addSubscriber($email)) {
                         $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
@@ -347,7 +364,7 @@ class CampaignMonitorSignupPageController extends PageController
             }
         } else {
             if ($m = Security::getCurrentUser()) {
-                $this->memberDbValues['Email'] = $m->Email;
+                $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
             }
         }
         return [];
@@ -412,7 +429,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function Email()
     {
-        return $this->memberDbValues['Email'];
+        return $this->memberDbValues['CampaignMonitorEmail'];
     }
 
     /**
@@ -582,10 +599,11 @@ class CampaignMonitorSignupPageController extends PageController
 
         $fieldArray = [];
         foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $title) {
-            $fieldArray['Fields'][$field] = null;
-            $fieldArray['Required'][$field] = true;
+            $fieldName = 'CampaignMonitor' . $field;
+            $fieldArray['Fields'][$fieldName] = null;
+            $fieldArray['Required'][$fieldName] = true;
             $fieldType = TextField::class;
-            $this->memberDbValues[$field] = $member->{$field};
+            $this->memberDbValues[$fieldName] = $member->{$field};
             $disabledEmailPhrase = '';
             if ($field === 'Email') {
                 if ($memberId) {
@@ -593,13 +611,13 @@ class CampaignMonitorSignupPageController extends PageController
                     // $fieldArray['Required'][$field] = false;
                 }
             }
-            $fieldArray['Fields'][$field] = (new $fieldType(
-                'CampaignMonitor' . $field,
-                $title,
-                $this->memberDbValues[$field]
+            //do not set values here!
+            $fieldArray['Fields'][$fieldName] = (new $fieldType(
+                $fieldName,
+                $title
             ));
             if ($disabledEmailPhrase) {
-                $fieldArray['Fields'][$field]->setAttribute('disabled', $disabledEmailPhrase);
+                $fieldArray['Fields'][$fieldName]->setAttribute('disabled', $disabledEmailPhrase);
             }
         }
         if ($this->ShowAllNewsletterForSigningUp) {

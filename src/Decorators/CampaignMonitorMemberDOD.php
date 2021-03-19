@@ -231,8 +231,8 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     protected function addToCampaignMonitor($listPage, ?array $customFields = []): bool
     {
+        $success = false;
         if ($listPage && $listPage->ListID) {
-            $success = false;
             if ($this->isPartOfCampaignMonitorList($listPage)) {
                 $success = $this->getCMAPI()->updateSubscriber(
                     $listPage->ListID,
@@ -241,7 +241,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                     $customFields,
                     $resubscribe = true,
                     $restartSubscriptionBasedAutoResponders = false
-                );
+                ) ? true : false;
             } else {
                 $success = $this->getCMAPI()->addSubscriber(
                     $listPage->ListID,
@@ -249,13 +249,12 @@ class CampaignMonitorMemberDOD extends DataExtension
                     $customFields,
                     true,
                     false
-                );
+                ) ? true : false;
             }
-            return $success;
+        } else {
+            user_error('Error, no subscription page supplied for campaign monitor subscription.');
         }
-        user_error('Error, no subscription page supplied for campaign monitor subscription.');
-
-        return false;
+        return $success;
     }
 
     protected function isPartOfCampaignMonitorList($listPage): bool
