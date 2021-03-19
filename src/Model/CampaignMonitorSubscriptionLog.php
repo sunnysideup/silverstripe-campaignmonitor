@@ -7,6 +7,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -23,6 +24,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
         'Action' => 'Enum("Subscribe, Unsubscribe, Other, Error", "Subscribe")',
         'CustomFields' => 'Varchar(64)',
         'CampaignMonitorOutcome' => 'Enum("Success, Error, Not Recorded", "Not Recorded")',
+        'ErrorDescription' => 'Text',
     ];
 
     private static $singular_name = 'Sign-Up Log';
@@ -55,10 +57,13 @@ class CampaignMonitorSubscriptionLog extends DataObject
         return $obj->write();
     }
 
-    public static function log_outcome(int $id, bool $success = false): int
+    public static function log_outcome(int $id, bool $success = false, ?string $errorDescription = ''): int
     {
         $obj = self::get()->byId($id);
         $obj->CampaignMonitorOutcome = ($success ? 'Success' : 'Error');
+        if(! $success) {
+            $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': '. self::get_last_error_description();
+        }
 
         return $obj->write();
     }

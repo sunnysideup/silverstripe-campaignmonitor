@@ -75,6 +75,20 @@ class CampaignMonitorAPIConnector
 
     private static $_get_subscriber = [];
 
+    private static $error_code = '';
+
+    private static $error_description = '';
+
+    public static function get_last_error_code() : string
+    {
+        return self::$error_code;
+    }
+
+    public static function get_last_error_description() : string
+    {
+        return self::$error_description;
+    }
+
     /**
      * must be called to use this API.
      */
@@ -1674,6 +1688,8 @@ class CampaignMonitorAPIConnector
         }
         if (is_string($result)) {
             $this->httpStatusCode = 500;
+            self::$error_description = $result;
+            self::$error_code = 500;
             return null;
         }
         if ($result->was_successful()) {
@@ -1683,6 +1699,9 @@ class CampaignMonitorAPIConnector
             return true;
         }
         $this->httpStatusCode = $result->http_status_code;
+        self::$error_description = serialize($result) . ' --- --- ' . serialize ($apiCall) . ' --- --- ' . serialize($description);;
+        self::$error_code = $result->http_status_code;
+
         return null;
     }
 

@@ -119,7 +119,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             $listPage = $listPage;
         }
 
-        $logId = CampaignMonitorSubscriptionLog ::log_attempt($this->owner, $listPage, 'Subscribe', $customFields);
+        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->owner, $listPage, 'Subscribe', $customFields);
 
         $successForGroups = $this->addToCampaignMonitorSecurityGroup($listPage);
         $successForCm = $this->addToCampaignMonitor($listPage, $customFields);
