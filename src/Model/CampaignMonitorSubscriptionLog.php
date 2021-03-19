@@ -22,7 +22,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
 
     private static $db = [
         'Action' => 'Enum("Subscribe, Unsubscribe, Other, Error", "Subscribe")',
-        'CustomFields' => 'Varchar(64)',
+        'CustomFields' => 'Text',
         'CampaignMonitorOutcome' => 'Enum("Success, Error, Not Recorded", "Not Recorded")',
         'ErrorDescription' => 'Text',
     ];
@@ -62,7 +62,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
         $obj = self::get()->byId($id);
         $obj->CampaignMonitorOutcome = ($success ? 'Success' : 'Error');
         if(! $success) {
-            $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': '. self::get_last_error_description();
+            $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': '. CampaignMonitorAPIConnector::get_last_error_description();
         }
 
         return $obj->write();

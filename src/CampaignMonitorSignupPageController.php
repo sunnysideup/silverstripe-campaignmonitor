@@ -129,7 +129,10 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
-            $validator = new RequiredFields([]);
+            if (($key = array_search('CampaignMonitorEmail', $requiredList)) !== false) {
+                unset($requiredList[$key]);
+            }
+            $validator = new RequiredFields($requiredList);
             $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
             $data = $this->getRequest()->getSession()->get("FormData.{$form->getName()}.data");
             if($data) {
@@ -608,7 +611,7 @@ class CampaignMonitorSignupPageController extends PageController
             if ($field === 'Email') {
                 if ($memberId) {
                     $disabledEmailPhrase = 'disabled';
-                    // $fieldArray['Required'][$field] = false;
+                    $fieldArray['Required'][$fieldName] = false;
                 }
             }
             //do not set values here!
