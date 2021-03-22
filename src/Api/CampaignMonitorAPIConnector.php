@@ -1693,7 +1693,7 @@ class CampaignMonitorAPIConnector
             return null;
         }
         if ($result->was_successful()) {
-            if (isset($result->response)) {
+            if (! empty($result->response)) {
                 return $result->response;
             }
             return true;
