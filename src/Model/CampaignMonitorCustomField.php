@@ -107,12 +107,6 @@ class CampaignMonitorCustomField extends DataObject
         return parent::canEdit();
     }
 
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
-        $this->Code = self::key_to_code($this->Code);
-    }
-
     public function getKey()
     {
         return '[' . $this->Code . ']';
@@ -176,6 +170,12 @@ class CampaignMonitorCustomField extends DataObject
             $field->setSource($optionsArray);
         }
         return $field;
+    }
+
+    protected function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        $this->Code = self::key_to_code($this->Code);
     }
 
     private static function key_to_code($key)

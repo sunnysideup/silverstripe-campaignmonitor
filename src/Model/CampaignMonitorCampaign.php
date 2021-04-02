@@ -99,11 +99,11 @@ class CampaignMonitorCampaign extends DataObject
 
     private static $default_sort = 'Hide ASC, SentDate DESC';
 
-    private static $_api = null;
+    private static $_api;
 
-    private $_hasBeenSent = null;
+    private $_hasBeenSent;
 
-    private $_existsOnCampaignMonitorCheck = null;
+    private $_existsOnCampaignMonitorCheck;
 
     public function canDelete($member = null, $context = [])
     {
@@ -289,61 +289,6 @@ class CampaignMonitorCampaign extends DataObject
         return $this->RenderWith(CampaignMonitorCampaign::class);
     }
 
-    public function onBeforeWrite()
-    {
-        parent::onBeforeWrite();
-        if (! $this->Hash) {
-            $this->Hash = substr(hash('md5', uniqid()), 0, 7);
-        }
-        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
-            if ($this->CreateAsTemplate) {
-                $this->TemplateID = null;
-            } else {
-                $this->CampaignID = null;
-            }
-        }
-    }
-
-    public function onAfterWrite()
-    {
-        parent::onAfterWrite();
-        if ($this->Pages()->count() === 0) {
-            if ($page = CampaignMonitorSignupPage::get()->first()) {
-                $this->Pages()->add($page);
-            }
-        }
-        $this->countOfWrites++;
-        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true) && $this->CreateFromWebsite && $this->countOfWrites < 3) {
-            $api = $this->getAPI();
-            if ($this->CreateAsTemplate) {
-                if ($this->TemplateID) {
-                    $api->updateTemplate($this, $this->TemplateID);
-                } else {
-                    $api->createTemplate($this);
-                }
-            } else {
-                $api->createCampaign($this);
-            }
-        }
-    }
-
-    public function onBeforeDelete()
-    {
-        parent::onBeforeDelete();
-        if ($this->HasBeenSentCheck()) {
-            //do nothing
-        } else {
-            if ($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
-                $api = $this->getAPI();
-                if ($this->CreateAsTemplate) {
-                    $api->deleteTemplate($this->TemplateID);
-                } else {
-                    $api->deleteCampaign($this->CampaignID);
-                }
-            }
-        }
-    }
-
     public function HasBeenSentCheck()
     {
         //lazy check
@@ -423,6 +368,59 @@ class CampaignMonitorCampaign extends DataObject
             }
         }
         return $this->_existsOnCampaignMonitorCheck;
+    }
+
+    protected function onBeforeWrite()
+    {
+        parent::onBeforeWrite();
+        if (! $this->Hash) {
+            $this->Hash = substr(hash('md5', uniqid()), 0, 7);
+        }
+        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
+            if ($this->CreateAsTemplate) {
+                $this->TemplateID = null;
+            } else {
+                $this->CampaignID = null;
+            }
+        }
+    }
+
+    protected function onAfterWrite()
+    {
+        parent::onAfterWrite();
+        if ($this->Pages()->count() === 0) {
+            if ($page = CampaignMonitorSignupPage::get()->first()) {
+                $this->Pages()->add($page);
+            }
+        }
+        ++$this->countOfWrites;
+        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true) && $this->CreateFromWebsite && $this->countOfWrites < 3) {
+            $api = $this->getAPI();
+            if ($this->CreateAsTemplate) {
+                if ($this->TemplateID) {
+                    $api->updateTemplate($this, $this->TemplateID);
+                } else {
+                    $api->createTemplate($this);
+                }
+            } else {
+                $api->createCampaign($this);
+            }
+        }
+    }
+
+    protected function onBeforeDelete()
+    {
+        parent::onBeforeDelete();
+        if ($this->HasBeenSentCheck()) {
+            //do nothing
+        } elseif ($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
+            $api = $this->getAPI();
+            if ($this->CreateAsTemplate) {
+                $api->deleteTemplate($this->TemplateID);
+            } else {
+                $api->deleteCampaign($this->CampaignID);
+            }
+        }
     }
 
     /**

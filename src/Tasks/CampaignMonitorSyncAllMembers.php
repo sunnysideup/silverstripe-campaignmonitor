@@ -61,7 +61,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private static $mailing_list_id = '';
 
-    private static $_api = null;
+    private static $_api;
 
     public function run($request)
     {
@@ -80,18 +80,18 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         if ($this->debug) {
             $limit = 20;
             $maxIterations = 20;
-            DB::alteration_message("Running in debug mode going to check ${maxIterations} loops of ${limit} records.");
+            DB::alteration_message("Running in debug mode going to check {$maxIterations} loops of {$limit} records.");
         } else {
             $limit = 400;
             $maxIterations = 1000000;
-            DB::alteration_message("Running in live mode going to check ${maxIterations} loops of ${limit} records.");
+            DB::alteration_message("Running in live mode going to check {$maxIterations} loops of {$limit} records.");
         }
         $customFields = [];
         $memberArray = [];
         $unsubscribeArray = [];
         $alreadyCompleted = [];
         $api = $this->getAPI();
-        for ($i = 0; $i < $maxIterations; $i++) {
+        for ($i = 0; $i < $maxIterations; ++$i) {
             $members = Member::get()
                 ->limit($limit, $i * $limit);
             if ($this->debug) {
@@ -154,7 +154,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getExistingFolkListed()
     {
         $api = $this->getAPI();
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < 100; ++$i) {
             $list = $api->getActiveSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
                 $daysAgo = 3650,
@@ -163,12 +163,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (isset($list->NumberOfPages) && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (isset($list->Results)) {
+            if (property_exists($list, 'Results') && $list->Results !== null) {
                 foreach ($list->Results as $obj) {
                     $finalCustomFields = [];
                     foreach ($obj->CustomFields as $customFieldObject) {
@@ -188,7 +188,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getBouncedSubscribers()
     {
         $api = $this->getAPI();
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < 100; ++$i) {
             $list = $api->getBouncedSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
                 $daysAgo = 3650,
@@ -197,12 +197,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (isset($list->NumberOfPages) && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (isset($list->Results)) {
+            if (property_exists($list, 'Results') && $list->Results !== null) {
                 foreach ($list->Results as $obj) {
                     $this->previouslyBouncedSubscribers[$obj->EmailAddress] = true;
                 }
@@ -218,7 +218,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getUnsubscribedSubscribers()
     {
         $api = $this->getAPI();
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < 100; ++$i) {
             $list = $api->getUnsubscribedSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
                 $daysAgo = 3650,
@@ -227,12 +227,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (isset($list->NumberOfPages) && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (isset($list->Results)) {
+            if (property_exists($list, 'Results') && $list->Results !== null) {
                 foreach ($list->Results as $obj) {
                     $this->previouslyUnsubscribedSubscribers[$obj->EmailAddress] = true;
                 }
@@ -267,10 +267,10 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                                         //do nothing
                                     } else {
                                         $updateDetails = true;
-                                        DB::alteration_message(" - - - Missing value for ${key} - current value ${value}", 'created');
+                                        DB::alteration_message(" - - - Missing value for {$key} - current value {$value}", 'created');
                                     }
                                 } elseif ($this->previouslyExported[$email][$key] !== $value) {
-                                    DB::alteration_message(' - - - Update for ' . $email . " for ${key} ${value} that is not the same as previous value: " . $this->previouslyExported[$email][$key], 'created');
+                                    DB::alteration_message(' - - - Update for ' . $email . " for {$key} {$value} that is not the same as previous value: " . $this->previouslyExported[$email][$key], 'created');
                                     $updateDetails = true;
                                 }
                             }
@@ -283,7 +283,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     foreach ($valuesArray as $key => $value) {
                         $finalCustomFields[$email][$k]['Key'] = $key;
                         $finalCustomFields[$email][$k]['Value'] = $value;
-                        $k++;
+                        ++$k;
                     }
                     if ($updateDetails) {
                         if (! $this->debug) {

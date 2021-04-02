@@ -27,17 +27,16 @@ class CampaignMonitorGroupDOD extends DataExtension
 
     /**
      * Is this a group for newsletter signing up.
-     * @return bool
      */
     public function IsCampaignMonitorSubscriberGroup(): bool
     {
-        return $this->CampaignMonitorSubscriberGroupPage() ? true : false;
+        return $this->CampaignMonitorSubscriberGroupPage();
     }
 
     public function updateCMSFields(FieldList $fields)
     {
         if ($this->IsCampaignMonitorSubscriberGroup()) {
-            /** @var CampaignMonitorSignupPage */
+            /** @var CampaignMonitorSignupPage $page */
             $page = $this->CampaignMonitorSubscriberGroupPage();
             if ($page instanceof CampaignMonitorSignupPage) {
                 $value =

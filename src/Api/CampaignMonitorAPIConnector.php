@@ -79,12 +79,12 @@ class CampaignMonitorAPIConnector
 
     private static $error_description = '';
 
-    public static function get_last_error_code() : string
+    public static function get_last_error_code(): string
     {
         return self::$error_code;
     }
 
-    public static function get_last_error_description() : string
+    public static function get_last_error_description(): string
     {
         return self::$error_description;
     }
@@ -276,8 +276,6 @@ class CampaignMonitorAPIConnector
     }
 
     /**
-     * @param CampaignMonitorCampaign $campaignMonitorCampaign
-     *
      * @return mixed
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
@@ -296,7 +294,7 @@ class CampaignMonitorAPIConnector
                 'ZipFileURL' => '',
             ]
         );
-        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
+        if ($result->http_status_code !== null && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
             $code = $result->response;
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = true;
@@ -319,7 +317,6 @@ class CampaignMonitorAPIConnector
     }
 
     /**
-     * @param CampaignMonitorCampaign $campaignMonitorCampaign
      * @param string $templateID
      *
      * @return mixed
@@ -339,7 +336,7 @@ class CampaignMonitorAPIConnector
                 'ZipFileURL' => '',
             ]
         );
-        if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
+        if ($result->http_status_code !== null && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
             $code = $result->response;
             $campaignMonitorCampaign->CreateFromWebsite = false;
             $campaignMonitorCampaign->CreatedFromWebsite = true;
@@ -455,12 +452,12 @@ class CampaignMonitorAPIConnector
             'FieldName' => $title,
             'DataType' => $type,
             'Options' => $options,
-            'VisibleInPreferenceCenter' => $visible ? true : false,
+            'VisibleInPreferenceCenter' => (bool) $visible,
         ]);
         return $this->returnResult(
             $result,
             'POST /api/v3/lists/{ID}/customfields',
-            "Created Custom Field for ${listID} "
+            "Created Custom Field for {$listID} "
         );
     }
 
@@ -479,7 +476,7 @@ class CampaignMonitorAPIConnector
         return $this->returnResult(
             $result,
             'DELETE /api/v3/lists/{ID}/{Key}',
-            "Delete Custom Field for ${listID} with key ${key}"
+            "Delete Custom Field for {$listID} with key {$key}"
         );
     }
 
@@ -751,7 +748,6 @@ class CampaignMonitorAPIConnector
     /**
      * Gets all unsubscribed subscribers who have unsubscribed since the given date
      *
-     * @param string $listID
      * @param int $daysAgo The date to start getting subscribers from
      * @param int $page The page number to get
      * @param int $pageSize The number of records per page
@@ -812,7 +808,6 @@ class CampaignMonitorAPIConnector
      * Updates the details of an existing list
      * Both the UnsubscribePage and the ConfirmationSuccessPage parameters are optional
      *
-     * @param string $listID
      * @param string $title - the page to redirect subscribers to when they unsubscribeThe list title
      * @param string $unsubscribePage - The page to redirect subscribers to when they unsubscribe
      * @param string $confirmationSuccessPage - The page to redirect subscribers to when they confirm their subscription
@@ -932,7 +927,6 @@ class CampaignMonitorAPIConnector
      *******************************************************/
 
     /**
-     * @param CampaignMonitorCampaign $campaignMonitorCampaign
      * @param array $listIDs
      * @param array $segmentIDs
      * @param string $templateID - OPTIONAL!
@@ -1008,7 +1002,7 @@ class CampaignMonitorAPIConnector
                     ]
                 );
             }
-            if (isset($result->http_status_code) && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
+            if ($result->http_status_code !== null && ($result->http_status_code === 201 || $result->http_status_code === 201)) {
                 $code = $result->response;
                 $campaignMonitorCampaign->CreateFromWebsite = false;
                 $campaignMonitorCampaign->CreatedFromWebsite = true;
@@ -1174,7 +1168,7 @@ class CampaignMonitorAPIConnector
         ?int $pageSize = 999,
         ?string $sortByField = 'EMAIL',
         ?string $sortDirection = 'ASC'
-) {
+    ) {
         //require_once '../../csrest_campaigns.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_campaigns.php';
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
@@ -1248,7 +1242,6 @@ class CampaignMonitorAPIConnector
     /**
      * Adds a new subscriber to the specified list
      *
-     * @param string $listID
      * @param Member $member (Member or standard object with Email, FirstName, Surname properties)
      * @param array $customFields
      * @param array $customFields The subscriber details to use during creation.
@@ -1343,7 +1336,7 @@ class CampaignMonitorAPIConnector
         return $this->returnResult(
             $result,
             'PUT /api/v3.1/subscribers/{list id}.{format}?email={email}',
-            "updated with email ${oldEmailAddress} ..."
+            "updated with email {$oldEmailAddress} ..."
         );
     }
 
@@ -1466,7 +1459,7 @@ class CampaignMonitorAPIConnector
             $member = $member->Email;
         }
         $outcome = $this->getSubscriber($listID, $member);
-        if ($outcome && isset($outcome->State)) {
+        if ($outcome && (property_exists($outcome, 'State') && $outcome->State !== null)) {
             if ($this->debug) {
                 echo '<h3>Subscriber Exists For This List</h3>';
             }
@@ -1492,7 +1485,7 @@ class CampaignMonitorAPIConnector
             $member = $member->Email;
         }
         $outcome = $this->getSubscriber($listID, $member);
-        if ($outcome && isset($outcome->State)) {
+        if ($outcome && (property_exists($outcome, 'State') && $outcome->State !== null)) {
             if ($outcome->State === 'Active') {
                 if ($this->debug) {
                     echo '<h3>Subscriber Can Receive Emails For This List</h3>';
@@ -1634,9 +1627,6 @@ class CampaignMonitorAPIConnector
                 //$expires_in = $result->response->expires_in;
                 # Save $access_token, $expires_in, and $refresh_token.
                 if ($this->debug) {
-                    'access token: ' . $result->response->access_token . "\n";
-                    'expires in (seconds): ' . $result->response->expires_in . "\n";
-                    'refresh token: ' . $result->response->refresh_token . "\n";
                 }
             } else {
                 # If you receive '121: Expired OAuth Token', refresh the access token
@@ -1651,7 +1641,6 @@ class CampaignMonitorAPIConnector
                 }
 
                 if ($this->debug) {
-                    $result->response->error . ': ' . $result->response->error_description . "\n";
                 }
             }
         }
@@ -1669,10 +1658,10 @@ class CampaignMonitorAPIConnector
     {
         if ($this->debug) {
             if (is_string($result)) {
-                echo "<h1>${description} ( ${apiCall} ) ...</h1>";
-                echo "<p style='color: red'>${result}</p>";
+                echo "<h1>{$description} ( {$apiCall} ) ...</h1>";
+                echo "<p style='color: red'>{$result}</p>";
             } else {
-                echo "<h1>${description} ( ${apiCall} ) ...</h1>";
+                echo "<h1>{$description} ( {$apiCall} ) ...</h1>";
                 if ($result->was_successful()) {
                     echo '<h2>SUCCESS</h2>';
                 } else {
@@ -1699,7 +1688,7 @@ class CampaignMonitorAPIConnector
             return true;
         }
         $this->httpStatusCode = $result->http_status_code;
-        self::$error_description = serialize($result) . ' --- --- ' . serialize ($apiCall) . ' --- --- ' . serialize($description);;
+        self::$error_description = serialize($result) . ' --- --- ' . serialize($apiCall) . ' --- --- ' . serialize($description);
         self::$error_code = $result->http_status_code;
 
         return null;
@@ -1711,7 +1700,6 @@ class CampaignMonitorAPIConnector
      *******************************************************/
 
     /**
-     * @param string $name
      * @return mixed
      */
     protected function getFromCache(string $name)
@@ -1729,7 +1717,6 @@ class CampaignMonitorAPIConnector
 
     /**
      * @param mixed $unserializedValue
-     * @param string $name
      */
     protected function saveToCache($unserializedValue, string $name): bool
     {
@@ -1750,7 +1737,6 @@ class CampaignMonitorAPIConnector
 
     /**
      * @param  mixed                $customFields (should be an array)
-     * @return array
      */
     protected function cleanCustomFields($customFields): array
     {
@@ -1761,22 +1747,20 @@ class CampaignMonitorAPIConnector
         foreach ($customFields as $key => $value) {
             if (isset($customFields[$key]['Key']) && isset($customFields[$key]['Value'])) {
                 $customFieldsBetter[] = $customFields[$key];
-            } else {
-                if (is_array($value)) {
-                    foreach ($value as $innerValue) {
-                        $customFieldsBetter[] = [
-                            'Key' => $key,
-                            'Value' => $innerValue,
-                            // 'Clear' => empty($value) ? true : false,
-                        ];
-                    }
-                } else {
+            } elseif (is_array($value)) {
+                foreach ($value as $innerValue) {
                     $customFieldsBetter[] = [
                         'Key' => $key,
-                        'Value' => $value,
+                        'Value' => $innerValue,
                         // 'Clear' => empty($value) ? true : false,
                     ];
                 }
+            } else {
+                $customFieldsBetter[] = [
+                    'Key' => $key,
+                    'Value' => $value,
+                    // 'Clear' => empty($value) ? true : false,
+                ];
             }
         }
 

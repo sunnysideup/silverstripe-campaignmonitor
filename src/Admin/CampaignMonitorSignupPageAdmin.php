@@ -27,7 +27,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
     {
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
-        $time = intval($session->get('CampaignMonitorSignupPageAdminINIT')) - 0;
+        $time = (int) $session->get('CampaignMonitorSignupPageAdminINIT') - 0;
         if ($time < time() - 3600 || isset($_GET['flush'])) {
             $session->set('CampaignMonitorSignupPageAdminINIT', time());
             (new CampaignMonitorCreateLists())

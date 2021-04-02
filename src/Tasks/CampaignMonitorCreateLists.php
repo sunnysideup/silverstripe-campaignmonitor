@@ -95,8 +95,8 @@ class CampaignMonitorCreateLists extends BuildTask
     protected function getCampaignMonitorPageForListIdExists(string $listId): ?bool
     {
         $className = $this->Config()->get('class_name_for_page');
-        return $className::get()
-            ->filter('ListID', $listId)->count() ? true : false;
+        return (bool) $className::get()
+            ->filter('ListID', $listId)->count();
     }
 
     /**

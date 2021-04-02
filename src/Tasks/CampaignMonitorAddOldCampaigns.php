@@ -32,6 +32,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
         }
         $api = CampaignMonitorAPIConnector::create();
         $api->init();
+
         $campaigns = $api->getCampaigns();
         if (is_array($campaigns)) {
             foreach ($campaigns as $campaign) {
@@ -42,10 +43,8 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
                             DB::alteration_message('Adding ' . $campaign->Subject . ' sent ' . $campaign->SentDate, 'created');
                         }
                         $campaignMonitorCampaign = CampaignMonitorCampaign::create();
-                    } else {
-                        if ($this->verbose) {
-                            DB::alteration_message('already added ' . $campaign->Subject, 'edited');
-                        }
+                    } elseif ($this->verbose) {
+                        DB::alteration_message('already added ' . $campaign->Subject, 'edited');
                     }
                     $campaignMonitorCampaign->HasBeenSent = true;
                     $campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
@@ -56,16 +55,12 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
                     $campaignMonitorCampaign->WebVersionTextURL = $campaign->WebVersionTextURL;
                     //$CampaignMonitorCampaign->ParentID = $this->ID;
                     $campaignMonitorCampaign->write();
-                } else {
-                    if ($this->verbose) {
-                        DB::alteration_message('not adding ' . $campaign->Subject . ' because it has not been sent yet...', 'edited');
-                    }
+                } elseif ($this->verbose) {
+                    DB::alteration_message('not adding ' . $campaign->Subject . ' because it has not been sent yet...', 'edited');
                 }
             }
-        } else {
-            if ($this->verbose) {
-                DB::alteration_message('there are no campaigns to be added', 'edited');
-            }
+        } elseif ($this->verbose) {
+            DB::alteration_message('there are no campaigns to be added', 'edited');
         }
         if ($this->verbose) {
             DB::alteration_message('<hr /><hr /><hr />Completed', 'edited');

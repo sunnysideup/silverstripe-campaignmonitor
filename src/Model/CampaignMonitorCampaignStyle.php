@@ -98,7 +98,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     {
         $array = [
 
-            /**
+        /**
          * ### @@@@ START REPLACEMENT @@@@ ###
          * WHY: automated upgrade
          * OLD: SSViewer::get_theme_folder() (ignore case)
@@ -134,7 +134,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             }
             //just try the next one ...
         }
-        user_error("can not find template, last one tried: ${fileLocation}");
+        user_error("can not find template, last one tried: {$fileLocation}");
         return 'error';
     }
 
@@ -157,7 +157,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                     if (file_exists($file)) {
                         $cssFiles[$file] = $file;
                     } else {
-                        user_error("can find css file ${file}");
+                        user_error("can find css file {$file}");
                     }
                 }
                 // if $link_tag rel == stylesheet
@@ -200,14 +200,15 @@ class CampaignMonitorCampaignStyle extends DataObject
             }
         }
         if (! empty($templates)) {
-            $excludes = $obj = CampaignMonitorCampaignStyle::get()->exclude(['TemplateName' => $templates]);
+            $excludes = CampaignMonitorCampaignStyle::get()->exclude(['TemplateName' => $templates]);
+            $obj = $excludes;
             foreach ($excludes as $exclude) {
                 $exclude->delete();
             }
         }
     }
 
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
         if ($this->TemplateName === CampaignMonitorCampaign::class) {

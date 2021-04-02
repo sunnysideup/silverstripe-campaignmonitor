@@ -22,9 +22,9 @@ class CampaignMonitorSignupFieldProvider
     use Extensible;
     use Injectable;
 
-    protected $member = null;
+    protected $member;
 
-    protected $listPage = null;
+    protected $listPage;
 
     /**
      * name of the field to use for sign-ups
@@ -213,20 +213,12 @@ class CampaignMonitorSignupFieldProvider
                         $fieldValues[] = $tmpValue;
                     }
                 }
-                if ($customField->Type === 'MultiSelectMany') {
-                    $finalValue = $fieldValues;
-                } else {
-                    $finalValue = implode('', $fieldValues);
-                }
+                $finalValue = $customField->Type === 'MultiSelectMany' ? $fieldValues : implode('', $fieldValues);
                 $customFormField->setValue($finalValue);
             }
             if (isset($linkedMemberFields[$customFormField->Code]) && ! $value) {
                 $fieldOrMethod = $linkedMemberFields[$customFormField->Code];
-                if ($this->member->hasMethod($fieldOrMethod)) {
-                    $value = $this->member->{$fieldOrMethod}();
-                } else {
-                    $value = $this->member->{$fieldOrMethod};
-                }
+                $value = $this->member->hasMethod($fieldOrMethod) ? $this->member->{$fieldOrMethod}() : $this->member->{$fieldOrMethod};
                 if ($value) {
                     $customFormField->setValue($value);
                 }

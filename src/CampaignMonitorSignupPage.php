@@ -105,7 +105,6 @@ class CampaignMonitorSignupPage extends Page
 
         'ShowFirstNameFieldInForm' => 'Boolean',
         'ShowSurnameFieldInForm' => 'Boolean',
-
     ];
 
     /**
@@ -213,6 +212,7 @@ class CampaignMonitorSignupPage extends Page
         }
         $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
         $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+
         $fields->addFieldToTab(
             'Root.SubscriptionFeedback',
             new TabSet(
@@ -313,7 +313,6 @@ class CampaignMonitorSignupPage extends Page
      *
      * Or does a basic sign up if ajax submitted.
      *
-     * @param Controller $controller
      * @param string $formName
      *
      * @return Form
@@ -344,8 +343,6 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * adds a subcriber to the list without worrying about making it a user ...
-     *
-     * @param string $email
      *
      * @returns
      */
@@ -379,7 +376,6 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * name of the list connected to.
-     * @return string
      */
     public function getListTitle(): string
     {
@@ -394,7 +390,6 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * tells us if the page is ready to receive subscriptions
-     * @return bool
      */
     public function ReadyToReceiveSubscribtions(): bool
     {
@@ -404,10 +399,44 @@ class CampaignMonitorSignupPage extends Page
         return $this->ListID && $this->GroupID;
     }
 
+    public function AddOldCampaigns()
+    {
+        $task = CampaignMonitorAddOldCampaigns::create();
+        $task->setVerbose(false);
+        $task->run(null);
+    }
+
+    public function requireDefaultRecords()
+    {
+        parent::requireDefaultRecords();
+        $update = [];
+        $page = CampaignMonitorSignupPage::get()->First();
+
+        if ($page) {
+            if (! $page->SignUpHeader) {
+                $page->SignUpHeader = 'Sign Up Now';
+                $update[] = 'created default entry for SignUpHeader';
+            }
+            if (strlen($page->SignUpIntro) < strlen('<p> </p>')) {
+                $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
+                $update[] = 'created default entry for SignUpIntro';
+            }
+            if (! $page->SignUpButtonLabel) {
+                $page->SignUpButtonLabel = 'Register Now';
+                $update[] = 'created default entry for SignUpButtonLabel';
+            }
+            if (count($update)) {
+                $page->writeToStage('Stage');
+                $page->publish('Stage', 'Live');
+                DB::alteration_message($page->ClassName . ' created/updated: ' . implode(' --- ', $update), 'created');
+            }
+        }
+    }
+
     /**
      * check list and group IDs
      */
-    public function onBeforeWrite()
+    protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
         //check list
@@ -423,7 +452,7 @@ class CampaignMonitorSignupPage extends Page
      *
      * add / remove segments ...
      */
-    public function onAfterWrite()
+    protected function onAfterWrite()
     {
         parent::onAfterWrite();
         if ($this->ShowOldNewsletters) {
@@ -467,40 +496,6 @@ class CampaignMonitorSignupPage extends Page
                 ->exclude(['Code' => $customCustomFieldsAdded]);
             foreach ($unwantedCustomFields as $unwantedCustomField) {
                 $unwantedCustomField->delete();
-            }
-        }
-    }
-
-    public function AddOldCampaigns()
-    {
-        $task = CampaignMonitorAddOldCampaigns::create();
-        $task->setVerbose(false);
-        $task->run(null);
-    }
-
-    public function requireDefaultRecords()
-    {
-        parent::requireDefaultRecords();
-        $update = [];
-        $page = CampaignMonitorSignupPage::get()->First();
-
-        if ($page) {
-            if (! $page->SignUpHeader) {
-                $page->SignUpHeader = 'Sign Up Now';
-                $update[] = 'created default entry for SignUpHeader';
-            }
-            if (strlen($page->SignUpIntro) < strlen('<p> </p>')) {
-                $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
-                $update[] = 'created default entry for SignUpIntro';
-            }
-            if (! $page->SignUpButtonLabel) {
-                $page->SignUpButtonLabel = 'Register Now';
-                $update[] = 'created default entry for SignUpButtonLabel';
-            }
-            if (count($update)) {
-                $page->writeToStage('Stage');
-                $page->publish('Stage', 'Live');
-                DB::alteration_message($page->ClassName . ' created/updated: ' . implode(' --- ', $update), 'created');
             }
         }
     }

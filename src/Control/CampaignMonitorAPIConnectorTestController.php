@@ -43,7 +43,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
      * contains API once started
      * @var CampaignMonitorAPIConnector
      */
-    protected $api = null;
+    protected $api;
 
     /**
      * should we show as much as possible?
@@ -257,15 +257,15 @@ class CampaignMonitorAPIConnectorTestController extends Controller
             $options = ['YES', 'NO']
         );
         $member = [];
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $member[$i] = new Member();
             $email = 'test_' . $i . '_' . $this->egData['oldEmailAddress'];
             $member[$i] = Member::get()->filter(['Email' => $email])->First();
             if (! $member[$i]) {
                 $member[$i] = new Member();
                 $member[$i]->Email = $email;
-                $member[$i]->FirstName = "First Name ${i}";
-                $member[$i]->Surname = "Surname ${i}";
+                $member[$i]->FirstName = "First Name {$i}";
+                $member[$i]->Surname = "Surname {$i}";
                 $member[$i]->write();
             }
             $this->api->addSubscriber(
@@ -307,7 +307,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
             $member[3]
         );
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $this->api->getSubscriberExistsForThisList(
                 $this->egData['tempListID'],
                 $member[$i]

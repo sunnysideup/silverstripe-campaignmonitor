@@ -6,8 +6,8 @@ use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Security\Member;
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -61,8 +61,8 @@ class CampaignMonitorSubscriptionLog extends DataObject
     {
         $obj = self::get()->byId($id);
         $obj->CampaignMonitorOutcome = ($success ? 'Success' : 'Error');
-        if(! $success) {
-            $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': '. CampaignMonitorAPIConnector::get_last_error_description();
+        if (! $success) {
+            $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': ' . CampaignMonitorAPIConnector::get_last_error_description();
         }
 
         return $obj->write();

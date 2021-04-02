@@ -129,22 +129,20 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
-            if (($key = array_search('CampaignMonitorEmail', $requiredList)) !== false) {
+            if (($key = array_search('CampaignMonitorEmail', $requiredList, true)) !== false) {
                 unset($requiredList[$key]);
             }
             $validator = new RequiredFields($requiredList);
             $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
             $data = $this->getRequest()->getSession()->get("FormData.{$form->getName()}.data");
-            if($data) {
+            if ($data) {
                 $form->loadDataFrom($data);
-            } else {
-                if ($member && $member->exists()) {
-                    foreach ($this->getFieldsForSignupFormFieldsIncluded(true) as $field) {
-                        $value = $this->memberDbValues['CampaignMonitor' . $field] ?? '';
-                        if ($value) {
-                            $form->Fields()->fieldByName('CampaignMonitor' . $field)
-                                ->setValue($value);
-                        }
+            } elseif ($member && $member->exists()) {
+                foreach ($this->getFieldsForSignupFormFieldsIncluded(true) as $field) {
+                    $value = $this->memberDbValues['CampaignMonitor' . $field] ?? '';
+                    if ($value) {
+                        $form->Fields()->fieldByName('CampaignMonitor' . $field)
+                            ->setValue($value);
                     }
                 }
             }
@@ -155,7 +153,6 @@ class CampaignMonitorSignupPageController extends PageController
 
     /**
      * we need this in controller and dataobject
-     * @return bool
      */
     public function ReadyToReceiveSubscribtions(): bool
     {
@@ -175,7 +172,6 @@ class CampaignMonitorSignupPageController extends PageController
     public function subscribe($data, $form)
     {
         if ($this->ReadyToReceiveSubscribtions()) {
-
             $session = $this->getRequest()->getSession();
             $loggedInMember = Security::getCurrentUser();
             if ($loggedInMember) {
@@ -348,7 +344,6 @@ class CampaignMonitorSignupPageController extends PageController
 
     /**
      * action
-     * @param HTTPRequest $request
      */
     public function preloademail(HTTPRequest $request)
     {
@@ -365,10 +360,8 @@ class CampaignMonitorSignupPageController extends PageController
                     return 'ERROR';
                 }
             }
-        } else {
-            if ($m = Security::getCurrentUser()) {
-                $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
-            }
+        } elseif ($m = Security::getCurrentUser()) {
+            $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
         }
         return [];
     }
@@ -378,7 +371,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function viewcampaign($request)
     {
-        $id = intval($request->param('ID'));
+        $id = (int) $request->param('ID');
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
@@ -391,7 +384,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function viewcampaigntextonly($request)
     {
-        $id = intval($request->param('ID'));
+        $id = (int) $request->param('ID');
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
@@ -404,7 +397,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function previewcampaign($request)
     {
-        $id = intval($request->param('ID'));
+        $id = (int) $request->param('ID');
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
             if (isset($_GET['hash']) && strlen($_GET['hash']) === 7 && $_GET['hash'] === $this->campaign->Hash) {
@@ -419,7 +412,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function previewcampaigntextonly($request)
     {
-        $id = intval($request->param('ID'));
+        $id = (int) $request->param('ID');
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
             return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
@@ -464,7 +457,7 @@ class CampaignMonitorSignupPageController extends PageController
      */
     public function HasCampaign()
     {
-        return $this->campaign ? true : false;
+        return (bool) $this->campaign;
     }
 
     public function Campaign()
