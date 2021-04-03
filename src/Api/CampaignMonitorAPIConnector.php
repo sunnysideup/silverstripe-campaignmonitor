@@ -9,7 +9,6 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\SS_List;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
