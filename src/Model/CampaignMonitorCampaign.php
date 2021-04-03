@@ -105,7 +105,7 @@ class CampaignMonitorCampaign extends DataObject
 
     private $_existsOnCampaignMonitorCheck;
 
-    public function canDelete($member = null, $context = [])
+    public function canDelete($member = null)
     {
         return $this->HasBeenSentCheck() ? false : parent::canDelete($member);
     }
