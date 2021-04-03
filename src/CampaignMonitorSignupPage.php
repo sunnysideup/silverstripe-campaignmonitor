@@ -255,7 +255,7 @@ class CampaignMonitorSignupPage extends Page
                 ),
                 new Tab(
                     'StartForm',
-                    new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignUpPage) to complete all the details.'),
+                    new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignupPage) to complete all the details.'),
                     new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
                     new HTMLEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
                     new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
