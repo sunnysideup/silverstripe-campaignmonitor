@@ -10,6 +10,7 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\SS_List;
+use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Member;
 use SilverStripe\SiteConfig\SiteConfig;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
@@ -1346,7 +1347,7 @@ class CampaignMonitorAPIConnector
      * given email not existing in the list.
      *
      * @param string $listID
-     * @param SS_List $membersSet - list of Member|object with Email, FirstName, Surname fields.
+     * @param DataList $membersSet - list of Member|object with Email, FirstName, Surname fields.
      * @param array $customFields The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
      * @param bool $resubscribe Whether we should resubscribe any existing subscribers
      * @param bool $queueSubscriptionBasedAutoResponders By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
