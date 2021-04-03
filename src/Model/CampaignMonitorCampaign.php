@@ -15,10 +15,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
- *
- *
- **/
-
+ */
 class CampaignMonitorCampaign extends DataObject
 {
     protected $countOfWrites = 0;
@@ -171,38 +168,50 @@ class CampaignMonitorCampaign extends DataObject
                 $fields->removeFieldFromTab('Root.Main', 'CreateFromWebsite');
             }
         }
+
         return $fields;
     }
 
     /**
-     * returns link to view campaign
+     * returns link to view campaign.
+     *
      * @var return
+     *
+     * @param mixed $action
      */
     public function Link($action = '')
     {
         if ($page = $this->Pages()->First()) {
             $link = $page->Link('viewcampaign' . $action . '/' . $this->ID . '/');
+
             return Director::absoluteURL($link);
         }
+
         return '#';
     }
 
     /**
      * returns link to view preview campaign
-     * this link is used to create templates / campaigns on Campaign Monitor
+     * this link is used to create templates / campaigns on Campaign Monitor.
+     *
      * @var return
+     *
+     * @param mixed $action
      */
     public function PreviewLink($action = '')
     {
         if ($page = $this->Pages()->First()) {
             $link = $page->Link('previewcampaign' . $action . '/' . $this->ID . '/?hash=' . $this->Hash);
+
             return Director::absoluteURL($link);
         }
+
         return '';
     }
 
     /**
-     * html for newsletter to be created
+     * html for newsletter to be created.
+     *
      * @var return
      */
     public function getNewsletterContent()
@@ -233,7 +242,7 @@ class CampaignMonitorCampaign extends DataObject
              * OLD: ->RenderWith( (ignore case)
              * NEW: ->RenderWith( (COMPLEX)
              * EXP: Check that the template location is still valid!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###
+             * ### @@@@ STOP REPLACEMENT @@@@ ###.
              */
             $html = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
@@ -252,11 +261,13 @@ class CampaignMonitorCampaign extends DataObject
         } else {
             user_error('Please include Emogrifier module');
         }
+
         return $html;
     }
 
     /**
-     * provide template used for RenderWith
+     * provide template used for RenderWith.
+     *
      * @return string
      */
     public function getRenderWithTemplate()
@@ -266,6 +277,7 @@ class CampaignMonitorCampaign extends DataObject
                 return $style->TemplateName;
             }
         }
+
         return $this->Config()->get('default_template');
     }
 
@@ -278,7 +290,7 @@ class CampaignMonitorCampaign extends DataObject
             return $style->getHTMLContent($this);
         }
 
-        /**
+        /*
          * ### @@@@ START REPLACEMENT @@@@ ###
          * WHY: automated upgrade
          * OLD: ->RenderWith( (ignore case)
@@ -296,7 +308,7 @@ class CampaignMonitorCampaign extends DataObject
             return true;
         }
         //real check
-        if ($this->_hasBeenSent === null) {
+        if (null === $this->_hasBeenSent) {
             if (! $this->CampaignID) {
                 $this->_hasBeenSent = false;
             } elseif (! $this->HasBeenSent) {
@@ -308,6 +320,7 @@ class CampaignMonitorCampaign extends DataObject
                             $this->HasBeenSent = true;
                             $this->write();
                             $this->_hasBeenSent = true;
+
                             break;
                         }
                     }
@@ -316,11 +329,15 @@ class CampaignMonitorCampaign extends DataObject
                 $this->_hasBeenSent = $this->HasBeenSent;
             }
         }
+
         return $this->_hasBeenSent;
     }
 
     /**
-     * checks if the template and/or the campaign exists
+     * checks if the template and/or the campaign exists.
+     *
+     * @param mixed $forceRecheck
+     *
      * @return bool
      */
     public function ExistsOnCampaignMonitorCheck($forceRecheck = false)
@@ -330,7 +347,7 @@ class CampaignMonitorCampaign extends DataObject
             return true;
         }
         //real check
-        if ($this->_existsOnCampaignMonitorCheck === null || $forceRecheck) {
+        if (null === $this->_existsOnCampaignMonitorCheck || $forceRecheck) {
             $this->_existsOnCampaignMonitorCheck = false;
             if ($this->CreateAsTemplate) {
                 $field = 'TemplateID';
@@ -350,6 +367,7 @@ class CampaignMonitorCampaign extends DataObject
                     foreach ($result as $campaign) {
                         if ($this->{$field} === $campaign->{$field}) {
                             $this->_existsOnCampaignMonitorCheck = true;
+
                             break;
                         }
                     }
@@ -360,6 +378,7 @@ class CampaignMonitorCampaign extends DataObject
                         foreach ($result as $campaign) {
                             if ($this->{$field} === $campaign->{$field}) {
                                 $this->_existsOnCampaignMonitorCheck = true;
+
                                 break;
                             }
                         }
@@ -367,6 +386,7 @@ class CampaignMonitorCampaign extends DataObject
                 }
             }
         }
+
         return $this->_existsOnCampaignMonitorCheck;
     }
 
@@ -388,7 +408,7 @@ class CampaignMonitorCampaign extends DataObject
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
-        if ($this->Pages()->count() === 0) {
+        if (0 === $this->Pages()->count()) {
             if ($page = CampaignMonitorSignupPage::get()->first()) {
                 $this->Pages()->add($page);
             }
@@ -431,6 +451,7 @@ class CampaignMonitorCampaign extends DataObject
         if ($style = $this->CampaignMonitorCampaignStyle()) {
             return $style->getCSSFilesAsArray();
         }
+
         return [];
     }
 
@@ -443,6 +464,7 @@ class CampaignMonitorCampaign extends DataObject
             self::$_api = CampaignMonitorAPIConnector::create();
             self::$_api->init();
         }
+
         return self::$_api;
     }
 }

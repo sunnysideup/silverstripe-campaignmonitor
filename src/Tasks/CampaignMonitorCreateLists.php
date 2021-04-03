@@ -26,15 +26,16 @@ class CampaignMonitorCreateLists extends BuildTask
 
     private static $drop_down_list_for_campaign_monitor = [];
 
-    public function setVerbose($b): self
+    public function setVerbose(bool $b): self
     {
         $this->verbose = $b;
+
         return $this;
     }
 
     public function run($request)
     {
-        if (self::$required_default_records_has_been_done === false) {
+        if (false === self::$required_default_records_has_been_done) {
             self::$required_default_records_has_been_done = true;
             $list = $this->getCampaignMonitorLists();
             $className = $this->Config()->get('class_name_for_page');
@@ -67,7 +68,8 @@ class CampaignMonitorCreateLists extends BuildTask
     }
 
     /**
-     * returns available list for client
+     * returns available list for client.
+     *
      * @return array
      */
     protected function getCampaignMonitorLists()
@@ -82,12 +84,14 @@ class CampaignMonitorCreateLists extends BuildTask
             }
             self::$drop_down_list_for_campaign_monitor = $array;
         }
+
         return self::$drop_down_list_for_campaign_monitor;
     }
 
     protected function getCampaignMonitorPageForListId(string $listId): ?CampaignMonitorSignupPage
     {
         $className = $this->Config()->get('class_name_for_page');
+
         return $className::get()
             ->filter('ListID', $listId)->first();
     }
@@ -95,12 +99,14 @@ class CampaignMonitorCreateLists extends BuildTask
     protected function getCampaignMonitorPageForListIdExists(string $listId): ?bool
     {
         $className = $this->Config()->get('class_name_for_page');
+
         return (bool) $className::get()
             ->filter('ListID', $listId)->count();
     }
 
     /**
-     * returns available list for client
+     * returns available list for client.
+     *
      * @return array
      */
     protected function createCampaignMonitorPage(string $listId, string $listName)

@@ -13,13 +13,13 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 /**
  * simple class to see that everything is working ...
  */
-
 class CampaignMonitorAPIConnectorTestController extends Controller
 {
     use CampaignMonitorApiTrait;
 
     /**
-     * example data
+     * example data.
+     *
      * @var array
      */
     protected $egData = [
@@ -40,14 +40,16 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     ];
 
     /**
-     * contains API once started
+     * contains API once started.
+     *
      * @var CampaignMonitorAPIConnector
      */
     protected $api;
 
     /**
      * should we show as much as possible?
-     * @var boolean
+     *
+     * @var bool
      */
     protected $showAll = false;
 
@@ -63,7 +65,10 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     /**
      * link for controller
      * we add baseURL to make it work for all set ups.
+     *
      * @var string
+     *
+     * @param null|mixed $action
      */
     public function Link($action = null)
     {
@@ -71,11 +76,12 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         if ($action) {
             $link .= $action . '/';
         }
+
         return $link;
     }
 
     /**
-     * run all tests
+     * run all tests.
      */
     public function testall()
     {

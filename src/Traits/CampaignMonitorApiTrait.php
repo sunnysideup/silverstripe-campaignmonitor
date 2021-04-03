@@ -13,10 +13,11 @@ trait CampaignMonitorApiTrait
      */
     public function getCMAPI()
     {
-        if (self::$cm_api === null) {
+        if (null === self::$cm_api) {
             self::$cm_api = CampaignMonitorAPIConnector::create();
             self::$cm_api->init();
         }
+
         return self::$cm_api;
     }
 }

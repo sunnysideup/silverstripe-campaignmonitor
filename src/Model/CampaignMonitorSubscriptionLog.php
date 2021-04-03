@@ -13,9 +13,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @author nicolaas [at] sunnysideup.co.nz
  *
  * @description: this represents a sub group of a list, otherwise known as a segment
- *
- **/
-
+ */
 class CampaignMonitorSubscriptionLog extends DataObject
 {
     private static $table_name = 'CampaignMonitorLog';
@@ -54,6 +52,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
         $obj->Action = $action;
         $obj->ListID = $list->ID;
         $obj->MemberID = $member->ID;
+
         return $obj->write();
     }
 

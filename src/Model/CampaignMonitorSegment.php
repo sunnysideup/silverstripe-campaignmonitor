@@ -9,9 +9,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @author nicolaas [at] sunnysideup.co.nz
  *
  * @description: this represents a sub group of a list, otherwise known as a segment
- *
- **/
-
+ */
 class CampaignMonitorSegment extends DataObject
 {
     private static $table_name = 'CampaignMonitorSegment';

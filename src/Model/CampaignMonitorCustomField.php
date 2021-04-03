@@ -14,9 +14,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @author nicolaas [at] sunnysideup.co.nz
  *
  * @description: this represents a sub group of a list, otherwise known as a segment
- *
- **/
-
+ */
 class CampaignMonitorCustomField extends DataObject
 {
     private static $table_name = 'CampaignMonitorCustomField';
@@ -55,7 +53,8 @@ class CampaignMonitorCustomField extends DataObject
     ];
 
     /**
-     * form field matcher between CM and SS CMField => SSField
+     * form field matcher between CM and SS CMField => SSField.
+     *
      * @return array
      */
     private static $field_translator = [
@@ -118,6 +117,9 @@ class CampaignMonitorCustomField extends DataObject
     }
 
     /**
+     * @param mixed $customFieldsObject
+     * @param mixed $listID
+     *
      * @return CampaignMonitorCustomField
      */
     public static function create_from_campaign_monitor_object($customFieldsObject, $listID)
@@ -141,14 +143,15 @@ class CampaignMonitorCustomField extends DataObject
         $obj->Options = implode(',', $customFieldsObject->FieldOptions);
         $obj->Visible = $customFieldsObject->VisibleInPreferenceCenter;
         $obj->write();
+
         return $obj;
     }
 
     /**
-     * @param string $namePrefix
-     * @param string $nameAppendix
-     * @param string $title
-     * @param array|null $options
+     * @param string     $namePrefix
+     * @param string     $nameAppendix
+     * @param string     $title
+     * @param null|array $options
      */
     public function getFormField($namePrefix = '', $nameAppendix = '', $title = '', $options = null)
     {
@@ -169,6 +172,7 @@ class CampaignMonitorCustomField extends DataObject
             $optionsArray = array_combine($optionsArray, $optionsArray);
             $field->setSource($optionsArray);
         }
+
         return $field;
     }
 

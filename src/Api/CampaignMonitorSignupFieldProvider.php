@@ -3,7 +3,6 @@
 namespace Sunnysideup\CampaignMonitor\Api;
 
 use SilverStripe\Core\Config\Configurable;
-
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\CheckboxSetField;
@@ -27,7 +26,8 @@ class CampaignMonitorSignupFieldProvider
     protected $listPage;
 
     /**
-     * name of the field to use for sign-ups
+     * name of the field to use for sign-ups.
+     *
      * @var string
      */
     private static $campaign_monitor_allow_unsubscribe = true;
@@ -35,15 +35,17 @@ class CampaignMonitorSignupFieldProvider
     /**
      * array of fields where the member value is set as the default for the
      * custom field ...
-     * The should be like this
+     * The should be like this.
      *
      *     CustomFieldCode => MemberFieldOrMethod
+     *
      * @var array
      */
     private static $custom_fields_member_field_or_method_map = [];
 
     /**
-     * name of the field to use for sign-ups
+     * name of the field to use for sign-ups.
+     *
      * @var string
      */
     private static $campaign_monitor_signup_fieldname = 'CampaignMonitorSubscriptions';
@@ -51,12 +53,14 @@ class CampaignMonitorSignupFieldProvider
     public function setMember(Member $member)
     {
         $this->member = $member;
+
         return $this;
     }
 
     public function setListPage($listPage)
     {
         $this->listPage = $listPage;
+
         return $this;
     }
 
@@ -90,7 +94,7 @@ class CampaignMonitorSignupFieldProvider
                 $optionArray = $this->getOptionArray();
                 $currentSelection = $this->getCurrentSelection();
 
-                if (count($optionArray) === 1) {
+                if (1 === count($optionArray)) {
                     $subscribeField = HiddenField::create(
                         $fieldName,
                         $currentSelection
@@ -134,13 +138,15 @@ class CampaignMonitorSignupFieldProvider
         if ($addCustomFields) {
             $this->addCustomFieldsToField($parentField);
         }
+
         return $parentField;
     }
 
     /**
-     * action subscription form
-     * @param array          $data
-     * @param array|string   $values
+     * action subscription form.
+     *
+     * @param array        $data
+     * @param array|string $values
      *
      * @return string: can be subscribe / unsubscribe / error
      */
@@ -160,7 +166,7 @@ class CampaignMonitorSignupFieldProvider
             }
         } elseif (is_string($values) && $values && $this->listPage->ListID) {
             //one choice
-            if ($values === 'Subscribe') {
+            if ('Subscribe' === $values) {
                 $customFields = $this->listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
                 $customFieldsArray = [];
                 foreach ($customFields as $customField) {
@@ -176,6 +182,7 @@ class CampaignMonitorSignupFieldProvider
         } else {
             user_error('Subscriber field missing', E_USER_WARNING);
         }
+
         return $typeOfAction;
     }
 
@@ -213,7 +220,7 @@ class CampaignMonitorSignupFieldProvider
                         $fieldValues[] = $tmpValue;
                     }
                 }
-                $finalValue = $customField->Type === 'MultiSelectMany' ? $fieldValues : implode('', $fieldValues);
+                $finalValue = 'MultiSelectMany' === $customField->Type ? $fieldValues : implode('', $fieldValues);
                 $customFormField->setValue($finalValue);
             }
             if (isset($linkedMemberFields[$customFormField->Code]) && ! $value) {
@@ -239,6 +246,7 @@ class CampaignMonitorSignupFieldProvider
                 }
             }
         }
+
         return json_decode(json_encode($currentValues), true);
     }
 }

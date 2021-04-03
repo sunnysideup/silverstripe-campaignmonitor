@@ -3,10 +3,6 @@
 namespace Sunnysideup\CampaignMonitor;
 
 use Page;
-
-
-
-
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -44,7 +40,7 @@ use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
- * Page for Signing Up to Campaign Monitor List
+ * Page for Signing Up to Campaign Monitor List.
  *
  * Each page relates to one CM list.
  *
@@ -57,13 +53,15 @@ class CampaignMonitorSignupPage extends Page
     private static $controller_name = CampaignMonitorSignupPageController::class;
 
     /**
-     * standard SS variable
+     * standard SS variable.
+     *
      * @var string
      */
     private static $singular_name = 'Newsletter sign-up page';
 
     /**
-     * standard SS variable
+     * standard SS variable.
+     *
      * @var string
      */
     private static $plural_name = 'Newsletter sign-up pages';
@@ -145,7 +143,7 @@ class CampaignMonitorSignupPage extends Page
     private static $description = 'Page to suscribe and review newsletter list(s)';
 
     /**
-     * @var array|null
+     * @var null|array
      */
     private static $drop_down_list = [];
 
@@ -160,7 +158,8 @@ class CampaignMonitorSignupPage extends Page
     }
 
     /**
-     * Campaign monitor pages that are ready to receive "sign-ups"
+     * Campaign monitor pages that are ready to receive "sign-ups".
+     *
      * @return \SilverStripe\ORM\ArrayList
      */
     public static function get_ready_ones()
@@ -172,6 +171,7 @@ class CampaignMonitorSignupPage extends Page
                 $array[$listPage->ID] = $listPage->ID;
             }
         }
+
         return CampaignMonitorSignupPage::get()->filter(['ID' => $array]);
     }
 
@@ -289,7 +289,7 @@ class CampaignMonitorSignupPage extends Page
                 )
             )
         );
-        if ($this->HasCampaigns() === false) {
+        if (false === $this->HasCampaigns()) {
             $fields->removeByName([
                 'MyCampaignReset',
                 'MyCampaignInfo',
@@ -299,6 +299,7 @@ class CampaignMonitorSignupPage extends Page
         if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
             $fields->removeByName('CreateNewCampaign');
         }
+
         return $fields;
     }
 
@@ -338,6 +339,7 @@ class CampaignMonitorSignupPage extends Page
             $actions
         );
         $form->setFormAction($this->Link('preloademail'));
+
         return $form;
     }
 
@@ -369,8 +371,10 @@ class CampaignMonitorSignupPage extends Page
             if ($result === $email) {
                 return null;
             }
+
             return 'ERROR: could not subscribe';
         }
+
         return 'ERROR: not ready';
     }
 
@@ -385,17 +389,19 @@ class CampaignMonitorSignupPage extends Page
                 return $a[$this->ListID];
             }
         }
+
         return '';
     }
 
     /**
-     * tells us if the page is ready to receive subscriptions
+     * tells us if the page is ready to receive subscriptions.
      */
     public function ReadyToReceiveSubscribtions(): bool
     {
         if ($this->CloseSubscriptions) {
             return false;
         }
+
         return $this->ListID && $this->GroupID;
     }
 
@@ -434,7 +440,7 @@ class CampaignMonitorSignupPage extends Page
     }
 
     /**
-     * check list and group IDs
+     * check list and group IDs.
      */
     protected function onBeforeWrite()
     {
@@ -448,7 +454,7 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * add old campaings or remove them
-     * depending on the setting
+     * depending on the setting.
      *
      * add / remove segments ...
      */
@@ -477,7 +483,8 @@ class CampaignMonitorSignupPage extends Page
         }
         if (count($segmentsAdded)) {
             $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                ->exclude(['SegmentID' => $segmentsAdded]);
+                ->exclude(['SegmentID' => $segmentsAdded])
+            ;
             foreach ($unwantedSegments as $unwantedSegment) {
                 $unwantedSegment->delete();
             }
@@ -493,7 +500,8 @@ class CampaignMonitorSignupPage extends Page
         }
         if (count($customCustomFieldsAdded)) {
             $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                ->exclude(['Code' => $customCustomFieldsAdded]);
+                ->exclude(['Code' => $customCustomFieldsAdded])
+            ;
             foreach ($unwantedCustomFields as $unwantedCustomField) {
                 $unwantedCustomField->delete();
             }
@@ -531,7 +539,8 @@ class CampaignMonitorSignupPage extends Page
     }
 
     /**
-     * returns available list for client
+     * returns available list for client.
+     *
      * @return array
      */
     protected function makeDropdownListFromLists()
@@ -547,7 +556,8 @@ class CampaignMonitorSignupPage extends Page
             }
             //remove subscription list IDs from other pages
             $subscribePages = CampaignMonitorSignupPage::get()
-                ->exclude('ID', $this->ID);
+                ->exclude('ID', $this->ID)
+            ;
             foreach ($subscribePages as $page) {
                 if (isset($array[$page->ListID])) {
                     unset($array[$page->ListID]);
@@ -555,6 +565,7 @@ class CampaignMonitorSignupPage extends Page
             }
             self::$drop_down_list[$this->ID] = $array;
         }
+
         return self::$drop_down_list[$this->ID];
     }
 }

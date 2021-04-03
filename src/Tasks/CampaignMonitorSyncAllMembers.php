@@ -13,7 +13,7 @@ use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 
 /**
- * Moves all Members to a Campaign Monitor List
+ * Moves all Members to a Campaign Monitor List.
  *
  * Requires the Member Object
  * to have a method `IsBlackListed`
@@ -23,7 +23,6 @@ use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
  * You can extend this basic task to
  * add more functionality
  */
-
 class CampaignMonitorSyncAllMembers extends BuildTask
 {
     protected $title = 'Export Newsletter to Campaign Monitor';
@@ -31,12 +30,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     protected $description = 'Moves all the Members to campaign monitor';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $debug = true;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $enabled = false;
 
@@ -57,6 +56,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
 
     /**
      * The default page of where the members are added.
+     *
      * @var int
      */
     private static $mailing_list_id = '';
@@ -93,7 +93,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         $api = $this->getAPI();
         for ($i = 0; $i < $maxIterations; ++$i) {
             $members = Member::get()
-                ->limit($limit, $i * $limit);
+                ->limit($limit, $i * $limit)
+            ;
             if ($this->debug) {
                 $members = $members->sort('RAND()');
             }
@@ -145,11 +146,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
             self::$_api = CampaignMonitorAPIConnector::create();
             self::$_api->init();
         }
+
         return self::$_api;
     }
 
     /**
-     * updates the previouslyExported variable
+     * updates the previouslyExported variable.
      */
     private function getExistingFolkListed()
     {
@@ -163,12 +165,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (property_exists($list, 'Results') && $list->Results !== null) {
+            if (property_exists($list, 'Results') && null !== $list->Results) {
                 foreach ($list->Results as $obj) {
                     $finalCustomFields = [];
                     foreach ($obj->CustomFields as $customFieldObject) {
@@ -183,7 +185,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     }
 
     /**
-     * updates previouslyBouncedSubscribers variable
+     * updates previouslyBouncedSubscribers variable.
      */
     private function getBouncedSubscribers()
     {
@@ -197,12 +199,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (property_exists($list, 'Results') && $list->Results !== null) {
+            if (property_exists($list, 'Results') && null !== $list->Results) {
                 foreach ($list->Results as $obj) {
                     $this->previouslyBouncedSubscribers[$obj->EmailAddress] = true;
                 }
@@ -213,7 +215,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     }
 
     /**
-     * updates previouslyUnsubscribedSubscribers variable
+     * updates previouslyUnsubscribedSubscribers variable.
      */
     private function getUnsubscribedSubscribers()
     {
@@ -227,12 +229,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 $sortByField = 'Email',
                 $sortDirection = 'ASC'
             );
-            if (property_exists($list, 'NumberOfPages') && $list->NumberOfPages !== null && $list->NumberOfPages) {
+            if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
                 if ($i > $list->NumberOfPages) {
                     $i = 999999;
                 }
             }
-            if (property_exists($list, 'Results') && $list->Results !== null) {
+            if (property_exists($list, 'Results') && null !== $list->Results) {
                 foreach ($list->Results as $obj) {
                     $this->previouslyUnsubscribedSubscribers[$obj->EmailAddress] = true;
                 }
@@ -261,9 +263,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $alreadyListed = true;
                         DB::alteration_message('' . $email . ' is already listed');
                         foreach ($valuesArray as $key => $value) {
-                            if ($key !== Email::class) {
+                            if (Email::class !== $key) {
                                 if (! isset($this->previouslyExported[$email][$key])) {
-                                    if ($value === 'tba' || $value === 'No' || strlen(trim($value)) < 1) {
+                                    if ('tba' === $value || 'No' === $value || strlen(trim($value)) < 1) {
                                         //do nothing
                                     } else {
                                         $updateDetails = true;
@@ -296,13 +298,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                                 $restartSubscriptionBasedAutoResponders = false
                             );
                         }
-                        unset($finalCustomFields[$email]);
-                        unset($customFields[$email]);
-                        unset($memberArray[$email]);
+                        unset($finalCustomFields[$email], $customFields[$email], $memberArray[$email]);
                     } elseif ($alreadyListed) {
-                        unset($finalCustomFields[$email]);
-                        unset($customFields[$email]);
-                        unset($memberArray[$email]);
+                        unset($finalCustomFields[$email], $customFields[$email], $memberArray[$email]);
                     }
                 }
                 if (count($memberArray)) {

@@ -11,13 +11,12 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
- *
- **/
-
+ */
 class CampaignMonitorGroupDOD extends DataExtension
 {
     /**
      * Is this a group for newsletter signing up.
+     *
      * @return bool
      */
     public function CampaignMonitorSubscriberGroupPage()
@@ -63,7 +62,8 @@ class CampaignMonitorGroupDOD extends DataExtension
     }
 
     /**
-     * @param  Member $member (optional)
+     * @param Member $member (optional)
+     *
      * @return mixed
      */
     public function canEdit($member = null)
@@ -71,6 +71,7 @@ class CampaignMonitorGroupDOD extends DataExtension
         if ($this->IsCampaignMonitorSubscriberGroup()) {
             return false;
         }
+
         return null;
     }
 }

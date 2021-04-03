@@ -5,7 +5,6 @@ namespace Sunnysideup\CampaignMonitor\Admin;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
-
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorCreateLists;
@@ -32,7 +31,8 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
             $session->set('CampaignMonitorSignupPageAdminINIT', time());
             (new CampaignMonitorCreateLists())
                 ->setVerbose(false)
-                ->run(null);
+                ->run(null)
+            ;
         }
         parent::init();
     }

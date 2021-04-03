@@ -3,7 +3,6 @@
 namespace Sunnysideup\CampaignMonitor\Model;
 
 use DOMDocument;
-
 use SilverStripe\Assets\FileFinder;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
@@ -15,10 +14,7 @@ use SilverStripe\View\ThemeResourceLoader;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
- *
- *
- **/
-
+ */
 class CampaignMonitorCampaignStyle extends DataObject
 {
     private static $table_name = 'CampaignMonitorCampaignStyle';
@@ -59,6 +55,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         $fields->addFieldToTab('Root.Debug', ReadonlyField::create('CSSFiles'));
         $fields->addFieldToTab('Root.Debug', ReadonlyField::create('CampaignMonitorCampaigns', 'Used in ', implode(',', $this->CampaignMonitorCampaigns()->map()->toArray())));
         $fields->removeFieldFromTab('Root', 'CampaignMonitorCampaigns');
+
         return $fields;
     }
 
@@ -76,7 +73,7 @@ class CampaignMonitorCampaignStyle extends DataObject
 
         $activeThemes = SSViewer::get_themes();
         foreach ($activeThemes as $activeTheme) {
-            if (strpos($activeTheme, '$') === false) {
+            if (false === strpos($activeTheme, '$')) {
                 $array[] = ThemeResourceLoader::inst()->getPath($activeTheme) . '/templates/Sunnysideup/CampaignMonitor/Email';
             }
         }
@@ -88,6 +85,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                 unset($array[$key]);
             }
         }
+
         return $array;
     }
 
@@ -97,29 +95,28 @@ class CampaignMonitorCampaignStyle extends DataObject
     public function getCSSFoldersToSearch()
     {
         $array = [
-
-        /**
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: automated upgrade
-         * OLD: SSViewer::get_theme_folder() (ignore case)
-         * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
-         * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
+            /*
+             * ### @@@@ START REPLACEMENT @@@@ ###
+             * WHY: automated upgrade
+             * OLD: SSViewer::get_theme_folder() (ignore case)
+             * NEW: SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') (COMPLEX)
+             * EXP: Please review update and fix as required. Note: $themesFilePath = SilverStripe\View\ThemeResourceLoader::inst()->findThemedResource('css/styles.css');
+             * ### @@@@ STOP REPLACEMENT @@@@ ###
+             */
             // Director::baseFolder() . '/' . SilverStripe\View\ThemeResourceLoader::inst()->getPath('NAME-OF-THEME-GOES-HERE') . '_campaignmonitor/css/',
             // Director::baseFolder() . '/campaignmonitor/css/',
-
         ];
         foreach ($array as $key => $folder) {
             if (! file_exists($folder)) {
                 unset($array[$key]);
             }
         }
+
         return $array;
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getFileLocation()
     {
@@ -135,6 +132,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             //just try the next one ...
         }
         user_error("can not find template, last one tried: {$fileLocation}");
+
         return 'error';
     }
 
@@ -152,7 +150,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             @$dom->loadHTMLFile($fileLocation);
             $linkTags = $dom->getElementsByTagName('link');
             foreach ($linkTags as $linkTag) {
-                if (strtolower($linkTag->getAttribute('rel')) === 'stylesheet') {
+                if ('stylesheet' === strtolower($linkTag->getAttribute('rel'))) {
                     $file = Director::baseFolder() . '/' . $linkTag->getAttribute('href');
                     if (file_exists($file)) {
                         $cssFiles[$file] = $file;
@@ -166,15 +164,17 @@ class CampaignMonitorCampaignStyle extends DataObject
         } else {
             user_error('Can not find template file');
         }
-        if (count($cssFiles) === 0) {
+        if (0 === count($cssFiles)) {
             foreach ($this->getCSSFoldersToSearch() as $folder) {
                 $file = $folder . 'CampaignMonitorCampaign.css';
                 if (file_exists($file)) {
                     $cssFiles[$file] = $file;
+
                     break;
                 }
             }
         }
+
         return $cssFiles;
     }
 
@@ -211,7 +211,7 @@ class CampaignMonitorCampaignStyle extends DataObject
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
-        if ($this->TemplateName === CampaignMonitorCampaign::class) {
+        if (CampaignMonitorCampaign::class === $this->TemplateName) {
             $this->Title = 'Default Template';
         }
     }

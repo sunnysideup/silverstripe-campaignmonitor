@@ -15,14 +15,14 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
 
     protected $verbose = true;
 
-    public function setVerbose($b)
+    public function setVerbose(bool $b)
     {
         $this->verbose = $b;
     }
 
     /**
      * @param \SilverStripe\Control\HTTPRequest $request
-     * standard method
+     *                                                   standard method
      */
     public function run($request)
     {
