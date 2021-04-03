@@ -16,7 +16,7 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
- * TO DO: only apply the on afterwrite to people in the subscriber group.
+ * @todoonly apply the on afterwrite to people in the subscriber group.
  *
  **/
 
