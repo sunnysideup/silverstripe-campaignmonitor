@@ -87,7 +87,7 @@ class CampaignMonitorSignupPageController extends PageController
         'resetsignup' => true,
     ];
 
-    public function ShowForm(): bool
+    public function ShowForm() : bool
     {
         return $this->isSignUp;
     }
