@@ -58,13 +58,13 @@ class CampaignMonitorSignupPage extends Page
 
     /**
      * standard SS variable
-     * @var String
+     * @var string
      */
     private static $singular_name = 'Newsletter sign-up page';
 
     /**
      * standard SS variable
-     * @var String
+     * @var string
      */
     private static $plural_name = 'Newsletter sign-up pages';
 
