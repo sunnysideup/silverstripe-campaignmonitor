@@ -115,9 +115,6 @@ class CampaignMonitorAPIConnector
         $this->debug = $b;
     }
 
-    /**
-     * @param bool $b
-     */
     public function setAllowCaching(bool $b)
     {
         $this->allowCaching = $b;
