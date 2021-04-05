@@ -132,19 +132,18 @@ class CampaignMonitorMemberDOD extends DataExtension
      * remove from Group
      * remove from CM database...
      *
-     * @param CampaignMonitorSignupPage | Int $listPage
+     * @param CampaignMonitorSignupPage|string $listPage
      *
      * @return bool returns true if successful
      */
     public function removeCampaignMonitorList($listPage): bool
     {
-        if (is_string($listPage)) {
+        if (! ($listPage instanceof CampaignMonitorSignupPage)) {
             /** @var CampaignMonitorSignupPage $listPage */
-            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
+            $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => (string) $listPage])->first();
         }
 
-        $logId = CampaignMonitorSubscriptionLog ::log_attempt($this->owner, $listPage, 'Unsubscribe')
-        ;
+        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->owner, $listPage, 'Unsubscribe');
         $successForGroups = false;
         $successForCm = false;
         if ($listPage->GroupID) {

@@ -14,10 +14,5 @@ Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector:
   redirect_uri: ""
   code: ""
 
-Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign:
-  emogrifier_add_allowed_media_types:
-    - "screen"
-  emogrifier_remove_allowed_media_types:
-    - "print"
 Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider:
   campaign_monitor_allow_unsubscribe: false

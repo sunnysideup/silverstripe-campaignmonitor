@@ -105,9 +105,9 @@ class CampaignMonitorCreateLists extends BuildTask
     }
 
     /**
-     * returns available list for client.
+     * returns ID for page.
      *
-     * @return array
+     * @return int
      */
     protected function createCampaignMonitorPage(string $listId, string $listName)
     {
@@ -123,5 +123,6 @@ class CampaignMonitorCreateLists extends BuildTask
         $page->MenuTitle = $listName;
         $page->writeToStage(Versioned::DRAFT);
         $page->publishRecursive();
+        return $page->ID;
     }
 }

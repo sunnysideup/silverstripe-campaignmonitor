@@ -21,18 +21,6 @@ class CampaignMonitorCampaign extends DataObject
     protected $countOfWrites = 0;
 
     /**
-     * @var array
-     */
-    private static $emogrifier_add_allowed_media_types = [
-        'screen',
-    ];
-
-    /**
-     * @var array
-     */
-    private static $emogrifier_remove_allowed_media_types = [];
-
-    /**
      * @var string
      */
     private static $default_template = CampaignMonitorCampaign::class;
@@ -175,11 +163,8 @@ class CampaignMonitorCampaign extends DataObject
     /**
      * returns link to view campaign.
      *
-     * @var return
-     *
-     * @param mixed $action
      */
-    public function Link($action = '')
+    public function Link($action = ''): string
     {
         if ($page = $this->Pages()->First()) {
             $link = $page->Link('viewcampaign' . $action . '/' . $this->ID . '/');
@@ -194,11 +179,10 @@ class CampaignMonitorCampaign extends DataObject
      * returns link to view preview campaign
      * this link is used to create templates / campaigns on Campaign Monitor.
      *
-     * @var return
-     *
      * @param mixed $action
+     * @return string
      */
-    public function PreviewLink($action = '')
+    public function PreviewLink($action = '') : string
     {
         if ($page = $this->Pages()->First()) {
             $link = $page->Link('previewcampaign' . $action . '/' . $this->ID . '/?hash=' . $this->Hash);
@@ -212,15 +196,16 @@ class CampaignMonitorCampaign extends DataObject
     /**
      * html for newsletter to be created.
      *
-     * @var return
+     *
      */
-    public function getNewsletterContent()
+    public function getNewsletterContent(): string
     {
         $extension = $this->extend('updateNewsletterContent', $content);
         if (is_array($extension) && count($extension)) {
             return $extension[0];
         }
         $html = '';
+
         if (class_exists('\Pelago\Emogrifier')) {
             $allCSS = '';
             $cssFileLocations = $this->getCSSFileLocations();
@@ -248,16 +233,10 @@ class CampaignMonitorCampaign extends DataObject
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', false);
             }
-            $emogrifier = new \Pelago\Emogrifier($html, $allCSS);
-            $addMediaTypes = $this->Config()->get('emogrifier_add_allowed_media_types');
-            foreach ($addMediaTypes as $type) {
-                //$emogrifier->addAllowedMediaType($type);
-            }
-            $removeMediaTypes = $this->Config()->get('emogrifier_remove_allowed_media_types');
-            foreach ($removeMediaTypes as $type) {
-                $emogrifier->removeAllowedMediaType($type);
-            }
-            $html = $emogrifier->emogrify();
+            $html = CssInliner::fromHtml($html)
+                ->inlineCss($allCSS)
+                ->render()
+            ;
         } else {
             user_error('Please include Emogrifier module');
         }
