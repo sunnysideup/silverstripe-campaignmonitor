@@ -123,6 +123,7 @@ class CampaignMonitorCreateLists extends BuildTask
         $page->MenuTitle = $listName;
         $page->writeToStage(Versioned::DRAFT);
         $page->publishRecursive();
+
         return $page->ID;
     }
 }

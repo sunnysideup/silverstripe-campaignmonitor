@@ -163,6 +163,7 @@ class CampaignMonitorCampaign extends DataObject
     /**
      * returns link to view campaign.
      *
+     * @param mixed $action
      */
     public function Link($action = ''): string
     {
@@ -180,9 +181,8 @@ class CampaignMonitorCampaign extends DataObject
      * this link is used to create templates / campaigns on Campaign Monitor.
      *
      * @param mixed $action
-     * @return string
      */
-    public function PreviewLink($action = '') : string
+    public function PreviewLink($action = ''): string
     {
         if ($page = $this->Pages()->First()) {
             $link = $page->Link('previewcampaign' . $action . '/' . $this->ID . '/?hash=' . $this->Hash);
@@ -195,8 +195,6 @@ class CampaignMonitorCampaign extends DataObject
 
     /**
      * html for newsletter to be created.
-     *
-     *
      */
     public function getNewsletterContent(): string
     {
