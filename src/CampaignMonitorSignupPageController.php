@@ -58,7 +58,7 @@ class CampaignMonitorSignupPageController extends PageController
     /**
      * holder for selected campaign.
      *
-     * @var null|CampaignMonitorCampaign
+     * @var CampaignMonitorCampaign
      */
     protected $campaign = '';
 

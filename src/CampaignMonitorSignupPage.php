@@ -143,7 +143,7 @@ class CampaignMonitorSignupPage extends Page
     private static $description = 'Page to suscribe and review newsletter list(s)';
 
     /**
-     * @var null|array
+     * @var array
      */
     private static $drop_down_list = [];
 
