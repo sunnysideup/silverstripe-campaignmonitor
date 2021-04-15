@@ -71,6 +71,8 @@ class CampaignMonitorSignupPageController extends PageController
 
     private static $allow_to_add_to_existing_member_without_logging_in = false;
 
+    private static $sign_in_new_member_on_registration = false;
+
     private static $allowed_actions = [
         'SignupForm' => true,
         'subscribe' => true,
@@ -225,7 +227,7 @@ class CampaignMonitorSignupPageController extends PageController
                         $form->sessionError(
                             _t(
                                 'CAMPAIGNMONITORSIGNUPPAGE.LOG_OUT_FIRST',
-                                'Please log out first.'
+                                'Please log out first. You can not be logged in and sign-up someone else.'
                             ),
                             'error'
                         );
@@ -237,7 +239,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $form->sessionError(
                         _t(
                             'CAMPAIGNMONITORSIGNUPPAGE.NON_MATCH_ERROR',
-                            'There was an error, please try again.'
+                            'Please log out first. You can not be logged in and sign-up someone new.'
                         ),
                         'error'
                     );
@@ -280,13 +282,15 @@ class CampaignMonitorSignupPageController extends PageController
                         }
                     }
                 }
-                if ($newlyCreatedMember && $doLogin) {
-                    $memberToEdit->write();
-                    Security::setCurrentUser($memberToEdit);
-                    $identityStore = Injector::inst()->get(IdentityStore::class);
-                    $identityStore->logIn($memberToEdit, $rememberMe = false, null);
-                }
                 $memberToEdit->write();
+                if ($newlyCreatedMember) {
+                    $canDoLogin = $this->Config()->get('sign_in_new_member_on_registration');
+                    if($canDoLogin && $doLogin)
+                        Security::setCurrentUser($memberToEdit);
+                        $identityStore = Injector::inst()->get(IdentityStore::class);
+                        $identityStore->logIn($memberToEdit, $rememberMe = false, null);
+                    }
+                }
             }
 
             $outcome = $memberToEdit->processCampaignMonitorSignupField($this->dataRecord, $data, $values);
