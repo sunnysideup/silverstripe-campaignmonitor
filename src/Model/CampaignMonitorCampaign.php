@@ -8,6 +8,8 @@ use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\DataObject;
+
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
@@ -259,7 +261,7 @@ class CampaignMonitorCampaign extends DataObject
     }
 
     /**
-     * @return array
+     * @return DBHTMLText
      */
     public function getHTMLContent()
     {
@@ -267,14 +269,7 @@ class CampaignMonitorCampaign extends DataObject
             return $style->getHTMLContent($this);
         }
 
-        /*
-         * ### @@@@ START REPLACEMENT @@@@ ###
-         * WHY: automated upgrade
-         * OLD: ->RenderWith( (ignore case)
-         * NEW: ->RenderWith( (COMPLEX)
-         * EXP: Check that the template location is still valid!
-         * ### @@@@ STOP REPLACEMENT @@@@ ###
-         */
+
         return $this->RenderWith(CampaignMonitorCampaign::class);
     }
 

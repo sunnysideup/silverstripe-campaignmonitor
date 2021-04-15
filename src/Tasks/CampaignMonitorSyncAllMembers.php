@@ -57,7 +57,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     /**
      * The default page of where the members are added.
      *
-     * @var int
+     * @var string
      */
     private static $mailing_list_id = '';
 

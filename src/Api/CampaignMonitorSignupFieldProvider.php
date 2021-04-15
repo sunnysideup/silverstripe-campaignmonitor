@@ -26,9 +26,7 @@ class CampaignMonitorSignupFieldProvider
     protected $listPage;
 
     /**
-     * name of the field to use for sign-ups.
-     *
-     * @var string
+     * @var bool
      */
     private static $campaign_monitor_allow_unsubscribe = true;
 

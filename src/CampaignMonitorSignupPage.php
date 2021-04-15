@@ -26,6 +26,9 @@ use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\DataList;
+
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
 use SilverStripe\View\Requirements;
@@ -163,7 +166,7 @@ class CampaignMonitorSignupPage extends Page
     /**
      * Campaign monitor pages that are ready to receive "sign-ups".
      *
-     * @return \SilverStripe\ORM\ArrayList
+     * @return \SilverStripe\ORM\DataList
      */
     public static function get_ready_ones()
     {
@@ -319,13 +322,13 @@ class CampaignMonitorSignupPage extends Page
      *
      * Or does a basic sign up if ajax submitted.
      *
-     * @param string $formName
      *
-     * @return Form
+     * @return Form|null|DBHTMLText
      */
-    public function CampaignMonitorStartForm(Controller $controller, $formName = 'CampaignMonitorStarterForm')
+    public function CampaignMonitorStartForm(Controller $controller, ?string $formName = 'CampaignMonitorStarterForm')
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
+            /** @return DBHTMLText */
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
@@ -333,11 +336,11 @@ class CampaignMonitorSignupPage extends Page
         Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
         if (! $this->ReadyToReceiveSubscribtions()) {
             //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
-            return false;
+            return null;
         }
-        $fields = new FieldList(new EmailField('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', 'Email')));
-        $actions = new FieldList(new FormAction('campaignmonitorstarterformstartaction', $this->SignUpButtonLabel));
-        $form = new Form(
+        $fields = FieldList::create(EmailField::create('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', 'Email')));
+        $actions = FieldList::create(FormAction::create('campaignmonitorstarterformstartaction', $this->SignUpButtonLabel));
+        $form = Form::create(
             $controller,
             $formName,
             $fields,
