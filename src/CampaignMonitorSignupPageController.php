@@ -249,7 +249,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             } else {
                 if ($submittedMember) {
-                    if ($this->MustBeLoggedInToAddSubscription) {
+                    if ($this->MustBeLoggedInToEditSubscription) {
                         $form->sessionError(
                             _t(
                                 'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
