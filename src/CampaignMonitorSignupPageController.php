@@ -69,6 +69,8 @@ class CampaignMonitorSignupPageController extends PageController
 
     protected $memberDbValues = [];
 
+    private static $allow_to_add_to_existing_member_without_logging_in = false;
+
     private static $allowed_actions = [
         'SignupForm' => true,
         'subscribe' => true,
@@ -193,6 +195,7 @@ class CampaignMonitorSignupPageController extends PageController
             $type = $data[$fieldName . 'Type'] ?? 'none';
             $isMany = false;
             $isOne = false;
+            $doLogin = true;
             //subscribe or unsubscribe?
             if ('many' === $type) {
                 $values = $data[$fieldName] ?? [];
@@ -244,19 +247,26 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             } else {
                 if ($submittedMember) {
-                    $form->sessionError(
-                        _t(
-                            'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
-                            'Please log in for this email or try another email address.'
-                        ),
-                        'error'
-                    );
-                    $this->redirectBack();
+                    if ($this->Config()->get('allow_to_add_to_existing_member_without_logging_in')) {
+                        $memberToEdit = $submittedMember;
+                        $doLogin = false;
+                        $newlyCreatedMember = false;
+                    } else {
+                        $form->sessionError(
+                            _t(
+                                'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
+                                'Please log in for this email or try another email address.'
+                            ),
+                            'error'
+                        );
+                        $this->redirectBack();
 
-                    return;
+                        return;
+                    }
+                } else {
+                    $newlyCreatedMember = true;
+                    $memberToEdit = Member::create($memberFilter);
                 }
-                $newlyCreatedMember = true;
-                $memberToEdit = Member::create($memberFilter);
             }
 
             //if this is a new member then we save the member
@@ -270,7 +280,7 @@ class CampaignMonitorSignupPageController extends PageController
                         }
                     }
                 }
-                if ($newlyCreatedMember) {
+                if ($newlyCreatedMember && $doLogin) {
                     $memberToEdit->write();
                     Security::setCurrentUser($memberToEdit);
                     $identityStore = Injector::inst()->get(IdentityStore::class);
