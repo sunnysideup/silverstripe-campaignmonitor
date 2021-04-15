@@ -103,6 +103,9 @@ class CampaignMonitorSignupPage extends Page
 
         'ShowFirstNameFieldInForm' => 'Boolean',
         'ShowSurnameFieldInForm' => 'Boolean',
+
+        'MustBeLoggedInToAddSubscription' => 'Boolean',
+        'SignInNewMemberOnRegistration' => 'Boolean',
     ];
 
     /**
@@ -247,6 +250,8 @@ class CampaignMonitorSignupPage extends Page
                     new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
                     new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
                     new ReadonlyField('ListIDNice', 'List ID', $this->ListID),
+                    new CheckboxField('SignInNewMemberOnRegistration', 'Sign-in newly created user on registration?'),
+                    new CheckboxField('MustBeLoggedInToAddSubscription', 'User must be logged in to edit their registations?'),
                     new CheckboxField('MakeAllFieldsRequired', 'Make all fields mandatory'),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
                     new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),

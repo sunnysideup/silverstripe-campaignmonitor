@@ -249,11 +249,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
             } else {
                 if ($submittedMember) {
-                    if ($this->Config()->get('allow_to_add_to_existing_member_without_logging_in')) {
-                        $memberToEdit = $submittedMember;
-                        $doLogin = false;
-                        $newlyCreatedMember = false;
-                    } else {
+                    if ($this->MustBeLoggedInToAddSubscription) {
                         $form->sessionError(
                             _t(
                                 'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
@@ -264,6 +260,10 @@ class CampaignMonitorSignupPageController extends PageController
                         $this->redirectBack();
 
                         return;
+                    } else {
+                        $memberToEdit = $submittedMember;
+                        $doLogin = false;
+                        $newlyCreatedMember = false;
                     }
                 } else {
                     $newlyCreatedMember = true;
@@ -284,8 +284,8 @@ class CampaignMonitorSignupPageController extends PageController
                 }
                 $memberToEdit->write();
                 if ($newlyCreatedMember) {
-                    $canDoLogin = $this->Config()->get('sign_in_new_member_on_registration');
-                    if($canDoLogin && $doLogin)
+                    $canDoLogin = $this->SignInNewMemberOnRegistration;
+                    if($canDoLogin && $doLogin) {
                         Security::setCurrentUser($memberToEdit);
                         $identityStore = Injector::inst()->get(IdentityStore::class);
                         $identityStore->logIn($memberToEdit, $rememberMe = false, null);
