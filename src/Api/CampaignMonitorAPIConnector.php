@@ -1676,6 +1676,10 @@ class CampaignMonitorAPIConnector
                 //$expires_in = $result->response->expires_in;
                 // Save $access_token, $expires_in, and $refresh_token.
                 if ($this->debug) {
+                    echo 'access token: ' . $result->response->access_token . "\n";
+                    echo 'expires in (seconds): ' . $result->response->expires_in . "\n";
+                    echo 'refresh token: ' . $result->response->refresh_token . "\n";
+
                 }
             } else {
                 // If you receive '121: Expired OAuth Token', refresh the access token
