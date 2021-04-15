@@ -124,9 +124,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.SIGN_UP_NOW', 'Signup');
             }
             // Create action
-            $actions = new FieldList(
-                new FormAction('subscribe', $action)
-            );
+            $actions = new FieldList([new FormAction('subscribe', $action)]);
             // Create Validators
             if ($this->MakeAllFieldsRequired) {
                 $requiredList = $fields->dataFieldNames();

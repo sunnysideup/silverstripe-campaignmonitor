@@ -287,6 +287,7 @@ class CampaignMonitorAPIConnector
     }
 
     /**
+     * @todo check 201 / 201!!!
      * @return mixed
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
@@ -1381,12 +1382,12 @@ class CampaignMonitorAPIConnector
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param string   $listID
-     * @param dataList $membersSet                             - list of Member|object with Email, FirstName, Surname fields
-     * @param array    $customFields                           The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
-     * @param bool     $resubscribe                            Whether we should resubscribe any existing subscribers
-     * @param bool     $queueSubscriptionBasedAutoResponders   By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
-     * @param bool     $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
+     * @param string         $listID
+     * @param dataList|array $membersSet                             - list of Member|object with Email, FirstName, Surname fields
+     * @param array          $customFields                           The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
+     * @param bool           $resubscribe                            Whether we should resubscribe any existing subscribers
+     * @param bool           $queueSubscriptionBasedAutoResponders   By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
+     * @param bool           $restartSubscriptionBasedAutoResponders By default, subscription based auto responders will not be restarted
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
