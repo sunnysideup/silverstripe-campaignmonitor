@@ -284,8 +284,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
                 $memberToEdit->write();
                 if ($newlyCreatedMember) {
-                    $canDoLogin = $this->SignInNewMemberOnRegistration;
-                    if($canDoLogin && $doLogin) {
+                    if($this->SignInNewMemberOnRegistration && $doLogin) {
                         Security::setCurrentUser($memberToEdit);
                         $identityStore = Injector::inst()->get(IdentityStore::class);
                         $identityStore->logIn($memberToEdit, $rememberMe = false, null);
