@@ -1267,11 +1267,15 @@ class CampaignMonitorAPIConnector
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_lists_for_email($member);
 
-        return $this->returnResult(
+        $result = $this->returnResult(
             $result,
             '/api/v3.1/clients/{id}/listsforemail',
             'Got lists to which email address ' . $member . ' is subscribed'
         );
+        if ($result === true) {
+            return [];
+        }
+        return $result;
     }
 
     /**
