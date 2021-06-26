@@ -2,7 +2,6 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
-use PWUpdateGetData;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
@@ -252,7 +251,6 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function exportNow($memberArray, $customFields, $unsubscribeArray)
     {
         $api = $this->getAPI();
-        PWUpdateGetData::flush('<hr />', 'deleted');
         if (count($memberArray)) {
             if (count($memberArray) === count($customFields)) {
                 $finalCustomFields = [];
