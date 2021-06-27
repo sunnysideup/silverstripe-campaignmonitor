@@ -258,11 +258,10 @@ class CampaignMonitorSignupPageController extends PageController
                         $this->redirectBack();
 
                         return;
-                    } else {
-                        $memberToEdit = $submittedMember;
-                        $doLogin = false;
-                        $newlyCreatedMember = false;
                     }
+                    $memberToEdit = $submittedMember;
+                    $doLogin = false;
+                    $newlyCreatedMember = false;
                 } else {
                     $newlyCreatedMember = true;
                     $memberToEdit = Member::create($memberFilter);
@@ -282,7 +281,7 @@ class CampaignMonitorSignupPageController extends PageController
                 }
                 $memberToEdit->write();
                 if ($newlyCreatedMember) {
-                    if($this->SignInNewMemberOnRegistration && $doLogin) {
+                    if ($this->SignInNewMemberOnRegistration && $doLogin) {
                         Security::setCurrentUser($memberToEdit);
                         $identityStore = Injector::inst()->get(IdentityStore::class);
                         $identityStore->logIn($memberToEdit, $rememberMe = false, null);
@@ -407,7 +406,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function viewcampaign($request)
     {
         $id = (int) $request->param('ID');
-        /** @var CampaignMonitorCampaign|null  $this->campaign */
+        // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
@@ -424,7 +423,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function viewcampaigntextonly($request)
     {
         $id = (int) $request->param('ID');
-        /** @var CampaignMonitorCampaign|null  $this->campaign */
+        // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
@@ -441,7 +440,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function previewcampaign($request)
     {
         $id = (int) $request->param('ID');
-        /** @var CampaignMonitorCampaign|null  $this->campaign */
+        // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
             if (isset($_GET['hash']) && 7 === strlen($_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
@@ -460,7 +459,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function previewcampaigntextonly($request)
     {
         $id = (int) $request->param('ID');
-        /** @var CampaignMonitorCampaign|null  $this->campaign */
+        // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get()->byID($id);
         if ($this->campaign) {
             return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));

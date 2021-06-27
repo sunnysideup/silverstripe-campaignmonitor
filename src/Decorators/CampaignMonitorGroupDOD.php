@@ -17,11 +17,11 @@ class CampaignMonitorGroupDOD extends DataExtension
     /**
      * Is this a group for newsletter signing up.
      *
-     * @return CampaignMonitorSignupPage|null
+     * @return null|CampaignMonitorSignupPage
      */
     public function CampaignMonitorSubscriberGroupPage()
     {
-        /** @var CampaignMonitorSignupPage */
+        // @var CampaignMonitorSignupPage
         return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->owner->ID])->first();
     }
 

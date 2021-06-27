@@ -288,6 +288,7 @@ class CampaignMonitorAPIConnector
 
     /**
      * @todo check 201 / 201!!!
+     *
      * @return mixed
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
@@ -1272,9 +1273,10 @@ class CampaignMonitorAPIConnector
             '/api/v3.1/clients/{id}/listsforemail',
             'Got lists to which email address ' . $member . ' is subscribed'
         );
-        if ($result === true) {
+        if (true === $result) {
             return [];
         }
+
         return $result;
     }
 
@@ -1387,7 +1389,7 @@ class CampaignMonitorAPIConnector
      * given email not existing in the list.
      *
      * @param string         $listID
-     * @param dataList|array $membersSet                             - list of Member|object with Email, FirstName, Surname fields
+     * @param array|dataList $membersSet                             - list of Member|object with Email, FirstName, Surname fields
      * @param array          $customFields                           The subscriber details to use during creation. Each array item needs to have the same key as the member ID - e.g. array( 123 => array( [custom fields here] ), 456 => array( [custom fields here] ) )
      * @param bool           $resubscribe                            Whether we should resubscribe any existing subscribers
      * @param bool           $queueSubscriptionBasedAutoResponders   By default, subscription based auto responders do not trigger during an import. Pass a value of true to override this behaviour
@@ -1684,7 +1686,6 @@ class CampaignMonitorAPIConnector
                     echo 'access token: ' . $result->response->access_token . "\n";
                     echo 'expires in (seconds): ' . $result->response->expires_in . "\n";
                     echo 'refresh token: ' . $result->response->refresh_token . "\n";
-
                 }
             } else {
                 // If you receive '121: Expired OAuth Token', refresh the access token

@@ -26,8 +26,6 @@ use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DB;
-use SilverStripe\ORM\DataList;
-
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Security\Group;
 use SilverStripe\Security\Member;
@@ -322,13 +320,12 @@ class CampaignMonitorSignupPage extends Page
      *
      * Or does a basic sign up if ajax submitted.
      *
-     *
-     * @return Form|null|DBHTMLText
+     * @return null|DBHTMLText|Form
      */
     public function CampaignMonitorStartForm(Controller $controller, ?string $formName = 'CampaignMonitorStarterForm')
     {
         if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
-            /** @return DBHTMLText */
+            // @return DBHTMLText
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');

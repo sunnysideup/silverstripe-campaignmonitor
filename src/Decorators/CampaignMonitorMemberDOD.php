@@ -107,7 +107,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      * add to CM database...
      *
      * @param CampaignMonitorSignupPage|string $listPage
-     * @param array                           $customFields
+     * @param array                            $customFields
      *
      * @return bool - returns true on success
      */

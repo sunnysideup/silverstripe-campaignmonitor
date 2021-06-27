@@ -128,7 +128,7 @@ class CampaignMonitorCustomField extends DataObject
             'ListID' => $listID,
             'Code' => self::key_to_code($customFieldsObject->Key),
         ];
-        /** @var CampaignMonitorCustomField|null $obj */
+        /** @var null|CampaignMonitorCustomField $obj */
         $obj = CampaignMonitorCustomField::get()->filter($filterOptions)->first();
         if (! $obj) {
             $obj = CampaignMonitorCustomField::create($filterOptions);

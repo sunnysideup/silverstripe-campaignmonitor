@@ -8,7 +8,6 @@ use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\ORM\DataObject;
-
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
@@ -268,7 +267,6 @@ class CampaignMonitorCampaign extends DataObject
         if ($style = $this->CampaignMonitorCampaignStyle()) {
             return $style->getHTMLContent($this);
         }
-
 
         return $this->RenderWith(CampaignMonitorCampaign::class);
     }
