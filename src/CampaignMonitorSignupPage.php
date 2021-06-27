@@ -309,9 +309,9 @@ class CampaignMonitorSignupPage extends Page
         return $fields;
     }
 
-    public function HasCampaigns()
+    public function HasCampaigns() : bool
     {
-        return CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->count() > 0;
+        return CampaignMonitorCampaign::get()->filter(['HasBeenSent' => true])->exists();
     }
 
     /**

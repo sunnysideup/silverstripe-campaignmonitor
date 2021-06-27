@@ -378,7 +378,7 @@ class CampaignMonitorCampaign extends DataObject
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
-        if (0 === $this->Pages()->count()) {
+        if (! $this->Pages()->exists()) {
             if ($page = CampaignMonitorSignupPage::get()->first()) {
                 $this->Pages()->add($page);
             }

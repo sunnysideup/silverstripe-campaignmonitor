@@ -97,7 +97,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
             if ($this->debug) {
                 $members = $members->sort('RAND()');
             }
-            if ($members->count()) {
+            if ($members->exists()) {
                 foreach ($members as $member) {
                     if (isset($this->previouslyUnsubscribedSubscribers[$member->Email])) {
                         DB::alteration_message('already blacklisted: ' . $member->Email, 'deleted');
