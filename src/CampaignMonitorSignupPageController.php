@@ -4,7 +4,6 @@ namespace Sunnysideup\CampaignMonitor;
 
 use PageController;
 use SilverStripe\Control\Director;
-use SilverStripe\Control\Email\Email;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
@@ -245,27 +244,25 @@ class CampaignMonitorSignupPageController extends PageController
 
                     return;
                 }
-            } else {
-                if ($submittedMember) {
-                    if ($this->MustBeLoggedInToAddSubscription) {
-                        $form->sessionError(
-                            _t(
-                                'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
-                                'Please log in for this email or try another email address.'
-                            ),
-                            'error'
-                        );
-                        $this->redirectBack();
+            } elseif ($submittedMember) {
+                if ($this->MustBeLoggedInToAddSubscription) {
+                    $form->sessionError(
+                        _t(
+                            'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
+                            'Please log in for this email or try another email address.'
+                        ),
+                        'error'
+                    );
+                    $this->redirectBack();
 
-                        return;
-                    }
-                    $memberToEdit = $submittedMember;
-                    $doLogin = false;
-                    $newlyCreatedMember = false;
-                } else {
-                    $newlyCreatedMember = true;
-                    $memberToEdit = Member::create($memberFilter);
+                    return;
                 }
+                $memberToEdit = $submittedMember;
+                $doLogin = false;
+                $newlyCreatedMember = false;
+            } else {
+                $newlyCreatedMember = true;
+                $memberToEdit = Member::create($memberFilter);
             }
 
             //if this is a new member then we save the member

@@ -1333,12 +1333,12 @@ class CampaignMonitorAPIConnector
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param string        $listID
-     * @param string        $oldEmailAddress
-     * @param Member|object $member                                 (Member or standard object with Email, FirstName, Surname properties)
-     * @param array         $customFields                           the subscriber details to use during creation
-     * @param bool          $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
-     * @param bool          $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param string                       $listID
+     * @param SilverStripe\Security\Member $oldEmailAddress
+     * @param Member|object                $member                                 (Member or standard object with Email, FirstName, Surname properties)
+     * @param array                        $customFields                           the subscriber details to use during creation
+     * @param bool                         $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
+     * @param bool                         $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -1522,8 +1522,8 @@ class CampaignMonitorAPIConnector
     /**
      * Can we send e-mails to this person in the future for this list?
      *
-     * @param string          $listID
-     * @param Member | String $member
+     * @param string        $listID
+     * @param Member|string $member
      *
      * @return bool
      */
@@ -1552,8 +1552,8 @@ class CampaignMonitorAPIConnector
     /**
      * This e-mail / user has been banned from a list.
      *
-     * @param string          $listID
-     * @param Member | String $member
+     * @param string        $listID
+     * @param Member|string $member
      *
      * @return bool
      */
@@ -1580,9 +1580,9 @@ class CampaignMonitorAPIConnector
     /**
      * Gets a subscriber details, including custom fields.
      *
-     * @param string          $listID
-     * @param Member | String $member
-     * @param mixed           $cacheIsOK
+     * @param string        $listID
+     * @param Member|string $member
+     * @param mixed         $cacheIsOK
      *
      * @return mixed A successful response will be an object of the form
      *               {
@@ -1622,8 +1622,8 @@ class CampaignMonitorAPIConnector
     /**
      * Gets a subscriber details, including custom fields.
      *
-     * @param string          $listID
-     * @param Member | String $member
+     * @param string        $listID
+     * @param Member|string $member
      *
      * @return mixed A successful response will be an object of the form
      *               {

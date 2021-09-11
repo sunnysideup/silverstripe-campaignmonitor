@@ -30,9 +30,9 @@ class CampaignMonitorMemberDOD extends DataExtension
      * returns a form field for signing up to all available lists
      * or if a list is provided, for that particular list.
      *
-     * @param CampaignMonitorSignupPage | string|null $listPage
-     * @param string                                  $fieldName
-     * @param string                                  $fieldTitle
+     * @param null|CampaignMonitorSignupPage|string $listPage
+     * @param string                                $fieldName
+     * @param string                                $fieldTitle
      *
      * @return \SilverStripe\Forms\FormField
      */
