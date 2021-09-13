@@ -14,6 +14,8 @@ use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\CheckboxField;
+use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\IdentityStore;
@@ -127,6 +129,8 @@ class CampaignMonitorSignupPageController extends PageController
             // Create Validators
             if ($this->MakeAllFieldsRequired) {
                 $requiredList = $fields->dataFieldNames();
+                // remove Consent checkbox from the list
+                $requiredList = array_diff($requiredList, ['CampaignMonitorPermissionToTrack']);
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
@@ -270,7 +274,9 @@ class CampaignMonitorSignupPageController extends PageController
                 $fields = $this->getFieldsForSignupFormFieldsIncluded(true);
 
                 foreach ($fields as $field) {
-                    if ('Email' !== $field) {
+                    if ('PermissionToTrack' === $field) {
+                        $memberToEdit->CM_PermissionToTrack = isset($data['CampaignMonitor' . $field]) && $data['CampaignMonitor' . $field] ? 'Yes' : 'No';
+                    } else if ('Email' !== $field) {
                         if (! empty($data['CampaignMonitor' . $field])) {
                             $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
                         }
@@ -646,11 +652,26 @@ class CampaignMonitorSignupPageController extends PageController
         }
 
         $fieldArray = [];
-        foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $title) {
+        foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $value) {
             $fieldName = 'CampaignMonitor' . $field;
             $fieldArray['Fields'][$fieldName] = null;
             $fieldArray['Required'][$fieldName] = true;
             $fieldType = TextField::class;
+            if (is_array($value)) {
+                $title = $value['title'];
+
+                // custom field type
+                if (isset($value['type'])) {
+                    $fieldType = $value['type'];
+                }
+
+                if (isset($value['required'])) {
+                    $fieldArray['Required'][$fieldName] = $value['required'];
+                }
+
+            } else {
+                $title = $value;
+            }
             $this->memberDbValues[$fieldName] = $member->{$field};
             $disabledEmailPhrase = '';
             if ('Email' === $field) {
@@ -687,6 +708,13 @@ class CampaignMonitorSignupPageController extends PageController
         }
         if ($this->ShowSurnameFieldInForm) {
             $array['Surname'] = _t('CAMPAIGNMONITORSIGNUPPAGE.SIRNAME', 'Surname');
+        }
+        if ($this->ShowPermissionToTrackFieldInForm) {
+            $array['PermissionToTrack'] = [
+                'title' => DBField::create_field('HTMLFragment', strip_tags($this->PermissionToTrackLabelField, '<a>')),
+                'type' => CheckboxField::class,
+                'required' => false,
+            ];
         }
         if ($keysOnly) {
             return array_keys($array);

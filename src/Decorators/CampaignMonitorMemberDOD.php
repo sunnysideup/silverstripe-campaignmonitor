@@ -22,6 +22,10 @@ class CampaignMonitorMemberDOD extends DataExtension
 {
     use CampaignMonitorApiTrait;
 
+    private static $db = [
+        'CM_PermissionToTrack' => 'Enum("Yes, No, Unchanged", "Unchanged")',
+    ];
+
     private static $has_many = [
         'CampaignMonitorSubscriptionLogs' => CampaignMonitorSubscriptionLog::class,
     ];

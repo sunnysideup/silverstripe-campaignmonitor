@@ -104,6 +104,8 @@ class CampaignMonitorSignupPage extends Page
 
         'ShowFirstNameFieldInForm' => 'Boolean',
         'ShowSurnameFieldInForm' => 'Boolean',
+        'ShowPermissionToTrackFieldInForm' => 'Boolean',
+        'PermissionToTrackLabelField' => 'HTMLText',
 
         'MustBeLoggedInToEditSubscription' => 'Boolean',
         'SignInNewMemberOnRegistration' => 'Boolean',
@@ -139,6 +141,7 @@ class CampaignMonitorSignupPage extends Page
     private static $defaults = [
         'ShowFirstNameFieldInForm' => true,
         'ShowSurnameFieldInForm' => true,
+        'ShowPermissionToTrackFieldInForm' => false,
     ];
 
     /**
@@ -253,9 +256,11 @@ class CampaignMonitorSignupPage extends Page
                     new ReadonlyField('ListIDNice', 'List ID', $this->ListID),
                     new CheckboxField('SignInNewMemberOnRegistration', 'Sign-in newly created user on registration?'),
                     new CheckboxField('MustBeLoggedInToEditSubscription', 'User must be logged in to edit their registations?'),
-                    new CheckboxField('MakeAllFieldsRequired', 'Make all fields mandatory'),
+                    new CheckboxField('MakeAllFieldsRequired', 'Make all fields mandatory (except consent field)'),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
                     new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
+                    CheckboxField::create('ShowPermissionToTrackFieldInForm', 'Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                    HTMLEditorField::create('PermissionToTrackLabelField', 'Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
                     new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'),
                     new CheckboxField('CloseSubscriptions', 'Close subscription'),
                 ),

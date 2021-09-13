@@ -1315,7 +1315,7 @@ class CampaignMonitorAPIConnector
             'CustomFields' => $customFields,
             'Resubscribe' => $resubscribe,
             'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-            'ConsentToTrack' => 'no',
+            'ConsentToTrack' => $member->CM_PermissionToTrack ?: 'Unchanged',
         ];
         $result = $wrap->add(
             $request
@@ -1372,7 +1372,7 @@ class CampaignMonitorAPIConnector
                 'CustomFields' => $customFields,
                 'Resubscribe' => $resubscribe,
                 'RestartSubscriptionBasedAutoResponders' => $restartSubscriptionBasedAutoResponders,
-                'ConsentToTrack' => 'no',
+                'ConsentToTrack' => $member->CM_PermissionToTrack ?: 'Unchanged',
             ]
         );
 
@@ -1429,7 +1429,7 @@ class CampaignMonitorAPIConnector
                     'EmailAddress' => $member->Email,
                     'Name' => trim($member->FirstName . ' ' . $member->Surname),
                     'CustomFields' => $customFieldsForMember,
-                    'ConsentToTrack' => 'no',
+                    'ConsentToTrack' => $member->CM_PermissionToTrack ?: 'Unchanged',
                 ];
             }
         }
