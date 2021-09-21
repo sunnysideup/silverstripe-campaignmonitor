@@ -119,7 +119,9 @@ class CampaignMonitorCreateLists extends BuildTask
         $page->ListID = $listId;
         $page->ShowInSearch = true;
         $page->ShowInMenus = false;
-        $page->Title = 'Sign up for ' . $listName;
+        if(! $page->Title) {
+            $page->Title = 'Sign up for ' . $listName;
+        }
         $page->MenuTitle = $listName;
         $page->writeToStage(Versioned::DRAFT);
         $page->publishRecursive();
