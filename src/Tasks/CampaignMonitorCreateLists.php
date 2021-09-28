@@ -119,7 +119,7 @@ class CampaignMonitorCreateLists extends BuildTask
         $page->ListID = $listId;
         $page->ShowInSearch = true;
         $page->ShowInMenus = false;
-        if(! $page->Title) {
+        if (! $page->Title) {
             $page->Title = 'Sign up for ' . $listName;
         }
         $page->MenuTitle = $listName;

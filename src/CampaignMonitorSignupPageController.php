@@ -9,15 +9,15 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\CheckboxField;
-use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DB;
+use SilverStripe\ORM\FieldType\DBField;
 use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
@@ -276,7 +276,7 @@ class CampaignMonitorSignupPageController extends PageController
                 foreach ($fields as $field) {
                     if ('PermissionToTrack' === $field) {
                         $memberToEdit->CM_PermissionToTrack = isset($data['CampaignMonitor' . $field]) && $data['CampaignMonitor' . $field] ? 'Yes' : 'No';
-                    } else if ('Email' !== $field) {
+                    } elseif ('Email' !== $field) {
                         if (! empty($data['CampaignMonitor' . $field])) {
                             $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
                         }
@@ -668,7 +668,6 @@ class CampaignMonitorSignupPageController extends PageController
                 if (isset($value['required'])) {
                     $fieldArray['Required'][$fieldName] = $value['required'];
                 }
-
             } else {
                 $title = $value;
             }

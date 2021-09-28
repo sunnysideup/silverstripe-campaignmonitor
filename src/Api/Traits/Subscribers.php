@@ -2,21 +2,12 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
-use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Member;
-use SilverStripe\SiteConfig\SiteConfig;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 trait Subscribers
 {
-
     private static $_get_subscriber = [];
 
     /*
@@ -39,7 +30,6 @@ trait Subscribers
      * Deleted – Means the subscriber has been deleted from a list through your account.
      *
      */
-
 
     /**
      * Gets the lists across a client to which a subscriber with a particular

@@ -2,22 +2,10 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
-use Psr\SimpleCache\CacheInterface;
-use SilverStripe\Control\Email\Email;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\DataList;
-use SilverStripe\Security\Member;
-use SilverStripe\SiteConfig\SiteConfig;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 trait templates
 {
-
-
     /**
      * @param mixed $templatID
      *
@@ -140,5 +128,4 @@ trait templates
             'Deleted Template'
         );
     }
-
 }

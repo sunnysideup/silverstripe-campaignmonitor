@@ -2,21 +2,10 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
-use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Control\Email\Email;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Extensible;
-use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\DataList;
-use SilverStripe\Security\Member;
-use SilverStripe\SiteConfig\SiteConfig;
-use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 trait Lists
 {
-
     /**
      * Gets all subscriber lists the current client has created.
      *
@@ -640,13 +629,8 @@ trait Lists
         );
     }
 
-
     public function getListsAndSegments()
     {
         user_error('This method is still to be implemented, see samples for an example');
     }
-
-
-
-
 }
