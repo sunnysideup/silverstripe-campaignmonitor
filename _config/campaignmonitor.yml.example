@@ -2,17 +2,5 @@
 # CAMPAIGN MONITOR
 ############################
 
-Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector:
-  ### REQUIRED ###
-  ## e.g. http://mycompany.sendmail.com/
-  campaign_monitor_url: ""
-  client_id: ""
-  ### OPTION 1: API KEY RECOMMENDED ###
-  api_key: ""
-  ### OPTION 2: OAUTH UNTESTED .... ###
-  client_secret: ""
-  redirect_uri: ""
-  code: ""
-
 Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider:
   campaign_monitor_allow_unsubscribe: false

@@ -3,6 +3,7 @@
 namespace Sunnysideup\CampaignMonitor\Traits;
 
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use SilverStripe\Core\Injector\Injector;
 
 trait CampaignMonitorApiTrait
 {
@@ -14,7 +15,7 @@ trait CampaignMonitorApiTrait
     public function getCMAPI()
     {
         if (null === self::$cm_api) {
-            self::$cm_api = CampaignMonitorAPIConnector::create();
+            self::$cm_api = Injector::inst()->get(CampaignMonitorAPIConnector::class);
             self::$cm_api->init();
         }
 

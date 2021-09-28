@@ -1,35 +1,35 @@
 {
-    "name": "sunnysideup/campaignmonitor",
-    "type": "silverstripe-vendormodule",
-    "description": "connect with campaign monitor",
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe",
-        "campaignmonitor"
-    ],
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
-        }
-    ],
-    "require": {
-        "campaignmonitor/createsend-php": "~6.1",
-        "silverstripe/recipe-cms": "^4.4"
-    },
-    "extra": {
-        "expose": [
-            "client/javascript",
-            "client/images",
-            "client/css"
-        ]
-    },
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\CampaignMonitor\\": "src/"
-        }
+  "name": "sunnysideup/campaignmonitor",
+  "type": "silverstripe-vendormodule",
+  "description": "connect with campaign monitor",
+  "keywords": [
+    "Silverstripe-CMS",
+    "CMS",
+    "Silverstripe",
+    "campaignmonitor"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Nicolaas Francken",
+      "email": "modules@sunnysideup.co.nz",
+      "role": "lead developer"
     }
+  ],
+  "require": {
+    "sunnysideup/campaignmonitor-api": "dev-master",
+    "silverstripe/recipe-cms": "^4.4"
+  },
+  "extra": {
+    "expose": [
+      "client/javascript",
+      "client/images",
+      "client/css"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "Sunnysideup\\CampaignMonitor\\": "src/"
+    }
+  }
 }

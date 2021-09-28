@@ -10,6 +10,7 @@ use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
  * Moves all Members to a Campaign Monitor List.
@@ -24,6 +25,8 @@ use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
  */
 class CampaignMonitorSyncAllMembers extends BuildTask
 {
+    use CampaignMonitorApiTrait;
+
     protected $title = 'Export Newsletter to Campaign Monitor';
 
     protected $description = 'Moves all the Members to campaign monitor';
@@ -60,8 +63,6 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private static $mailing_list_id = '';
 
-    private static $_api;
-
     public function run($request)
     {
         Environment::increaseTimeLimitTo(3600);
@@ -89,7 +90,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         $memberArray = [];
         $unsubscribeArray = [];
         $alreadyCompleted = [];
-        $api = $this->getAPI();
+        $api = $this->getCMAPI();
         for ($i = 0; $i < $maxIterations; ++$i) {
             $members = Member::get()
                 ->limit($limit, $i * $limit)
@@ -137,24 +138,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     }
 
     /**
-     * @return CampaignMonitorAPIConnector
-     */
-    public function getAPI()
-    {
-        if (! self::$_api) {
-            self::$_api = CampaignMonitorAPIConnector::create();
-            self::$_api->init();
-        }
-
-        return self::$_api;
-    }
-
-    /**
      * updates the previouslyExported variable.
      */
     private function getExistingFolkListed()
     {
-        $api = $this->getAPI();
+        $api = $this->getCMAPI();
         for ($i = 1; $i < 100; ++$i) {
             $list = $api->getActiveSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -188,7 +176,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function getBouncedSubscribers()
     {
-        $api = $this->getAPI();
+        $api = $this->getCMAPI();
         for ($i = 1; $i < 100; ++$i) {
             $list = $api->getBouncedSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -218,7 +206,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function getUnsubscribedSubscribers()
     {
-        $api = $this->getAPI();
+        $api = $this->getCMAPI();
         for ($i = 1; $i < 100; ++$i) {
             $list = $api->getUnsubscribedSubscribers(
                 $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -250,7 +238,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private function exportNow($memberArray, $customFields, $unsubscribeArray)
     {
-        $api = $this->getAPI();
+        $api = $this->getCMAPI();
         if (count($memberArray)) {
             if (count($memberArray) === count($customFields)) {
                 $finalCustomFields = [];

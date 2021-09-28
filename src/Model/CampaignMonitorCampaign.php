@@ -13,12 +13,16 @@ use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
+use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  */
 class CampaignMonitorCampaign extends DataObject
 {
+
+    use CampaignMonitorApiTrait;
+
     protected $countOfWrites = 0;
 
     /**
@@ -84,8 +88,6 @@ class CampaignMonitorCampaign extends DataObject
     private static $plural_name = 'Campaigns';
 
     private static $default_sort = 'Hide ASC, SentDate DESC';
-
-    private static $_api;
 
     private $_hasBeenSent;
 
@@ -282,7 +284,7 @@ class CampaignMonitorCampaign extends DataObject
             if (! $this->CampaignID) {
                 $this->_hasBeenSent = false;
             } elseif (! $this->HasBeenSent) {
-                //$api = $this->getAPI();
+                //$api = $this->getCMAPI();
                 $result = $this->api->getCampaigns();
                 if (isset($result)) {
                     foreach ($result as $campaign) {
@@ -385,7 +387,7 @@ class CampaignMonitorCampaign extends DataObject
         }
         ++$this->countOfWrites;
         if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true) && $this->CreateFromWebsite && $this->countOfWrites < 3) {
-            $api = $this->getAPI();
+            $api = $this->getCMAPI();
             if ($this->CreateAsTemplate) {
                 if ($this->TemplateID) {
                     $api->updateTemplate($this, $this->TemplateID);
@@ -404,7 +406,7 @@ class CampaignMonitorCampaign extends DataObject
         if ($this->HasBeenSentCheck()) {
             //do nothing
         } elseif ($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
-            $api = $this->getAPI();
+            $api = $this->getCMAPI();
             if ($this->CreateAsTemplate) {
                 $api->deleteTemplate($this->TemplateID);
             } else {
@@ -425,16 +427,4 @@ class CampaignMonitorCampaign extends DataObject
         return [];
     }
 
-    /**
-     * @return CampaignMonitorAPIConnector
-     */
-    protected function getAPI()
-    {
-        if (! self::$_api) {
-            self::$_api = CampaignMonitorAPIConnector::create();
-            self::$_api->init();
-        }
-
-        return self::$_api;
-    }
 }

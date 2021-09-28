@@ -72,7 +72,7 @@ further setup
      *
      * @return CampaignMonitorAPIConnector
      */
-     public function getAPI(){
+     public function getCMAPI(){
        if(!self::$api) {
          self::$api = CampaignMonitorAPIConnector::create();
          self::$api->init();
@@ -120,5 +120,3 @@ and add this in the your template:
 ```html
     $CampaignMonitorStartForm
 ```
-
-

@@ -1,6 +1,7 @@
 <?php
 
 namespace Sunnysideup\CampaignMonitor\Api;
+namespace Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 use Sunnysideup\CampaignMonitor\Api\Traits\Campaigns;
 use Sunnysideup\CampaignMonitor\Api\Traits\Lists;
