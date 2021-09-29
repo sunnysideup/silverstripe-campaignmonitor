@@ -4,7 +4,7 @@ namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
-trait templates
+trait Templates
 {
     /**
      * @param mixed $templatID
