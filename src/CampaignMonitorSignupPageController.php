@@ -694,6 +694,14 @@ class CampaignMonitorSignupPageController extends PageController
             $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
         }
 
+        // move consent field to the end
+        if(isset($fieldArray['Fields']['CampaignMonitorPermissionToTrack']))
+        {
+            $consent = $fieldArray['Fields']['CampaignMonitorPermissionToTrack'];
+            unset($fieldArray['Fields']['CampaignMonitorPermissionToTrack']);
+            $fieldArray['Fields']['CampaignMonitorPermissionToTrack'] = $consent;
+        }
+
         return $fieldArray;
     }
 
