@@ -6,6 +6,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Group;
 use SilverStripe\Versioned\Versioned;
@@ -62,6 +63,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $fields->addFieldsToTab(
             'Root.Newsletter',
             [
+                DropdownField::create('CM_PermissionToTrack', 'Permission to track', singleton(__CLASS__)->owner->dbObject('CM_PermissionToTrack')->enumValues())->setDescription('For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
                 ReadonlyField::create(
                     'IsCampaignMonitorSubscriberNice',
                     'Has subcribed to any list - ever?',
