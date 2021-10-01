@@ -32,7 +32,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         'unsubscribePage' => 'http://unsub',
         'confirmedOptIn' => false,
         'confirmationSuccessPage' => 'http://confirmed',
-        'unsubscribeSetting' => ''
+        'unsubscribeSetting' => '',
         'addUnsubscribesToSuppList' => true,
         'scrubActiveWithSuppList' => true,
         'oldEmailAddress' => 'oldemail@test.nowhere',
