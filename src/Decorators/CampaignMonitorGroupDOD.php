@@ -22,7 +22,7 @@ class CampaignMonitorGroupDOD extends DataExtension
     public function CampaignMonitorSubscriberGroupPage()
     {
         // @var CampaignMonitorSignupPage
-        return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->owner->ID])->first();
+        return CampaignMonitorSignupPage::get()->filter(['GroupID' => $this->getOwner()->ID])->first();
     }
 
     /**

@@ -75,7 +75,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 GridField::create(
                     'CampaignMonitorSubscriptionLogs',
                     'Logs',
-                    $this->owner->CampaignMonitorSubscriptionLogs(),
+                    $this->getOwner()->CampaignMonitorSubscriptionLogs(),
                     GridFieldConfig_RelationEditor::create()
                 ),
             ]
@@ -87,7 +87,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $lists = CampaignMonitorSignupPage::get_ready_ones();
         foreach ($lists as $list) {
             if (0 === $listId || $list->ListID === $listId) {
-                $this->owner->removeCampaignMonitorList($list->ListID);
+                $this->getOwner()->removeCampaignMonitorList($list->ListID);
             }
         }
     }
@@ -100,7 +100,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $stage = Versioned::LIVE === Versioned::get_stage() ? '_Live' : '';
 
         return (bool) CampaignMonitorSignupPage::get_ready_ones()
-            ->where('MemberID = ' . $this->owner->ID)
+            ->where('MemberID = ' . $this->getOwner()->ID)
             ->innerJoin('Group_Members', 'CampaignMonitorSignupPage' . $stage . '.GroupID = Group_Members.GroupID')
             ->count()
         ;
@@ -152,9 +152,9 @@ class CampaignMonitorMemberDOD extends DataExtension
         $successForCm = false;
         if ($listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
-                $groups = $this->owner->Groups();
+                $groups = $this->getOwner()->Groups();
                 if ($groups) {
-                    $this->owner->Groups()->remove($gp);
+                    $this->getOwner()->Groups()->remove($gp);
                     $successForGroups = true;
                 }
             }
@@ -205,9 +205,9 @@ class CampaignMonitorMemberDOD extends DataExtension
         //internal database
         if ($listPage && $listPage->GroupID) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
-                $groups = $this->owner->Groups();
+                $groups = $this->getOwner()->Groups();
                 if ($groups) {
-                    $this->owner->Groups()->add($gp);
+                    $this->getOwner()->Groups()->add($gp);
 
                     return true;
                 }
