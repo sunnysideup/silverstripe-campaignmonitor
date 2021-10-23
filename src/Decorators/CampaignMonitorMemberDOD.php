@@ -102,7 +102,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         return (bool) CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->getOwner()->ID)
             ->innerJoin('Group_Members', 'CampaignMonitorSignupPage' . $stage . '.GroupID = Group_Members.GroupID')
-            ->count()
+            ->exists()
         ;
     }
 

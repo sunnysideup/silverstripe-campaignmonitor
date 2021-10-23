@@ -101,7 +101,7 @@ class CampaignMonitorCreateLists extends BuildTask
         $className = $this->Config()->get('class_name_for_page');
 
         return (bool) $className::get()
-            ->filter('ListID', $listId)->count();
+            ->filter('ListID', $listId)->exists();
     }
 
     /**
