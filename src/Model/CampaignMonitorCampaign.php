@@ -11,7 +11,6 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
@@ -20,7 +19,6 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
  */
 class CampaignMonitorCampaign extends DataObject
 {
-
     use CampaignMonitorApiTrait;
 
     protected $countOfWrites = 0;
@@ -426,5 +424,4 @@ class CampaignMonitorCampaign extends DataObject
 
         return [];
     }
-
 }

@@ -695,8 +695,7 @@ class CampaignMonitorSignupPageController extends PageController
         }
 
         // move consent field to the end
-        if(isset($fieldArray['Fields']['CampaignMonitorPermissionToTrack']))
-        {
+        if (isset($fieldArray['Fields']['CampaignMonitorPermissionToTrack'])) {
             $consent = $fieldArray['Fields']['CampaignMonitorPermissionToTrack'];
             unset($fieldArray['Fields']['CampaignMonitorPermissionToTrack']);
             $fieldArray['Fields']['CampaignMonitorPermissionToTrack'] = $consent;

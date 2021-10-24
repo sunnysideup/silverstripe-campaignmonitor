@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Traits;
 
-use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 
 trait CampaignMonitorApiTrait
 {
