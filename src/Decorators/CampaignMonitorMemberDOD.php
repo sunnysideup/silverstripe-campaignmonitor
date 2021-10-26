@@ -204,7 +204,8 @@ class CampaignMonitorMemberDOD extends DataExtension
     protected function addToCampaignMonitorSecurityGroup($listPage): bool
     {
         //internal database
-        if ($listPage && $listPage->GroupID) {
+        $listPage && $listPage->GroupID;
+        if ($listPage) {
             if ($gp = Group::get()->byID($listPage->GroupID)) {
                 $groups = $this->getOwner()->Groups();
                 if ($groups) {
