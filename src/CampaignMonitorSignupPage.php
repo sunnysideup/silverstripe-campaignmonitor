@@ -329,7 +329,8 @@ class CampaignMonitorSignupPage extends Page
      */
     public function CampaignMonitorStartForm(Controller $controller, ?string $formName = 'CampaignMonitorStarterForm')
     {
-        if ($email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID)) {
+        $email = Controller::curr()->getRequest()->getSession()->get('CampaignMonitorStartForm_AjaxResult_' . $this->ID);
+        if ($email) {
             // @return DBHTMLText
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
@@ -373,7 +374,8 @@ class CampaignMonitorSignupPage extends Page
                 //$member->Password = Member::create_new_password();
                 $member->write();
             }
-            if ($group = $this->Group()) {
+            $group = $this->Group();
+            if ($group) {
                 $group->Members()->add($member);
             }
             $api = $this->getCMAPI();
@@ -537,7 +539,8 @@ class CampaignMonitorSignupPage extends Page
                 $gp->write();
             }
             $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
-            if ($myListName = $this->getListTitle()) {
+            $myListName = $this->getListTitle();
+            if ($myListName) {
                 $title .= ': ' . $myListName;
             }
             $gp->Title = (string) $title;
