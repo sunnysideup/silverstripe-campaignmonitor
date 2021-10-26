@@ -135,7 +135,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
             $key = array_search('CampaignMonitorEmail', $requiredList, true);
-            if ($key !== false) {
+            if (false !== $key) {
                 unset($requiredList[$key]);
             }
             $validator = new RequiredFields($requiredList);

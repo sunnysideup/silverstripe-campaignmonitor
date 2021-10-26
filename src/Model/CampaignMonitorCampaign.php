@@ -168,7 +168,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function Link($action = ''): string
     {
-        if ($page = $this->Pages()->First()) {
+        $page = $this->Pages()->First();
+        if ($page) {
             $link = $page->Link('viewcampaign' . $action . '/' . $this->ID . '/');
 
             return Director::absoluteURL($link);
@@ -185,7 +186,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function PreviewLink($action = ''): string
     {
-        if ($page = $this->Pages()->First()) {
+        $page = $this->Pages()->First();
+        if ($page) {
             $link = $page->Link('previewcampaign' . $action . '/' . $this->ID . '/?hash=' . $this->Hash);
 
             return Director::absoluteURL($link);
@@ -219,16 +221,16 @@ class CampaignMonitorCampaign extends DataObject
             }
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
-
-            /**
-             * ### @@@@ START REPLACEMENT @@@@ ###
-             * WHY: automated upgrade
-             * OLD: ->RenderWith( (ignore case)
-             * NEW: ->RenderWith( (COMPLEX)
-             * EXP: Check that the template location is still valid!
-             * ### @@@@ STOP REPLACEMENT @@@@ ###.
-             */
-            $html = $this->RenderWith($templateName);
+            //
+            // /**
+            //  * ### @@@@ START REPLACEMENT @@@@ ###
+            //  * WHY: automated upgrade
+            //  * OLD: ->RenderWith( (ignore case)
+            //  * NEW: ->RenderWith( (COMPLEX)
+            //  * EXP: Check that the template location is still valid!
+            //  * ### @@@@ STOP REPLACEMENT @@@@ ###.
+            //  */
+            // $htmL = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', false);
             }
@@ -250,7 +252,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function getRenderWithTemplate()
     {
-        if ($style = $this->CampaignMonitorCampaignStyle()) {
+        $style = $this->CampaignMonitorCampaignStyle();
+        if ($style) {
             if ($style->exists() && $style->TemplateName) {
                 return $style->TemplateName;
             }
@@ -264,7 +267,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function getHTMLContent()
     {
-        if ($style = $this->CampaignMonitorCampaignStyle()) {
+        $style = $this->CampaignMonitorCampaignStyle();
+        if ($style) {
             return $style->getHTMLContent($this);
         }
 
