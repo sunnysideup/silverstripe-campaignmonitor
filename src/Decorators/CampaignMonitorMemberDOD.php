@@ -205,8 +205,9 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         //internal database
         $listPage && $listPage->GroupID;
+        $gp = Group::get()->byID($listPage->GroupID);
         if ($listPage) {
-            if ($gp = Group::get()->byID($listPage->GroupID)) {
+            if ($gp) {
                 $groups = $this->getOwner()->Groups();
                 if ($groups) {
                     $this->getOwner()->Groups()->add($gp);
