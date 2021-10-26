@@ -134,7 +134,8 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
-            if (($key = array_search('CampaignMonitorEmail', $requiredList, true)) !== false) {
+            $key = array_search('CampaignMonitorEmail', $requiredList, true);
+            if ($key !== false) {
                 unset($requiredList[$key]);
             }
             $validator = new RequiredFields($requiredList);
@@ -380,6 +381,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function preloademail(HTTPRequest $request)
     {
         $data = $request->requestVars();
+        $m = Security::getCurrentUser();
         if (isset($data['CampaignMonitorEmail'])) {
             $email = Convert::raw2sql($data['CampaignMonitorEmail']);
             if ($email) {
@@ -394,7 +396,7 @@ class CampaignMonitorSignupPageController extends PageController
                     return 'ERROR';
                 }
             }
-        } elseif ($m = Security::getCurrentUser()) {
+        } elseif ($m) {
             $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
         }
 
