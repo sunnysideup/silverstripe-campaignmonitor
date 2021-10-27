@@ -221,16 +221,8 @@ class CampaignMonitorCampaign extends DataObject
             }
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
-            //
-            // /**
-            //  * ### @@@@ START REPLACEMENT @@@@ ###
-            //  * WHY: automated upgrade
-            //  * OLD: ->RenderWith( (ignore case)
-            //  * NEW: ->RenderWith( (COMPLEX)
-            //  * EXP: Check that the template location is still valid!
-            //  * ### @@@@ STOP REPLACEMENT @@@@ ###.
-            //  */
-            // $htmL = $this->RenderWith($templateName);
+
+            $html = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', false);
             }
@@ -370,7 +362,8 @@ class CampaignMonitorCampaign extends DataObject
         if (! $this->Hash) {
             $this->Hash = substr(hash('md5', uniqid()), 0, 7);
         }
-        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
+        $test = $this->ExistsOnCampaignMonitorCheck($forceRecheck = true);
+        if (! $test) {
             if ($this->CreateAsTemplate) {
                 $this->TemplateID = null;
             } else {
@@ -383,12 +376,16 @@ class CampaignMonitorCampaign extends DataObject
     {
         parent::onAfterWrite();
         if (! $this->Pages()->exists()) {
-            if ($page = CampaignMonitorSignupPage::get()->first()) {
+            $page = CampaignMonitorSignupPage::get()->first();
+            if ($page) {
                 $this->Pages()->add($page);
             }
         }
         ++$this->countOfWrites;
-        if (! $this->ExistsOnCampaignMonitorCheck($forceRecheck = true) && $this->CreateFromWebsite && $this->countOfWrites < 3) {
+        $testA = $this->ExistsOnCampaignMonitorCheck($forceRecheck = true);
+        $testB = $this->CreateFromWebsite;
+        $testC = $this->countOfWrites < 3;
+        if (! $testA && $testB && $testC) {
             $api = $this->getCMAPI();
             if ($this->CreateAsTemplate) {
                 if ($this->TemplateID) {
@@ -405,9 +402,10 @@ class CampaignMonitorCampaign extends DataObject
     protected function onBeforeDelete()
     {
         parent::onBeforeDelete();
+        $this->ExistsOnCampaignMonitorCheck($forceRecheck = true);
         if ($this->HasBeenSentCheck()) {
             //do nothing
-        } elseif ($this->ExistsOnCampaignMonitorCheck($forceRecheck = true)) {
+        } elseif ($this) {
             $api = $this->getCMAPI();
             if ($this->CreateAsTemplate) {
                 $api->deleteTemplate($this->TemplateID);
@@ -422,7 +420,8 @@ class CampaignMonitorCampaign extends DataObject
      */
     protected function getCSSFileLocations()
     {
-        if ($style = $this->CampaignMonitorCampaignStyle()) {
+        $style = $this->CampaignMonitorCampaignStyle();
+        if ($style) {
             return $style->getCSSFilesAsArray();
         }
 
