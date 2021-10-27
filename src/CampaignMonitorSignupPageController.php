@@ -381,7 +381,6 @@ class CampaignMonitorSignupPageController extends PageController
     public function preloademail(HTTPRequest $request)
     {
         $data = $request->requestVars();
-        $m = Security::getCurrentUser();
         if (isset($data['CampaignMonitorEmail'])) {
             $email = Convert::raw2sql($data['CampaignMonitorEmail']);
             if ($email) {
@@ -396,8 +395,11 @@ class CampaignMonitorSignupPageController extends PageController
                     return 'ERROR';
                 }
             }
-        } elseif ($m) {
-            $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
+        } else {
+            $m = Security::getCurrentUser();
+            if($m) {
+                $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
+            }
         }
 
         return [];
