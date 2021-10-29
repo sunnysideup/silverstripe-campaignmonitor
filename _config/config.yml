@@ -16,7 +16,7 @@ SilverStripe\Security\Group:
 
 
 SilverStripe\Core\Injector\Injector:
-  Psr\SimpleCache\CacheInterface.CampaignMonitor:
+  Psr\SimpleCache\CacheInterface.CampaignMonitorNameSpace:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
       namespace: "CampaignMonitorNameSpace"
