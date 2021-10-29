@@ -397,7 +397,7 @@ class CampaignMonitorSignupPageController extends PageController
             }
         } else {
             $m = Security::getCurrentUser();
-            if($m) {
+            if ($m) {
                 $this->memberDbValues['CampaignMonitorEmail'] = $m->Email;
             }
         }
