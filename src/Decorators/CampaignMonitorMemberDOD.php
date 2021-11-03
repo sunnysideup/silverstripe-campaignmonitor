@@ -152,8 +152,8 @@ class CampaignMonitorMemberDOD extends DataExtension
         $logId = CampaignMonitorSubscriptionLog::log_attempt($this->owner, $listPage, 'Unsubscribe');
         $successForGroups = false;
         $successForCm = false;
-        $gp = Group::get()->byID($listPage->GroupID);
         if ($listPage->GroupID) {
+            $gp = Group::get()->byID($listPage->GroupID);
             if ($gp) {
                 $groups = $this->getOwner()->Groups();
                 if ($groups) {
