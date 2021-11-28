@@ -123,11 +123,11 @@ trait Subscribers
      * given email not existing in the list.
      *
      * @param string                       $listID
-     * @param SilverStripe\Security\Member $oldEmailAddress
      * @param Member|object                $member                                 (Member or standard object with Email, FirstName, Surname properties)
-     * @param array                        $customFields                           the subscriber details to use during creation
-     * @param bool                         $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
-     * @param bool                         $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param string|null                  $oldEmailAddress
+     * @param array|null                   $customFields                           the subscriber details to use during creation
+     * @param bool|null                    $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
+     * @param bool|null                    $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
