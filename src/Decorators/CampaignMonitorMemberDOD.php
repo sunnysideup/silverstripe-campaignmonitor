@@ -153,7 +153,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $successForGroups = false;
         $successForCm = false;
         if ($listPage->GroupID) {
-            $gp = Group::get()->byID($listPage->GroupID);
+            $gp = Group::get_by_id($listPage->GroupID);
             if ($gp) {
                 $groups = $this->getOwner()->Groups();
                 if ($groups) {
@@ -207,7 +207,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         //internal database
         if ($listPage) {
-            $gp = Group::get()->byID($listPage->GroupID);
+            $gp = Group::get_by_id($listPage->GroupID);
             if ($gp) {
                 $groups = $this->getOwner()->Groups();
                 if ($groups) {

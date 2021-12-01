@@ -58,7 +58,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
 
     public static function log_outcome(int $id, bool $success = false, ?string $errorDescription = ''): int
     {
-        $obj = self::get()->byId($id);
+        $obj = self::get_by_id($id);
         $obj->CampaignMonitorOutcome = ($success ? 'Success' : 'Error');
         if (! $success) {
             $obj->ErrorDescription = CampaignMonitorAPIConnector::get_last_error_code() . ': ' . CampaignMonitorAPIConnector::get_last_error_description();

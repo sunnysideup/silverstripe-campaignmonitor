@@ -414,7 +414,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get()->byID($id);
+        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
@@ -431,7 +431,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get()->byID($id);
+        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if (! $this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
@@ -448,7 +448,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get()->byID($id);
+        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
             if (isset($_GET['hash']) && 7 === strlen($_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
                 return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
@@ -467,7 +467,7 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get()->byID($id);
+        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
             return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
         }
