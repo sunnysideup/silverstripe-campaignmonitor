@@ -56,6 +56,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     private static $url_segment = 'create-send-test';
 
     private static $allowed_actions = [
+        'index' => 'CMS_ACCESS_CMSMain',
         'testall' => 'CMS_ACCESS_CMSMain',
         'testlists' => 'CMS_ACCESS_CMSMain',
         'testcampaigns' => 'CMS_ACCESS_CMSMain',
