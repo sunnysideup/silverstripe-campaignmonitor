@@ -96,15 +96,15 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     public function index()
     {
         echo '
-			<hr /><hr /><hr /><hr /><hr />
-			<ul>
-				<li><a href="' . $this->Link('testlists') . '">test lists</a></li>
-				<li><a href="' . $this->Link('testcampaigns') . '">test campaigns</a></li>
-				<li><a href="' . $this->Link('testsubscribers') . '">test subscribers</a></li>
-				<li><a href="' . $this->Link('testall') . '">test all</a></li>
-			</ul>
-			<hr /><hr /><hr /><hr /><hr />
-		';
+            <hr /><hr /><hr /><hr /><hr />
+            <ul>
+                <li><a href="' . $this->Link('testlists') . '">test lists</a></li>
+                <li><a href="' . $this->Link('testcampaigns') . '">test campaigns</a></li>
+                <li><a href="' . $this->Link('testsubscribers') . '">test subscribers</a></li>
+                <li><a href="' . $this->Link('testall') . '">test all</a></li>
+            </ul>
+            <hr /><hr /><hr /><hr /><hr />
+        ';
     }
 
     public function testlists()
