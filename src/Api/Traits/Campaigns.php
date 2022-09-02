@@ -28,6 +28,9 @@ trait Campaigns
     public function getCampaigns()
     {
         //require_once '../../csrest_clients.php';
+        if(! $this->isAvailable()) {
+            return null;
+        }
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_campaigns();
@@ -44,6 +47,9 @@ trait Campaigns
      */
     public function getDrafts()
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
@@ -76,6 +82,10 @@ trait Campaigns
         $templateID = '',
         $templateContent = []
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $siteConfig = SiteConfig::current_site_config();
@@ -167,6 +177,10 @@ trait Campaigns
 
     public function deleteCampaign($campaignID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->delete();
 
@@ -213,6 +227,10 @@ trait Campaigns
      */
     public function getSummary($campaignID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_summary();
 
@@ -240,6 +258,10 @@ trait Campaigns
      */
     public function getEmailClientUsage($campaignID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_email_client_usage();
 
@@ -302,6 +324,10 @@ trait Campaigns
         ?string $sortByField = 'EMAIL',
         ?string $sortDirection = 'ASC'
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_campaigns.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_campaigns.php';
         $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());

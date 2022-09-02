@@ -49,6 +49,10 @@ trait Subscribers
      */
     public function getListsForEmail($member)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if ($member instanceof Member) {
             $email = $member->Email;
         } else {
@@ -99,6 +103,10 @@ trait Subscribers
         ?bool $resubscribe = true,
         ?bool $restartSubscriptionBasedAutoResponders = false
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
@@ -151,6 +159,10 @@ trait Subscribers
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if (! $oldEmailAddress) {
             $oldEmailAddress = $member->Email;
         }
@@ -206,6 +218,10 @@ trait Subscribers
         $queueSubscriptionBasedAutoResponders = false,
         $restartSubscriptionBasedAutoResponders = false
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
@@ -249,6 +265,10 @@ trait Subscribers
      */
     public function deleteSubscriber($listID, $member)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if ($member instanceof Member) {
             $member = $member->Email;
         }
@@ -272,6 +292,10 @@ trait Subscribers
      */
     public function unsubscribeSubscriber($listID, $member)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if ($member instanceof Member) {
             $member = $member->Email;
         }
@@ -394,6 +418,10 @@ trait Subscribers
      */
     public function getSubscriber($listID, $member, $cacheIsOK = true)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if ($member instanceof Member) {
             $member = $member->Email;
         }
@@ -435,6 +463,10 @@ trait Subscribers
      */
     public function getHistory($listID, $member)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         if ($member instanceof Member) {
             $member = $member->Email;
         }

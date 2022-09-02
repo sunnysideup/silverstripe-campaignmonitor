@@ -371,7 +371,10 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     protected function setupTests()
     {
         $this->api = $this->getCMAPI();
-
+        if(! $this->api) {
+            user_error('Api not enabled!');
+            return;
+        }
         if ($this->showAll) {
             $this->egData['limit'] = 100;
         }

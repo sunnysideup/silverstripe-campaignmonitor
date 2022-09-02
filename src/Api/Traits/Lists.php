@@ -19,6 +19,10 @@ trait Lists
      */
     public function getLists()
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
@@ -43,6 +47,10 @@ trait Lists
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Clients(
             $this->Config()->get('client_id'),
             $this->getAuth()
@@ -77,6 +85,10 @@ trait Lists
      */
     public function createList($title, $unsubscribePage, $confirmationSuccessPage, $confirmedOptIn = false, $unsubscribeSetting = null)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists(null, $this->getAuth());
@@ -116,6 +128,10 @@ trait Lists
      */
     public function createCustomField(string $listID, $visible, $type, $title, $options = [])
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         switch ($type) {
             case 'text':
@@ -165,6 +181,10 @@ trait Lists
      */
     public function deleteCustomField($listID, $key)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->delete_custom_field($key);
 
@@ -184,6 +204,10 @@ trait Lists
      */
     public function deleteList($listID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -216,6 +240,10 @@ trait Lists
      */
     public function getList($listID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -265,6 +293,10 @@ trait Lists
      */
     public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -320,6 +352,10 @@ trait Lists
      */
     public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -375,6 +411,10 @@ trait Lists
      */
     public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -430,6 +470,10 @@ trait Lists
      */
     public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -490,6 +534,10 @@ trait Lists
         ?string $sortByField = 'email',
         ?string $sortDirection = 'asc'
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -532,6 +580,10 @@ trait Lists
         ?bool $addUnsubscribesToSuppList = true,
         ?bool $scrubActiveWithSuppList = true
     ) {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         if (! $unsubscribeSetting) {
@@ -557,6 +609,10 @@ trait Lists
 
     public function getSegments($listID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
@@ -605,6 +661,10 @@ trait Lists
      */
     public function getListStats($listID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
@@ -619,6 +679,10 @@ trait Lists
 
     public function getListCustomFields($listID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_custom_fields();
 

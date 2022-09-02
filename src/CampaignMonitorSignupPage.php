@@ -379,9 +379,11 @@ class CampaignMonitorSignupPage extends Page
                 $group->Members()->add($member);
             }
             $api = $this->getCMAPI();
-            $result = $api->addSubscriber($listID, $member);
-            if ($result === $email) {
-                return null;
+            if($api) {
+                $result = $api->addSubscriber($listID, $member);
+                if ($result === $email) {
+                    return null;
+                }
             }
 
             return 'ERROR: could not subscribe';
@@ -480,42 +482,45 @@ class CampaignMonitorSignupPage extends Page
         }
         // //add segments
         $segmentsAdded = [];
-        $segments = $this->getCMAPI()->getSegments($this->ListID);
-        if ($segments && is_array($segments) && count($segments)) {
-            foreach ($segments as $segment) {
-                $segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
-                $filterArray = ['SegmentID' => $segment->SegmentID, 'ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID];
-                $obj = CampaignMonitorSegment::get()->filter($filterArray)->first();
-                if (! $obj) {
-                    $obj = CampaignMonitorSegment::create($filterArray);
+        $api = $this->getCMAPI();
+        if($api) {
+            $segments = $api->getSegments($this->ListID);
+            if ($segments && is_array($segments) && count($segments)) {
+                foreach ($segments as $segment) {
+                    $segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
+                    $filterArray = ['SegmentID' => $segment->SegmentID, 'ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID];
+                    $obj = CampaignMonitorSegment::get()->filter($filterArray)->first();
+                    if (! $obj) {
+                        $obj = CampaignMonitorSegment::create($filterArray);
+                    }
+                    $obj->Title = $segment->Title;
+                    $obj->write();
                 }
-                $obj->Title = $segment->Title;
-                $obj->write();
             }
-        }
-        if (count($segmentsAdded)) {
-            $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                ->exclude(['SegmentID' => $segmentsAdded])
-            ;
-            foreach ($unwantedSegments as $unwantedSegment) {
-                $unwantedSegment->delete();
+            if (count($segmentsAdded)) {
+                $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+                    ->exclude(['SegmentID' => $segmentsAdded])
+                ;
+                foreach ($unwantedSegments as $unwantedSegment) {
+                    $unwantedSegment->delete();
+                }
             }
-        }
-        // //add custom fields
-        $customCustomFieldsAdded = [];
-        $customCustomFields = $this->getCMAPI()->getListCustomFields($this->ListID);
-        if ($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
-            foreach ($customCustomFields as $customCustomField) {
-                $obj = CampaignMonitorCustomField::create_from_campaign_monitor_object($customCustomField, $this->ListID);
-                $customCustomFieldsAdded[$obj->Code] = $obj->Code;
+            // //add custom fields
+            $customCustomFieldsAdded = [];
+            $customCustomFields = $api->getListCustomFields($this->ListID);
+            if ($customCustomFields && is_array($customCustomFields) && count($customCustomFields)) {
+                foreach ($customCustomFields as $customCustomField) {
+                    $obj = CampaignMonitorCustomField::create_from_campaign_monitor_object($customCustomField, $this->ListID);
+                    $customCustomFieldsAdded[$obj->Code] = $obj->Code;
+                }
             }
-        }
-        if (count($customCustomFieldsAdded)) {
-            $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                ->exclude(['Code' => $customCustomFieldsAdded])
-            ;
-            foreach ($unwantedCustomFields as $unwantedCustomField) {
-                $unwantedCustomField->delete();
+            if (count($customCustomFieldsAdded)) {
+                $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
+                    ->exclude(['Code' => $customCustomFieldsAdded])
+                ;
+                foreach ($unwantedCustomFields as $unwantedCustomField) {
+                    $unwantedCustomField->delete();
+                }
             }
         }
     }
@@ -559,24 +564,27 @@ class CampaignMonitorSignupPage extends Page
     protected function makeDropdownListFromLists()
     {
         if (! isset(self::$drop_down_list[$this->ID])) {
+            self::$drop_down_list[$this->ID] = [];
             $array = [];
             $api = $this->getCMAPI();
-            $lists = $api->getLists();
-            if (is_array($lists) && count($lists)) {
-                foreach ($lists as $list) {
-                    $array[$list->ListID] = $list->Name;
+            if($api) {
+                $lists = $api->getLists();
+                if (is_array($lists) && count($lists)) {
+                    foreach ($lists as $list) {
+                        $array[$list->ListID] = $list->Name;
+                    }
                 }
-            }
-            //remove subscription list IDs from other pages
-            $subscribePages = CampaignMonitorSignupPage::get()
-                ->exclude('ID', $this->ID)
-            ;
-            foreach ($subscribePages as $page) {
-                if (isset($array[$page->ListID])) {
-                    unset($array[$page->ListID]);
+                //remove subscription list IDs from other pages
+                $subscribePages = CampaignMonitorSignupPage::get()
+                    ->exclude('ID', $this->ID)
+                ;
+                foreach ($subscribePages as $page) {
+                    if (isset($array[$page->ListID])) {
+                        unset($array[$page->ListID]);
+                    }
                 }
+                self::$drop_down_list[$this->ID] = $array;
             }
-            self::$drop_down_list[$this->ID] = $array;
         }
 
         return self::$drop_down_list[$this->ID];

@@ -13,6 +13,10 @@ trait Templates
      */
     public function getTemplate($templatID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Templates(
             $templatID,
             $this->getAuth()
@@ -33,6 +37,10 @@ trait Templates
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
         if (! $name) {
             $name = 'no name set';
@@ -77,6 +85,10 @@ trait Templates
      */
     public function updateTemplate(CampaignMonitorCampaign $campaignMonitorCampaign, $templateID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
         if (! $name) {
             $name = 'no name set';
@@ -119,6 +131,10 @@ trait Templates
      */
     public function deleteTemplate($templateID)
     {
+        if(! $this->isAvailable()) {
+            return null;
+        }
+
         $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->delete();
 

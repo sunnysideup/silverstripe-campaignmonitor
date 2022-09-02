@@ -554,28 +554,32 @@ class CampaignMonitorSignupPageController extends PageController
         if (Permission::check('ADMIN')) {
             //run tests here
             $api = $this->getCMAPI();
-            $html = '<div id="CampaignMonitorStats">';
-            $html .= '<h1>Debug Response</h1>';
-            $html .= '<h2>Main Client Stuff</h2>';
-            $html .= '<h3>Link to confirm page</h3>' . Director::absoluteUrl($this->Link('confirm')) . '';
-            $html .= '<h3>Link to thank-you-page</h3>' . Director::absoluteUrl($this->Link('thankyou')) . '';
-            $html .= '<h3>Link to sad-to-see-you-go page</h3>' . Director::absoluteUrl($this->Link('sadtoseeyougo')) . '';
-            $html .= '<h3><a href="#">All Campaigns</a></a></h3><pre>' . print_r($api->getCampaigns(), 1) . '</pre>';
-            $html .= '<h3><a href="#">All Lists</a></h3><pre>' . print_r($api->getLists(), 1) . '</pre>';
-            if ($this->ListID) {
-                $html .= '<h2>List</h2';
-                $html .= '<h3><a href="#" id="MyListStatsAreHere">List Stats</a></h3><pre>' . print_r($api->getListStats($this->ListID), 1) . '</pre>';
-                $html .= '<h3><a href="#">List Details</a></h3><pre>' . print_r($api->getList($this->ListID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Active Subscribers (latest ones)</a></h3><pre>' . print_r($api->getActiveSubscribers($this->ListID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Unconfirmed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnconfirmedSubscribers($this->ListID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Bounced Subscribers (latest ones)</a></h3><pre>' . print_r($api->getBouncedSubscribers($this->ListID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Unsubscribed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnsubscribedSubscribers($this->ListID), 1) . '</pre>';
+            if($api) {
+                $html = '<div id="CampaignMonitorStats">';
+                $html .= '<h1>Debug Response</h1>';
+                $html .= '<h2>Main Client Stuff</h2>';
+                $html .= '<h3>Link to confirm page</h3>' . Director::absoluteUrl($this->Link('confirm')) . '';
+                $html .= '<h3>Link to thank-you-page</h3>' . Director::absoluteUrl($this->Link('thankyou')) . '';
+                $html .= '<h3>Link to sad-to-see-you-go page</h3>' . Director::absoluteUrl($this->Link('sadtoseeyougo')) . '';
+                $html .= '<h3><a href="#">All Campaigns</a></a></h3><pre>' . print_r($api->getCampaigns(), 1) . '</pre>';
+                $html .= '<h3><a href="#">All Lists</a></h3><pre>' . print_r($api->getLists(), 1) . '</pre>';
+                if ($this->ListID) {
+                    $html .= '<h2>List</h2';
+                    $html .= '<h3><a href="#" id="MyListStatsAreHere">List Stats</a></h3><pre>' . print_r($api->getListStats($this->ListID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">List Details</a></h3><pre>' . print_r($api->getList($this->ListID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Active Subscribers (latest ones)</a></h3><pre>' . print_r($api->getActiveSubscribers($this->ListID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Unconfirmed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnconfirmedSubscribers($this->ListID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Bounced Subscribers (latest ones)</a></h3><pre>' . print_r($api->getBouncedSubscribers($this->ListID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Unsubscribed Subscribers (latest ones)</a></h3><pre>' . print_r($api->getUnsubscribedSubscribers($this->ListID), 1) . '</pre>';
+                } else {
+                    $html .= '<h2 style="color: red;">ERROR: No Lists selected</h2';
+                }
+                Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
+                $html .= '</div>';
+                $this->Content = $html;
             } else {
-                $html .= '<h2 style="color: red;">ERROR: No Lists selected</h2';
+                $html = '<p class="message warning">Api not enabled</p>';
             }
-            Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
-            $html .= '</div>';
-            $this->Content = $html;
         } else {
             Security::permissionFailure($this, _t('CAMPAIGNMONITORSIGNUPPAGE.TESTFAILURE', 'This function is only available for administrators'));
         }
@@ -593,16 +597,20 @@ class CampaignMonitorSignupPageController extends PageController
             if ($this->campaign) {
                 //run tests here
                 $api = $this->getCMAPI();
-                $html = '<div id="CampaignMonitorStats">';
-                $html .= '<h2>Campaign Stats</h2>';
-                $html .= '<h3><a href="#">Campaign: ' . $this->campaign->Subject . '</a></h3>';
-                $html .= '<h3><a href="#">Summary</a></h3><pre>' . print_r($api->getSummary($this->campaign->CampaignID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Email Client Usage</a></h3><pre>' . print_r($api->getEmailClientUsage($this->campaign->CampaignID), 1) . '</pre>';
-                $html .= '<h3><a href="#">Unsubscribes</a></h3><pre>' . print_r($api->getUnsubscribes($this->campaign->CampaignID), 1) . '</pre>';
-                Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
-                $html .= '</div>';
-                $this->Content = $html;
+                if($api) {
+                    $html = '<div id="CampaignMonitorStats">';
+                    $html .= '<h2>Campaign Stats</h2>';
+                    $html .= '<h3><a href="#">Campaign: ' . $this->campaign->Subject . '</a></h3>';
+                    $html .= '<h3><a href="#">Summary</a></h3><pre>' . print_r($api->getSummary($this->campaign->CampaignID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Email Client Usage</a></h3><pre>' . print_r($api->getEmailClientUsage($this->campaign->CampaignID), 1) . '</pre>';
+                    $html .= '<h3><a href="#">Unsubscribes</a></h3><pre>' . print_r($api->getUnsubscribes($this->campaign->CampaignID), 1) . '</pre>';
+                    Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
+                    $html .= '</div>';
+                } else {
+                    $html = '<p class="message warning">Api not enabled</p>';
+                }
             }
+            $this->Content = $html;
         }
     }
 

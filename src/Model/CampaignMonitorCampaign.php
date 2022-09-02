@@ -14,6 +14,8 @@ use SilverStripe\View\SSViewer;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
+use Pelago\Emogrifier\CssInliner;
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  */
@@ -207,7 +209,7 @@ class CampaignMonitorCampaign extends DataObject
         }
         $html = '';
 
-        if (class_exists('\Pelago\Emogrifier')) {
+        if (class_exists(CssInliner::class)) {
             $allCSS = '';
             $cssFileLocations = $this->getCSSFileLocations();
             foreach ($cssFileLocations as $cssFileLocation) {
@@ -387,14 +389,16 @@ class CampaignMonitorCampaign extends DataObject
         $testC = $this->countOfWrites < 3;
         if (! $testA && $testB && $testC) {
             $api = $this->getCMAPI();
-            if ($this->CreateAsTemplate) {
-                if ($this->TemplateID) {
-                    $api->updateTemplate($this, $this->TemplateID);
+            if($api) {
+                if ($this->CreateAsTemplate) {
+                    if ($this->TemplateID) {
+                        $api->updateTemplate($this, $this->TemplateID);
+                    } else {
+                        $api->createTemplate($this);
+                    }
                 } else {
-                    $api->createTemplate($this);
+                    $api->createCampaign($this);
                 }
-            } else {
-                $api->createCampaign($this);
             }
         }
     }
@@ -407,10 +411,12 @@ class CampaignMonitorCampaign extends DataObject
             //do nothing
         } elseif ($this) {
             $api = $this->getCMAPI();
-            if ($this->CreateAsTemplate) {
-                $api->deleteTemplate($this->TemplateID);
-            } else {
-                $api->deleteCampaign($this->CampaignID);
+            if($api) {
+                if ($this->CreateAsTemplate) {
+                    $api->deleteTemplate($this->TemplateID);
+                } else {
+                    $api->deleteCampaign($this->CampaignID);
+                }
             }
         }
     }

@@ -236,15 +236,17 @@ class CampaignMonitorSignupFieldProvider
     {
         $api = $this->getCMAPI();
         $currentValues = [];
-        if ($this->listPage->ListID) {
-            if ($this->member && $this->member->exists()) {
-                if ($api->getSubscriberCanReceiveEmailsForThisList($this->listPage->ListID, $this->member)) {
-                    $currentValues = $api->getSubscriber($this->listPage->ListID, $this->member);
-                    //$currentSelection = "Unsubscribe";
+        if($api) {
+            if ($this->listPage->ListID) {
+                if ($this->member && $this->member->exists()) {
+                    if ($api->getSubscriberCanReceiveEmailsForThisList($this->listPage->ListID, $this->member)) {
+                        $currentValues = $api->getSubscriber($this->listPage->ListID, $this->member);
+                        //$currentSelection = "Unsubscribe";
+                    }
                 }
             }
+            $currentValues = json_decode(json_encode($currentValues), true);
         }
-
-        return json_decode(json_encode($currentValues), true);
+        return $currentValues;
     }
 }

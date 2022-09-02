@@ -76,10 +76,14 @@ class CampaignMonitorCreateLists extends BuildTask
     {
         if (empty(self::$drop_down_list_for_campaign_monitor)) {
             $array = [];
-            $lists = $this->getCMAPI()->getLists();
-            if (is_array($lists) && count($lists)) {
-                foreach ($lists as $list) {
-                    $array[$list->ListID] = $list->Name;
+            self::$drop_down_list_for_campaign_monitor = [];
+            $api = $this->getCMAPI();
+            if($api) {
+                $lists = $api->getLists();
+                if (is_array($lists) && count($lists)) {
+                    foreach ($lists as $list) {
+                        $array[$list->ListID] = $list->Name;
+                    }
                 }
             }
             self::$drop_down_list_for_campaign_monitor = $array;
