@@ -76,6 +76,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         if (Director::isLive()) {
             $this->debug = false;
         }
+
         if ($this->debug) {
             $limit = 20;
             $maxIterations = 20;
@@ -85,12 +86,13 @@ class CampaignMonitorSyncAllMembers extends BuildTask
             $maxIterations = 1000000;
             DB::alteration_message("Running in live mode going to check {$maxIterations} loops of {$limit} records.");
         }
+
         $customFields = [];
         $memberArray = [];
         $unsubscribeArray = [];
         $alreadyCompleted = [];
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             for ($i = 0; $i < $maxIterations; ++$i) {
                 $members = Member::get()
                     ->limit($limit, $i * $limit)
@@ -98,6 +100,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 if ($this->debug) {
                     $members = $members->sort('RAND()');
                 }
+
                 if ($members->exists()) {
                     foreach ($members as $member) {
                         if (isset($this->previouslyUnsubscribedSubscribers[$member->Email])) {
@@ -118,14 +121,17 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                                 if (! $member instanceof Member) {
                                     user_error('Member not instance of Member');
                                 }
+
                                 $memberArray[$member->Email] = $member;
                             }
+
                             if ($member->Email && $member->hasMethod('IsBlackListed') && $member->IsBlackListed()) {
                                 $unsubscribeArray[$member->Email] = $member;
                                 DB::alteration_message('Blacklisting: ' . $member->Email, 'deleted');
                             }
                         }
                     }
+
                     $this->exportNow($memberArray, $customFields, $unsubscribeArray);
                     $customFields = [];
                     $memberArray = [];
@@ -137,6 +143,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         } else {
             DB::alteration_message('Api not enabled', 'deleted');
         }
+
         DB::alteration_message('<h1>== THE END ==</h1>');
     }
 
@@ -146,7 +153,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getExistingFolkListed()
     {
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             for ($i = 1; $i < 100; ++$i) {
                 $list = $api->getActiveSubscribers(
                     $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -161,12 +168,14 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $i = 999999;
                     }
                 }
+
                 if (property_exists($list, 'Results') && null !== $list->Results) {
                     foreach ($list->Results as $obj) {
                         $finalCustomFields = [];
                         foreach ($obj->CustomFields as $customFieldObject) {
                             $finalCustomFields[str_replace(['[', ']'], '', $customFieldObject->Key)] = $customFieldObject->Value;
                         }
+
                         $this->previouslyExported[$obj->EmailAddress] = $finalCustomFields;
                     }
                 } else {
@@ -176,7 +185,6 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         } else {
             DB::alteration_message('Api not enabled', 'deleted');
         }
-
     }
 
     /**
@@ -185,7 +193,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getBouncedSubscribers()
     {
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             for ($i = 1; $i < 100; ++$i) {
                 $list = $api->getBouncedSubscribers(
                     $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -200,6 +208,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $i = 999999;
                     }
                 }
+
                 if (property_exists($list, 'Results') && null !== $list->Results) {
                     foreach ($list->Results as $obj) {
                         $this->previouslyBouncedSubscribers[$obj->EmailAddress] = true;
@@ -211,7 +220,6 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         } else {
             DB::alteration_message('Api not enabled', 'deleted');
         }
-
     }
 
     /**
@@ -220,7 +228,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function getUnsubscribedSubscribers()
     {
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             for ($i = 1; $i < 100; ++$i) {
                 $list = $api->getUnsubscribedSubscribers(
                     $listID = Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -235,6 +243,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $i = 999999;
                     }
                 }
+
                 if (property_exists($list, 'Results') && null !== $list->Results) {
                     foreach ($list->Results as $obj) {
                         $this->previouslyUnsubscribedSubscribers[$obj->EmailAddress] = true;
@@ -256,8 +265,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
     private function exportNow($memberArray, $customFields, $unsubscribeArray)
     {
         $api = $this->getCMAPI();
-        if($api) {
-            if (count($memberArray)) {
+        if ($api) {
+            if ([] !== $memberArray) {
                 if (count($memberArray) === count($customFields)) {
                     $finalCustomFields = [];
                     foreach ($customFields as $email => $valuesArray) {
@@ -284,6 +293,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         } else {
                             DB::alteration_message('Adding entry: ' . implode('; ', $customFields[$email]) . '.', 'created');
                         }
+
                         $finalCustomFields[$email] = [];
                         $k = 0;
                         foreach ($valuesArray as $key => $value) {
@@ -291,6 +301,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                             $finalCustomFields[$email][$k]['Value'] = $value;
                             ++$k;
                         }
+
                         if ($updateDetails) {
                             if (! $this->debug) {
                                 $api->updateSubscriber(
@@ -302,12 +313,14 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                                     $restartSubscriptionBasedAutoResponders = false
                                 );
                             }
+
                             unset($finalCustomFields[$email], $customFields[$email], $memberArray[$email]);
                         } elseif ($alreadyListed) {
                             unset($finalCustomFields[$email], $customFields[$email], $memberArray[$email]);
                         }
                     }
-                    if (count($memberArray)) {
+
+                    if ([] !== $memberArray) {
                         if (count($memberArray) === count($finalCustomFields)) {
                             DB::alteration_message('<h3>adding: ' . count($memberArray) . ' subscribers</h3>', 'created');
                             if (! $this->debug) {
@@ -326,6 +339,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     } else {
                         DB::alteration_message('adding: ' . count($memberArray) . ' subscribers');
                     }
+
                     foreach ($unsubscribeArray as $member) {
                         DB::alteration_message('Now doing Blacklisting: ' . $member->Email, 'deleted');
                         if (! $this->debug) {

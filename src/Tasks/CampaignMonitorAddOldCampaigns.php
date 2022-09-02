@@ -30,6 +30,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
         foreach ($faultyOnes as $faultyOne) {
             $faultyOne->delete();
         }
+
         $api = CampaignMonitorAPIConnector::create();
         $api->init();
 
@@ -42,10 +43,12 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
                         if ($this->verbose) {
                             DB::alteration_message('Adding ' . $campaign->Subject . ' sent ' . $campaign->SentDate, 'created');
                         }
+
                         $campaignMonitorCampaign = CampaignMonitorCampaign::create();
                     } elseif ($this->verbose) {
                         DB::alteration_message('already added ' . $campaign->Subject, 'edited');
                     }
+
                     $campaignMonitorCampaign->HasBeenSent = true;
                     $campaignMonitorCampaign->CampaignID = $campaign->CampaignID;
                     $campaignMonitorCampaign->Subject = $campaign->Subject;
@@ -62,6 +65,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
         } elseif ($this->verbose) {
             DB::alteration_message('there are no campaigns to be added', 'edited');
         }
+
         if ($this->verbose) {
             DB::alteration_message('<hr /><hr /><hr />Completed', 'edited');
         }

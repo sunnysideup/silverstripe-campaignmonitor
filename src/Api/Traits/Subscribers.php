@@ -49,18 +49,15 @@ trait Subscribers
      */
     public function getListsForEmail($member)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
-        if ($member instanceof Member) {
-            $email = $member->Email;
-        } else {
-            $email = $member;
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $email = $member instanceof Member ? $member->Email : $member;
+        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [];
         }
+
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
@@ -103,7 +100,7 @@ trait Subscribers
         ?bool $resubscribe = true,
         ?bool $restartSubscriptionBasedAutoResponders = false
     ) {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -159,13 +156,14 @@ trait Subscribers
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
     ) {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
         if (! $oldEmailAddress) {
             $oldEmailAddress = $member->Email;
         }
+
         $customFields = $this->cleanCustomFields($customFields);
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
@@ -218,7 +216,7 @@ trait Subscribers
         $queueSubscriptionBasedAutoResponders = false,
         $restartSubscriptionBasedAutoResponders = false
     ) {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -233,6 +231,7 @@ trait Subscribers
             } elseif (isset($customFields[$member->Email])) {
                 $customFieldsForMember = $customFields[$member->Email];
             }
+
             $customFieldsForMember = $this->cleanCustomFields($customFieldsForMember);
             if ($member instanceof Member) {
                 $importArray[] = [
@@ -243,6 +242,7 @@ trait Subscribers
                 ];
             }
         }
+
         $result = $wrap->import(
             $importArray,
             $resubscribe,
@@ -265,13 +265,14 @@ trait Subscribers
      */
     public function deleteSubscriber($listID, $member)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->delete($member);
 
@@ -292,13 +293,14 @@ trait Subscribers
      */
     public function unsubscribeSubscriber($listID, $member)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->unsubscribe($member);
 
@@ -322,6 +324,7 @@ trait Subscribers
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $outcome = $this->getSubscriber($listID, $member);
         if ($outcome && (property_exists($outcome, 'State') && null !== $outcome->State)) {
             if ($this->debug) {
@@ -330,6 +333,7 @@ trait Subscribers
 
             return true;
         }
+
         if ($this->debug) {
             echo '<h3>Subscriber does *** NOT *** Exist For This List</h3>';
         }
@@ -350,6 +354,7 @@ trait Subscribers
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $outcome = $this->getSubscriber($listID, $member);
         if ($outcome && (property_exists($outcome, 'State') && null !== $outcome->State)) {
             if ('Active' === $outcome->State) {
@@ -360,6 +365,7 @@ trait Subscribers
                 return true;
             }
         }
+
         if ($this->debug) {
             echo '<h3>Subscriber Can *** NOT *** Receive Emails For This List</h3>';
         }
@@ -388,6 +394,7 @@ trait Subscribers
                 return true;
             }
         }
+
         if ($this->debug) {
             echo '<h3>Subscriber Can *** STILL *** Receive Emails For This List</h3>';
         }
@@ -418,13 +425,14 @@ trait Subscribers
      */
     public function getSubscriber($listID, $member, $cacheIsOK = true)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $key = $listID . '_' . $member;
         if (isset(self::$_get_subscriber[$key]) && $cacheIsOK) {
             //do nothing
@@ -463,13 +471,14 @@ trait Subscribers
      */
     public function getHistory($listID, $member)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
         if ($member instanceof Member) {
             $member = $member->Email;
         }
+
         $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->get_history($member);
 

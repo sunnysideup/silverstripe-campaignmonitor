@@ -28,9 +28,10 @@ trait Campaigns
     public function getCampaigns()
     {
         //require_once '../../csrest_clients.php';
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
+
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
         $result = $wrap->get_campaigns();
@@ -47,9 +48,10 @@ trait Campaigns
      */
     public function getDrafts()
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
+
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
@@ -82,7 +84,7 @@ trait Campaigns
         $templateID = '',
         $templateContent = []
     ) {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -114,6 +116,7 @@ trait Campaigns
         if (! $replyTo) {
             $replyTo = $fromEmail;
         }
+
         $page = $campaignMonitorCampaign->Pages()->first();
         if ($page) {
             $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
@@ -149,6 +152,7 @@ trait Campaigns
                     ]
                 );
             }
+
             if (null !== $result->http_status_code && (201 === $result->http_status_code || 201 === $result->http_status_code)) {
                 $code = $result->response;
                 $campaignMonitorCampaign->CreateFromWebsite = false;
@@ -161,8 +165,10 @@ trait Campaigns
                 if (is_object($result->response)) {
                     $code = $result->response->Code . ':' . $result->response->Message;
                 }
+
                 $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
             }
+
             $campaignMonitorCampaign->write();
         } else {
             $result = 'ERROR: no campagn monitor page with list id created yet.';
@@ -177,7 +183,7 @@ trait Campaigns
 
     public function deleteCampaign($campaignID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -227,7 +233,7 @@ trait Campaigns
      */
     public function getSummary($campaignID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -258,7 +264,7 @@ trait Campaigns
      */
     public function getEmailClientUsage($campaignID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -324,7 +330,7 @@ trait Campaigns
         ?string $sortByField = 'EMAIL',
         ?string $sortDirection = 'ASC'
     ) {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 

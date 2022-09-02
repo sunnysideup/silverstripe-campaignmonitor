@@ -34,6 +34,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
                 ->run(null)
             ;
         }
+
         parent::init();
     }
 }

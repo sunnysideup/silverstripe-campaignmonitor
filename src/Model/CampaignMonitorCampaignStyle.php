@@ -123,14 +123,17 @@ class CampaignMonitorCampaignStyle extends DataObject
         if (! $this->TemplateName) {
             $this->TemplateName = CampaignMonitorCampaign::class;
         }
+
         $fileLocation = '';
         foreach ($this->getFoldersToSearch() as $folder) {
             $fileLocation = $folder . $this->TemplateName . '.ss';
             if (file_exists($fileLocation)) {
                 return $fileLocation;
             }
+
             //just try the next one ...
         }
+
         user_error("can not find template, last one tried: {$fileLocation}");
 
         return 'error';
@@ -158,13 +161,15 @@ class CampaignMonitorCampaignStyle extends DataObject
                         user_error("can find css file {$file}");
                     }
                 }
+
                 // if $link_tag rel == stylesheet
                  //   get href value and load CSS
             }
         } else {
             user_error('Can not find template file');
         }
-        if (0 === count($cssFiles)) {
+
+        if ([] === $cssFiles) {
             foreach ($this->getCSSFoldersToSearch() as $folder) {
                 $file = $folder . 'CampaignMonitorCampaign.css';
                 if (file_exists($file)) {
@@ -191,6 +196,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                 $templates[$template['filename']] = $template['filename'];
             }
         }
+
         foreach ($templates as $template) {
             $filter = ['TemplateName' => $template];
             $obj = CampaignMonitorCampaignStyle::get()->filter($filter)->first();
@@ -199,6 +205,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                 $obj->write();
             }
         }
+
         if (! empty($templates)) {
             $excludes = CampaignMonitorCampaignStyle::get()->exclude(['TemplateName' => $templates]);
             $obj = $excludes;

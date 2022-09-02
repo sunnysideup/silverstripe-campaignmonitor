@@ -77,11 +77,13 @@ class CampaignMonitorSubscriptionLog extends DataObject
         } else {
             $memberLink = 'Member could not be found (id = ' . $this->MemberID . ').';
         }
+
         if ($list && $list->exists()) {
             $listLink = DBField::create_field('HTMLText', '<a href="admin/pages/edit/show/' . $this->ListID . '/edit/">' . $this->List()->Title . '</a>');
         } else {
             $listLink = 'List could not be found (id = ' . $this->ListID . ').';
         }
+
         $fields->addFieldsToTab(
             'Root.Main',
             [

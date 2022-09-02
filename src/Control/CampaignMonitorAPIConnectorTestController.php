@@ -275,6 +275,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
                 $member[$i]->Surname = "Surname {$i}";
                 $member[$i]->write();
             }
+
             $this->api->addSubscriber(
                 $this->egData['tempListID'],
                 $member[$i],
@@ -365,16 +366,19 @@ class CampaignMonitorAPIConnectorTestController extends Controller
         if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'client_id')) {
             user_error('To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id');
         }
+
         $this->egData['listTitle'] .= rand(0, 999999999999);
     }
 
     protected function setupTests()
     {
         $this->api = $this->getCMAPI();
-        if(! $this->api) {
+        if (! $this->api) {
             user_error('Api not enabled!');
+
             return;
         }
+
         if ($this->showAll) {
             $this->egData['limit'] = 100;
         }

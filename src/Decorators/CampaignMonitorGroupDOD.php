@@ -50,6 +50,7 @@ class CampaignMonitorGroupDOD extends DataExtension
         } else {
             $value = 'no';
         }
+
         $fields->addFieldsToTab(
             'Root.Newsletter',
             [

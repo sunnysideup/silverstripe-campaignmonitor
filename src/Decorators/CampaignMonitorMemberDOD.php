@@ -61,7 +61,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             'CampaignMonitorSubscriptionLogs',
             'CM_PermissionToTrack',
         ]);
-        if(! empty($_GET['mail'])) {
+        if (! empty($_GET['mail'])) {
             $fields->addFieldsToTab(
                 'Root.Newsletter',
                 [
@@ -165,9 +165,10 @@ class CampaignMonitorMemberDOD extends DataExtension
                 }
             }
         }
+
         if ($listPage->ListID) {
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 $successForCm = $api->unsubscribeSubscriber($listPage->ListID, $this->owner);
                 CampaignMonitorSubscriptionLog::log_outcome($logId, $successForCm);
             } else {
@@ -186,7 +187,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         $array = [];
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             $lists = $api->getListsForEmail($this->owner);
             if ($lists && count($lists)) {
                 foreach ($lists as $listArray) {
@@ -196,6 +197,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 }
             }
         }
+
         return $array;
     }
 
@@ -243,7 +245,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         $success = false;
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             if ($listPage && $listPage->ListID) {
                 if ($this->isPartOfCampaignMonitorList($listPage)) {
                     $success = (bool) $api->updateSubscriber(
@@ -274,9 +276,10 @@ class CampaignMonitorMemberDOD extends DataExtension
     protected function isPartOfCampaignMonitorList($listPage): ?bool
     {
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             return (bool) $api->getSubscriber($listPage->ListID, $this->owner);
         }
+
         return null;
     }
 }

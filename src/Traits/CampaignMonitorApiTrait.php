@@ -16,7 +16,7 @@ trait CampaignMonitorApiTrait
     {
         if (null === self::$cm_api) {
             self::$cm_api = Injector::inst()->get(CampaignMonitorAPIConnector::class);
-            if(self::$cm_api->isAvailable()) {
+            if (self::$cm_api->isAvailable()) {
                 self::$cm_api->init();
             } else {
                 self::$cm_api = false;

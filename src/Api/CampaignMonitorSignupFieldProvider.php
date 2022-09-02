@@ -77,9 +77,11 @@ class CampaignMonitorSignupFieldProvider
         if (! is_object($this->listPage)) {
             $this->listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $this->listPage])->first();
         }
+
         if (! $fieldName) {
             $fieldName = $this->Config()->get('campaign_monitor_signup_fieldname');
         }
+
         $addCustomFields = false;
         $subscribeField = null;
         $typeFieldValue = 'none';
@@ -89,6 +91,7 @@ class CampaignMonitorSignupFieldProvider
                 if (! $fieldTitle) {
                     $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $this->listPage->getListTitle();
                 }
+
                 $optionArray = $this->getOptionArray();
                 $currentSelection = $this->getCurrentSelection();
 
@@ -100,6 +103,7 @@ class CampaignMonitorSignupFieldProvider
                 } elseif (count($optionArray) > 1) {
                     $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray);
                 }
+
                 $subscribeField->setValue($currentSelection);
                 $addCustomFields = true;
             }
@@ -108,12 +112,14 @@ class CampaignMonitorSignupFieldProvider
             if (! $fieldTitle) {
                 $fieldTitle = _t('CampaignMonitorMemberDOD.NEWSLETTERSIGNUP', 'Newsletter sign-up');
             }
+
             $lists = CampaignMonitorSignupPage::get_ready_ones();
             $array = [];
             foreach ($lists as $list) {
                 $array[$list->ListID] = $list->getListTitle();
             }
-            if (count($array)) {
+
+            if ([] !== $array) {
                 $subscribeField = new CheckboxSetField(
                     $fieldName,
                     $fieldTitle,
@@ -122,6 +128,7 @@ class CampaignMonitorSignupFieldProvider
                 $subscribeField->setDefaultItems(array_keys($this->member->CampaignMonitorSignedUpArray()));
             }
         }
+
         if (! $subscribeField) {
             $subscribeField = ReadonlyField::create(
                 $fieldName,
@@ -129,6 +136,7 @@ class CampaignMonitorSignupFieldProvider
                 _t('CampaignMonitorMemberDOD.NO_LISTS_AVAILABLE', 'No sign-up available right now.  Please come back soon.')
             );
         }
+
         $parentField = CompositeField::create();
         $parentField->push($subscribeField);
         $parentField->push(HiddenField::create($fieldName . 'Type')->setValue($typeFieldValue));
@@ -172,6 +180,7 @@ class CampaignMonitorSignupFieldProvider
                         $customFieldsArray[$customField->Code] = $data['CMCustomField' . $customField->Code];
                     }
                 }
+
                 $this->member->addCampaignMonitorList($this->listPage->ListID, $customFieldsArray);
                 $typeOfAction = 'subscribe';
             } else {
@@ -218,9 +227,11 @@ class CampaignMonitorSignupFieldProvider
                         $fieldValues[] = $tmpValue;
                     }
                 }
+
                 $finalValue = 'MultiSelectMany' === $customField->Type ? $fieldValues : implode('', $fieldValues);
                 $customFormField->setValue($finalValue);
             }
+
             if (isset($linkedMemberFields[$customFormField->Code]) && ! $value) {
                 $fieldOrMethod = $linkedMemberFields[$customFormField->Code];
                 $value = $this->member->hasMethod($fieldOrMethod) ? $this->member->{$fieldOrMethod}() : $this->member->{$fieldOrMethod};
@@ -228,6 +239,7 @@ class CampaignMonitorSignupFieldProvider
                     $customFormField->setValue($value);
                 }
             }
+
             $field->push($customFormField);
         }
     }
@@ -236,7 +248,7 @@ class CampaignMonitorSignupFieldProvider
     {
         $api = $this->getCMAPI();
         $currentValues = [];
-        if($api) {
+        if ($api) {
             if ($this->listPage->ListID) {
                 if ($this->member && $this->member->exists()) {
                     if ($api->getSubscriberCanReceiveEmailsForThisList($this->listPage->ListID, $this->member)) {
@@ -245,8 +257,10 @@ class CampaignMonitorSignupFieldProvider
                     }
                 }
             }
+
             $currentValues = json_decode(json_encode($currentValues), true);
         }
+
         return $currentValues;
     }
 }

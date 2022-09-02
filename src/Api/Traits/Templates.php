@@ -13,7 +13,7 @@ trait Templates
      */
     public function getTemplate($templatID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -37,7 +37,7 @@ trait Templates
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -67,8 +67,10 @@ trait Templates
             if (is_object($result->response)) {
                 $code = $result->response->Code . ':' . $result->response->Message;
             }
+
             $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
         }
+
         $campaignMonitorCampaign->write();
 
         return $this->returnResult(
@@ -85,7 +87,7 @@ trait Templates
      */
     public function updateTemplate(CampaignMonitorCampaign $campaignMonitorCampaign, $templateID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 
@@ -93,6 +95,7 @@ trait Templates
         if (! $name) {
             $name = 'no name set';
         }
+
         $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->create(
             $this->Config()->get('client_id'),
@@ -113,8 +116,10 @@ trait Templates
             if (is_object($result->response)) {
                 $code = $result->response->Code . ':' . $result->response->Message;
             }
+
             $campaignMonitorCampaign->MessageFromNewsletterServer = $code;
         }
+
         $campaignMonitorCampaign->write();
 
         return $this->returnResult(
@@ -131,7 +136,7 @@ trait Templates
      */
     public function deleteTemplate($templateID)
     {
-        if(! $this->isAvailable()) {
+        if (! $this->isAvailable()) {
             return null;
         }
 

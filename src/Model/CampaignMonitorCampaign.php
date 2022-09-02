@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Pelago\Emogrifier\CssInliner;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\CheckboxSetField;
@@ -13,8 +14,6 @@ use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
-
-use Pelago\Emogrifier\CssInliner;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -118,9 +117,10 @@ class CampaignMonitorCampaign extends DataObject
         $pages = CampaignMonitorSignupPage::get()->map('ID', 'Title')->toArray();
         $fields->removeFieldFromTab('Root.Main', 'Pages');
         $fields->replaceField('CreateAsTemplate', new OptionsetField('CreateAsTemplate', 'Type', [0 => 'Create as Campaign', 1 => 'Create as Template']));
-        if (count($pages)) {
+        if ([] !== $pages) {
             $fields->addFieldToTab('Root.Pages', new CheckboxSetField('Pages', 'Shown on the following pages ...', $pages));
         }
+
         if ($this->ExistsOnCampaignMonitorCheck()) {
             $fields->removeFieldFromTab('Root.Main', 'CreateAsTemplate');
             if (! $this->CreateAsTemplate) {
@@ -129,6 +129,7 @@ class CampaignMonitorCampaign extends DataObject
                     $fields->addFieldToTab('Root.Main', new LiteralField('CreateFromWebsiteRemake', '<h2>To edit this newsletter, please first delete it from your newsletter server</h2>'), 'CampaignID');
                 }
             }
+
             $fields->removeFieldFromTab('Root.Main', 'Hash');
             $fields->removeFieldFromTab('Root.Main', 'CampaignMonitorCampaignStyleID');
 
@@ -145,6 +146,7 @@ class CampaignMonitorCampaign extends DataObject
             $this->CampaignID = null;
             $this->TemplateID = null;
         }
+
         if ($this->HasBeenSentCheck()) {
             $fields->addFieldToTab('Root.Main', new LiteralField('Link', '<h2><a target="_blank" href="' . $this->Link() . '">Link</a></h2>'), 'CampaignID');
         } else {
@@ -207,6 +209,7 @@ class CampaignMonitorCampaign extends DataObject
         if (is_array($extension) && count($extension)) {
             return $extension[0];
         }
+
         $html = '';
 
         if (class_exists(CssInliner::class)) {
@@ -217,10 +220,12 @@ class CampaignMonitorCampaign extends DataObject
                 $allCSS .= fread($cssFileHandler, filesize($cssFileLocation));
                 fclose($cssFileHandler);
             }
+
             $isThemeEnabled = Config::inst()->get(SSViewer::class, 'theme_enabled');
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', true);
             }
+
             Requirements::clear();
             $templateName = $this->getRenderWithTemplate();
 
@@ -228,6 +233,7 @@ class CampaignMonitorCampaign extends DataObject
             if (! $isThemeEnabled) {
                 Config::modify()->update(SSViewer::class, 'theme_enabled', false);
             }
+
             $html = CssInliner::fromHtml($html)
                 ->inlineCss($allCSS)
                 ->render()
@@ -275,6 +281,7 @@ class CampaignMonitorCampaign extends DataObject
         if ($this->HasBeenSent || $this->WebVersionURL) {
             return true;
         }
+
         //real check
         if (null === $this->_hasBeenSent) {
             if (! $this->CampaignID) {
@@ -314,6 +321,7 @@ class CampaignMonitorCampaign extends DataObject
         if ($this->HasBeenSent) {
             return true;
         }
+
         //real check
         if (null === $this->_existsOnCampaignMonitorCheck || $forceRecheck) {
             $this->_existsOnCampaignMonitorCheck = false;
@@ -326,6 +334,7 @@ class CampaignMonitorCampaign extends DataObject
                 $apiMethod1 = 'getDrafts';
                 $apiMethod2 = 'getCampaigns';
             }
+
             if (! $this->{$field}) {
                 //do nothing
             } else {
@@ -364,6 +373,7 @@ class CampaignMonitorCampaign extends DataObject
         if (! $this->Hash) {
             $this->Hash = substr(hash('md5', uniqid()), 0, 7);
         }
+
         $test = $this->ExistsOnCampaignMonitorCheck($forceRecheck = true);
         if (! $test) {
             if ($this->CreateAsTemplate) {
@@ -383,13 +393,14 @@ class CampaignMonitorCampaign extends DataObject
                 $this->Pages()->add($page);
             }
         }
+
         ++$this->countOfWrites;
         $testA = $this->ExistsOnCampaignMonitorCheck($forceRecheck = true);
         $testB = $this->CreateFromWebsite;
         $testC = $this->countOfWrites < 3;
         if (! $testA && $testB && $testC) {
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 if ($this->CreateAsTemplate) {
                     if ($this->TemplateID) {
                         $api->updateTemplate($this, $this->TemplateID);
@@ -411,7 +422,7 @@ class CampaignMonitorCampaign extends DataObject
             //do nothing
         } elseif ($this) {
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 if ($this->CreateAsTemplate) {
                     $api->deleteTemplate($this->TemplateID);
                 } else {

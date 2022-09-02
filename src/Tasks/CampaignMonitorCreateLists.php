@@ -43,6 +43,7 @@ class CampaignMonitorCreateLists extends BuildTask
             if (empty($currentlyListed)) {
                 $currentlyListed = [0 => 0];
             }
+
             $currentlyListed = array_combine($currentlyListed, $currentlyListed);
             foreach ($list as $listId => $listName) {
                 unset($currentlyListed[$listId]);
@@ -53,14 +54,17 @@ class CampaignMonitorCreateLists extends BuildTask
                         DB::alteration_message('Creating page for ' . $listId . ' - ' . $listName, 'created');
                     }
                 }
+
                 $this->createCampaignMonitorPage($listId, $listName);
             }
+
             foreach ($currentlyListed as $listId) {
                 $page = $className::get()->filter(['ListID' => $listId])->first();
                 if ($page && $page->exists()) {
                     if ($this->verbose) {
                         DB::alteration_message('Archiving ' . $listId . ' sign-up page: ' . $page->Title, 'deleted');
                     }
+
                     $page->doArchive();
                 }
             }
@@ -78,7 +82,7 @@ class CampaignMonitorCreateLists extends BuildTask
             $array = [];
             self::$drop_down_list_for_campaign_monitor = [];
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 $lists = $api->getLists();
                 if (is_array($lists) && count($lists)) {
                     foreach ($lists as $list) {
@@ -86,6 +90,7 @@ class CampaignMonitorCreateLists extends BuildTask
                     }
                 }
             }
+
             self::$drop_down_list_for_campaign_monitor = $array;
         }
 
@@ -120,12 +125,14 @@ class CampaignMonitorCreateLists extends BuildTask
         if (! $page) {
             $page = $className::create();
         }
+
         $page->ListID = $listId;
         $page->ShowInSearch = true;
         $page->ShowInMenus = false;
         if (! $page->Title) {
             $page->Title = 'Sign up for ' . $listName;
         }
+
         $page->MenuTitle = $listName;
         $page->writeToStage(Versioned::DRAFT);
         $page->publishRecursive();

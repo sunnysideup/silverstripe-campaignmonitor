@@ -204,6 +204,7 @@ class CampaignMonitorSignupPage extends Page
         } else {
             $groupLink = '<p>No Group has been selected yet.</p>';
         }
+
         $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
         $campaignExample = CampaignMonitorCampaign::get()->Last();
         if ($campaignExample && $campaignExample->CampaignID) {
@@ -211,12 +212,14 @@ class CampaignMonitorSignupPage extends Page
         } else {
             $campaignExampleLink = 'error-not-available';
         }
+
         if ($this->ID) {
             $config = GridFieldConfig_RelationEditor::create();
             $campaignField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
         } else {
             $campaignField = new HiddenField('CampaignList');
         }
+
         $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
         $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
 
@@ -307,6 +310,7 @@ class CampaignMonitorSignupPage extends Page
                 'Campaigns',
             ]);
         }
+
         if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
             $fields->removeByName('CreateNewCampaign');
         }
@@ -334,6 +338,7 @@ class CampaignMonitorSignupPage extends Page
             // @return DBHTMLText
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
+
         Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
         //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
         Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
@@ -341,6 +346,7 @@ class CampaignMonitorSignupPage extends Page
             //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
             return null;
         }
+
         $fields = FieldList::create(EmailField::create('CampaignMonitorEmail', _t('CAMPAIGNMONITORSIGNUPPAGE.EMAIL', 'Email')));
         $actions = FieldList::create(FormAction::create('campaignmonitorstarterformstartaction', $this->SignUpButtonLabel));
         $form = Form::create(
@@ -374,12 +380,14 @@ class CampaignMonitorSignupPage extends Page
                 //$member->Password = Member::create_new_password();
                 $member->write();
             }
+
             $group = $this->Group();
             if ($group) {
                 $group->Members()->add($member);
             }
+
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 $result = $api->addSubscriber($listID, $member);
                 if ($result === $email) {
                     return null;
@@ -437,14 +445,17 @@ class CampaignMonitorSignupPage extends Page
                 $page->SignUpHeader = 'Sign Up Now';
                 $update[] = 'created default entry for SignUpHeader';
             }
+
             if (strlen($page->SignUpIntro) < strlen('<p> </p>')) {
                 $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
                 $update[] = 'created default entry for SignUpIntro';
             }
+
             if (! $page->SignUpButtonLabel) {
                 $page->SignUpButtonLabel = 'Register Now';
                 $update[] = 'created default entry for SignUpButtonLabel';
             }
+
             if (count($update)) {
                 $page->writeToStage('Stage');
                 $page->publish('Stage', 'Live');
@@ -463,6 +474,7 @@ class CampaignMonitorSignupPage extends Page
         if (! $this->getListTitle()) {
             $this->ListID = 0;
         }
+
         $this->addOrRemoveGroup();
     }
 
@@ -480,10 +492,11 @@ class CampaignMonitorSignupPage extends Page
         } else {
             $this->CampaignMonitorCampaigns()->filter(['HasBeenSent' => 1])->removeAll();
         }
+
         // //add segments
         $segmentsAdded = [];
         $api = $this->getCMAPI();
-        if($api) {
+        if ($api) {
             $segments = $api->getSegments($this->ListID);
             if ($segments && is_array($segments) && count($segments)) {
                 foreach ($segments as $segment) {
@@ -493,11 +506,13 @@ class CampaignMonitorSignupPage extends Page
                     if (! $obj) {
                         $obj = CampaignMonitorSegment::create($filterArray);
                     }
+
                     $obj->Title = $segment->Title;
                     $obj->write();
                 }
             }
-            if (count($segmentsAdded)) {
+
+            if ([] !== $segmentsAdded) {
                 $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
                     ->exclude(['SegmentID' => $segmentsAdded])
                 ;
@@ -505,6 +520,7 @@ class CampaignMonitorSignupPage extends Page
                     $unwantedSegment->delete();
                 }
             }
+
             // //add custom fields
             $customCustomFieldsAdded = [];
             $customCustomFields = $api->getListCustomFields($this->ListID);
@@ -514,7 +530,8 @@ class CampaignMonitorSignupPage extends Page
                     $customCustomFieldsAdded[$obj->Code] = $obj->Code;
                 }
             }
-            if (count($customCustomFieldsAdded)) {
+
+            if ([] !== $customCustomFieldsAdded) {
                 $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
                     ->exclude(['Code' => $customCustomFieldsAdded])
                 ;
@@ -543,14 +560,17 @@ class CampaignMonitorSignupPage extends Page
                 $this->GroupID = $gp->ID;
                 $gp->write();
             }
+
             $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
             $myListName = $this->getListTitle();
             if ($myListName) {
                 $title .= ': ' . $myListName;
             }
+
             $gp->Title = (string) $title;
             $gp->write();
         }
+
         if ($gp) {
             $this->GroupID = $gp->ID;
         }
@@ -567,13 +587,14 @@ class CampaignMonitorSignupPage extends Page
             self::$drop_down_list[$this->ID] = [];
             $array = [];
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 $lists = $api->getLists();
                 if (is_array($lists) && count($lists)) {
                     foreach ($lists as $list) {
                         $array[$list->ListID] = $list->Name;
                     }
                 }
+
                 //remove subscription list IDs from other pages
                 $subscribePages = CampaignMonitorSignupPage::get()
                     ->exclude('ID', $this->ID)
@@ -583,6 +604,7 @@ class CampaignMonitorSignupPage extends Page
                         unset($array[$page->ListID]);
                     }
                 }
+
                 self::$drop_down_list[$this->ID] = $array;
             }
         }

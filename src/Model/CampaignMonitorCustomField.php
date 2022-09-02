@@ -133,10 +133,12 @@ class CampaignMonitorCustomField extends DataObject
         if (! $obj) {
             $obj = CampaignMonitorCustomField::create($filterOptions);
         }
+
         $page = CampaignMonitorSignupPage::get()->filter(['ListID' => $listID])->first();
         if ($page) {
             $obj->CampaignMonitorSignupPageID = $page->ID;
         }
+
         $obj->ListID = $listID;
         $obj->Code = self::key_to_code($customFieldsObject->Key);
         $obj->Title = $customFieldsObject->FieldName;
@@ -160,11 +162,13 @@ class CampaignMonitorCustomField extends DataObject
         if (! $title) {
             $title = $this->Title;
         }
+
         $name = $namePrefix . $this->Code . $nameAppendix;
         //create field
-        if (! count($this->_fieldTranslator)) {
+        if ([] === $this->_fieldTranslator) {
             $this->_fieldTranslator = $this->Config()->get('field_translator');
         }
+
         $fieldName = $this->_fieldTranslator[$this->Type];
         $field = $fieldName::create($name, $title);
         //add options

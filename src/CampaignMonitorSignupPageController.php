@@ -118,12 +118,14 @@ class CampaignMonitorSignupPageController extends PageController
             foreach ($additionalFieldsAtEnd as $field) {
                 $fields->push($field);
             }
+
             $allowUnsubscribe = Config::inst()->get(CampaignMonitorSignupFieldProvider::class, 'campaign_monitor_allow_unsubscribe');
             if ($allowUnsubscribe) {
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions');
             } else {
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.SIGN_UP_NOW', 'Signup');
             }
+
             // Create action
             $actions = new FieldList([new FormAction('subscribe', $action)]);
             // Create Validators
@@ -134,10 +136,12 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
+
             $key = array_search('CampaignMonitorEmail', $requiredList, true);
             if (false !== $key) {
                 unset($requiredList[$key]);
             }
+
             $validator = new RequiredFields($requiredList);
             $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
             $data = $this->getRequest()->getSession()->get("FormData.{$form->getName()}.data");
@@ -190,6 +194,7 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
             }
+
             $session->set("FormData.{$form->getName()}.data", $data);
 
             //true until proven otherwise.
@@ -262,6 +267,7 @@ class CampaignMonitorSignupPageController extends PageController
 
                     return;
                 }
+
                 $memberToEdit = $submittedMember;
                 $doLogin = false;
                 $newlyCreatedMember = false;
@@ -283,6 +289,7 @@ class CampaignMonitorSignupPageController extends PageController
                         }
                     }
                 }
+
                 $memberToEdit->write();
                 if ($newlyCreatedMember) {
                     if ($this->SignInNewMemberOnRegistration && $doLogin) {
@@ -298,14 +305,18 @@ class CampaignMonitorSignupPageController extends PageController
             if ($isMany) {
                 return $this->redirect($this->link('confirm'));
             }
+
             if ($isOne && 'subscribe' === $outcome) {
                 return $this->redirect($this->link('thankyou'));
             }
+
             if ($isOne && 'unsubscribe' === $outcome) {
                 return $this->redirect($this->link('sadtoseeyougo'));
             }
+
             user_error('Could not process data succecssfully.');
         }
+
         user_error('No list to subscribe to', E_USER_WARNING);
     }
 
@@ -554,7 +565,7 @@ class CampaignMonitorSignupPageController extends PageController
         if (Permission::check('ADMIN')) {
             //run tests here
             $api = $this->getCMAPI();
-            if($api) {
+            if ($api) {
                 $html = '<div id="CampaignMonitorStats">';
                 $html .= '<h1>Debug Response</h1>';
                 $html .= '<h2>Main Client Stuff</h2>';
@@ -574,6 +585,7 @@ class CampaignMonitorSignupPageController extends PageController
                 } else {
                     $html .= '<h2 style="color: red;">ERROR: No Lists selected</h2';
                 }
+
                 Requirements::customScript($this->JSHackForPreSections(), 'CampaignMonitorStats');
                 $html .= '</div>';
                 $this->Content = $html;
@@ -597,7 +609,7 @@ class CampaignMonitorSignupPageController extends PageController
             if ($this->campaign) {
                 //run tests here
                 $api = $this->getCMAPI();
-                if($api) {
+                if ($api) {
                     $html = '<div id="CampaignMonitorStats">';
                     $html .= '<h2>Campaign Stats</h2>';
                     $html .= '<h3><a href="#">Campaign: ' . $this->campaign->Subject . '</a></h3>';
@@ -610,6 +622,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $html = '<p class="message warning">Api not enabled</p>';
                 }
             }
+
             $this->Content = $html;
         }
     }
@@ -637,6 +650,7 @@ class CampaignMonitorSignupPageController extends PageController
             DB::query('DELETE FROM "CampaignMonitorCampaign_Pages";');
             die('old campaigns have been deleted');
         }
+
         Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need CMS rights to access it. Enter your credentials below and we will send you right along.'));
     }
 
@@ -683,6 +697,7 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $title = $value;
             }
+
             $this->memberDbValues[$fieldName] = $member->{$field};
             $disabledEmailPhrase = '';
             if ('Email' === $field) {
@@ -691,6 +706,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $fieldArray['Required'][$fieldName] = false;
                 }
             }
+
             //do not set values here!
             $fieldArray['Fields'][$fieldName] = (new $fieldType(
                 $fieldName,
@@ -700,6 +716,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $fieldArray['Fields'][$fieldName]->setAttribute('disabled', $disabledEmailPhrase);
             }
         }
+
         if ($this->ShowAllNewsletterForSigningUp) {
             $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
         } else {
@@ -724,9 +741,11 @@ class CampaignMonitorSignupPageController extends PageController
         if ($this->ShowFirstNameFieldInForm) {
             $array['FirstName'] = _t('CAMPAIGNMONITORSIGNUPPAGE.FIRSTNAME', 'First Name');
         }
+
         if ($this->ShowSurnameFieldInForm) {
             $array['Surname'] = _t('CAMPAIGNMONITORSIGNUPPAGE.SIRNAME', 'Surname');
         }
+
         if ($this->ShowPermissionToTrackFieldInForm) {
             $array['PermissionToTrack'] = [
                 'title' => DBField::create_field('HTMLFragment', strip_tags($this->PermissionToTrackLabelField, '<a>')),
@@ -734,6 +753,7 @@ class CampaignMonitorSignupPageController extends PageController
                 'required' => false,
             ];
         }
+
         if ($keysOnly) {
             return array_keys($array);
         }
