@@ -50,17 +50,22 @@ trait Subscribers
     public function getListsForEmail($member)
     {
         if ($member instanceof Member) {
-            $member = $member->Email;
+            $email = $member->Email;
+        } else {
+            $email = $member;
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return [];
         }
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
         $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
-        $result = $wrap->get_lists_for_email($member);
+        $result = $wrap->get_lists_for_email($email);
 
         $result = $this->returnResult(
             $result,
             '/api/v3.1/clients/{id}/listsforemail',
-            'Got lists to which email address ' . $member . ' is subscribed'
+            'Got lists to which email address ' . $email . ' is subscribed'
         );
         if (true === $result) {
             return [];
