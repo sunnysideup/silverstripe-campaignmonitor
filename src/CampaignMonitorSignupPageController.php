@@ -606,6 +606,7 @@ class CampaignMonitorSignupPageController extends PageController
     public function CampaignStats()
     {
         if (Permission::check('Admin')) {
+            $html = '';
             if ($this->campaign) {
                 //run tests here
                 $api = $this->getCMAPI();
