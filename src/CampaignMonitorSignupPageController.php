@@ -108,7 +108,6 @@ class CampaignMonitorSignupPageController extends PageController
             $member = Security::getCurrentUser();
 
             $fields = new FieldList($this->getFieldsForSignupFormFormFields($member));
-
             $additionalFieldsAtStart = $this->getAdditionalFieldsAtStart();
             foreach (array_reverse($additionalFieldsAtStart) as $field) {
                 $fields->unshift($field);
@@ -679,6 +678,12 @@ class CampaignMonitorSignupPageController extends PageController
         }
 
         $fieldArray = [];
+
+        if ($this->ShowAllNewsletterForSigningUp) {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
+        } else {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
+        }
         foreach ($this->getFieldsForSignupFormFieldsIncluded() as $field => $value) {
             $fieldName = 'CampaignMonitor' . $field;
             $fieldArray['Fields'][$fieldName] = null;
@@ -716,12 +721,6 @@ class CampaignMonitorSignupPageController extends PageController
             if ($disabledEmailPhrase) {
                 $fieldArray['Fields'][$fieldName]->setAttribute('disabled', $disabledEmailPhrase);
             }
-        }
-
-        if ($this->ShowAllNewsletterForSigningUp) {
-            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
-        } else {
-            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
         }
 
         // move consent field to the end

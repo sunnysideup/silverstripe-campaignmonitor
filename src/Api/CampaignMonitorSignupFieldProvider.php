@@ -31,6 +31,11 @@ class CampaignMonitorSignupFieldProvider
     private static $campaign_monitor_allow_unsubscribe = true;
 
     /**
+     * @var bool
+     */
+    private static $show_list_name_in_subcribe_field = true;
+
+    /**
      * array of fields where the member value is set as the default for the
      * custom field ...
      * The should be like this.
@@ -89,7 +94,10 @@ class CampaignMonitorSignupFieldProvider
             $typeFieldValue = 'one';
             if ($this->listPage->ReadyToReceiveSubscribtions()) {
                 if (! $fieldTitle) {
-                    $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP_FOR', 'Sign up for ') . ' ' . $this->listPage->getListTitle();
+                    $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP', 'Sign up');
+                    if($this->Config()->get('show_list_name_in_subcribe_field')) {
+                        $fieldTitle .= _t('CampaignMonitorSignupPage.FOR', ' for ') . ' ' . $this->listPage->getListTitle();
+                    }
                 }
 
                 $optionArray = $this->getOptionArray();
@@ -196,10 +204,16 @@ class CampaignMonitorSignupFieldProvider
     protected function getOptionArray(): array
     {
         $optionArray = [];
-        $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe to') . ' ' . $this->listPage->getListTitle();
+        $toAddSubscribe = '';
+        $toAddUnsubscribe = '';
+        if($this->Config()->get('show_list_name_in_subcribe_field')) {
+            $toAddSubscribe =  'to ' . $this->listPage->getListTitle();
+            $toAddUnsubscribe =  'from ' . $this->listPage->getListTitle();
+        }
+        $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe')  . $toAddSubscribe;
         $hasUnsubscribe = $this->Config()->get('campaign_monitor_allow_unsubscribe');
         if ($hasUnsubscribe) {
-            $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe from ') . ' ' . $this->listPage->getListTitle();
+            $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe ') . $toAddUnsubscribe;
         }
 
         return $optionArray;
