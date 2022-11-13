@@ -26,6 +26,7 @@ class CampaignMonitorCustomField extends DataObject
         'Options' => 'Text',
         'Visible' => 'Boolean',
         'ListID' => 'Varchar(32)',
+        'SortOrder' => 'Int',
     ];
 
     private static $casting = [
@@ -42,6 +43,7 @@ class CampaignMonitorCustomField extends DataObject
     private static $indexes = [
         'ListID' => true,
         'Code' => true,
+        'SortOrder' => true,
     ];
 
     private static $has_one = [
@@ -49,7 +51,6 @@ class CampaignMonitorCustomField extends DataObject
     ];
 
     private static $default_sort = [
-        'Visible' => 'DESC',
         'SortOrder' => 'ASC',
     ];
 

@@ -297,8 +297,8 @@ class CampaignMonitorSignupPage extends Page
                         'CustomFields',
                         'Custom Fields',
                         $this->CampaignMonitorCustomFields(),
-                        $config = GridFieldConfig_RecordViewer::create()
-                            ->GridFieldSortableRows->addComponent(new GridFieldSortableRows('SortOrder'))
+                        GridFieldConfig_RecordViewer::create()
+                            ->addComponent(new GridFieldSortableRows('SortOrder'))
                     ),
                 ),
                 new Tab(
