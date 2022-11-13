@@ -718,6 +718,13 @@ class CampaignMonitorSignupPageController extends PageController
             }
         }
 
+        //sign up field also contains all the custom fields!
+        if ($this->ShowAllNewsletterForSigningUp) {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField(null);
+        } else {
+            $fieldArray['Fields']['SignupField'] = $member->getCampaignMonitorSignupField($this->ListID);
+        }
+
         // move consent field to the end
         if (isset($fieldArray['Fields']['CampaignMonitorPermissionToTrack'])) {
             $consent = $fieldArray['Fields']['CampaignMonitorPermissionToTrack'];
