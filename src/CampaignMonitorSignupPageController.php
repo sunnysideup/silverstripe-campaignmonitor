@@ -120,7 +120,7 @@ class CampaignMonitorSignupPageController extends PageController
 
             $allowUnsubscribe = Config::inst()->get(CampaignMonitorSignupFieldProvider::class, 'campaign_monitor_allow_unsubscribe');
             if ($allowUnsubscribe) {
-                $action = _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTIONS', 'Update Subscriptions');
+                $action = _t('CAMPAIGNMONITORSIGNUPPAGE.UPDATE_SUBSCRIPTION', 'Update Subscription');
             } else {
                 $action = _t('CAMPAIGNMONITORSIGNUPPAGE.SIGN_UP_NOW', 'Signup');
             }
