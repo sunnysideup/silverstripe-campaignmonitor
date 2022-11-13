@@ -146,12 +146,12 @@ class CampaignMonitorSignupFieldProvider
         }
 
         $parentField = CompositeField::create();
-        $parentField->push($subscribeField);
         $parentField->push(HiddenField::create($fieldName . 'Type')->setValue($typeFieldValue));
         $parentField->addExtraClass('CMFieldsCustomFieldsHolder');
         if ($addCustomFields) {
             $this->addCustomFieldsToField($parentField);
         }
+        $parentField->push($subscribeField);
 
         return $parentField;
     }
