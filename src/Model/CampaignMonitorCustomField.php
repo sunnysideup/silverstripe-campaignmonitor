@@ -50,6 +50,7 @@ class CampaignMonitorCustomField extends DataObject
 
     private static $default_sort = [
         'Visible' => 'DESC',
+        'SortOrder' => 'ASC',
     ];
 
     /**

@@ -3,6 +3,8 @@
 namespace Sunnysideup\CampaignMonitor;
 
 use Page;
+
+use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -291,7 +293,13 @@ class CampaignMonitorSignupPage extends Page
                 ),
                 new Tab(
                     'CustomFields',
-                    new GridField('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()),
+                    new GridField(
+                        'CustomFields',
+                        'Custom Fields',
+                        $this->CampaignMonitorCustomFields(),
+                        $config = GridFieldConfig_RecordViewer::create()
+                            ->GridFieldSortableRows->addComponent(new GridFieldSortableRows('SortOrder'))
+                    ),
                 ),
                 new Tab(
                     'Advanced',
