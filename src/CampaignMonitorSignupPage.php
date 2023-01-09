@@ -347,7 +347,7 @@ class CampaignMonitorSignupPage extends Page
             return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult', ['Email' => $email]);
         }
 
-        Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
+        Requirements::javascript('https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js');
         //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
         Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
         if (! $this->ReadyToReceiveSubscribtions()) {
