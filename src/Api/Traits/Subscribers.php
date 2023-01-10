@@ -132,12 +132,12 @@ trait Subscribers
      * The update is performed even for inactive subscribers, but will return an error in the event of the
      * given email not existing in the list.
      *
-     * @param string                       $listID
-     * @param SilverStripe\Security\Member $member                                 (Member or standard object with Email, FirstName, Surname properties)
-     * @param null|string                  $oldEmailAddress
-     * @param null|array                   $customFields                           the subscriber details to use during creation
-     * @param null|bool                    $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
-     * @param null|bool                    $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
+     * @param string             $listID
+     * @param Member             $member                                 (Member or standard object with Email, FirstName, Surname properties)
+     * @param null|string        $oldEmailAddress
+     * @param null|array         $customFields                           the subscriber details to use during creation
+     * @param null|bool          $resubscribe                            Whether we should resubscribe this subscriber if they already exist in the list
+     * @param null|bool          $restartSubscriptionBasedAutoResponders Whether we should restart subscription based auto responders which are sent when the subscriber first subscribes to a list.
      *
      * NOTE that for the custom fields they need to be formatted like this:
      *    Array(
@@ -150,7 +150,7 @@ trait Subscribers
      */
     public function updateSubscriber(
         $listID,
-        $member,
+        Member $member,
         $oldEmailAddress = '',
         $customFields = [],
         $resubscribe = true,
