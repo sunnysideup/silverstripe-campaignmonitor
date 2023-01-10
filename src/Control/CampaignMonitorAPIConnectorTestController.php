@@ -67,9 +67,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
      * link for controller
      * we add baseURL to make it work for all set ups.
      *
-     * @var string
-     *
-     * @param null|mixed $action
+     * @param null|string $action
      */
     public function Link($action = null)
     {
