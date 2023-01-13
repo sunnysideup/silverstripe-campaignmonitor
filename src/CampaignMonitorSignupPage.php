@@ -3,8 +3,6 @@
 namespace Sunnysideup\CampaignMonitor;
 
 use Page;
-
-use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
@@ -41,6 +39,7 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
+use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 
 /**
  * Page for Signing Up to Campaign Monitor List.

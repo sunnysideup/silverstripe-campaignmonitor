@@ -95,7 +95,7 @@ class CampaignMonitorSignupFieldProvider
             if ($this->listPage->ReadyToReceiveSubscribtions()) {
                 if (! $fieldTitle) {
                     $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP', 'Sign up');
-                    if($this->Config()->get('show_list_name_in_subcribe_field')) {
+                    if ($this->Config()->get('show_list_name_in_subcribe_field')) {
                         $fieldTitle .= _t('CampaignMonitorSignupPage.FOR', ' for ') . ' ' . $this->listPage->getListTitle();
                     }
                 }
@@ -206,11 +206,11 @@ class CampaignMonitorSignupFieldProvider
         $optionArray = [];
         $toAddSubscribe = '';
         $toAddUnsubscribe = '';
-        if($this->Config()->get('show_list_name_in_subcribe_field')) {
-            $toAddSubscribe =  'to ' . $this->listPage->getListTitle();
-            $toAddUnsubscribe =  'from ' . $this->listPage->getListTitle();
+        if ($this->Config()->get('show_list_name_in_subcribe_field')) {
+            $toAddSubscribe = 'to ' . $this->listPage->getListTitle();
+            $toAddUnsubscribe = 'from ' . $this->listPage->getListTitle();
         }
-        $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe')  . $toAddSubscribe;
+        $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe') . $toAddSubscribe;
         $hasUnsubscribe = $this->Config()->get('campaign_monitor_allow_unsubscribe');
         if ($hasUnsubscribe) {
             $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe ') . $toAddUnsubscribe;
