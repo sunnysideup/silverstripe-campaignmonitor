@@ -115,7 +115,7 @@ class CampaignMonitorCustomField extends DataObject
 
     public function getOptionsAsArray()
     {
-        return ['' => _t('CampaignMonitor.PLEASE_SELECT', '-- please select --')] + explode(',', $this->Options);
+        return ['' => _t('CampaignMonitor.PLEASE_SELECT', '-- please select --')] + explode(',', (string) $this->Options);
     }
 
     /**
@@ -175,7 +175,7 @@ class CampaignMonitorCustomField extends DataObject
         $field = $fieldName::create($name, $title);
         //add options
         if (! $options && $this->Options) {
-            $optionsArray = explode(',', $this->Options);
+            $optionsArray = explode(',', (string) $this->Options);
             $optionsArray = array_combine($optionsArray, $optionsArray);
             $field->setSource($optionsArray);
         }
@@ -191,6 +191,6 @@ class CampaignMonitorCustomField extends DataObject
 
     private static function key_to_code($key)
     {
-        return str_replace(['[', ']'], '', $key);
+        return str_replace(['[', ']'], '', (string) $key);
     }
 }

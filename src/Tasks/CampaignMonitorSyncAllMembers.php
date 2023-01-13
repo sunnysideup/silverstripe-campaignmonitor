@@ -173,7 +173,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     foreach ($list->Results as $obj) {
                         $finalCustomFields = [];
                         foreach ($obj->CustomFields as $customFieldObject) {
-                            $finalCustomFields[str_replace(['[', ']'], '', $customFieldObject->Key)] = $customFieldObject->Value;
+                            $finalCustomFields[str_replace(['[', ']'], '', (string) $customFieldObject->Key)] = $customFieldObject->Value;
                         }
 
                         $this->previouslyExported[$obj->EmailAddress] = $finalCustomFields;
