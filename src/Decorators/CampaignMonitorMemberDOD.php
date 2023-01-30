@@ -169,7 +169,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         if ($listPage->ListID) {
             $api = $this->getCMAPI();
             if ($api) {
-                $successForCm = $api->unsubscribeSubscriber($listPage->ListID, $this->owner);
+                $successForCm = (bool) $api->unsubscribeSubscriber($listPage->ListID, $this->owner);
                 CampaignMonitorSubscriptionLog::log_outcome($logId, $successForCm);
             } else {
                 CampaignMonitorSubscriptionLog::log_outcome($logId, false);
