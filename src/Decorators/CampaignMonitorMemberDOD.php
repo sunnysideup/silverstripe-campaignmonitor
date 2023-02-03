@@ -61,30 +61,28 @@ class CampaignMonitorMemberDOD extends DataExtension
             'CampaignMonitorSubscriptionLogs',
             'CM_PermissionToTrack',
         ]);
-        if (! empty($_GET['mail'])) {
-            $fields->addFieldsToTab(
-                'Root.Newsletter',
-                [
-                    DropdownField::create('CM_PermissionToTrack', 'Permission to track', singleton(__CLASS__)->owner->dbObject('CM_PermissionToTrack')->enumValues())->setDescription('For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
-                    ReadonlyField::create(
-                        'IsCampaignMonitorSubscriberNice',
-                        'Has subcribed to any list - ever?',
-                        $this->IsCampaignMonitorSubscriber() ? 'yes' : 'no'
-                    ),
-                    ReadonlyField::create(
-                        'CampaignMonitorSignedUpArrayNice',
-                        'Currently Subscribed to',
-                        implode(',', $this->CampaignMonitorSignedUpArray())
-                    ),
-                    GridField::create(
-                        'CampaignMonitorSubscriptionLogs',
-                        'Logs',
-                        $this->getOwner()->CampaignMonitorSubscriptionLogs(),
-                        GridFieldConfig_RelationEditor::create()
-                    ),
-                ]
-            );
-        }
+        $fields->addFieldsToTab(
+            'Root.Newsletter',
+            [
+                DropdownField::create('CM_PermissionToTrack', 'Permission to track', singleton(__CLASS__)->owner->dbObject('CM_PermissionToTrack')->enumValues())->setDescription('For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                ReadonlyField::create(
+                    'IsCampaignMonitorSubscriberNice',
+                    'Has subcribed to any list - ever?',
+                    $this->IsCampaignMonitorSubscriber() ? 'yes' : 'no'
+                ),
+                ReadonlyField::create(
+                    'CampaignMonitorSignedUpArrayNice',
+                    'Currently Subscribed to',
+                    implode(',', $this->CampaignMonitorSignedUpArray())
+                ),
+                GridField::create(
+                    'CampaignMonitorSubscriptionLogs',
+                    'Logs',
+                    $this->getOwner()->CampaignMonitorSubscriptionLogs(),
+                    GridFieldConfig_RelationEditor::create()
+                ),
+            ]
+        );
     }
 
     public function unsubscribeFromAllCampaignMonitorLists(?int $listId = 0)
@@ -107,8 +105,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         return (bool) CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->getOwner()->ID)
             ->innerJoin('Group_Members', 'CampaignMonitorSignupPage' . $stage . '.GroupID = Group_Members.GroupID')
-            ->exists()
-        ;
+            ->exists();
     }
 
     /**
@@ -147,7 +144,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function removeCampaignMonitorList($listPage): bool
     {
-        if (! ($listPage instanceof CampaignMonitorSignupPage)) {
+        if (!($listPage instanceof CampaignMonitorSignupPage)) {
             /** @var CampaignMonitorSignupPage $listPage */
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => (string) $listPage])->first();
         }

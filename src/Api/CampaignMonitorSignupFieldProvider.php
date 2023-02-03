@@ -195,7 +195,7 @@ class CampaignMonitorSignupFieldProvider
                 $this->member->removeCampaignMonitorList($this->listPage->ListID);
             }
         } else {
-            user_error('Subscriber field missing', E_USER_WARNING);
+            user_error('Subscriber field missing', E_USER_ERROR);
         }
 
         return $typeOfAction;
