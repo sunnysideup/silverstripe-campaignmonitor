@@ -453,7 +453,7 @@ class CampaignMonitorSignupPage extends Page
                 $update[] = 'created default entry for SignUpHeader';
             }
 
-            if (strlen($page->SignUpIntro) < strlen('<p> </p>')) {
+            if (strlen( (string) $page->SignUpIntro) < strlen('<p> </p>')) {
                 $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
                 $update[] = 'created default entry for SignUpIntro';
             }

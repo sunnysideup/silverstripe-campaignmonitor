@@ -460,7 +460,7 @@ class CampaignMonitorSignupPageController extends PageController
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
-            if (isset($_GET['hash']) && 7 === strlen($_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
+            if (isset($_GET['hash']) && 7 === strlen( (string) $_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
                 return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
             }
         }
@@ -479,7 +479,7 @@ class CampaignMonitorSignupPageController extends PageController
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
-            return HTTP::absoluteURLs(strip_tags($this->campaign->getNewsletterContent()));
+            return HTTP::absoluteURLs(strip_tags( (string) $this->campaign->getNewsletterContent()));
         }
 
         return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'No preview available.'));
@@ -750,7 +750,7 @@ class CampaignMonitorSignupPageController extends PageController
 
         if ($this->ShowPermissionToTrackFieldInForm) {
             $array['PermissionToTrack'] = [
-                'title' => DBField::create_field('HTMLFragment', strip_tags($this->PermissionToTrackLabelField, '<a>')),
+                'title' => DBField::create_field('HTMLFragment', strip_tags( (string) $this->PermissionToTrackLabelField, '<a>')),
                 'type' => CheckboxField::class,
                 'required' => false,
             ];
