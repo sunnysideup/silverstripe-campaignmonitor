@@ -40,6 +40,8 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
+use Exception;
+
 
 /**
  * Page for Signing Up to Campaign Monitor List.
@@ -568,19 +570,21 @@ class CampaignMonitorSignupPage extends Page
             if ($myListName) {
                 $title .= ': ' . $myListName;
             }
-
+            // if there is an other group - check if there are
             // create or find the group if we do not have the group
             if (!$gp) {
                 $filter = ['Title' => $title];
                 $gp = Group::get()->filter($filter)->first();
                 if (!$gp) {
                     $gp = Group::create($filter);
-                    $gp->write();
                 }
             }
 
             $gp->Title = (string) $title;
-            $gp->write();
+            try {
+                $gp->write();
+            } catch (Exception $e) {
+            }
 
             if ($gp) {
                 $this->GroupID = $gp->ID;
