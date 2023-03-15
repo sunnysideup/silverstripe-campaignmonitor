@@ -318,7 +318,7 @@ class CampaignMonitorSignupPage extends Page
             ]);
         }
 
-        if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
+        if (!Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
             $fields->removeByName('CreateNewCampaign');
         }
 
@@ -349,7 +349,7 @@ class CampaignMonitorSignupPage extends Page
         Requirements::javascript('https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js');
         //Requirements::javascript(THIRDPARTY_DIR . '/jquery-form/jquery.form.js');
         Requirements::javascript('sunnysideup/campaignmonitor: client/javascript/CampaignMonitorStartForm.js');
-        if (! $this->ReadyToReceiveSubscribtions()) {
+        if (!$this->ReadyToReceiveSubscribtions()) {
             //user_error("You first need to setup a Campaign Monitor Page for this function to work.", E_USER_NOTICE);
             return null;
         }
@@ -448,17 +448,17 @@ class CampaignMonitorSignupPage extends Page
         $page = CampaignMonitorSignupPage::get()->First();
 
         if ($page) {
-            if (! $page->SignUpHeader) {
+            if (!$page->SignUpHeader) {
                 $page->SignUpHeader = 'Sign Up Now';
                 $update[] = 'created default entry for SignUpHeader';
             }
 
-            if (strlen( (string) $page->SignUpIntro) < strlen('<p> </p>')) {
+            if (strlen((string) $page->SignUpIntro) < strlen('<p> </p>')) {
                 $page->SignUpIntro = '<p>Enter your email to sign up for our newsletter</p>';
                 $update[] = 'created default entry for SignUpIntro';
             }
 
-            if (! $page->SignUpButtonLabel) {
+            if (!$page->SignUpButtonLabel) {
                 $page->SignUpButtonLabel = 'Register Now';
                 $update[] = 'created default entry for SignUpButtonLabel';
             }
@@ -478,7 +478,7 @@ class CampaignMonitorSignupPage extends Page
     {
         parent::onBeforeWrite();
         //check list
-        if (! $this->getListTitle()) {
+        if (!$this->getListTitle()) {
             $this->ListID = 0;
         }
 
@@ -510,7 +510,7 @@ class CampaignMonitorSignupPage extends Page
                     $segmentsAdded[$segment->SegmentID] = $segment->SegmentID;
                     $filterArray = ['SegmentID' => $segment->SegmentID, 'ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID];
                     $obj = CampaignMonitorSegment::get()->filter($filterArray)->first();
-                    if (! $obj) {
+                    if (!$obj) {
                         $obj = CampaignMonitorSegment::create($filterArray);
                     }
 
@@ -521,8 +521,7 @@ class CampaignMonitorSignupPage extends Page
 
             if ([] !== $segmentsAdded) {
                 $unwantedSegments = CampaignMonitorSegment::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                    ->exclude(['SegmentID' => $segmentsAdded])
-                ;
+                    ->exclude(['SegmentID' => $segmentsAdded]);
                 foreach ($unwantedSegments as $unwantedSegment) {
                     $unwantedSegment->delete();
                 }
@@ -540,8 +539,7 @@ class CampaignMonitorSignupPage extends Page
 
             if ([] !== $customCustomFieldsAdded) {
                 $unwantedCustomFields = CampaignMonitorCustomField::get()->filter(['ListID' => $this->ListID, 'CampaignMonitorSignupPageID' => $this->ID])
-                    ->exclude(['Code' => $customCustomFieldsAdded])
-                ;
+                    ->exclude(['Code' => $customCustomFieldsAdded]);
                 foreach ($unwantedCustomFields as $unwantedCustomField) {
                     $unwantedCustomField->delete();
                 }
@@ -552,34 +550,41 @@ class CampaignMonitorSignupPage extends Page
     protected function addOrRemoveGroup()
     {
         $gp = null;
-        //check group
+        // get grouip
         if ($this->GroupID) {
             $gp = $this->Group();
-            if (! ($gp && $gp->exists())) {
+            if (!($gp && $gp->exists())) {
                 $this->GroupID = 0;
+                $gp = null;
             }
         }
 
-        //add group
+        // add group if there is a list.
         if ($this->ListID) {
-            if (! $this->GroupID) {
-                $gp = new Group();
-                $this->GroupID = $gp->ID;
-                $gp->write();
-            }
 
+            // get title
             $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
             $myListName = $this->getListTitle();
             if ($myListName) {
                 $title .= ': ' . $myListName;
             }
 
+            // create or find the group if we do not have the group
+            if (!$gp) {
+                $filter = ['Title' => $title];
+                $gp = Group::get()->filter($filter)->first();
+                if (!$gp) {
+                    $gp = Group::create($filter);
+                    $gp->write();
+                }
+            }
+
             $gp->Title = (string) $title;
             $gp->write();
-        }
 
-        if ($gp) {
-            $this->GroupID = $gp->ID;
+            if ($gp) {
+                $this->GroupID = $gp->ID;
+            }
         }
     }
 
@@ -590,7 +595,7 @@ class CampaignMonitorSignupPage extends Page
      */
     protected function makeDropdownListFromLists()
     {
-        if (! isset(self::$drop_down_list[$this->ID])) {
+        if (!isset(self::$drop_down_list[$this->ID])) {
             self::$drop_down_list[$this->ID] = [];
             $array = [];
             $api = $this->getCMAPI();
@@ -604,8 +609,7 @@ class CampaignMonitorSignupPage extends Page
 
                 //remove subscription list IDs from other pages
                 $subscribePages = CampaignMonitorSignupPage::get()
-                    ->exclude('ID', $this->ID)
-                ;
+                    ->exclude('ID', $this->ID);
                 foreach ($subscribePages as $page) {
                     if (isset($array[$page->ListID])) {
                         unset($array[$page->ListID]);
