@@ -24,6 +24,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
 
     protected function init()
     {
+        parent::init();
         $request = Injector::inst()->get(HTTPRequest::class);
         $session = $request->getSession();
         $time = (int) $session->get('CampaignMonitorSignupPageAdminINIT') - 0;
@@ -31,10 +32,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
             $session->set('CampaignMonitorSignupPageAdminINIT', time());
             (new CampaignMonitorCreateLists())
                 ->setVerbose(false)
-                ->run(null)
-            ;
+                ->run(null);
         }
-
-        parent::init();
     }
 }
