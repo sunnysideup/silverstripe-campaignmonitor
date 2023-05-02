@@ -10,7 +10,9 @@ use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorGroupDOD
+ *
+ * @property \SilverStripe\Security\Group|\Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorGroupDOD $owner
  */
 class CampaignMonitorGroupDOD extends DataExtension
 {

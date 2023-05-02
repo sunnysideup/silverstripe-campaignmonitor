@@ -16,8 +16,11 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
- * @todoonly apply the on afterwrite to people in the subscriber group.
+ * Class \Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
+ *
+ * @property \SilverStripe\Security\Member|\Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD $owner
+ * @property string $CM_PermissionToTrack
+ * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
  */
 class CampaignMonitorMemberDOD extends DataExtension
 {

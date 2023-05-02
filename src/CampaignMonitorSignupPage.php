@@ -48,7 +48,35 @@ use Exception;
  *
  * Each page relates to one CM list.
  *
- * @author nicolaas [at] sunnysideup.co.nz
+ * @property bool $CloseSubscriptions
+ * @property bool $MakeAllFieldsRequired
+ * @property string $ListID
+ * @property string $ConfirmTitle
+ * @property string $ConfirmMenuTitle
+ * @property string $ConfirmMessage
+ * @property string $ThankYouTitle
+ * @property string $ThankYouMenuTitle
+ * @property string $ThankYouMessage
+ * @property string $SadToSeeYouGoTitle
+ * @property string $SadToSeeYouGoMenuTitle
+ * @property string $SadToSeeYouGoMessage
+ * @property string $SignUpHeader
+ * @property string $SignUpIntro
+ * @property string $SignUpButtonLabel
+ * @property bool $ShowOldNewsletters
+ * @property bool $ShowAllNewsletterForSigningUp
+ * @property bool $ShowFirstNameFieldInForm
+ * @property bool $ShowSurnameFieldInForm
+ * @property bool $ShowPermissionToTrackFieldInForm
+ * @property string $PermissionToTrackLabelField
+ * @property bool $MustBeLoggedInToEditSubscription
+ * @property bool $SignInNewMemberOnRegistration
+ * @property int $GroupID
+ * @method \SilverStripe\Security\Group Group()
+ * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment[] CampaignMonitorSegments()
+ * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField[] CampaignMonitorCustomFields()
+ * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
+ * @method \SilverStripe\ORM\ManyManyList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign[] CampaignMonitorCampaigns()
  */
 class CampaignMonitorSignupPage extends Page
 {

@@ -10,9 +10,16 @@ use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog
  *
- * @description: this represents a sub group of a list, otherwise known as a segment
+ * @property string $Action
+ * @property string $CustomFields
+ * @property string $CampaignMonitorOutcome
+ * @property string $ErrorDescription
+ * @property int $MemberID
+ * @property int $ListID
+ * @method \SilverStripe\Security\Member Member()
+ * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage List()
  */
 class CampaignMonitorSubscriptionLog extends DataObject
 {

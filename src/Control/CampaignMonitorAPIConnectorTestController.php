@@ -11,7 +11,10 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
- * simple class to see that everything is working ...
+ * simple class to see that everything is working .
+ *
+ * ..
+ *
  */
 class CampaignMonitorAPIConnectorTestController extends Controller
 {

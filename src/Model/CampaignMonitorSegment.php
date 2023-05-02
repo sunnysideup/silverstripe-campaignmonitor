@@ -6,9 +6,13 @@ use SilverStripe\ORM\DataObject;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment
  *
- * @description: this represents a sub group of a list, otherwise known as a segment
+ * @property string $Title
+ * @property string $SegmentID
+ * @property string $ListID
+ * @property int $CampaignMonitorSignupPageID
+ * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage CampaignMonitorSignupPage()
  */
 class CampaignMonitorSegment extends DataObject
 {

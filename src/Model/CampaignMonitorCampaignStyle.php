@@ -13,7 +13,12 @@ use SilverStripe\View\SSViewer;
 use SilverStripe\View\ThemeResourceLoader;
 
 /**
- *@author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle
+ *
+ * @property string $Title
+ * @property string $TemplateName
+ * @property string $CSSFiles
+ * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign[] CampaignMonitorCampaigns()
  */
 class CampaignMonitorCampaignStyle extends DataObject
 {

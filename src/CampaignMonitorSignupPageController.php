@@ -27,6 +27,13 @@ use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
+/**
+ * Class \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController
+ *
+ * @property \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage $dataRecord
+ * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage data()
+ * @mixin \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage
+ */
 class CampaignMonitorSignupPageController extends PageController
 {
     use CampaignMonitorApiTrait;

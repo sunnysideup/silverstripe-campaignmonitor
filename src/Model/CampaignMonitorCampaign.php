@@ -16,7 +16,29 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
- *@author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign
+ *
+ * @property bool $HasBeenSent
+ * @property string $MessageFromNewsletterServer
+ * @property bool $CreateAsTemplate
+ * @property bool $CreateFromWebsite
+ * @property bool $CreatedFromWebsite
+ * @property string $TemplateID
+ * @property string $CampaignID
+ * @property string $Name
+ * @property string $Subject
+ * @property string $FromName
+ * @property string $FromEmail
+ * @property string $ReplyTo
+ * @property string $SentDate
+ * @property string $WebVersionURL
+ * @property string $WebVersionTextURL
+ * @property bool $Hide
+ * @property string $Content
+ * @property string $Hash
+ * @property int $CampaignMonitorCampaignStyleID
+ * @method \Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle CampaignMonitorCampaignStyle()
+ * @method \SilverStripe\ORM\ManyManyList|\Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage[] Pages()
  */
 class CampaignMonitorCampaign extends DataObject
 {
@@ -223,7 +245,7 @@ class CampaignMonitorCampaign extends DataObject
 
             $isThemeEnabled = Config::inst()->get(SSViewer::class, 'theme_enabled');
             if (! $isThemeEnabled) {
-                Config::modify()->update(SSViewer::class, 'theme_enabled', true);
+                Config::modify()->merge(SSViewer::class, 'theme_enabled', true);
             }
 
             Requirements::clear();
@@ -231,7 +253,7 @@ class CampaignMonitorCampaign extends DataObject
 
             $html = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
-                Config::modify()->update(SSViewer::class, 'theme_enabled', false);
+                Config::modify()->merge(SSViewer::class, 'theme_enabled', false);
             }
 
             $html = CssInliner::fromHtml($html)

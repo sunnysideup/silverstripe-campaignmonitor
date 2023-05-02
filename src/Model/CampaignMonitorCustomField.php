@@ -11,9 +11,17 @@ use SilverStripe\ORM\DataObject;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
+ * Class \Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField
  *
- * @description: this represents a sub group of a list, otherwise known as a segment
+ * @property string $Code
+ * @property string $Title
+ * @property string $Type
+ * @property string $Options
+ * @property bool $Visible
+ * @property string $ListID
+ * @property int $SortOrder
+ * @property int $CampaignMonitorSignupPageID
+ * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage CampaignMonitorSignupPage()
  */
 class CampaignMonitorCustomField extends DataObject
 {

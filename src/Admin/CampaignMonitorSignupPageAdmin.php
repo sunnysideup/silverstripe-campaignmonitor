@@ -9,6 +9,10 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog;
 use Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorCreateLists;
 
+/**
+ * Class \Sunnysideup\CampaignMonitor\Admin\CampaignMonitorSignupPageAdmin
+ *
+ */
 class CampaignMonitorSignupPageAdmin extends ModelAdmin
 {
     private static $managed_models = [
