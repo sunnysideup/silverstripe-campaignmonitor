@@ -36,7 +36,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
 
     private static $plural_name = 'Sign-Ups Log';
 
-    private static $default_sort = 'Created DESC';
+    private static $default_sort = 'ID DESC';
 
     private static $summary_fields = [
         'CampaignMonitorOutcome' => 'Outcome',
