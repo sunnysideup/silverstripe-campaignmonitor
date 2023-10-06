@@ -98,7 +98,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     ->limit($limit, $i * $limit)
                 ;
                 if ($this->debug) {
-                    $members = $members->sort('RAND()');
+                    $members = $members->orderBy(DB::get_conn()->random());
                 }
 
                 if ($members->exists()) {

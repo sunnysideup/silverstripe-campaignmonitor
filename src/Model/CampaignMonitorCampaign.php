@@ -245,7 +245,7 @@ class CampaignMonitorCampaign extends DataObject
 
             $isThemeEnabled = Config::inst()->get(SSViewer::class, 'theme_enabled');
             if (! $isThemeEnabled) {
-                Config::modify()->merge(SSViewer::class, 'theme_enabled', true);
+                Config::modify()->set(SSViewer::class, 'theme_enabled', true);
             }
 
             Requirements::clear();
@@ -253,7 +253,7 @@ class CampaignMonitorCampaign extends DataObject
 
             $html = $this->RenderWith($templateName);
             if (! $isThemeEnabled) {
-                Config::modify()->merge(SSViewer::class, 'theme_enabled', false);
+                Config::modify()->set(SSViewer::class, 'theme_enabled', false);
             }
 
             $html = CssInliner::fromHtml($html)
