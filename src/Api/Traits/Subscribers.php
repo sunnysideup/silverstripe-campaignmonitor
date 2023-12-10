@@ -5,6 +5,7 @@ namespace Sunnysideup\CampaignMonitor\Api\Traits;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Member;
+use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 trait Subscribers
 {
@@ -49,18 +50,21 @@ trait Subscribers
      */
     public function getListsForEmail($member)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         $email = $member instanceof Member ? $member->Email : $member;
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [];
         }
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        $wrap = new \CS_REST_Clients(
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
+            $this->getAuth()
+        );
         $result = $wrap->get_lists_for_email($email);
 
         $result = $this->returnResult(
@@ -100,7 +104,7 @@ trait Subscribers
         ?bool $resubscribe = true,
         ?bool $restartSubscriptionBasedAutoResponders = false
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -156,11 +160,11 @@ trait Subscribers
         $resubscribe = true,
         $restartSubscriptionBasedAutoResponders = false
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
-        if (! $oldEmailAddress) {
+        if (!$oldEmailAddress) {
             $oldEmailAddress = $member->Email;
         }
 
@@ -216,7 +220,7 @@ trait Subscribers
         $queueSubscriptionBasedAutoResponders = false,
         $restartSubscriptionBasedAutoResponders = false
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -265,7 +269,7 @@ trait Subscribers
      */
     public function deleteSubscriber($listID, $member)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -293,7 +297,7 @@ trait Subscribers
      */
     public function unsubscribeSubscriber($listID, $member)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -386,7 +390,7 @@ trait Subscribers
         $subscriberExistsForThisList = $this->getSubscriberExistsForThisList($listID, $member);
         $subscriberCanReceiveEmailsForThisList = $this->getSubscriberCanReceiveEmailsForThisList($listID, $member);
         if ($subscriberExistsForThisList) {
-            if (! $subscriberCanReceiveEmailsForThisList) {
+            if (!$subscriberCanReceiveEmailsForThisList) {
                 if ($this->debug) {
                     echo '<h3>Subscriber Can No Longer Receive Emails For This List</h3>';
                 }
@@ -425,7 +429,7 @@ trait Subscribers
      */
     public function getSubscriber($listID, $member, $cacheIsOK = true)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -471,7 +475,7 @@ trait Subscribers
      */
     public function getHistory($listID, $member)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 

@@ -3,6 +3,7 @@
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 trait Templates
 {
@@ -13,7 +14,7 @@ trait Templates
      */
     public function getTemplate($templatID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -37,18 +38,18 @@ trait Templates
      */
     public function createTemplate(CampaignMonitorCampaign $campaignMonitorCampaign)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
-        if (! $name) {
+        if (!$name) {
             $name = 'no name set';
         }
 
         $wrap = new \CS_REST_Templates(null, $this->getAuth());
         $result = $wrap->create(
-            $this->Config()->get('client_id'),
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             [
                 'Name' => $name,
                 'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
@@ -87,18 +88,18 @@ trait Templates
      */
     public function updateTemplate(CampaignMonitorCampaign $campaignMonitorCampaign, $templateID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
-        if (! $name) {
+        if (!$name) {
             $name = 'no name set';
         }
 
         $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->create(
-            $this->Config()->get('client_id'),
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             [
                 'Name' => $name,
                 'HtmlPageURL' => $campaignMonitorCampaign->PreviewLink(),
@@ -136,7 +137,7 @@ trait Templates
      */
     public function deleteTemplate($templateID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 

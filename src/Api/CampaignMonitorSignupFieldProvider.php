@@ -79,11 +79,11 @@ class CampaignMonitorSignupFieldProvider
     public function getCampaignMonitorSignupField(?string $fieldName = '', ?string $fieldTitle = '')
     {
         //get defaults
-        if (! is_object($this->listPage)) {
+        if (!is_object($this->listPage)) {
             $this->listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $this->listPage])->first();
         }
 
-        if (! $fieldName) {
+        if (!$fieldName) {
             $fieldName = $this->Config()->get('campaign_monitor_signup_fieldname');
         }
 
@@ -93,7 +93,7 @@ class CampaignMonitorSignupFieldProvider
         if ($this->listPage) {
             $typeFieldValue = 'one';
             if ($this->listPage->ReadyToReceiveSubscribtions()) {
-                if (! $fieldTitle) {
+                if (!$fieldTitle) {
                     $fieldTitle = _t('CampaignMonitorSignupPage.SIGNUP', 'Sign up');
                     if ($this->Config()->get('show_list_name_in_subcribe_field')) {
                         $fieldTitle .= _t('CampaignMonitorSignupPage.FOR', ' for ') . ' ' . $this->listPage->getListTitle();
@@ -117,7 +117,7 @@ class CampaignMonitorSignupFieldProvider
             }
         } else {
             $typeFieldValue = 'many';
-            if (! $fieldTitle) {
+            if (!$fieldTitle) {
                 $fieldTitle = _t('CampaignMonitorMemberDOD.NEWSLETTERSIGNUP', 'Newsletter sign-up');
             }
 
@@ -137,7 +137,7 @@ class CampaignMonitorSignupFieldProvider
             }
         }
 
-        if (! $subscribeField) {
+        if (!$subscribeField) {
             $subscribeField = ReadonlyField::create(
                 $fieldName,
                 $fieldTitle,
@@ -246,7 +246,7 @@ class CampaignMonitorSignupFieldProvider
                 $customFormField->setValue($finalValue);
             }
 
-            if (isset($linkedMemberFields[$customFormField->Code]) && ! $value) {
+            if (isset($linkedMemberFields[$customFormField->Code]) && !$value) {
                 $fieldOrMethod = $linkedMemberFields[$customFormField->Code];
                 $value = $this->member->hasMethod($fieldOrMethod) ? $this->member->{$fieldOrMethod}() : $this->member->{$fieldOrMethod};
                 if ($value) {

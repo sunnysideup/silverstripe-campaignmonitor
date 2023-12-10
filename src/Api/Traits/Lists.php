@@ -3,6 +3,7 @@
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
 use SilverStripe\Control\Email\Email;
+use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 trait Lists
 {
@@ -19,13 +20,16 @@ trait Lists
      */
     public function getLists()
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        $wrap = new \CS_REST_Clients(
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
+            $this->getAuth()
+        );
         $result = $wrap->get_lists();
 
         return $this->returnResult(
@@ -47,12 +51,12 @@ trait Lists
      */
     public function getSuppressionlist($page, $pageSize, $sortByField = 'email', $sortDirection = 'asc')
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         $wrap = new \CS_REST_Clients(
-            $this->Config()->get('client_id'),
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             $this->getAuth()
         );
         $result = $wrap->get_suppressionlist(
@@ -85,7 +89,7 @@ trait Lists
      */
     public function createList($title, $unsubscribePage, $confirmationSuccessPage, $confirmedOptIn = false, $unsubscribeSetting = null)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -94,12 +98,12 @@ trait Lists
         $wrap = new \CS_REST_Lists(null, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
-        if (! $unsubscribeSetting) {
+        if (!$unsubscribeSetting) {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
 
         $result = $wrap->create(
-            $this->Config()->get('client_id'),
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             [
                 'Title' => $title,
                 'UnsubscribePage' => $unsubscribePage,
@@ -129,7 +133,7 @@ trait Lists
      */
     public function createCustomField(string $listID, $visible, $type, $title, $options = [])
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -183,7 +187,7 @@ trait Lists
      */
     public function deleteCustomField($listID, $key)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -206,7 +210,7 @@ trait Lists
      */
     public function deleteList($listID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -242,7 +246,7 @@ trait Lists
      */
     public function getList($listID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -295,7 +299,7 @@ trait Lists
      */
     public function getActiveSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -354,7 +358,7 @@ trait Lists
      */
     public function getUnconfirmedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -413,7 +417,7 @@ trait Lists
      */
     public function getBouncedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -472,7 +476,7 @@ trait Lists
      */
     public function getUnsubscribedSubscribers($listID, $daysAgo = 3650, $page = 1, $pageSize = 999, $sortByField = 'DATE', $sortDirection = 'DESC')
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -536,7 +540,7 @@ trait Lists
         ?string $sortByField = 'email',
         ?string $sortDirection = 'asc'
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -582,13 +586,13 @@ trait Lists
         ?bool $addUnsubscribesToSuppList = true,
         ?bool $scrubActiveWithSuppList = true
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        if (! $unsubscribeSetting) {
+        if (!$unsubscribeSetting) {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
 
@@ -612,7 +616,7 @@ trait Lists
 
     public function getSegments($listID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -664,7 +668,7 @@ trait Lists
      */
     public function getListStats($listID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -682,7 +686,7 @@ trait Lists
 
     public function getListCustomFields($listID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 

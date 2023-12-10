@@ -6,6 +6,7 @@ use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\SiteConfig\SiteConfig;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
+use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 trait Campaigns
 {
@@ -28,12 +29,15 @@ trait Campaigns
     public function getCampaigns()
     {
         //require_once '../../csrest_clients.php';
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        $wrap = new \CS_REST_Clients(
+            CampaignMonitorAPIConnectorBase::inst()->getClientId(),
+            $this->getAuth()
+        );
         $result = $wrap->get_campaigns();
 
         return $this->returnResult(
@@ -48,13 +52,13 @@ trait Campaigns
      */
     public function getDrafts()
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients($this->Config()->get('client_id'), $this->getAuth());
+        $wrap = new \CS_REST_Clients(CampaignMonitorAPIConnectorBase::inst()->getClientId(), $this->getAuth());
         $result = $wrap->get_drafts();
 
         return $this->returnResult(
@@ -84,7 +88,7 @@ trait Campaigns
         $templateID = '',
         $templateContent = []
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -93,27 +97,27 @@ trait Campaigns
         $siteConfig = SiteConfig::current_site_config();
 
         $subject = $campaignMonitorCampaign->Subject;
-        if (! $subject) {
+        if (!$subject) {
             $subject = 'no subject set';
         }
 
         $name = $campaignMonitorCampaign->Name;
-        if (! $name) {
+        if (!$name) {
             $name = 'no name set';
         }
 
         $fromName = $campaignMonitorCampaign->FromName;
-        if (! $fromName) {
+        if (!$fromName) {
             $fromName = $siteConfig->Title;
         }
 
         $fromEmail = $campaignMonitorCampaign->FromEmail;
-        if (! $fromEmail) {
+        if (!$fromEmail) {
             $fromEmail = Config::inst()->get(Email::class, 'admin_email');
         }
 
         $replyTo = $campaignMonitorCampaign->ReplyTo;
-        if (! $replyTo) {
+        if (!$replyTo) {
             $replyTo = $fromEmail;
         }
 
@@ -124,7 +128,7 @@ trait Campaigns
             $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
             if ($templateID) {
                 $result = $wrap->create_from_template(
-                    $this->Config()->get('client_id'),
+                    CampaignMonitorAPIConnectorBase::inst()->getClientId(),
                     [
                         'Subject' => $subject,
                         'Name' => $name,
@@ -139,7 +143,7 @@ trait Campaigns
                 );
             } else {
                 $result = $wrap->create(
-                    $this->Config()->get('client_id'),
+                    CampaignMonitorAPIConnectorBase::inst()->getClientId(),
                     [
                         'Subject' => $subject,
                         'Name' => $name,
@@ -183,7 +187,7 @@ trait Campaigns
 
     public function deleteCampaign($campaignID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -233,7 +237,7 @@ trait Campaigns
      */
     public function getSummary($campaignID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -264,7 +268,7 @@ trait Campaigns
      */
     public function getEmailClientUsage($campaignID)
     {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
@@ -330,7 +334,7 @@ trait Campaigns
         ?string $sortByField = 'EMAIL',
         ?string $sortDirection = 'ASC'
     ) {
-        if (! $this->isAvailable()) {
+        if (!$this->isAvailable()) {
             return null;
         }
 
