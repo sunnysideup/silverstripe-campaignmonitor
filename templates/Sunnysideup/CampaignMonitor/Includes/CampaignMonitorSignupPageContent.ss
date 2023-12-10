@@ -1,4 +1,4 @@
 <h1 class="pageTitle">$Title</h1>
 <div class="mainMessage">$Content</div>
-<% include CampaignMonitorSignupPageContentInner %>
-<% include CampaignMonitorSignupPageContentInnerFooter %>
+<% include Sunnysideup\CampaignMonitor\Includes\CampaignMonitorSignupPageContentInner %>
+<% include Sunnysideup\CampaignMonitor\Includes\CampaignMonitorSignupPageContentInnerFooter %>

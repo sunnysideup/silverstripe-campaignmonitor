@@ -36,8 +36,6 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
  */
 class CampaignMonitorSignupPageController extends PageController
 {
-    use CampaignMonitorApiTrait;
-
     /**
      * @var bool
      */
@@ -290,7 +288,7 @@ class CampaignMonitorSignupPageController extends PageController
                     if ('PermissionToTrack' === $field) {
                         $memberToEdit->CM_PermissionToTrack = isset($data['CampaignMonitor' . $field]) && $data['CampaignMonitor' . $field] ? 'Yes' : 'No';
                     } elseif ('Email' !== $field) {
-                        if (! empty($data['CampaignMonitor' . $field])) {
+                        if (!empty($data['CampaignMonitor' . $field])) {
                             $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
                         }
                     }
@@ -403,7 +401,7 @@ class CampaignMonitorSignupPageController extends PageController
             if ($email) {
                 $this->memberDbValues['CampaignMonitorEmail'] = $email;
                 if (Director::is_ajax()) {
-                    if (! $this->addSubscriber($email)) {
+                    if (!$this->addSubscriber($email)) {
                         $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
 
                         return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult');
@@ -432,7 +430,7 @@ class CampaignMonitorSignupPageController extends PageController
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
-        if (! $this->campaign) {
+        if (!$this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
 
@@ -449,7 +447,7 @@ class CampaignMonitorSignupPageController extends PageController
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
-        if (! $this->campaign) {
+        if (!$this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
 
@@ -467,7 +465,7 @@ class CampaignMonitorSignupPageController extends PageController
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
-            if (isset($_GET['hash']) && 7 === strlen( (string) $_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
+            if (isset($_GET['hash']) && 7 === strlen((string) $_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
                 return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
             }
         }
@@ -486,7 +484,7 @@ class CampaignMonitorSignupPageController extends PageController
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
         if ($this->campaign) {
-            return HTTP::absoluteURLs(strip_tags( (string) $this->campaign->getNewsletterContent()));
+            return HTTP::absoluteURLs(strip_tags((string) $this->campaign->getNewsletterContent()));
         }
 
         return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'No preview available.'));
@@ -757,7 +755,7 @@ class CampaignMonitorSignupPageController extends PageController
 
         if ($this->ShowPermissionToTrackFieldInForm) {
             $array['PermissionToTrack'] = [
-                'title' => DBField::create_field('HTMLFragment', strip_tags( (string) $this->PermissionToTrackLabelField, '<a>')),
+                'title' => DBField::create_field('HTMLFragment', strip_tags((string) $this->PermissionToTrackLabelField, '<a>')),
                 'type' => CheckboxField::class,
                 'required' => false,
             ];
@@ -780,12 +778,11 @@ class CampaignMonitorSignupPageController extends PageController
         return [];
     }
 
-    // protected function init()
-    // {
-    //     parent::init();
-    //     //UPGRADE TO DO: fix this
-    //     Requirements::themedCSS('client/css/CampaignMonitorSignupPage');
-    // }
+    protected function init()
+    {
+        parent::init();
+        //UPGRADE TO DO: fix this
+    }
 
     /**
      * @return string

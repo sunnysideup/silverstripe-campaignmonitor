@@ -42,7 +42,6 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use Exception;
 
-
 /**
  * Page for Signing Up to Campaign Monitor List.
  *
@@ -81,8 +80,6 @@ use Exception;
 class CampaignMonitorSignupPage extends Page
 {
     use CampaignMonitorApiTrait;
-
-    private static $controller_name = CampaignMonitorSignupPageController::class;
 
     /**
      * standard SS variable.
