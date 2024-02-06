@@ -2,12 +2,14 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Group;
 use SilverStripe\Versioned\Versioned;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
@@ -103,11 +105,12 @@ class CampaignMonitorMemberDOD extends DataExtension
      */
     public function IsCampaignMonitorSubscriber(): bool
     {
-        $stage = Versioned::LIVE === Versioned::get_stage() ? '_Live' : '';
+        $singleton = DataObject::singleton(CampaignMonitorSignupPage::class);
+        $tableName = $singleton->stageTable($singleton->config()->table_name, Versioned::get_stage());
 
         return (bool) CampaignMonitorSignupPage::get_ready_ones()
             ->where('MemberID = ' . $this->getOwner()->ID)
-            ->innerJoin('Group_Members', 'CampaignMonitorSignupPage' . $stage . '.GroupID = Group_Members.GroupID')
+            ->innerJoin('Group_Members', '' . $tableName . '.GroupID = Group_Members.GroupID')
             ->exists();
     }
 
