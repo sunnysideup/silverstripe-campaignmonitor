@@ -80,7 +80,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
         $member = $this->Member();
         $list = $this->List();
         if ($member && $member->exists()) {
-            $memberLink = DBField::create_field('HTMLText', '<a href="/admin/security/users/EditForm/field/users/item/' . $member->ID . '/edit/">' . $member->Email . '</a>');
+            $memberLink = DBField::create_field('HTMLText', '<a href="'.$member->CMSEditLink().'">' . $member->Email . '</a>');
         } else {
             $memberLink = 'Member could not be found (id = ' . $this->MemberID . ').';
         }
