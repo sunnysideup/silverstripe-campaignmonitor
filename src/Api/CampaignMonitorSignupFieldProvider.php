@@ -7,6 +7,7 @@ use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\CompositeField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
@@ -109,7 +110,7 @@ class CampaignMonitorSignupFieldProvider
                         $currentSelection
                     );
                 } elseif (count($optionArray) > 1) {
-                    $subscribeField = OptionsetField::create($fieldName, $fieldTitle, $optionArray);
+                    $subscribeField = DropdownField::create($fieldName, $fieldTitle, $optionArray);
                 }
 
                 $subscribeField->setValue($currentSelection);

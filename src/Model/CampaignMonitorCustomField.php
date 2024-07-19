@@ -4,6 +4,7 @@ namespace Sunnysideup\CampaignMonitor\Model;
 
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DateField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\NumericField;
 use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextField;
@@ -68,7 +69,7 @@ class CampaignMonitorCustomField extends DataObject
      * @return array
      */
     private static $field_translator = [
-        'MultiSelectOne' => OptionsetField::class,
+        'MultiSelectOne' => DropdownField::class,
         'Text' => TextField::class,
         'Number' => NumericField::class,
         'MultiSelectMany' => CheckboxSetField::class,
