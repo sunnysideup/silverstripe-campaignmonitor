@@ -41,7 +41,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
     private static $summary_fields = [
         'CampaignMonitorOutcome' => 'Outcome',
         'Created.Nice' => 'When',
-        'Member.Title' => 'Person',
+        'Member.Title' => 'Member',
         'Member.Email' => 'Email',
         'List.Title' => 'List',
         'Action' => 'Action',

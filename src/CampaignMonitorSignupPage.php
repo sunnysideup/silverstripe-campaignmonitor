@@ -227,7 +227,7 @@ class CampaignMonitorSignupPage extends Page
                 'CampaignMonitorSubscriptionLogs',
                 'Logs',
                 $this->CampaignMonitorSubscriptionLogs(),
-                GridFieldConfig_RelationEditor::create()
+                GridFieldConfig_RecordViewer::create()
             ),
         );
 

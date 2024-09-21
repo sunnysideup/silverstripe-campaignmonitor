@@ -6,6 +6,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataExtension;
@@ -84,7 +85,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                     'CampaignMonitorSubscriptionLogs',
                     'Logs',
                     $this->getOwner()->CampaignMonitorSubscriptionLogs(),
-                    GridFieldConfig_RelationEditor::create()
+                    GridFieldConfig_RecordViewer::create()
                 ),
             ]
         );
