@@ -198,6 +198,9 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
             }
+            if (filter_var($data['CampaignMonitorEmail'], FILTER_VALIDATE_EMAIL)) {
+                $form->sessionError('Please enter a valid email address.', 'error');
+            }
 
             $session->set("FormData.{$form->getName()}.data", $data);
 
@@ -238,7 +241,7 @@ class CampaignMonitorSignupPageController extends PageController
                         $form->sessionError(
                             _t(
                                 'CAMPAIGNMONITORSIGNUPPAGE.LOG_OUT_FIRST',
-                                'Please log out first. You can not be logged in and sign-up someone else.'
+                                'Please log-out first. You can not be logged-in and sign-up someone else.'
                             ),
                             'error'
                         );
@@ -250,7 +253,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $form->sessionError(
                         _t(
                             'CAMPAIGNMONITORSIGNUPPAGE.NON_MATCH_ERROR',
-                            'Please log out first. You can not be logged in and sign-up someone new.'
+                            'Please log-out first. You can not be logged-in and sign-up with another email address.'
                         ),
                         'error'
                     );
@@ -263,7 +266,7 @@ class CampaignMonitorSignupPageController extends PageController
                     $form->sessionError(
                         _t(
                             'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
-                            'Please log in for this email or try another email address.'
+                            'Please log-in first, using this email address or try another email address.'
                         ),
                         'error'
                     );

@@ -2,5 +2,3 @@
 # CAMPAIGN MONITOR
 ############################
 
-Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider:
-  campaign_monitor_allow_unsubscribe: false

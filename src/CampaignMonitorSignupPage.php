@@ -130,6 +130,8 @@ class CampaignMonitorSignupPage extends Page
         'ShowOldNewsletters' => 'Boolean',
         'ShowAllNewsletterForSigningUp' => 'Boolean',
 
+        'ShowListNameInSubscribeToField' => 'Boolean(0)',
+        'AllowUnsubscribeInForm' => 'Boolean(1)',
         'ShowFirstNameFieldInForm' => 'Boolean',
         'ShowSurnameFieldInForm' => 'Boolean',
         'ShowPermissionToTrackFieldInForm' => 'Boolean',
@@ -167,6 +169,8 @@ class CampaignMonitorSignupPage extends Page
     ];
 
     private static $defaults = [
+        'ShowListNameInSubscribeToField' => true,
+        'AllowUnsubscribeInForm' => true,
         'ShowFirstNameFieldInForm' => true,
         'ShowSurnameFieldInForm' => true,
         'ShowPermissionToTrackFieldInForm' => false,
@@ -276,6 +280,7 @@ class CampaignMonitorSignupPage extends Page
                 ),
             )
         );
+
         $fields->addFieldToTab(
             'Root.Newsletters',
             new TabSet(
@@ -288,6 +293,8 @@ class CampaignMonitorSignupPage extends Page
                     new CheckboxField('SignInNewMemberOnRegistration', 'Sign-in newly created user on registration?'),
                     new CheckboxField('MustBeLoggedInToEditSubscription', 'User must be logged in to edit their registations?'),
                     new CheckboxField('MakeAllFieldsRequired', 'Make all fields mandatory (except consent field)'),
+                    new CheckboxField('ShowListNameInSubscribeToField', 'Show name of the list in the subscribe to field?'),
+                    new CheckboxField('AllowUnsubscribeInForm', 'Allow unsubscribe in form?'),
                     new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
                     new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
                     CheckboxField::create('ShowPermissionToTrackFieldInForm', 'Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
