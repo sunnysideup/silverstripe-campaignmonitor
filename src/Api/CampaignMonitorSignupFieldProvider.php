@@ -235,9 +235,8 @@ class CampaignMonitorSignupFieldProvider
                 $finalValue = 'MultiSelectMany' === $customField->Type ? $fieldValues : implode('', $fieldValues);
                 $customFormField->setValue($finalValue);
             }
-
-            if (isset($linkedMemberFields[$customFormField->Code]) && !$value) {
-                $fieldOrMethod = $linkedMemberFields[$customFormField->Code];
+            if (isset($linkedMemberFields[$customField->Code]) && !$value) {
+                $fieldOrMethod = $linkedMemberFields[$customField->Code];
                 $value = $this->member->hasMethod($fieldOrMethod) ? $this->member->{$fieldOrMethod}() : $this->member->{$fieldOrMethod};
                 if ($value) {
                     $customFormField->setValue($value);

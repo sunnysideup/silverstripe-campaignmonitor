@@ -2,3 +2,6 @@
 # CAMPAIGN MONITOR
 ############################
 
+Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider:
+  custom_fields_member_field_or_method_map:
+    Surname: Surname
