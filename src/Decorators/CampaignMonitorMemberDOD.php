@@ -208,7 +208,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     protected function getCampaignMonitorSignupFieldProvider($listPage = null)
     {
         $provider = CampaignMonitorSignupFieldProvider::create();
-        $provider->setMember($this->owner);
+        $provider->setMember($this->getOwner());
         $provider->setListPage($listPage);
 
         return $provider;
@@ -223,13 +223,16 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         //internal database
         if ($listPage) {
-            $gp = Group::get_by_id($listPage->GroupID);
-            if ($gp) {
-                $groups = $this->getOwner()->Groups();
-                if ($groups) {
-                    $this->getOwner()->Groups()->add($gp);
+            $owner = $this->getOwner();
+            if ($owner && $owner->exists()) {
+                $gp = Group::get_by_id($listPage->GroupID);
+                if ($gp) {
+                    $groups = $owner->Groups();
+                    if ($groups) {
+                        $owner->Groups()->add($gp);
 
-                    return true;
+                        return true;
+                    }
                 }
             }
         } else {
