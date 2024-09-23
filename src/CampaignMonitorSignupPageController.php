@@ -10,6 +10,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -139,11 +140,6 @@ class CampaignMonitorSignupPageController extends PageController
                 $requiredList = array_diff($requiredList, ['CampaignMonitorPermissionToTrack']);
             } else {
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
-            }
-
-            $key = array_search('CampaignMonitorEmail', $requiredList, true);
-            if (false !== $key) {
-                unset($requiredList[$key]);
             }
 
             $validator = new RequiredFields($requiredList);
@@ -709,6 +705,7 @@ class CampaignMonitorSignupPageController extends PageController
             $this->memberDbValues[$fieldName] = $member->{$field};
             $disabledEmailPhrase = '';
             if ('Email' === $field) {
+                $fieldType = EmailField::class;
                 if ($memberId) {
                     $disabledEmailPhrase = 'disabled';
                     $fieldArray['Required'][$fieldName] = false;
