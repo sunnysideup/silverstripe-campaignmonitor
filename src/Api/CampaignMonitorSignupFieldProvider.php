@@ -3,6 +3,7 @@
 namespace Sunnysideup\CampaignMonitor\Api;
 
 use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\CheckboxSetField;
@@ -158,12 +159,24 @@ class CampaignMonitorSignupFieldProvider
     public function processCampaignMonitorSignupField($data, $values): string
     {
         $typeOfAction = 'unsubscribe';
+
+        // get data
+
+        $customFields = $this->listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
+        $customFieldsArray = [];
+        foreach ($customFields as $customField) {
+            if (isset($data['CMCustomField' . $customField->Code])) {
+                $customFieldsArray[$customField->Code] = $data['CMCustomField' . $customField->Code];
+            }
+        }
+
         //many choices
         if (is_array($values)) {
             $listPages = CampaignMonitorSignupPage::get_ready_ones();
             foreach ($listPages as $listPage) {
-                if (isset($values[$listPage->ListID]) && $values[$listPage->ListID]) {
-                    $this->member->addCampaignMonitorList($listPage->ListID);
+                if (! empty($values[$listPage->ListID])) {
+                    Convert::raw2sql($values[$listPage->ListID]);
+                    $this->member->addCampaignMonitorList($listPage->ListID, $customFieldsArray);
                     $typeOfAction = 'subscribe';
                 } else {
                     $this->member->removeCampaignMonitorList($listPage->ListID);
@@ -172,14 +185,6 @@ class CampaignMonitorSignupFieldProvider
         } elseif (is_string($values) && $values && $this->listPage->ListID) {
             //one choice
             if ('Subscribe' === $values) {
-                $customFields = $this->listPage->CampaignMonitorCustomFields()->filter(['Visible' => 1]);
-                $customFieldsArray = [];
-                foreach ($customFields as $customField) {
-                    if (isset($data['CMCustomField' . $customField->Code])) {
-                        $customFieldsArray[$customField->Code] = $data['CMCustomField' . $customField->Code];
-                    }
-                }
-
                 $this->member->addCampaignMonitorList($this->listPage->ListID, $customFieldsArray);
                 $typeOfAction = 'subscribe';
             } else {
