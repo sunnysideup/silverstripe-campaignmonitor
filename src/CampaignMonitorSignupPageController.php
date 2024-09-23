@@ -198,8 +198,9 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
             }
-            if (filter_var($data['CampaignMonitorEmail'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($data['CampaignMonitorEmail'], FILTER_VALIDATE_EMAIL)) {
                 $form->sessionError('Please enter a valid email address.', 'error');
+                return $this->redirectBack();
             }
 
             $session->set("FormData.{$form->getName()}.data", $data);
@@ -245,9 +246,8 @@ class CampaignMonitorSignupPageController extends PageController
                             ),
                             'error'
                         );
-                        $this->redirectBack();
+                        return $this->redirectBack();
 
-                        return;
                     }
                 } else {
                     $form->sessionError(
@@ -257,9 +257,8 @@ class CampaignMonitorSignupPageController extends PageController
                         ),
                         'error'
                     );
-                    $this->redirectBack();
+                    return $this->redirectBack();
 
-                    return;
                 }
             } elseif ($submittedMember) {
                 if ($this->MustBeLoggedInToAddSubscription) {
