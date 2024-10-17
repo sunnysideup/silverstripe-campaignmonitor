@@ -194,6 +194,9 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function Link($action = ''): string
     {
+        /**
+         * @var CampaignMonitorSignupPage $page
+         */
         $page = $this->Pages()->First();
         if ($page) {
             $link = $page->Link('viewcampaign' . $action . '/' . $this->ID . '/');
@@ -212,6 +215,9 @@ class CampaignMonitorCampaign extends DataObject
      */
     public function PreviewLink($action = ''): string
     {
+        /**
+         * @var CampaignMonitorSignupPage $page
+         */
         $page = $this->Pages()->First();
         if ($page) {
             $link = $page->Link('previewcampaign' . $action . '/' . $this->ID . '/?hash=' . $this->Hash);
