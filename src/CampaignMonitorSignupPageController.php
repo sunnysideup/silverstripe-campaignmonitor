@@ -238,23 +238,21 @@ class CampaignMonitorSignupPageController extends PageController
                         $form->sessionError(
                             _t(
                                 'CAMPAIGNMONITORSIGNUPPAGE.LOG_OUT_FIRST',
-                                'Please log-out first. You can not be logged-in and sign-up someone else.'
+                                'Please log out first. You can not be logged-in and sign-up someone else.'
                             ),
                             'error'
                         );
                         return $this->redirectBack();
-
                     }
                 } else {
                     $form->sessionError(
                         _t(
                             'CAMPAIGNMONITORSIGNUPPAGE.NON_MATCH_ERROR',
-                            'Please log-out first. You can not be logged-in and sign-up with another email address.'
+                            'Please log out first. You can not be logged-in and sign-up with another email address.'
                         ),
                         'error'
                     );
                     return $this->redirectBack();
-
                 }
             } elseif ($submittedMember) {
                 if ($this->MustBeLoggedInToAddSubscription) {
