@@ -217,7 +217,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
         echo '<h3>creating a campaign without template</h3>';
         $obj = CampaignMonitorCampaign::create();
-        $randNumber = rand(0, 9999999);
+        $randNumber = rand();
         $obj->Name = 'test only ' . $randNumber;
         $obj->Subject = 'test only ' . $randNumber;
         $obj->CreateAsTemplate = false;
@@ -229,7 +229,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
         echo '<h3>creating a campaign with template</h3>';
         $obj = CampaignMonitorCampaign::create();
-        $randNumber = rand(0, 9999999);
+        $randNumber = rand();
         $obj->Name = 'test only ' . $randNumber;
         $obj->Subject = 'test only ' . $randNumber;
         $obj->CreateAsTemplate = true;
@@ -368,7 +368,7 @@ class CampaignMonitorAPIConnectorTestController extends Controller
             user_error('To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id');
         }
 
-        $this->egData['listTitle'] .= rand(0, 999999999999);
+        $this->egData['listTitle'] .= rand();
     }
 
     protected function setupTests()
