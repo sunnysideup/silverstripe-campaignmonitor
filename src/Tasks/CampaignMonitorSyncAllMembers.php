@@ -95,10 +95,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         if ($api) {
             for ($i = 0; $i < $maxIterations; ++$i) {
                 $members = Member::get()
-                    ->limit($limit, $i * $limit)
-                ;
+                    ->limit($limit, $i * $limit);
                 if ($this->debug) {
-                    $members = $members->orderBy(DB::get_conn()->random());
+                    $members = $members->shuffle();
                 }
 
                 if ($members->exists()) {
