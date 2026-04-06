@@ -17,7 +17,7 @@
     }
   ],
   "require": {
-    "sunnysideup/campaignmonitor-api": "dev-master",
+    "sunnysideup/campaignmonitor-api": "5.x-dev",
     "undefinedoffset/sortablegridfield": "^2",
     "silverstripe/recipe-cms": "^4.0 || ^5.0"
   },
