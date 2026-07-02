@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Override;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBField;
@@ -18,8 +19,8 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @property string $ErrorDescription
  * @property int $MemberID
  * @property int $ListID
- * @method \SilverStripe\Security\Member Member()
- * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage List()
+ * @method Member Member()
+ * @method CampaignMonitorSignupPage List()
  */
 class CampaignMonitorSubscriptionLog extends DataObject
 {
@@ -74,6 +75,7 @@ class CampaignMonitorSubscriptionLog extends DataObject
         return $obj->write();
     }
 
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -102,16 +104,19 @@ class CampaignMonitorSubscriptionLog extends DataObject
         return $fields;
     }
 
+    #[Override]
     public function canCreate($member = null, $context = [])
     {
         return false;
     }
 
+    #[Override]
     public function canDelete($member = null)
     {
         return false;
     }
 
+    #[Override]
     public function canEdit($member = null)
     {
         return false;

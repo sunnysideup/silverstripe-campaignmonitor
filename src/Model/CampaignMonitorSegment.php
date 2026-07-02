@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Override;
 use SilverStripe\ORM\DataObject;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 
@@ -12,7 +15,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @property string $SegmentID
  * @property string $ListID
  * @property int $CampaignMonitorSignupPageID
- * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage CampaignMonitorSignupPage()
+ * @method CampaignMonitorSignupPage CampaignMonitorSignupPage()
  */
 class CampaignMonitorSegment extends DataObject
 {
@@ -37,16 +40,19 @@ class CampaignMonitorSegment extends DataObject
         'CampaignMonitorSignupPage' => CampaignMonitorSignupPage::class,
     ];
 
+    #[Override]
     public function canCreate($member = null, $context = [])
     {
         return false;
     }
 
+    #[Override]
     public function canDelete($member = null)
     {
         return false;
     }
 
+    #[Override]
     public function canEdit($member = null)
     {
         return false;

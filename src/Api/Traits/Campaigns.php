@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
+use CS_REST_Clients;
+use CS_REST_Campaigns;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -34,7 +36,7 @@ trait Campaigns
         }
 
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients(
+        $wrap = new CS_REST_Clients(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             $this->getAuth()
         );
@@ -58,7 +60,7 @@ trait Campaigns
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients(CampaignMonitorAPIConnectorBase::inst()->getClientId(), $this->getAuth());
+        $wrap = new CS_REST_Clients(CampaignMonitorAPIConnectorBase::inst()->getClientId(), $this->getAuth());
         $result = $wrap->get_drafts();
 
         return $this->returnResult(
@@ -125,7 +127,7 @@ trait Campaigns
         if ($page) {
             $listID = $campaignMonitorCampaign->Pages()->first()->ListID;
 
-            $wrap = new \CS_REST_Campaigns(null, $this->getAuth());
+            $wrap = new CS_REST_Campaigns(null, $this->getAuth());
             if ($templateID) {
                 $result = $wrap->create_from_template(
                     CampaignMonitorAPIConnectorBase::inst()->getClientId(),
@@ -191,7 +193,7 @@ trait Campaigns
             return null;
         }
 
-        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->delete();
 
         return $this->returnResult(
@@ -241,7 +243,7 @@ trait Campaigns
             return null;
         }
 
-        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_summary();
 
         return $this->returnResult(
@@ -272,7 +274,7 @@ trait Campaigns
             return null;
         }
 
-        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_email_client_usage();
 
         return $this->returnResult(
@@ -340,7 +342,7 @@ trait Campaigns
 
         //require_once '../../csrest_campaigns.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_campaigns.php';
-        $wrap = new \CS_REST_Campaigns($campaignID, $this->getAuth());
+        $wrap = new CS_REST_Campaigns($campaignID, $this->getAuth());
         $result = $wrap->get_unsubscribes(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,

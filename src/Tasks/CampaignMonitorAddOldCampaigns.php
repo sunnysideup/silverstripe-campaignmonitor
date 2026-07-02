@@ -2,6 +2,10 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
+use Symfony\Component\Console\Input\InputInterface;
+use SilverStripe\PolyExecution\PolyOutput;
+use Symfony\Component\Console\Command\Command;
+use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Dev\BuildTask;
 use SilverStripe\ORM\DB;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
@@ -9,9 +13,13 @@ use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 
 class CampaignMonitorAddOldCampaigns extends BuildTask
 {
-    protected $title = 'Retrieves a list of campaigns from Campaign Monitor.';
+    protected string $title = 'Retrieves a list of campaigns from Campaign Monitor.';
 
-    protected $description = 'Retrieves a list of campaigns from Campaign Monitor for future display.';
+    protected static string $description = 'Retrieves a list of campaigns from Campaign Monitor for future display.';
+
+    protected static string $commandName = 'campaignmonitor:add-old-campaigns';
+
+    private static $segment = 'CampaignMonitorAddOldCampaigns';
 
     protected $verbose = true;
 
@@ -20,11 +28,7 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
         $this->verbose = $b;
     }
 
-    /**
-     * @param \SilverStripe\Control\HTTPRequest $request
-     *                                                   standard method
-     */
-    public function run($request)
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
         $faultyOnes = CampaignMonitorCampaign::get()->where("(\"CampaignID\" = '' OR \"CampaignID\" IS NULL) AND (\"WebVersionURL\" IS NOT NULL && \"WebVersionURL\" <> '')");
         foreach ($faultyOnes as $faultyOne) {
@@ -41,12 +45,12 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
                     $campaignMonitorCampaign = CampaignMonitorCampaign::get()->filter(['CampaignID' => $campaign->CampaignID])->first();
                     if (! $campaignMonitorCampaign) {
                         if ($this->verbose) {
-                            DB::alteration_message('Adding ' . $campaign->Subject . ' sent ' . $campaign->SentDate, 'created');
+                            $output->writeln('Adding ' . $campaign->Subject . ' sent ' . $campaign->SentDate);
                         }
 
                         $campaignMonitorCampaign = CampaignMonitorCampaign::create();
                     } elseif ($this->verbose) {
-                        DB::alteration_message('already added ' . $campaign->Subject, 'edited');
+                        $output->writeln('already added ' . $campaign->Subject);
                     }
 
                     $campaignMonitorCampaign->HasBeenSent = true;
@@ -59,15 +63,17 @@ class CampaignMonitorAddOldCampaigns extends BuildTask
                     //$CampaignMonitorCampaign->ParentID = $this->ID;
                     $campaignMonitorCampaign->write();
                 } elseif ($this->verbose) {
-                    DB::alteration_message('not adding ' . $campaign->Subject . ' because it has not been sent yet...', 'edited');
+                    $output->writeln('not adding ' . $campaign->Subject . ' because it has not been sent yet...');
                 }
             }
         } elseif ($this->verbose) {
-            DB::alteration_message('there are no campaigns to be added', 'edited');
+            $output->writeln('there are no campaigns to be added');
         }
 
         if ($this->verbose) {
-            DB::alteration_message('<hr /><hr /><hr />Completed', 'edited');
+            $output->writeForHtml('<hr /><hr /><hr />Completed');
         }
+
+        return Command::SUCCESS;
     }
 }

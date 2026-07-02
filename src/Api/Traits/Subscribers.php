@@ -2,7 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
-use SilverStripe\Control\Email\Email;
+use CS_REST_Clients;
+use CS_REST_Subscribers;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
@@ -61,7 +62,7 @@ trait Subscribers
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients(
+        $wrap = new CS_REST_Clients(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             $this->getAuth()
         );
@@ -110,7 +111,7 @@ trait Subscribers
 
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $customFields = $this->cleanCustomFields($customFields);
         $request = [
             'EmailAddress' => $member->Email,
@@ -171,7 +172,7 @@ trait Subscribers
         $customFields = $this->cleanCustomFields($customFields);
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->update(
             $oldEmailAddress,
             [
@@ -187,7 +188,7 @@ trait Subscribers
         return $this->returnResult(
             $result,
             'PUT /api/v3.1/subscribers/{list id}.{format}?email={email}',
-            "updated with email {$oldEmailAddress} ..."
+            sprintf('updated with email %s ...', $oldEmailAddress)
         );
     }
 
@@ -226,7 +227,7 @@ trait Subscribers
 
         //require_once '../../csrest_subscribers.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_subscribers.php';
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $importArray = [];
         foreach ($membersSet as $member) {
             $customFieldsForMember = [];
@@ -277,7 +278,7 @@ trait Subscribers
             $member = $member->Email;
         }
 
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->delete($member);
 
         return $this->returnResult(
@@ -305,7 +306,7 @@ trait Subscribers
             $member = $member->Email;
         }
 
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->unsubscribe($member);
 
         return $this->returnResult(
@@ -360,14 +361,12 @@ trait Subscribers
         }
 
         $outcome = $this->getSubscriber($listID, $member);
-        if ($outcome && (property_exists($outcome, 'State') && null !== $outcome->State)) {
-            if ('Active' === $outcome->State) {
-                if ($this->debug) {
-                    echo '<h3>Subscriber Can Receive Emails For This List</h3>';
-                }
-
-                return true;
+        if ($outcome && (property_exists($outcome, 'State') && null !== $outcome->State) && 'Active' === $outcome->State) {
+            if ($this->debug) {
+                echo '<h3>Subscriber Can Receive Emails For This List</h3>';
             }
+
+            return true;
         }
 
         if ($this->debug) {
@@ -389,14 +388,12 @@ trait Subscribers
     {
         $subscriberExistsForThisList = $this->getSubscriberExistsForThisList($listID, $member);
         $subscriberCanReceiveEmailsForThisList = $this->getSubscriberCanReceiveEmailsForThisList($listID, $member);
-        if ($subscriberExistsForThisList) {
-            if (!$subscriberCanReceiveEmailsForThisList) {
-                if ($this->debug) {
-                    echo '<h3>Subscriber Can No Longer Receive Emails For This List</h3>';
-                }
-
-                return true;
+        if ($subscriberExistsForThisList && !$subscriberCanReceiveEmailsForThisList) {
+            if ($this->debug) {
+                echo '<h3>Subscriber Can No Longer Receive Emails For This List</h3>';
             }
+
+            return true;
         }
 
         if ($this->debug) {
@@ -441,7 +438,7 @@ trait Subscribers
         if (isset(self::$_get_subscriber[$key]) && $cacheIsOK) {
             //do nothing
         } else {
-            $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+            $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
             $result = $wrap->get($member);
             self::$_get_subscriber[$key] = $this->returnResult(
                 $result,
@@ -483,7 +480,7 @@ trait Subscribers
             $member = $member->Email;
         }
 
-        $wrap = new \CS_REST_Subscribers($listID, $this->getAuth());
+        $wrap = new CS_REST_Subscribers($listID, $this->getAuth());
         $result = $wrap->get_history($member);
 
         return $this->returnResult(

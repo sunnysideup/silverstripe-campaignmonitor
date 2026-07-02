@@ -2,6 +2,12 @@
 
 namespace Sunnysideup\CampaignMonitor;
 
+use Override;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\ArrayInput;
+use SilverStripe\PolyExecution\PolyOutput;
+use SilverStripe\ORM\DataList;
+use SilverStripe\ORM\ManyManyList;
 use Page;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
@@ -71,15 +77,52 @@ use Exception;
  * @property bool $MustBeLoggedInToEditSubscription
  * @property bool $SignInNewMemberOnRegistration
  * @property int $GroupID
- * @method \SilverStripe\Security\Group Group()
- * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSegment[] CampaignMonitorSegments()
- * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCustomField[] CampaignMonitorCustomFields()
- * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
- * @method \SilverStripe\ORM\ManyManyList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign[] CampaignMonitorCampaigns()
+ * @method Group Group()
+ * @method DataList|CampaignMonitorSegment[] CampaignMonitorSegments()
+ * @method DataList|CampaignMonitorCustomField[] CampaignMonitorCustomFields()
+ * @method DataList|CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
+ * @method ManyManyList|CampaignMonitorCampaign[] CampaignMonitorCampaigns()
  */
 class CampaignMonitorSignupPage extends Page
 {
     use CampaignMonitorApiTrait;
+
+    private static array $scaffold_cms_fields_settings = [
+        'ignoreFields' => [
+            'ListID',
+            'SignInNewMemberOnRegistration',
+            'MustBeLoggedInToEditSubscription',
+            'MakeAllFieldsRequired',
+            'ShowListNameInSubscribeToField',
+            'AllowUnsubscribeInForm',
+            'ShowFirstNameFieldInForm',
+            'ShowSurnameFieldInForm',
+            'ShowPermissionToTrackFieldInForm',
+            'PermissionToTrackLabelField',
+            'ShowAllNewsletterForSigningUp',
+            'CloseSubscriptions',
+            'ThankYouTitle',
+            'ThankYouMenuTitle',
+            'ThankYouMessage',
+            'SadToSeeYouGoTitle',
+            'SadToSeeYouGoMenuTitle',
+            'SadToSeeYouGoMessage',
+            'ConfirmTitle',
+            'ConfirmMenuTitle',
+            'ConfirmMessage',
+            'SignUpHeader',
+            'SignUpIntro',
+            'SignUpButtonLabel',
+            'ShowOldNewsletters',
+        ],
+        'ignoreRelations' => [
+            'CampaignMonitorSegments',
+            'CampaignMonitorCustomFields',
+            'CampaignMonitorCampaigns',
+            'CampaignMonitorSubscriptionLogs',
+            'Group',
+        ],
+    ];
 
     /**
      * standard SS variable.
@@ -98,7 +141,7 @@ class CampaignMonitorSignupPage extends Page
     /**
      * @inherited
      */
-    private static $icon = 'sunnysideup/campaignmonitor: client/images/treeicons/CampaignMonitorSignupPage-file.gif';
+    private static $cms_icon = 'sunnysideup/campaignmonitor: client/images/treeicons/CampaignMonitorSignupPage-file.gif';
 
     /**
      * @inherited
@@ -179,19 +222,21 @@ class CampaignMonitorSignupPage extends Page
     /**
      * @inherited
      */
-    private static $description = 'Page to suscribe and review newsletter list(s)';
+    private static $class_description = 'Page to suscribe and review newsletter list(s)';
 
     /**
      * @var array
      */
     private static $drop_down_list = [];
 
+    #[Override]
     public function i18n_singular_name()
     {
         return _t('AccountPage.NEWSLETTER_PAGE', 'Newsletter sign-up page');
     }
 
-    public function i18n_plural_name()
+    #[Override]
+    public function plural_name()
     {
         return _t('AccountPage.NEWSLETTER_PAGE', 'Newsletter sign-up pages');
     }
@@ -199,7 +244,7 @@ class CampaignMonitorSignupPage extends Page
     /**
      * Campaign monitor pages that are ready to receive "sign-ups".
      *
-     * @return \SilverStripe\ORM\DataList
+     * @return DataList
      */
     public static function get_ready_ones()
     {
@@ -217,18 +262,27 @@ class CampaignMonitorSignupPage extends Page
     /**
      * @inherited
      */
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
-        $fields->addFieldToTab(
+        $fields->removeByName([
+            'CampaignMonitorSegments',
+            'CampaignMonitorCustomFields',
+            'CampaignMonitorSubscriptionLogs',
+            'CampaignMonitorCampaigns',
+            'Group',
+        ]);
+        $fields->addFieldsToTab(
             'Root.Log',
-            GridField::create(
-                'CampaignMonitorSubscriptionLogs',
-                'Logs',
-                $this->CampaignMonitorSubscriptionLogs(),
-                GridFieldConfig_RecordViewer::create()
-            ),
+            [
+                GridField::create(
+                    'CampaignMonitorSubscriptionLogs',
+                    'Logs',
+                    $this->CampaignMonitorSubscriptionLogs(),
+                    GridFieldConfig_RecordViewer::create()
+                ),
+            ]
         );
 
         if ($this->GroupID) {
@@ -247,102 +301,559 @@ class CampaignMonitorSignupPage extends Page
 
         if ($this->ID) {
             $config = GridFieldConfig_RelationEditor::create();
-            $campaignField = new GridField('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
         } else {
-            $campaignField = new HiddenField('CampaignList');
+            $campaignField = HiddenField::create('CampaignList');
         }
 
-        $gridFieldTemplatesAvailable = new GridField('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+        $fields->addFieldsToTab(
+            'Root.SubscriptionFeedback',
+            [
+                TabSet::create(
+                    'AlternativeContentSubHeader',
+                    Tab::create(
+                        'ThankYou',
+                        $fields->dataFieldByName('ThankYouTitle'),
+                        $fields->dataFieldByName('ThankYouMenuTitle'),
+                        $fields->dataFieldByName('ThankYouMessage')
+                    ),
+                    Tab::create(
+                        'SadToSeeYouGo',
+                        $fields->dataFieldByName('SadToSeeYouGoTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMenuTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMessage')
+                    ),
+                    Tab::create(
+                        'Updating Subscription',
+                        LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
+                        $fields->dataFieldByName('ConfirmTitle'),
+                        $fields->dataFieldByName('ConfirmMenuTitle'),
+                        $fields->dataFieldByName('ConfirmMessage')
+                    )
+                ),
+            ]
+        );
+        $fields->addFieldsToTab(
+            'Root.Newsletters',
+            [
+                TabSet::create(
+                    'Options',
+                    Tab::create(
+                        'MainSettings',
+                        LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+                        DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                        ReadonlyField::create('ListIDNice', 'List ID', $this->ListID),
+                        $fields->dataFieldByName('SignInNewMemberOnRegistration')->setTitle('Sign-in newly created user on registration?'),
+                        $fields->dataFieldByName('MustBeLoggedInToEditSubscription')->setTitle('User must be logged in to edit their registations?'),
+                        $fields->dataFieldByName('MakeAllFieldsRequired')->setTitle('Make all fields mandatory (except consent field)'),
+                        $fields->dataFieldByName('ShowListNameInSubscribeToField')->setTitle('Show name of the list in the subscribe to field?'),
+                        $fields->dataFieldByName('AllowUnsubscribeInForm')->setTitle('Allow unsubscribe in form?'),
+                        $fields->dataFieldByName('ShowFirstNameFieldInForm')->setTitle('Show First Name Field in form?'),
+                        $fields->dataFieldByName('ShowSurnameFieldInForm')->setTitle('Show Surname Field in form?'),
+                        $fields->dataFieldByName('ShowPermissionToTrackFieldInForm')->setTitle('Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                        $fields->dataFieldByName('PermissionToTrackLabelField')->setTitle('Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
+                        $fields->dataFieldByName('ShowAllNewsletterForSigningUp')->setTitle('Allow users to sign up to all lists'),
+                        $fields->dataFieldByName('CloseSubscriptions')->setTitle('Close subscription')
+                    ),
+                    Tab::create(
+                        'StartForm',
+                        LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they will be redirected to the full form to enter more details.'),
+                        $fields->dataFieldByName('SignUpHeader'),
+                        $fields->dataFieldByName('SignUpIntro'),
+                        $fields->dataFieldByName('SignUpButtonLabel')
+                    ),
+                    Tab::create(
+                        'Shown on Site',
+                        $fields->dataFieldByName('ShowOldNewsletters')->setTitle('Show previously sent Newsletters'),
+                        $campaignField
+                    ),
+                    Tab::create('Templates', $gridFieldTemplatesAvailable),
+                    Tab::create(
+                        'Segments',
+                        LiteralField::create('SegmentsExplanation', '<p>Segments are smart lists within your main list that are created in Campaign Monitor.  You can add them here for your own reference.</p>'),
+                        GridField::create('MySegments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordEditor::create())
+                    ),
+                    Tab::create(
+                        'CustomFields',
+                        GridField::create('MyCustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordEditor::create())
+                            ->addComponent(GridFieldSortableRows::create('SortOrder'))
+                    ),
+                    Tab::create(
+                        'Advanced',
+                        $fields->dataFieldByName('GroupID'),
+                        LiteralField::create('GroupLink', $groupLink),
+                        LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                        LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                        LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                        LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')
+                    )
+                ),
+            ]
+        );
+
+        if ($this->GroupID) {
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
+        } else {
+            $groupLink = '<p>No Group has been selected yet.</p>';
+        }
+
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
+        $campaignExample = CampaignMonitorCampaign::get()->Last();
+        if ($campaignExample && $campaignExample->CampaignID) {
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
+        }
+
+        if ($this->ID) {
+            $config = GridFieldConfig_RelationEditor::create();
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+        } else {
+            $campaignField = HiddenField::create('CampaignList');
+        }
+
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+        $fields->addFieldsToTab(
+            'Root.SubscriptionFeedback',
+            [
+                TabSet::create(
+                    'AlternativeContentSubHeader',
+                    Tab::create('ThankYou',
+                        $fields->dataFieldByName('ThankYouTitle'),
+                        $fields->dataFieldByName('ThankYouMenuTitle'),
+                        $fields->dataFieldByName('ThankYouMessage')
+                    ),
+                    Tab::create('SadToSeeYouGo',
+                        $fields->dataFieldByName('SadToSeeYouGoTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMenuTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMessage')
+                    ),
+                    Tab::create('Updating Subscription',
+                        LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
+                        $fields->dataFieldByName('ConfirmTitle'),
+                        $fields->dataFieldByName('ConfirmMenuTitle'),
+                        $fields->dataFieldByName('ConfirmMessage')
+                    )
+                ),
+            ]
+        );
+        $fields->addFieldsToTab(
+            'Root.Newsletters',
+            [
+                TabSet::create(
+                    'Options',
+                    Tab::create(
+                        'MainSettings',
+                        LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+                        DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                        ReadonlyField::create('ListIDNice', 'List ID', $this->ListID),
+                        $fields->dataFieldByName('SignInNewMemberOnRegistration')->setTitle('Sign-in newly created user on registration?'),
+                        $fields->dataFieldByName('MustBeLoggedInToEditSubscription')->setTitle('User must be logged in to edit their registations?'),
+                        $fields->dataFieldByName('MakeAllFieldsRequired')->setTitle('Make all fields mandatory (except consent field)'),
+                        $fields->dataFieldByName('ShowListNameInSubscribeToField')->setTitle('Show name of the list in the subscribe to field?'),
+                        $fields->dataFieldByName('AllowUnsubscribeInForm')->setTitle('Allow unsubscribe in form?'),
+                        $fields->dataFieldByName('ShowFirstNameFieldInForm')->setTitle('Show First Name Field in form?'),
+                        $fields->dataFieldByName('ShowSurnameFieldInForm')->setTitle('Show Surname Field in form?'),
+                        $fields->dataFieldByName('ShowPermissionToTrackFieldInForm')->setTitle('Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                        $fields->dataFieldByName('PermissionToTrackLabelField')->setTitle('Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
+                        $fields->dataFieldByName('ShowAllNewsletterForSigningUp')->setTitle('Allow users to sign up to all lists'),
+                        $fields->dataFieldByName('CloseSubscriptions')->setTitle('Close subscription')
+                    ),
+                    Tab::create(
+                        'StartForm',
+                        LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they will be redirected to the full form to enter more details.'),
+                        $fields->dataFieldByName('SignUpHeader'),
+                        $fields->dataFieldByName('SignUpIntro'),
+                        $fields->dataFieldByName('SignUpButtonLabel')
+                    ),
+                    Tab::create(
+                        'Shown on Site',
+                        $fields->dataFieldByName('ShowOldNewsletters')->setTitle('Show previously sent Newsletters'),
+                        $campaignField
+                    ),
+                    Tab::create('Templates', $gridFieldTemplatesAvailable),
+                    Tab::create(
+                        'Segments',
+                        LiteralField::create('SegmentsExplanation', '<p>Segments are smart lists within your main list that are created in Campaign Monitor.  You can add them here for your own reference.</p>'),
+                        GridField::create('MySegments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordEditor::create())
+                    ),
+                    Tab::create(
+                        'CustomFields',
+                        GridField::create('MyCustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordEditor::create())
+                            ->addComponent(GridFieldSortableRows::create('SortOrder'))
+                    ),
+                    Tab::create(
+                        'Advanced',
+                        $fields->dataFieldByName('GroupID'),
+                        LiteralField::create('GroupLink', $groupLink),
+                        LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                        LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                        LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                        LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')
+                    )
+                ),
+            ]
+        );
+
+        if ($this->GroupID) {
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
+        } else {
+            $groupLink = '<p>No Group has been selected yet.</p>';
+        }
+
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
+        $campaignExample = CampaignMonitorCampaign::get()->Last();
+        if ($campaignExample && $campaignExample->CampaignID) {
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
+        }
+
+        if ($this->ID) {
+            $config = GridFieldConfig_RelationEditor::create();
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+        } else {
+            $campaignField = HiddenField::create('CampaignList');
+        }
+
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+        $fields->addFieldsToTab(
+            'Root.SubscriptionFeedback',
+            [
+                TabSet::create(
+                    'AlternativeContentSubHeader',
+                    Tab::create('ThankYou',
+                        $fields->dataFieldByName('ThankYouTitle'),
+                        $fields->dataFieldByName('ThankYouMenuTitle'),
+                        $fields->dataFieldByName('ThankYouMessage')
+                    ),
+                    Tab::create('SadToSeeYouGo',
+                        $fields->dataFieldByName('SadToSeeYouGoTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMenuTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMessage')
+                    ),
+                    Tab::create('Updating Subscription',
+                        LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
+                        $fields->dataFieldByName('ConfirmTitle'),
+                        $fields->dataFieldByName('ConfirmMenuTitle'),
+                        $fields->dataFieldByName('ConfirmMessage')
+                    )
+                ),
+            ]
+        );
+        $fields->addFieldsToTab(
+            'Root.Newsletters',
+            [
+                TabSet::create(
+                    'Options',
+                    Tab::create(
+                        'MainSettings',
+                        LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+                        DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                        ReadonlyField::create('ListIDNice', 'List ID', $this->ListID),
+                        $fields->dataFieldByName('SignInNewMemberOnRegistration')->setTitle('Sign-in newly created user on registration?'),
+                        $fields->dataFieldByName('MustBeLoggedInToEditSubscription')->setTitle('User must be logged in to edit their registations?'),
+                        $fields->dataFieldByName('MakeAllFieldsRequired')->setTitle('Make all fields mandatory (except consent field)'),
+                        $fields->dataFieldByName('ShowListNameInSubscribeToField')->setTitle('Show name of the list in the subscribe to field?'),
+                        $fields->dataFieldByName('AllowUnsubscribeInForm')->setTitle('Allow unsubscribe in form?'),
+                        $fields->dataFieldByName('ShowFirstNameFieldInForm')->setTitle('Show First Name Field in form?'),
+                        $fields->dataFieldByName('ShowSurnameFieldInForm')->setTitle('Show Surname Field in form?'),
+                        $fields->dataFieldByName('ShowPermissionToTrackFieldInForm')->setTitle('Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                        $fields->dataFieldByName('PermissionToTrackLabelField')->setTitle('Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
+                        $fields->dataFieldByName('ShowAllNewsletterForSigningUp')->setTitle('Allow users to sign up to all lists'),
+                        $fields->dataFieldByName('CloseSubscriptions')->setTitle('Close subscription')
+                    ),
+                    Tab::create(
+                        'StartForm',
+                        LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they will be redirected to the full form to enter more details.'),
+                        $fields->dataFieldByName('SignUpHeader'),
+                        $fields->dataFieldByName('SignUpIntro'),
+                        $fields->dataFieldByName('SignUpButtonLabel')
+                    ),
+                    Tab::create(
+                        'Shown on Site',
+                        $fields->dataFieldByName('ShowOldNewsletters')->setTitle('Show previously sent Newsletters'),
+                        $campaignField
+                    ),
+                    Tab::create('Templates', $gridFieldTemplatesAvailable),
+                    Tab::create(
+                        'Segments',
+                        LiteralField::create('SegmentsExplanation', '<p>Segments are smart lists within your main list that are created in Campaign Monitor.  You can add them here for your own reference.</p>'),
+                        GridField::create('MySegments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordEditor::create())
+                    ),
+                    Tab::create(
+                        'CustomFields',
+                        GridField::create('MyCustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordEditor::create())
+                            ->addComponent(GridFieldSortableRows::create('SortOrder'))
+                    ),
+                    Tab::create(
+                        'Advanced',
+                        $fields->dataFieldByName('GroupID'),
+                        LiteralField::create('GroupLink', $groupLink),
+                        LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                        LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                        LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                        LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')
+                    )
+                ),
+            ]
+        );
+
+        if ($this->GroupID) {
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
+        } else {
+            $groupLink = '<p>No Group has been selected yet.</p>';
+        }
+
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
+        $campaignExample = CampaignMonitorCampaign::get()->Last();
+        if ($campaignExample && $campaignExample->CampaignID) {
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
+        }
+
+        if ($this->ID) {
+            $config = GridFieldConfig_RelationEditor::create();
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+        } else {
+            $campaignField = HiddenField::create('CampaignList');
+        }
+
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+        $fields->addFieldsToTab(
+            'Root.SubscriptionFeedback',
+            [
+                TabSet::create(
+                    'AlternativeContentSubHeader',
+                    Tab::create('ThankYou',
+                        $fields->dataFieldByName('ThankYouTitle'),
+                        $fields->dataFieldByName('ThankYouMenuTitle'),
+                        $fields->dataFieldByName('ThankYouMessage')
+                    ),
+                    Tab::create('SadToSeeYouGo',
+                        $fields->dataFieldByName('SadToSeeYouGoTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMenuTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMessage')
+                    ),
+                    Tab::create('Updating Subscription',
+                        LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
+                        $fields->dataFieldByName('ConfirmTitle'),
+                        $fields->dataFieldByName('ConfirmMenuTitle'),
+                        $fields->dataFieldByName('ConfirmMessage')
+                    )
+                ),
+            ]
+        );
+        $fields->addFieldsToTab(
+            'Root.Newsletters',
+            [
+                TabSet::create(
+                    'Options',
+                    Tab::create(
+                        'MainSettings',
+                        LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+                        DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                        ReadonlyField::create('ListIDNice', 'List ID', $this->ListID),
+                        $fields->dataFieldByName('SignInNewMemberOnRegistration')->setTitle('Sign-in newly created user on registration?'),
+                        $fields->dataFieldByName('MustBeLoggedInToEditSubscription')->setTitle('User must be logged in to edit their registations?'),
+                        $fields->dataFieldByName('MakeAllFieldsRequired')->setTitle('Make all fields mandatory (except consent field)'),
+                        $fields->dataFieldByName('ShowListNameInSubscribeToField')->setTitle('Show name of the list in the subscribe to field?'),
+                        $fields->dataFieldByName('AllowUnsubscribeInForm')->setTitle('Allow unsubscribe in form?'),
+                        $fields->dataFieldByName('ShowFirstNameFieldInForm')->setTitle('Show First Name Field in form?'),
+                        $fields->dataFieldByName('ShowSurnameFieldInForm')->setTitle('Show Surname Field in form?'),
+                        $fields->dataFieldByName('ShowPermissionToTrackFieldInForm')->setTitle('Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                        $fields->dataFieldByName('PermissionToTrackLabelField')->setTitle('Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
+                        $fields->dataFieldByName('ShowAllNewsletterForSigningUp')->setTitle('Allow users to sign up to all lists'),
+                        $fields->dataFieldByName('CloseSubscriptions')->setTitle('Close subscription')
+                    ),
+                    Tab::create(
+                        'StartForm',
+                        LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they will be redirected to the full form to enter more details.'),
+                        $fields->dataFieldByName('SignUpHeader'),
+                        $fields->dataFieldByName('SignUpIntro'),
+                        $fields->dataFieldByName('SignUpButtonLabel')
+                    ),
+                    Tab::create(
+                        'Shown on Site',
+                        $fields->dataFieldByName('ShowOldNewsletters')->setTitle('Show previously sent Newsletters'),
+                        $campaignField
+                    ),
+                    Tab::create('Templates', $gridFieldTemplatesAvailable),
+                    Tab::create(
+                        'Segments',
+                        LiteralField::create('SegmentsExplanation', '<p>Segments are smart lists within your main list that are created in Campaign Monitor.  You can add them here for your own reference.</p>'),
+                        GridField::create('MySegments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordEditor::create())
+                    ),
+                    Tab::create(
+                        'CustomFields',
+                        GridField::create('MyCustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordEditor::create())
+                            ->addComponent(GridFieldSortableRows::create('SortOrder'))
+                    ),
+                    Tab::create(
+                        'Advanced',
+                        $fields->dataFieldByName('GroupID'),
+                        LiteralField::create('GroupLink', $groupLink),
+                        LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                        LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                        LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                        LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')
+                    )
+                ),
+            ]
+        );
+
+        if ($this->GroupID) {
+            $groupLink = '<h2><a href="/admin/security/EditForm/field/Groups/item/' . $this->GroupID . '/edit">Open Related Security Group</a></h2>';
+        } else {
+            $groupLink = '<p>No Group has been selected yet.</p>';
+        }
+
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
+        $campaignExample = CampaignMonitorCampaign::get()->Last();
+        if ($campaignExample && $campaignExample->CampaignID) {
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
+        }
+
+        if ($this->ID) {
+            $config = GridFieldConfig_RelationEditor::create();
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+        } else {
+            $campaignField = HiddenField::create('CampaignList');
+        }
+
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
+        $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
+        $fields->addFieldsToTab(
+            'Root.SubscriptionFeedback',
+            [
+                TabSet::create(
+                    'AlternativeContentSubHeader',
+                    Tab::create('ThankYou',
+                        $fields->dataFieldByName('ThankYouTitle'),
+                        $fields->dataFieldByName('ThankYouMenuTitle'),
+                        $fields->dataFieldByName('ThankYouMessage')
+                    ),
+                    Tab::create('SadToSeeYouGo',
+                        $fields->dataFieldByName('SadToSeeYouGoTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMenuTitle'),
+                        $fields->dataFieldByName('SadToSeeYouGoMessage')
+                    ),
+                    Tab::create('Updating Subscription',
+                        LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
+                        $fields->dataFieldByName('ConfirmTitle'),
+                        $fields->dataFieldByName('ConfirmMenuTitle'),
+                        $fields->dataFieldByName('ConfirmMessage')
+                    )
+                ),
+            ]
+        );
+        $fields->addFieldsToTab(
+            'Root.Newsletters',
+            [
+                TabSet::create(
+                    'Options',
+                    Tab::create(
+                        'MainSettings',
+                        LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
+                        DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
+                        ReadonlyField::create('ListIDNice', 'List ID', $this->ListID),
+                        $fields->dataFieldByName('SignInNewMemberOnRegistration')->setDescription('Sign-in newly created user on registration?'),
+                        $fields->dataFieldByName('MustBeLoggedInToEditSubscription')->setDescription('User must be logged in to edit their registations?'),
+                        $fields->dataFieldByName('MakeAllFieldsRequired')->setDescription('Make all fields mandatory (except consent field)'),
+                        $fields->dataFieldByName('ShowListNameInSubscribeToField')->setDescription('Show name of the list in the subscribe to field?'),
+                        $fields->dataFieldByName('AllowUnsubscribeInForm')->setDescription('Allow unsubscribe in form?'),
+                        $fields->dataFieldByName('ShowFirstNameFieldInForm')->setDescription('Show First Name Field in form?'),
+                        $fields->dataFieldByName('ShowSurnameFieldInForm')->setDescription('Show Surname Field in form?'),
+                        $fields->dataFieldByName('ShowPermissionToTrackFieldInForm')->setDescription('Show Consent checkbox? - if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                        $fields->dataFieldByName('PermissionToTrackLabelField')->setRows(2)->setDescription('Consent label - HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
+                        $fields->dataFieldByName('ShowAllNewsletterForSigningUp')->setDescription('Allow users to sign up to all lists'),
+                        $fields->dataFieldByName('CloseSubscriptions')->setDescription('Close subscription')
+                    ),
+                    Tab::create(
+                        'StartForm',
+                        LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they will be redirected to the full form to enter more details.'),
+                        $fields->dataFieldByName('SignUpHeader'),
+                        $fields->dataFieldByName('SignUpIntro'),
+                        $fields->dataFieldByName('SignUpButtonLabel')
+                    ),
+                    Tab::create(
+                        'Shown on Site',
+                        $fields->dataFieldByName('ShowOldNewsletters')->setDescription('Show previously sent Newsletters'),
+                        $campaignField
+                    ),
+                    Tab::create('Templates', $gridFieldTemplatesAvailable),
+                    Tab::create(
+                        'Segments',
+                        LiteralField::create('SegmentsExplanation', '<p>Segments are smart lists within your main list that are created in Campaign Monitor.  You can add them here for your own reference.</p>'),
+                        GridField::create('MySegments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordEditor::create())
+                    ),
+                    Tab::create(
+                        'CustomFields',
+                        GridField::create('MyCustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordEditor::create())
+                            ->addComponent(GridFieldSortableRows::create('SortOrder'))
+                    ),
+                    Tab::create(
+                        'Advanced',
+                        $fields->dataFieldByName('GroupID'),
+                        LiteralField::create('GroupLink', $groupLink),
+                        LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
+                        LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
+                        LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
+                        LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')
+                    )
+                ),
+            ]
+        );
+        if (false === $this->HasCampaigns()) {
+            $fields->removeByName([
+                'MyCampaignReset',
+                'MyCampaignInfo',
+                'Campaigns',
+            ]);
+        }
+
+        if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url')) {
+            $fields->removeByName('CreateNewCampaign');
+        }
+
+        return $fields;
+    }
+
+        $testControllerLink = Injector::inst()->get(CampaignMonitorAPIConnectorTestController::class)->Link();
+        $campaignExample = CampaignMonitorCampaign::get()->Last();
+        if ($campaignExample && $campaignExample->CampaignID) {
+            $campaignExampleLink = $this->Link('viewcampaign/' . $campaignExample->CampaignID);
+        } else {
+            $campaignExampleLink = 'error-not-available';
+        }
+
+        if ($this->ID) {
+            $config = GridFieldConfig_RelationEditor::create();
+            $campaignField = GridField::create('CampaignList', 'Campaigns', $this->CampaignMonitorCampaigns(), $config);
+        } else {
+            $campaignField = HiddenField::create('CampaignList');
+        }
+
+        $gridFieldTemplatesAvailable = GridField::create('TemplatesAvailable', 'Templates Available', CampaignMonitorCampaignStyle::get(), GridFieldConfig_RecordEditor::create());
         $gridFieldTemplatesAvailable->setDescription('Ask your developer on how to add more templates');
 
         $fields->addFieldToTab(
             'Root.SubscriptionFeedback',
-            new TabSet(
-                'AlternativeContentSubHeader',
-                new Tab(
-                    'ThankYou',
-                    new TextField('ThankYouTitle', 'Title'),
-                    new TextField('ThankYouMenuTitle', 'Menu Title'),
-                    new HTMLEditorField('ThankYouMessage', 'Thank you message after submitting form')
-                ),
-                new Tab(
-                    'SadToSeeYouGo',
-                    new TextField('SadToSeeYouGoTitle', 'Title'),
-                    new TextField('SadToSeeYouGoMenuTitle', 'Menu Title'),
-                    new HTMLEditorField('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')
-                ),
-                new Tab(
-                    'Updating Subscription',
-                    new LiteralField('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'),
-                    new TextField('ConfirmTitle', 'Title'),
-                    new TextField('ConfirmMenuTitle', 'Menu Title'),
-                    new HTMLEditorField('ConfirmMessage', 'Message (e.g. thank you for confirming)')
-                ),
-            )
+            TabSet::create('AlternativeContentSubHeader', Tab::create('ThankYou', TextField::create('ThankYouTitle', 'Title'), TextField::create('ThankYouMenuTitle', 'Menu Title'), HTMLEditorField::create('ThankYouMessage', 'Thank you message after submitting form')), Tab::create('SadToSeeYouGo', TextField::create('SadToSeeYouGoTitle', 'Title'), TextField::create('SadToSeeYouGoMenuTitle', 'Menu Title'), HTMLEditorField::create('SadToSeeYouGoMessage', 'Sad to see you  go message after submitting form')), Tab::create('Updating Subscription', LiteralField::create('ConfirmExplanation', '<p>Thank you for updating your subscription</p>'), TextField::create('ConfirmTitle', 'Title'), TextField::create('ConfirmMenuTitle', 'Menu Title'), HTMLEditorField::create('ConfirmMessage', 'Message (e.g. thank you for confirming)')))
         );
 
         $fields->addFieldToTab(
             'Root.Newsletters',
-            new TabSet(
-                'Options',
-                new Tab(
-                    'MainSettings',
-                    new LiteralField('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'),
-                    new DropdownField('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()),
-                    new ReadonlyField('ListIDNice', 'List ID', $this->ListID),
-                    new CheckboxField('SignInNewMemberOnRegistration', 'Sign-in newly created user on registration?'),
-                    new CheckboxField('MustBeLoggedInToEditSubscription', 'User must be logged in to edit their registations?'),
-                    new CheckboxField('MakeAllFieldsRequired', 'Make all fields mandatory (except consent field)'),
-                    new CheckboxField('ShowListNameInSubscribeToField', 'Show name of the list in the subscribe to field?'),
-                    new CheckboxField('AllowUnsubscribeInForm', 'Allow unsubscribe in form?'),
-                    new CheckboxField('ShowFirstNameFieldInForm', 'Show First Name Field in form?'),
-                    new CheckboxField('ShowSurnameFieldInForm', 'Show Surname Field in form?'),
-                    CheckboxField::create('ShowPermissionToTrackFieldInForm', 'Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
-                    HTMLEditorField::create('PermissionToTrackLabelField', 'Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'),
-                    new CheckboxField('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'),
-                    new CheckboxField('CloseSubscriptions', 'Close subscription'),
-                ),
-                new Tab(
-                    'StartForm',
-                    new LiteralField('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignupPage) to complete all the details.'),
-                    new TextField('SignUpHeader', 'Sign up header (e.g. sign up now)'),
-                    new HTMLEditorField('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'),
-                    new TextField('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')
-                ),
-                new Tab(
-                    'Campaigns',
-                    new LiteralField('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'),
-                    new CheckboxField('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'),
-                    new LiteralField('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'),
-                    new CheckboxSetField('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter('HasBeenSent', 1)->limit(500)->map()->toArray()),
-                    $campaignField,
-                    $gridFieldTemplatesAvailable,
-                    new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
-                    new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
-                ),
-                new Tab(
-                    'Segments',
-                    new GridField('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create()),
-                ),
-                new Tab(
-                    'CustomFields',
-                    new GridField(
-                        'CustomFields',
-                        'Custom Fields',
-                        $this->CampaignMonitorCustomFields(),
-                        GridFieldConfig_RecordViewer::create()
-                            ->addComponent(new GridFieldSortableRows('SortOrder'))
-                    ),
-                ),
-                new Tab(
-                    'Advanced',
-                    new LiteralField('GroupLink', $groupLink),
-                    new LiteralField('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'),
-                    new LiteralField('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'),
-                    new LiteralField('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'),
-                    new LiteralField('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>'),
-                )
-            )
+            TabSet::create('Options', Tab::create('MainSettings', LiteralField::create('ListIDExplanation', '<p>Each sign-up page needs to be associated with a campaign monitor subscription list.</p>'), DropdownField::create('ListID', 'Related List from Campaign Monitor (*)', [0 => '-- please select --'] + $this->makeDropdownListFromLists()), ReadonlyField::create('ListIDNice', 'List ID', $this->ListID), CheckboxField::create('SignInNewMemberOnRegistration', 'Sign-in newly created user on registration?'), CheckboxField::create('MustBeLoggedInToEditSubscription', 'User must be logged in to edit their registations?'), CheckboxField::create('MakeAllFieldsRequired', 'Make all fields mandatory (except consent field)'), CheckboxField::create('ShowListNameInSubscribeToField', 'Show name of the list in the subscribe to field?'), CheckboxField::create('AllowUnsubscribeInForm', 'Allow unsubscribe in form?'), CheckboxField::create('ShowFirstNameFieldInForm', 'Show First Name Field in form?'), CheckboxField::create('ShowSurnameFieldInForm', 'Show Surname Field in form?'), CheckboxField::create('ShowPermissionToTrackFieldInForm', 'Show Consent checkbox?')->setDescription('if the Consent checkbox is not shown in the sign-up form - <i>Permission to track</i> for each new subscriber set to <b>Unknown (Unchanged)</b> by default. For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'), HTMLEditorField::create('PermissionToTrackLabelField', 'Consent label')->setRows(2)->setDescription('HTML restriction: only link tag <b>&lt;a&gt;</b> allowed to be used in this field'), CheckboxField::create('ShowAllNewsletterForSigningUp', 'Allow users to sign up to all lists'), CheckboxField::create('CloseSubscriptions', 'Close subscription')), Tab::create('StartForm', LiteralField::create('StartFormExplanation', 'A start form is a form where people are just required to enter their email address and nothing else.  After completion they go through to another page (the actual CampaignMonitorSignupPage) to complete all the details.'), TextField::create('SignUpHeader', 'Sign up header (e.g. sign up now)'), HTMLEditorField::create('SignUpIntro', 'Sign up form intro (e.g. sign up for our monthly newsletter ...'), TextField::create('SignUpButtonLabel', 'Sign up button label for start form (e.g. register now)')), Tab::create('Campaigns', LiteralField::create('CreateNewCampaign', '<p>To create a new mail out go to <a href="' . Config::inst()->get(CampaignMonitorAPIConnector::class, 'campaign_monitor_url') . '">Campaign Monitor</a> site.</p>'), CheckboxField::create('ShowOldNewsletters', 'Show old newsletters? Set to "NO" to remove all old newsletters links to this page. Set to "YES" to retrieve all old newsletters.'), LiteralField::create('CampaignExplanation', '<h3>Unfortunately, newsletter lists are not automatically linked to individual newsletters, you can link them here...</h3>'), CheckboxSetField::create('CampaignMonitorCampaigns', 'Newsletters shown', CampaignMonitorCampaign::get()->filter(['HasBeenSent' => 1])->limit(500)->map()->toArray()), $campaignField, $gridFieldTemplatesAvailable, LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'), LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')), Tab::create('Segments', GridField::create('Segments', 'Segments', $this->CampaignMonitorSegments(), GridFieldConfig_RecordViewer::create())), Tab::create('CustomFields', GridField::create('CustomFields', 'Custom Fields', $this->CampaignMonitorCustomFields(), GridFieldConfig_RecordViewer::create()
+                ->addComponent(GridFieldSortableRows::create('SortOrder')))), Tab::create('Advanced', LiteralField::create('GroupLink', $groupLink), LiteralField::create('MyControllerTest', '<h3><a href="' . $testControllerLink . '">Test Connections</a></h3>'), LiteralField::create('MyStats', '<h3><a href="' . $this->Link('stats') . '">Stats and Debug information</a></h3>'), LiteralField::create('MyCampaignReset', '<h3><a href="' . $this->Link('resetoldcampaigns') . '">Delete All Campaigns from Website</a></h3>'), LiteralField::create('MyCampaignInfo', '<h3>You can also view individual campaigns - here is <a href="' . $campaignExampleLink . '">an example</a></h3>')))
         );
         if (false === $this->HasCampaigns()) {
             $fields->removeByName([
@@ -415,7 +926,7 @@ class CampaignMonitorSignupPage extends Page
             if ($member && $member->exists()) {
                 //do nothing
             } else {
-                $member = new Member();
+                $member = Member::create();
                 $member->Email = $email;
                 //$member->SetPassword = true;
                 //$member->Password = Member::create_new_password();
@@ -471,10 +982,16 @@ class CampaignMonitorSignupPage extends Page
     public function AddOldCampaigns()
     {
         $task = CampaignMonitorAddOldCampaigns::create();
-        $task->setVerbose(false);
-        $task->run(null);
+        $definition = new InputDefinition($task->getOptions());
+        $input = new ArrayInput(['Verbose' => false], $definition);
+        $output = PolyOutput::create(PolyOutput::FORMAT_ANSI);
+        $definition = new InputDefinition($task->getOptions());
+        $input = new ArrayInput([], $definition);
+        $output = PolyOutput::create(PolyOutput::FORMAT_ANSI);
+        $task->run($input, $output);
     }
 
+    #[Override]
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
@@ -497,7 +1014,7 @@ class CampaignMonitorSignupPage extends Page
                 $update[] = 'created default entry for SignUpButtonLabel';
             }
 
-            if (count($update)) {
+            if ($update !== []) {
                 $page->writeToStage('Stage');
                 $page->publish('Stage', 'Live');
                 DB::alteration_message($page->ClassName . ' created/updated: ' . implode(' --- ', $update), 'created');
@@ -508,11 +1025,12 @@ class CampaignMonitorSignupPage extends Page
     /**
      * check list and group IDs.
      */
+    #[Override]
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
         //check list
-        if (!$this->getListTitle()) {
+        if ($this->getListTitle() === '' || $this->getListTitle() === '0') {
             $this->ListID = 0;
         }
 
@@ -525,6 +1043,7 @@ class CampaignMonitorSignupPage extends Page
      *
      * add / remove segments ...
      */
+    #[Override]
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
@@ -599,9 +1118,10 @@ class CampaignMonitorSignupPage extends Page
             // get title
             $title = _t('CampaignMonitor.NEWSLETTER', 'NEWSLETTER');
             $myListName = $this->getListTitle();
-            if ($myListName) {
+            if ($myListName !== '' && $myListName !== '0') {
                 $title .= ': ' . $myListName;
             }
+
             // if there is an other group - check if there are
             // create or find the group if we do not have the group
             if (!$gp) {
@@ -615,7 +1135,7 @@ class CampaignMonitorSignupPage extends Page
             $gp->Title = (string) $title;
             try {
                 $gp->write();
-            } catch (Exception $e) {
+            } catch (Exception) {
             }
 
             if ($gp) {
@@ -644,8 +1164,7 @@ class CampaignMonitorSignupPage extends Page
                 }
 
                 //remove subscription list IDs from other pages
-                $subscribePages = CampaignMonitorSignupPage::get()
-                    ->exclude('ID', $this->ID);
+                $subscribePages = CampaignMonitorSignupPage::get()->exclude(['ID' => $this->ID]);
                 foreach ($subscribePages as $page) {
                     if (isset($array[$page->ListID])) {
                         unset($array[$page->ListID]);

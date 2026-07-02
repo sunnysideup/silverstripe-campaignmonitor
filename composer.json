@@ -1,36 +1,42 @@
 {
-  "name": "sunnysideup/campaignmonitor",
-  "type": "silverstripe-vendormodule",
-  "description": "connect with campaign monitor",
-  "keywords": [
-    "Silverstripe-CMS",
-    "CMS",
-    "Silverstripe",
-    "campaignmonitor"
-  ],
-  "license": "BSD-3-Clause",
-  "authors": [
-    {
-      "name": "Nicolaas Francken",
-      "email": "modules@sunnysideup.co.nz",
-      "role": "lead developer"
+    "name": "sunnysideup/campaignmonitor",
+    "type": "silverstripe-vendormodule",
+    "description": "connect with campaign monitor",
+    "keywords": [
+        "Silverstripe-CMS",
+        "CMS",
+        "Silverstripe",
+        "campaignmonitor"
+    ],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Nicolaas Francken",
+            "email": "modules@sunnysideup.co.nz",
+            "role": "lead developer"
+        }
+    ],
+    "require": {
+        "undefinedoffset/sortablegridfield": "^3.0",
+        "silverstripe/recipe-cms": "^6.0"
+    },
+    "extra": {
+        "expose": [
+            "client/javascript",
+            "client/images",
+            "client/css"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\CampaignMonitor\\": "src/"
+        }
+    },
+    "yet-to-update": {
+        "sunnysideup/campaignmonitor-api": {
+            "section": "require",
+            "current": "^5.0-dev",
+            "reason": "no-compatible-stable-release"
+        }
     }
-  ],
-  "require": {
-    "sunnysideup/campaignmonitor-api": "5.x-dev",
-    "undefinedoffset/sortablegridfield": "^2",
-    "silverstripe/recipe-cms": "^4.0 || ^5.0"
-  },
-  "extra": {
-    "expose": [
-      "client/javascript",
-      "client/images",
-      "client/css"
-    ]
-  },
-  "autoload": {
-    "psr-4": {
-      "Sunnysideup\\CampaignMonitor\\": "src/"
-    }
-  }
 }

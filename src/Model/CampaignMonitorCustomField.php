@@ -2,11 +2,11 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Override;
 use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\DateField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\NumericField;
-use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataObject;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
@@ -22,7 +22,7 @@ use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
  * @property string $ListID
  * @property int $SortOrder
  * @property int $CampaignMonitorSignupPageID
- * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage CampaignMonitorSignupPage()
+ * @method CampaignMonitorSignupPage CampaignMonitorSignupPage()
  */
 class CampaignMonitorCustomField extends DataObject
 {
@@ -81,6 +81,7 @@ class CampaignMonitorCustomField extends DataObject
      */
     private $_fieldTranslator = [];
 
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -102,16 +103,19 @@ class CampaignMonitorCustomField extends DataObject
         return $fields;
     }
 
+    #[Override]
     public function canCreate($member = null, $context = [])
     {
         return false;
     }
 
+    #[Override]
     public function canDelete($member = null)
     {
         return false;
     }
 
+    #[Override]
     public function canEdit($member = null, $context = [])
     {
         return parent::canEdit();
@@ -192,6 +196,7 @@ class CampaignMonitorCustomField extends DataObject
         return $field;
     }
 
+    #[Override]
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
