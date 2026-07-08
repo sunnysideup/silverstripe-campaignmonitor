@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Admin;
 
+use Override;
 use SilverStripe\Admin\ModelAdmin;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injector;
@@ -26,6 +27,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
 
     private static $menu_icon_class = 'font-icon-menu-security';
 
+    #[Override]
     protected function init()
     {
         parent::init();
@@ -34,7 +36,7 @@ class CampaignMonitorSignupPageAdmin extends ModelAdmin
         // $time = (int) $session->get('CampaignMonitorSignupPageAdminINIT') - 0;
         if (isset($_GET['flush'])) {
             $session->set('CampaignMonitorSignupPageAdminINIT', time());
-            (new CampaignMonitorCreateLists())
+            (CampaignMonitorCreateLists::create())
                 ->setVerbose(false)
                 ->run(null);
         }

@@ -2,21 +2,31 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
+use Symfony\Component\Console\Input\InputInterface;
+use SilverStripe\PolyExecution\PolyOutput;
+use Symfony\Component\Console\Command\Command;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\ORM\DB;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\CampaignMonitor\Model\CampaignMonitorSignupPage;
 use SilverStripe\Versioned\Versioned;
-use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 class CampaignMonitorCreateLists extends BuildTask
 {
     use CampaignMonitorApiTrait;
 
-    protected $title = 'Create Campaign Monitor Sign-up Pages';
+    protected string $title = 'Create Campaign Monitor Sign-up Pages';
 
-    protected $description = 'Goes through all the Campaign Monitor lists on Campaign Monitor and adds them to Silverstripe.';
+    protected static string $description = 'Goes through all the Campaign Monitor lists on Campaign Monitor and adds them to Silverstripe.';
 
-    protected $enabled = true;
+    protected static string $commandName = 'campaignmonitor:create-lists';
+
+    private static $segment = 'CampaignMonitorCreateLists';
+
+    /**
+     * @config
+     */
+    private static $is_enabled = true;
 
     protected $verbose = true;
 
@@ -33,7 +43,7 @@ class CampaignMonitorCreateLists extends BuildTask
         return $this;
     }
 
-    public function run($request)
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
         if (false === self::$required_default_records_has_been_done) {
             self::$required_default_records_has_been_done = true;
@@ -49,9 +59,9 @@ class CampaignMonitorCreateLists extends BuildTask
                 unset($currentlyListed[$listId]);
                 if ($this->verbose) {
                     if ($this->getCampaignMonitorPageForListIdExists($listId)) {
-                        DB::alteration_message('Updating page for ' . $listId . ' - ' . $listName, 'updated');
+                        $output->writeln('Updating page for ' . $listId . ' - ' . $listName);
                     } else {
-                        DB::alteration_message('Creating page for ' . $listId . ' - ' . $listName, 'created');
+                        $output->writeln('Creating page for ' . $listId . ' - ' . $listName);
                     }
                 }
 
@@ -62,13 +72,15 @@ class CampaignMonitorCreateLists extends BuildTask
                 $page = $className::get()->filter(['ListID' => $listId])->first();
                 if ($page && $page->exists()) {
                     if ($this->verbose) {
-                        DB::alteration_message('Archiving ' . $listId . ' sign-up page: ' . $page->Title, 'deleted');
+                        $output->writeln('Archiving ' . $listId . ' sign-up page: ' . $page->Title);
                     }
 
                     $page->doArchive();
                 }
             }
         }
+
+        return Command::SUCCESS;
     }
 
     /**
@@ -122,7 +134,7 @@ class CampaignMonitorCreateLists extends BuildTask
     {
         $className = $this->Config()->get('class_name_for_page');
         $page = $this->getCampaignMonitorPageForListId($listId);
-        if (! $page) {
+        if (!$page instanceof CampaignMonitorSignupPage) {
             $page = $className::create();
         }
 

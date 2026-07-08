@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Override;
+use SilverStripe\ORM\DataList;
 use DOMDocument;
 use SilverStripe\Assets\FileFinder;
 use SilverStripe\Control\Director;
@@ -18,7 +20,7 @@ use SilverStripe\View\ThemeResourceLoader;
  * @property string $Title
  * @property string $TemplateName
  * @property string $CSSFiles
- * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign[] CampaignMonitorCampaigns()
+ * @method DataList|CampaignMonitorCampaign[] CampaignMonitorCampaigns()
  */
 class CampaignMonitorCampaignStyle extends DataObject
 {
@@ -52,6 +54,7 @@ class CampaignMonitorCampaignStyle extends DataObject
 
     private static $default_template = CampaignMonitorCampaign::class;
 
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -64,6 +67,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         return $fields;
     }
 
+    #[Override]
     public function canCreate($member = null, $context = [])
     {
         return false;
@@ -78,7 +82,7 @@ class CampaignMonitorCampaignStyle extends DataObject
 
         $activeThemes = SSViewer::get_themes();
         foreach ($activeThemes as $activeTheme) {
-            if (false === strpos($activeTheme, '$')) {
+            if (!str_contains((string) $activeTheme, '$')) {
                 $array[] = ThemeResourceLoader::inst()->getPath($activeTheme) . '/templates/Sunnysideup/CampaignMonitor/Email';
             }
         }
@@ -139,7 +143,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             //just try the next one ...
         }
 
-        user_error("can not find template, last one tried: {$fileLocation}");
+        user_error('can not find template, last one tried: ' . $fileLocation);
 
         return 'error';
     }
@@ -163,7 +167,7 @@ class CampaignMonitorCampaignStyle extends DataObject
                     if (file_exists($file)) {
                         $cssFiles[$file] = $file;
                     } else {
-                        user_error("can find css file {$file}");
+                        user_error('can find css file ' . $file);
                     }
                 }
 
@@ -188,6 +192,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         return $cssFiles;
     }
 
+    #[Override]
     public function requireDefaultRecords()
     {
         parent::requireDefaultRecords();
@@ -197,7 +202,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             $finder->setOption('name_regex', '/^.*\.ss$/');
             $found = $finder->find($folder);
             foreach ($found as $value) {
-                $template = pathinfo($value);
+                $template = pathinfo((string) $value);
                 $templates[$template['filename']] = $template['filename'];
             }
         }
@@ -211,7 +216,7 @@ class CampaignMonitorCampaignStyle extends DataObject
             }
         }
 
-        if (! empty($templates)) {
+        if ($templates !== []) {
             $excludes = CampaignMonitorCampaignStyle::get()->exclude(['TemplateName' => $templates]);
             $obj = $excludes;
             foreach ($excludes as $exclude) {
@@ -220,6 +225,7 @@ class CampaignMonitorCampaignStyle extends DataObject
         }
     }
 
+    #[Override]
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();

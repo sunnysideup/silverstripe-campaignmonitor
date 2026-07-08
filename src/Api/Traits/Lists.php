@@ -2,7 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
-use SilverStripe\Control\Email\Email;
+use CS_REST_Clients;
+use CS_REST_Lists;
 use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
 trait Lists
@@ -26,7 +27,7 @@ trait Lists
 
         //require_once '../../csrest_clients.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_clients.php';
-        $wrap = new \CS_REST_Clients(
+        $wrap = new CS_REST_Clients(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             $this->getAuth()
         );
@@ -55,7 +56,7 @@ trait Lists
             return null;
         }
 
-        $wrap = new \CS_REST_Clients(
+        $wrap = new CS_REST_Clients(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             $this->getAuth()
         );
@@ -95,7 +96,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists(null, $this->getAuth());
+        $wrap = new CS_REST_Lists(null, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
         if (!$unsubscribeSetting) {
@@ -137,7 +138,7 @@ trait Lists
             return null;
         }
 
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         switch ($type) {
             case 'text':
                 $type = CS_REST_CUSTOM_FIELD_TYPE_TEXT;
@@ -173,7 +174,7 @@ trait Lists
         return $this->returnResult(
             $result,
             'POST /api/v3/lists/{ID}/customfields',
-            "Created Custom Field for {$listID} "
+            sprintf('Created Custom Field for %s ', $listID)
         );
     }
 
@@ -191,13 +192,13 @@ trait Lists
             return null;
         }
 
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->delete_custom_field($key);
 
         return $this->returnResult(
             $result,
             'DELETE /api/v3/lists/{ID}/{Key}',
-            "Delete Custom Field for {$listID} with key {$key}"
+            sprintf('Delete Custom Field for %s with key %s', $listID, $key)
         );
     }
 
@@ -216,7 +217,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->delete();
 
         return $this->returnResult(
@@ -252,7 +253,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get();
 
         return $this->returnResult(
@@ -305,7 +306,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_active_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -364,7 +365,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unconfirmed_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -423,7 +424,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_bounced_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -482,7 +483,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_unsubscribed_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -546,7 +547,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_deleted_subscribers(
             date('Y-m-d', strtotime('-' . $daysAgo . ' days')),
             $page,
@@ -592,11 +593,11 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        if (!$unsubscribeSetting) {
+        if ($unsubscribeSetting === '' || $unsubscribeSetting === '0') {
             $unsubscribeSetting = CS_REST_LIST_UNSUBSCRIBE_SETTING_ALL_CLIENT_LISTS;
         }
 
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->update([
             'Title' => $title,
             'UnsubscribePage' => $unsubscribePage,
@@ -621,7 +622,7 @@ trait Lists
         }
 
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         //we need to do this afterwards otherwise the definition below
         //is not recognised
         $result = $wrap->get_segments();
@@ -674,7 +675,7 @@ trait Lists
 
         //require_once '../../csrest_lists.php';
         require_once BASE_PATH . '/vendor/campaignmonitor/createsend-php/csrest_lists.php';
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_stats();
 
         return $this->returnResult(
@@ -690,7 +691,7 @@ trait Lists
             return null;
         }
 
-        $wrap = new \CS_REST_Lists($listID, $this->getAuth());
+        $wrap = new CS_REST_Lists($listID, $this->getAuth());
         $result = $wrap->get_custom_fields();
 
         return $this->returnResult(

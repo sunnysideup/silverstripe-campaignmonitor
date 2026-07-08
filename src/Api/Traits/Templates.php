@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\CampaignMonitor\Api\Traits;
 
+use CS_REST_Templates;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
 use Sunnysideup\CampaignMonitorApi\Api\CampaignMonitorAPIConnectorBase;
 
@@ -18,7 +19,7 @@ trait Templates
             return null;
         }
 
-        $wrap = new \CS_REST_Templates(
+        $wrap = new CS_REST_Templates(
             $templatID,
             $this->getAuth()
         );
@@ -43,11 +44,11 @@ trait Templates
         }
 
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
-        if (!$name) {
+        if ($name === '' || $name === '0') {
             $name = 'no name set';
         }
 
-        $wrap = new \CS_REST_Templates(null, $this->getAuth());
+        $wrap = new CS_REST_Templates(null, $this->getAuth());
         $result = $wrap->create(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             [
@@ -93,11 +94,11 @@ trait Templates
         }
 
         $name = 'Template for ' . $campaignMonitorCampaign->Name;
-        if (!$name) {
+        if ($name === '' || $name === '0') {
             $name = 'no name set';
         }
 
-        $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
+        $wrap = new CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->create(
             CampaignMonitorAPIConnectorBase::inst()->getClientId(),
             [
@@ -141,7 +142,7 @@ trait Templates
             return null;
         }
 
-        $wrap = new \CS_REST_Templates($templateID, $this->getAuth());
+        $wrap = new CS_REST_Templates($templateID, $this->getAuth());
         $result = $wrap->delete();
 
         return $this->returnResult(

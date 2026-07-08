@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor;
 
+use Override;
+use SilverStripe\Forms\Validation\RequiredFieldsValidator;
 use PageController;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTP;
@@ -14,7 +16,6 @@ use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
-use SilverStripe\Forms\RequiredFields;
 use SilverStripe\Forms\TextField;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DB;
@@ -26,14 +27,13 @@ use SilverStripe\Security\Security;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
-use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
 /**
  * Class \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPageController
  *
- * @property \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage $dataRecord
- * @method \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage data()
- * @mixin \Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage
+ * @property CampaignMonitorSignupPage $dataRecord
+ * @method CampaignMonitorSignupPage data()
+ * @mixin CampaignMonitorSignupPage
  */
 class CampaignMonitorSignupPageController extends PageController
 {
@@ -113,7 +113,7 @@ class CampaignMonitorSignupPageController extends PageController
             // Create fields
             $member = Security::getCurrentUser();
 
-            $fields = new FieldList($this->getFieldsForSignupFormFormFields($member));
+            $fields = FieldList::create($this->getFieldsForSignupFormFormFields($member));
             $additionalFieldsAtStart = $this->getAdditionalFieldsAtStart();
             foreach (array_reverse($additionalFieldsAtStart) as $field) {
                 $fields->unshift($field);
@@ -132,7 +132,7 @@ class CampaignMonitorSignupPageController extends PageController
             }
 
             // Create action
-            $actions = new FieldList([new FormAction('subscribe', $action)]);
+            $actions = FieldList::create([FormAction::create('subscribe', $action)]);
             // Create Validators
             if ($this->MakeAllFieldsRequired) {
                 $requiredList = $fields->dataFieldNames();
@@ -142,9 +142,9 @@ class CampaignMonitorSignupPageController extends PageController
                 $requiredList = $this->getFieldsForSignupFormRequiredFields($member);
             }
 
-            $validator = new RequiredFields($requiredList);
-            $form = new Form($this, 'SignupForm', $fields, $actions, $validator);
-            $data = $this->getRequest()->getSession()->get("FormData.{$form->getName()}.data");
+            $validator = RequiredFieldsValidator::create($requiredList);
+            $form = Form::create($this, 'SignupForm', $fields, $actions, $validator);
+            $data = $this->getRequest()->getSession()->get(sprintf('FormData.%s.data', $form->getName()));
             if ($data) {
                 $form->loadDataFrom($data);
             } elseif ($member && $member->exists()) {
@@ -194,12 +194,13 @@ class CampaignMonitorSignupPageController extends PageController
             } else {
                 $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
             }
+
             if (!filter_var($data['CampaignMonitorEmail'], FILTER_VALIDATE_EMAIL)) {
                 $form->sessionError('Please enter a valid email address.', 'error');
                 return $this->redirectBack();
             }
 
-            $session->set("FormData.{$form->getName()}.data", $data);
+            $session->set(sprintf('FormData.%s.data', $form->getName()), $data);
 
             //true until proven otherwise.
             $newlyCreatedMember = false;
@@ -221,7 +222,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $form->sessionError('You can not subscribe right now.', 'error');
                 $this->redirectBack();
 
-                return;
+                return null;
             }
 
             //no member logged in: if the member already exists then you can't sign up.
@@ -265,7 +266,7 @@ class CampaignMonitorSignupPageController extends PageController
                     );
                     $this->redirectBack();
 
-                    return;
+                    return null;
                 }
 
                 $memberToEdit = $submittedMember;
@@ -291,17 +292,15 @@ class CampaignMonitorSignupPageController extends PageController
                 }
 
                 $memberToEdit->write();
-                if ($newlyCreatedMember) {
-                    if ($this->SignInNewMemberOnRegistration && $doLogin) {
-                        Security::setCurrentUser($memberToEdit);
-                        $identityStore = Injector::inst()->get(IdentityStore::class);
-                        $identityStore->logIn($memberToEdit, $rememberMe = false, null);
-                    }
+                if ($newlyCreatedMember && ($this->SignInNewMemberOnRegistration && $doLogin)) {
+                    Security::setCurrentUser($memberToEdit);
+                    $identityStore = Injector::inst()->get(IdentityStore::class);
+                    $identityStore->logIn($memberToEdit, $rememberMe = false, null);
                 }
             }
 
             $outcome = $memberToEdit->processCampaignMonitorSignupField($this->dataRecord, $data, $values);
-            $session->clear("FormData.{$form->getName()}.data");
+            $session->clear(sprintf('FormData.%s.data', $form->getName()));
             if ($isMany) {
                 return $this->redirect($this->link('confirm'));
             }
@@ -318,6 +317,7 @@ class CampaignMonitorSignupPageController extends PageController
         }
 
         user_error('No list to subscribe to', E_USER_WARNING);
+        return null;
     }
 
     /**
@@ -460,10 +460,8 @@ class CampaignMonitorSignupPageController extends PageController
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
         $this->campaign = CampaignMonitorCampaign::get_by_id($id);
-        if ($this->campaign) {
-            if (isset($_GET['hash']) && 7 === strlen((string) $_GET['hash']) && $_GET['hash'] === $this->campaign->Hash) {
-                return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
-            }
+        if ($this->campaign && (isset($_GET['hash']) && 7 === strlen((string) $_GET['hash']) && $_GET['hash'] === $this->campaign->Hash)) {
+            return HTTP::absoluteURLs($this->campaign->getNewsletterContent());
         }
 
         return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'No preview available.'));
@@ -671,11 +669,11 @@ class CampaignMonitorSignupPageController extends PageController
 
     protected function getFieldsForSignupForm(?Member $member): array
     {
-        if ($member) {
+        if ($member instanceof Member) {
             $memberId = $member->ID;
         } else {
             $memberId = 0;
-            $member = new Member();
+            $member = Member::create();
         }
 
         $fieldArray = [];
@@ -715,7 +713,7 @@ class CampaignMonitorSignupPageController extends PageController
                 $fieldName,
                 $title
             ));
-            if ($disabledEmailPhrase) {
+            if ($disabledEmailPhrase !== '' && $disabledEmailPhrase !== '0') {
                 $fieldArray['Fields'][$fieldName]->setAttribute('disabled', $disabledEmailPhrase);
             }
         }
@@ -775,6 +773,7 @@ class CampaignMonitorSignupPageController extends PageController
         return [];
     }
 
+    #[Override]
     protected function init()
     {
         parent::init();

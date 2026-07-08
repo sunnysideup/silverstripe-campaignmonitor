@@ -2,12 +2,14 @@
 
 namespace Sunnysideup\CampaignMonitor\Tasks;
 
+use Symfony\Component\Console\Input\InputInterface;
+use SilverStripe\PolyExecution\PolyOutput;
+use Symfony\Component\Console\Command\Command;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Environment;
 use SilverStripe\Dev\BuildTask;
-use SilverStripe\ORM\DB;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 
@@ -26,9 +28,13 @@ class CampaignMonitorSyncAllMembers extends BuildTask
 {
     use CampaignMonitorApiTrait;
 
-    protected $title = 'Export Newsletter to Campaign Monitor';
+    protected string $title = 'Export Newsletter to Campaign Monitor';
 
-    protected $description = 'Moves all the Members to campaign monitor';
+    protected static string $description = 'Moves all the Members to campaign monitor';
+
+    protected static string $commandName = 'campaignmonitor:sync-all-members';
+
+    private static $segment = 'CampaignMonitorSyncAllMembers';
 
     /**
      * @var bool
@@ -37,8 +43,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
 
     /**
      * @var bool
+     * @config
      */
-    protected $enabled = false;
+    private static $is_enabled = false;
 
     /**
      * @var array
@@ -62,17 +69,16 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      */
     private static $mailing_list_id = '';
 
-    public function run($request)
+    protected function execute(InputInterface $input, PolyOutput $output): int
     {
         Environment::increaseTimeLimitTo(3600);
         Environment::increaseMemoryLimitTo('5120M');
         $this->getUnsubscribedSubscribers();
         $this->getExistingFolkListed();
         $this->getBouncedSubscribers();
-        DB::alteration_message('Number of active recipients already exported: ' . count($this->previouslyExported), 'created');
-        DB::alteration_message('Number of recipients already unsubscribed: ' . count($this->previouslyUnsubscribedSubscribers), 'created');
-        DB::alteration_message('Number of recipients already bounced: ' . count($this->previouslyBouncedSubscribers), 'created');
-
+        $output->writeln('Number of active recipients already exported: ' . count($this->previouslyExported));
+        $output->writeln('Number of recipients already unsubscribed: ' . count($this->previouslyUnsubscribedSubscribers));
+        $output->writeln('Number of recipients already bounced: ' . count($this->previouslyBouncedSubscribers));
         if (Director::isLive()) {
             $this->debug = false;
         }
@@ -80,11 +86,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
         if ($this->debug) {
             $limit = 20;
             $maxIterations = 20;
-            DB::alteration_message("Running in debug mode going to check {$maxIterations} loops of {$limit} records.");
+            $output->writeln(sprintf('Running in debug mode going to check %d loops of %d records.', $maxIterations, $limit));
         } else {
             $limit = 400;
             $maxIterations = 1000000;
-            DB::alteration_message("Running in live mode going to check {$maxIterations} loops of {$limit} records.");
+            $output->writeln(sprintf('Running in live mode going to check %d loops of %d records.', $maxIterations, $limit));
         }
 
         $customFields = [];
@@ -103,9 +109,9 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 if ($members->exists()) {
                     foreach ($members as $member) {
                         if (isset($this->previouslyUnsubscribedSubscribers[$member->Email])) {
-                            DB::alteration_message('already blacklisted: ' . $member->Email, 'deleted');
+                            $output->writeln('already blacklisted: ' . $member->Email);
                         } elseif (isset($this->previouslyBouncedSubscribers[$member->Email])) {
-                            DB::alteration_message('deleting bounced member: ' . $member->Email, 'deleted');
+                            $output->writeln('deleting bounced member: ' . $member->Email);
                             if (! $this->debug) {
                                 $api->deleteSubscriber(Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'), $member->Email);
                             }
@@ -126,12 +132,12 @@ class CampaignMonitorSyncAllMembers extends BuildTask
 
                             if ($member->Email && $member->hasMethod('IsBlackListed') && $member->IsBlackListed()) {
                                 $unsubscribeArray[$member->Email] = $member;
-                                DB::alteration_message('Blacklisting: ' . $member->Email, 'deleted');
+                                $output->writeln('Blacklisting: ' . $member->Email);
                             }
                         }
                     }
 
-                    $this->exportNow($memberArray, $customFields, $unsubscribeArray);
+                    $this->exportNow($memberArray, $customFields, $unsubscribeArray, $output);
                     $customFields = [];
                     $memberArray = [];
                     $unsubscribeArray = [];
@@ -140,10 +146,11 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 }
             }
         } else {
-            DB::alteration_message('Api not enabled', 'deleted');
+            $output->writeln('Api not enabled');
         }
 
-        DB::alteration_message('<h1>== THE END ==</h1>');
+        $output->writeForHtml('<h1>== THE END ==</h1>');
+        return Command::SUCCESS;
     }
 
     /**
@@ -162,10 +169,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     $sortByField = 'Email',
                     $sortDirection = 'ASC'
                 );
-                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
-                    if ($i > $list->NumberOfPages) {
-                        $i = 999999;
-                    }
+                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages && $i > $list->NumberOfPages) {
+                    $i = 999999;
                 }
 
                 if (property_exists($list, 'Results') && null !== $list->Results) {
@@ -182,7 +187,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 }
             }
         } else {
-            DB::alteration_message('Api not enabled', 'deleted');
+            // @TODO (SS6 upgrade)
+            // DB::alteration_message('Api not enabled', 'deleted');
         }
     }
 
@@ -202,10 +208,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     $sortByField = 'Email',
                     $sortDirection = 'ASC'
                 );
-                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
-                    if ($i > $list->NumberOfPages) {
-                        $i = 999999;
-                    }
+                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages && $i > $list->NumberOfPages) {
+                    $i = 999999;
                 }
 
                 if (property_exists($list, 'Results') && null !== $list->Results) {
@@ -217,7 +221,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 }
             }
         } else {
-            DB::alteration_message('Api not enabled', 'deleted');
+            // @TODO (SS6 upgrade)
+            // DB::alteration_message('Api not enabled', 'deleted');
         }
     }
 
@@ -237,10 +242,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                     $sortByField = 'Email',
                     $sortDirection = 'ASC'
                 );
-                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages) {
-                    if ($i > $list->NumberOfPages) {
-                        $i = 999999;
-                    }
+                if (property_exists($list, 'NumberOfPages') && null !== $list->NumberOfPages && $list->NumberOfPages && $i > $list->NumberOfPages) {
+                    $i = 999999;
                 }
 
                 if (property_exists($list, 'Results') && null !== $list->Results) {
@@ -252,7 +255,8 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                 }
             }
         } else {
-            DB::alteration_message('Api not enabled', 'deleted');
+            // @TODO (SS6 upgrade)
+            // DB::alteration_message('Api not enabled', 'deleted');
         }
     }
 
@@ -261,7 +265,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
      * @param array $customFields
      * @param array $unsubscribeArray
      */
-    private function exportNow($memberArray, $customFields, $unsubscribeArray)
+    private function exportNow($memberArray, $customFields, $unsubscribeArray, PolyOutput $output)
     {
         $api = $this->getCMAPI();
         if ($api) {
@@ -273,24 +277,24 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                         $alreadyListed = false;
                         if (isset($this->previouslyExported[$email])) {
                             $alreadyListed = true;
-                            DB::alteration_message('' . $email . ' is already listed');
+                            $output->writeln('' . $email . ' is already listed');
                             foreach ($valuesArray as $key => $value) {
                                 if (Email::class !== $key) {
                                     if (! isset($this->previouslyExported[$email][$key])) {
-                                        if ('tba' === $value || 'No' === $value || strlen(trim($value)) < 1) {
+                                        if ('tba' === $value || 'No' === $value || strlen(trim((string) $value)) < 1) {
                                             //do nothing
                                         } else {
                                             $updateDetails = true;
-                                            DB::alteration_message(" - - - Missing value for {$key} - current value {$value}", 'created');
+                                            $output->writeln(sprintf(' - - - Missing value for %s - current value %s', $key, $value));
                                         }
                                     } elseif ($this->previouslyExported[$email][$key] !== $value) {
-                                        DB::alteration_message(' - - - Update for ' . $email . " for {$key} {$value} that is not the same as previous value: " . $this->previouslyExported[$email][$key], 'created');
+                                        $output->writeln(' - - - Update for ' . $email . sprintf(' for %s %s that is not the same as previous value: ', $key, $value) . $this->previouslyExported[$email][$key]);
                                         $updateDetails = true;
                                     }
                                 }
                             }
                         } else {
-                            DB::alteration_message('Adding entry: ' . implode('; ', $customFields[$email]) . '.', 'created');
+                            $output->writeln('Adding entry: ' . implode('; ', $customFields[$email]) . '.');
                         }
 
                         $finalCustomFields[$email] = [];
@@ -321,7 +325,7 @@ class CampaignMonitorSyncAllMembers extends BuildTask
 
                     if ([] !== $memberArray) {
                         if (count($memberArray) === count($finalCustomFields)) {
-                            DB::alteration_message('<h3>adding: ' . count($memberArray) . ' subscribers</h3>', 'created');
+                            $output->writeForHtml('<h3>adding: ' . count($memberArray) . ' subscribers</h3>');
                             if (! $this->debug) {
                                 $api->addSubscribers(
                                     Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'),
@@ -333,26 +337,26 @@ class CampaignMonitorSyncAllMembers extends BuildTask
                                 );
                             }
                         } else {
-                            DB::alteration_message('Error, memberArray (' . count($memberArray) . ') count is not the same as finalCustomFields (' . count($finalCustomFields) . ') count.', 'deleted');
+                            $output->writeln('Error, memberArray (' . count($memberArray) . ') count is not the same as finalCustomFields (' . count($finalCustomFields) . ') count.');
                         }
                     } else {
-                        DB::alteration_message('adding: ' . count($memberArray) . ' subscribers');
+                        $output->writeln('adding: ' . count($memberArray) . ' subscribers');
                     }
 
                     foreach ($unsubscribeArray as $member) {
-                        DB::alteration_message('Now doing Blacklisting: ' . $member->Email, 'deleted');
+                        $output->writeln('Now doing Blacklisting: ' . $member->Email);
                         if (! $this->debug) {
                             $api->unsubscribeSubscriber(Config::inst()->get(CampaignMonitorSyncAllMembers::class, 'mailing_list_id'), $member);
                         }
                     }
                 } else {
-                    DB::alteration_message('Error, memberArray (' . count($memberArray) . ') count is not the same as customFields (' . count($customFields) . ') count.', 'deleted');
+                    $output->writeln('Error, memberArray (' . count($memberArray) . ') count is not the same as customFields (' . count($customFields) . ') count.');
                 }
             } else {
-                DB::alteration_message('adding: ' . count($memberArray) . ' subscribers');
+                $output->writeln('adding: ' . count($memberArray) . ' subscribers');
             }
         } else {
-            DB::alteration_message('Api not enabled', 'deleted');
+            $output->writeln('Api not enabled');
         }
     }
 }

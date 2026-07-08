@@ -10,7 +10,6 @@ use SilverStripe\Forms\CheckboxSetField;
 use SilverStripe\Forms\CompositeField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\OptionsetField;
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage;
@@ -66,7 +65,7 @@ class CampaignMonitorSignupFieldProvider
      * @param string $fieldName
      * @param string $fieldTitle
      *
-     * @return \SilverStripe\Forms\CompositeField
+     * @return CompositeField
      */
     public function getCampaignMonitorSignupField(?string $fieldName = '', ?string $fieldTitle = '')
     {
@@ -120,11 +119,7 @@ class CampaignMonitorSignupFieldProvider
             }
 
             if ([] !== $array) {
-                $subscribeField = new CheckboxSetField(
-                    $fieldName,
-                    $fieldTitle,
-                    $array
-                );
+                $subscribeField = CheckboxSetField::create($fieldName, $fieldTitle, $array);
                 $subscribeField->setDefaultItems(array_keys($this->member->CampaignMonitorSignedUpArray()));
             }
         }
@@ -143,6 +138,7 @@ class CampaignMonitorSignupFieldProvider
         if ($addCustomFields) {
             $this->addCustomFieldsToField($parentField);
         }
+
         $parentField->push($subscribeField);
 
         return $parentField;
@@ -206,6 +202,7 @@ class CampaignMonitorSignupFieldProvider
             $toAddSubscribe = ' to ' . $this->listPage->getListTitle();
             $toAddUnsubscribe = ' from ' . $this->listPage->getListTitle();
         }
+
         $optionArray['Subscribe'] = _t('CampaignMonitrSignupPage.SUBSCRIBE_TO', 'subscribe') . $toAddSubscribe;
         if ($this->listPage->AllowUnsubscribeInForm) {
             $optionArray['Unsubscribe'] = _t('CampaignMonitorSignupPage.UNSUBSCRIBE_FROM', 'unsubscribe') . $toAddUnsubscribe;
@@ -240,6 +237,7 @@ class CampaignMonitorSignupFieldProvider
                 $finalValue = 'MultiSelectMany' === $customField->Type ? $fieldValues : implode('', $fieldValues);
                 $customFormField->setValue($finalValue);
             }
+
             if (isset($linkedMemberFields[$customField->Code]) && !$value) {
                 $fieldOrMethod = $linkedMemberFields[$customField->Code];
                 $value = $this->member->hasMethod($fieldOrMethod) ? $this->member->{$fieldOrMethod}() : $this->member->{$fieldOrMethod};
@@ -257,13 +255,9 @@ class CampaignMonitorSignupFieldProvider
         $api = $this->getCMAPI();
         $currentValues = [];
         if ($api) {
-            if ($this->listPage->ListID) {
-                if ($this->member && $this->member->exists()) {
-                    if ($api->getSubscriberCanReceiveEmailsForThisList($this->listPage->ListID, $this->member)) {
-                        $currentValues = $api->getSubscriber($this->listPage->ListID, $this->member);
-                        //$currentSelection = "Unsubscribe";
-                    }
-                }
+            if ($this->listPage->ListID && ($this->member && $this->member->exists()) && $api->getSubscriberCanReceiveEmailsForThisList($this->listPage->ListID, $this->member)) {
+                $currentValues = $api->getSubscriber($this->listPage->ListID, $this->member);
+                //$currentSelection = "Unsubscribe";
             }
 
             $currentValues = json_decode(json_encode($currentValues), true);

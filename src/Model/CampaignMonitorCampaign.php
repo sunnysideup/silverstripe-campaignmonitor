@@ -2,6 +2,8 @@
 
 namespace Sunnysideup\CampaignMonitor\Model;
 
+use Override;
+use SilverStripe\ORM\ManyManyList;
 use Pelago\Emogrifier\CssInliner;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
@@ -37,8 +39,8 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
  * @property string $Content
  * @property string $Hash
  * @property int $CampaignMonitorCampaignStyleID
- * @method \Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaignStyle CampaignMonitorCampaignStyle()
- * @method \SilverStripe\ORM\ManyManyList|\Sunnysideup\CampaignMonitor\CampaignMonitorSignupPage[] Pages()
+ * @method CampaignMonitorCampaignStyle CampaignMonitorCampaignStyle()
+ * @method ManyManyList|CampaignMonitorSignupPage[] Pages()
  */
 class CampaignMonitorCampaign extends DataObject
 {
@@ -114,11 +116,13 @@ class CampaignMonitorCampaign extends DataObject
 
     private $_existsOnCampaignMonitorCheck;
 
+    #[Override]
     public function canDelete($member = null)
     {
         return $this->HasBeenSentCheck() ? false : parent::canDelete($member);
     }
 
+    #[Override]
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
@@ -138,9 +142,9 @@ class CampaignMonitorCampaign extends DataObject
         //pages
         $pages = CampaignMonitorSignupPage::get()->map('ID', 'Title')->toArray();
         $fields->removeFieldFromTab('Root.Main', 'Pages');
-        $fields->replaceField('CreateAsTemplate', new OptionsetField('CreateAsTemplate', 'Type', [0 => 'Create as Campaign', 1 => 'Create as Template']));
+        $fields->replaceField('CreateAsTemplate', OptionsetField::create('CreateAsTemplate', 'Type', [0 => 'Create as Campaign', 1 => 'Create as Template']));
         if ([] !== $pages) {
-            $fields->addFieldToTab('Root.Pages', new CheckboxSetField('Pages', 'Shown on the following pages ...', $pages));
+            $fields->addFieldToTab('Root.Pages', CheckboxSetField::create('Pages', 'Shown on the following pages ...', $pages));
         }
 
         if ($this->ExistsOnCampaignMonitorCheck()) {
@@ -148,7 +152,7 @@ class CampaignMonitorCampaign extends DataObject
             if (! $this->CreateAsTemplate) {
                 $fields->removeFieldFromTab('Root.Main', 'CreateFromWebsite');
                 if (! $this->HasBeenSentCheck()) {
-                    $fields->addFieldToTab('Root.Main', new LiteralField('CreateFromWebsiteRemake', '<h2>To edit this newsletter, please first delete it from your newsletter server</h2>'), 'CampaignID');
+                    $fields->addFieldToTab('Root.Main', LiteralField::create('CreateFromWebsiteRemake', '<h2>To edit this newsletter, please first delete it from your newsletter server</h2>'), 'CampaignID');
                 }
             }
 
@@ -170,14 +174,14 @@ class CampaignMonitorCampaign extends DataObject
         }
 
         if ($this->HasBeenSentCheck()) {
-            $fields->addFieldToTab('Root.Main', new LiteralField('Link', '<h2><a target="_blank" href="' . $this->Link() . '">Link</a></h2>'), 'CampaignID');
+            $fields->addFieldToTab('Root.Main', LiteralField::create('Link', '<h2><a target="_blank" href="' . $this->Link() . '">Link</a></h2>'), 'CampaignID');
         } else {
             $fields->removeFieldFromTab('Root.Main', 'Hide');
             if ($this->exists()) {
                 if ($this->ExistsOnCampaignMonitorCheck()) {
                     $fields->removeFieldFromTab('Root.Main', 'CreateFromWebsite');
                 } else {
-                    $fields->addFieldToTab('Root.Main', new LiteralField('PreviewLink', '<h2><a target="_blank" href="' . $this->PreviewLink() . '">Preview Link</a></h2>'), 'CampaignID');
+                    $fields->addFieldToTab('Root.Main', LiteralField::create('PreviewLink', '<h2><a target="_blank" href="' . $this->PreviewLink() . '">Preview Link</a></h2>'), 'CampaignID');
                 }
             } else {
                 $fields->removeFieldFromTab('Root.Main', 'CreateFromWebsite');
@@ -281,10 +285,8 @@ class CampaignMonitorCampaign extends DataObject
     public function getRenderWithTemplate()
     {
         $style = $this->CampaignMonitorCampaignStyle();
-        if ($style) {
-            if ($style->exists() && $style->TemplateName) {
-                return $style->TemplateName;
-            }
+        if ($style && ($style->exists() && $style->TemplateName)) {
+            return $style->TemplateName;
         }
 
         return $this->Config()->get('default_template');
@@ -376,7 +378,7 @@ class CampaignMonitorCampaign extends DataObject
                             break;
                         }
                     }
-                } elseif ($apiMethod2) {
+                } elseif ($apiMethod2 !== '' && $apiMethod2 !== '0') {
                     //check sent ones
                     $result = $this->api->{$apiMethod2}();
                     if (isset($result)) {
@@ -395,6 +397,7 @@ class CampaignMonitorCampaign extends DataObject
         return $this->_existsOnCampaignMonitorCheck;
     }
 
+    #[Override]
     protected function onBeforeWrite()
     {
         parent::onBeforeWrite();
@@ -412,6 +415,7 @@ class CampaignMonitorCampaign extends DataObject
         }
     }
 
+    #[Override]
     protected function onAfterWrite()
     {
         parent::onAfterWrite();
@@ -442,6 +446,7 @@ class CampaignMonitorCampaign extends DataObject
         }
     }
 
+    #[Override]
     protected function onBeforeDelete()
     {
         parent::onBeforeDelete();

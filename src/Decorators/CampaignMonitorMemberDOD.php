@@ -2,14 +2,15 @@
 
 namespace Sunnysideup\CampaignMonitor\Decorators;
 
-use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Extension;
+use SilverStripe\Security\Member;
+use SilverStripe\ORM\DataList;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
-use SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Group;
 use SilverStripe\Versioned\Versioned;
@@ -21,11 +22,11 @@ use Sunnysideup\CampaignMonitor\Traits\CampaignMonitorApiTrait;
 /**
  * Class \Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD
  *
- * @property \SilverStripe\Security\Member|\Sunnysideup\CampaignMonitor\Decorators\CampaignMonitorMemberDOD $owner
+ * @property Member|CampaignMonitorMemberDOD $owner
  * @property string $CM_PermissionToTrack
- * @method \SilverStripe\ORM\DataList|\Sunnysideup\CampaignMonitor\Model\CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
+ * @method DataList|CampaignMonitorSubscriptionLog[] CampaignMonitorSubscriptionLogs()
  */
-class CampaignMonitorMemberDOD extends DataExtension
+class CampaignMonitorMemberDOD extends Extension
 {
     use CampaignMonitorApiTrait;
 
@@ -45,7 +46,7 @@ class CampaignMonitorMemberDOD extends DataExtension
      * @param string                                $fieldName
      * @param string                                $fieldTitle
      *
-     * @return \SilverStripe\Forms\FormField
+     * @return FormField
      */
     public function getCampaignMonitorSignupField($listPage = null, ?string $fieldName = '', ?string $fieldTitle = '')
     {
@@ -70,7 +71,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $fields->addFieldsToTab(
             'Root.Newsletter',
             [
-                DropdownField::create('CM_PermissionToTrack', 'Permission to track', singleton(__CLASS__)->owner->dbObject('CM_PermissionToTrack')->enumValues())->setDescription('For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
+                DropdownField::create('CM_PermissionToTrack', 'Permission to track', singleton(self::class)->owner->dbObject('CM_PermissionToTrack')->enumValues())->setDescription('For more info, please check <a href="https://help.campaignmonitor.com/permission-to-track" target="_blank">this page</a>.'),
                 ReadonlyField::create(
                     'IsCampaignMonitorSubscriberNice',
                     'Has subcribed to any list - ever?',
@@ -131,7 +132,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => $listPage])->first();
         }
 
-        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->owner, $listPage, 'Subscribe', $customFields);
+        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->getOwner(), $listPage, 'Subscribe', $customFields);
 
         $successForGroups = $this->addToCampaignMonitorSecurityGroup($listPage);
         $successForCm = $this->addToCampaignMonitor($listPage, $customFields);
@@ -156,7 +157,7 @@ class CampaignMonitorMemberDOD extends DataExtension
             $listPage = CampaignMonitorSignupPage::get()->filter(['ListID' => (string) $listPage])->first();
         }
 
-        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->owner, $listPage, 'Unsubscribe');
+        $logId = CampaignMonitorSubscriptionLog::log_attempt($this->getOwner(), $listPage, 'Unsubscribe');
         $successForGroups = false;
         $successForCm = false;
         if ($listPage->GroupID) {
@@ -173,7 +174,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         if ($listPage->ListID) {
             $api = $this->getCMAPI();
             if ($api) {
-                $successForCm = (bool) $api->unsubscribeSubscriber($listPage->ListID, $this->owner);
+                $successForCm = (bool) $api->unsubscribeSubscriber($listPage->ListID, $this->getOwner());
                 CampaignMonitorSubscriptionLog::log_outcome($logId, $successForCm);
             } else {
                 CampaignMonitorSubscriptionLog::log_outcome($logId, false);
@@ -192,7 +193,7 @@ class CampaignMonitorMemberDOD extends DataExtension
         $array = [];
         $api = $this->getCMAPI();
         if ($api) {
-            $lists = $api->getListsForEmail($this->owner);
+            $lists = $api->getListsForEmail($this->getOwner());
             if ($lists && count($lists)) {
                 foreach ($lists as $listArray) {
                     if (in_array($listArray->SubscriberState, ['Active', 'Bounced'], true)) {
@@ -257,7 +258,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 if ($this->isPartOfCampaignMonitorList($listPage)) {
                     $success = (bool) $api->updateSubscriber(
                         $listPage->ListID,
-                        $this->owner,
+                        $this->getOwner(),
                         $oldEmailAddress = '',
                         $customFields,
                         $resubscribe = true,
@@ -266,7 +267,7 @@ class CampaignMonitorMemberDOD extends DataExtension
                 } else {
                     $success = (bool) $api->addSubscriber(
                         $listPage->ListID,
-                        $this->owner,
+                        $this->getOwner(),
                         $customFields,
                         true,
                         false
@@ -284,7 +285,7 @@ class CampaignMonitorMemberDOD extends DataExtension
     {
         $api = $this->getCMAPI();
         if ($api) {
-            return (bool) $api->getSubscriber($listPage->ListID, $this->owner);
+            return (bool) $api->getSubscriber($listPage->ListID, $this->getOwner());
         }
 
         return null;

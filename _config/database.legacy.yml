@@ -1,4 +1,5 @@
-SilverStripe\ORM\DatabaseAdmin:
+
+SilverStripe\Dev\DbBuild:
   classname_value_remapping:
     CampaignMonitorSyncAllMembers: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorSyncAllMembers
     CampaignMonitorAddOldCampaigns: Sunnysideup\CampaignMonitor\Tasks\CampaignMonitorAddOldCampaigns
