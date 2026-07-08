@@ -18,7 +18,8 @@
     ],
     "require": {
         "undefinedoffset/sortablegridfield": "^3.0",
-        "silverstripe/recipe-cms": "^6.0"
+        "silverstripe/recipe-cms": "^6.0",
+        "sunnysideup/campaignmonitor-api": "dev-main"
     },
     "extra": {
         "expose": [
@@ -30,13 +31,6 @@
     "autoload": {
         "psr-4": {
             "Sunnysideup\\CampaignMonitor\\": "src/"
-        }
-    },
-    "yet-to-update": {
-        "sunnysideup/campaignmonitor-api": {
-            "section": "require",
-            "current": "^5.0-dev",
-            "reason": "no-compatible-stable-release"
         }
     }
 }
