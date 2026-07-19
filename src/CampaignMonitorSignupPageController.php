@@ -804,4 +804,9 @@ class CampaignMonitorSignupPageController extends PageController
 
 javascript;
     }
+
+    public function canCachePage(): bool
+    {
+        return false;
+    }
 }
