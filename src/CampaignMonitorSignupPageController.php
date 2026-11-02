@@ -23,6 +23,7 @@ use SilverStripe\Security\IdentityStore;
 use SilverStripe\Security\Member;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\Security;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\Requirements;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorSignupFieldProvider;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
@@ -255,7 +256,9 @@ class CampaignMonitorSignupPageController extends PageController
                     return $this->redirectBack();
                 }
             } elseif ($submittedMember) {
-                if ($this->MustBeLoggedInToAddSubscription) {
+                // The email address has not been verified: if we let anyone edit or (un)subscribe an existing member
+                // then anybody can change the details of, and unsubscribe, a customer by typing in their email address.
+                if (! $this->config()->get('allow_to_add_to_existing_member_without_logging_in')) {
                     $form->sessionError(
                         _t(
                             'CAMPAIGNMONITORSIGNUPPAGE.EMAIL_EXISTS',
@@ -393,12 +396,17 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $data = $request->requestVars();
         if (isset($data['CampaignMonitorEmail'])) {
-            $email = Convert::raw2sql($data['CampaignMonitorEmail']);
-            if ($email) {
+            $email = trim((string) (is_array($data['CampaignMonitorEmail']) ? '' : $data['CampaignMonitorEmail']));
+            if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->memberDbValues['CampaignMonitorEmail'] = $email;
                 if (Director::is_ajax()) {
-                    if (!$this->addSubscriber($email)) {
-                        $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $data['CampaignMonitorEmail']);
+                    // this subscribes the email address straight away so it can only be done with a POST,
+                    // with a valid security token and a limited number of times per hour.
+                    if (! $request->isPOST() || ! SecurityToken::inst()->checkRequest($request) || ! $this->preloadEmailAttemptAllowed($request)) {
+                        return 'ERROR';
+                    }
+                    if (! $this->addSubscriber($email)) {
+                        $this->getRequest()->getSession()->set('CampaignMonitorStartForm_AjaxResult_' . $this->ID, $email);
 
                         return $this->RenderWith('Sunnysideup\CampaignMonitor\Includes\CampaignMonitorStartForm_AjaxResult');
                     }
@@ -414,6 +422,25 @@ class CampaignMonitorSignupPageController extends PageController
         }
 
         return [];
+    }
+
+    /**
+     * a visitor can only add a few email addresses per hour.
+     */
+    protected function preloadEmailAttemptAllowed(HTTPRequest $request): bool
+    {
+        $session = $request->getSession();
+        $key = 'CampaignMonitorPreloadEmailAttempts';
+        $attempts = $session->get($key);
+        $cutOff = time() - 3600;
+        $attempts = array_values(array_filter(is_array($attempts) ? $attempts : [], static fn ($time) => (int) $time > $cutOff));
+        if (count($attempts) >= 5) {
+            return false;
+        }
+        $attempts[] = time();
+        $session->set($key, $attempts);
+
+        return true;
     }
 
     /**
