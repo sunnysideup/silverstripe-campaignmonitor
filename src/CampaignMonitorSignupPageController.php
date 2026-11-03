@@ -7,7 +7,6 @@ use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTP;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\EmailField;
@@ -193,7 +192,7 @@ class CampaignMonitorSignupPageController extends PageController
             if ($loggedInMember) {
                 $data['CampaignMonitorEmail'] = $loggedInMember->Email;
             } else {
-                $data['CampaignMonitorEmail'] = Convert::raw2sql($data['CampaignMonitorEmail']);
+                $data['CampaignMonitorEmail'] = is_string($data['CampaignMonitorEmail']) ? trim($data['CampaignMonitorEmail']) : '';
             }
             if (!filter_var($data['CampaignMonitorEmail'], FILTER_VALIDATE_EMAIL)) {
                 $form->sessionError('Please enter a valid email address.', 'error');
@@ -288,7 +287,7 @@ class CampaignMonitorSignupPageController extends PageController
                         $memberToEdit->CM_PermissionToTrack = isset($data['CampaignMonitor' . $field]) && $data['CampaignMonitor' . $field] ? 'Yes' : 'No';
                     } elseif ('Email' !== $field) {
                         if (!empty($data['CampaignMonitor' . $field])) {
-                            $memberToEdit->{$field} = Convert::raw2sql($data['CampaignMonitor' . $field]);
+                            $memberToEdit->{$field} = $data['CampaignMonitor' . $field];
                         }
                     }
                 }

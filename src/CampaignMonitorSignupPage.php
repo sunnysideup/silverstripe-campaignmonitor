@@ -5,7 +5,6 @@ namespace Sunnysideup\CampaignMonitor;
 use Page;
 use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\CheckboxSetField;
@@ -410,7 +409,6 @@ class CampaignMonitorSignupPage extends Page
     {
         if ($this->ReadyToReceiveSubscribtions()) {
             $listID = $this->ListID;
-            $email = Convert::raw2sql($email);
             $member = Member::get()->filter(['Email' => $email])->first();
             if ($member && $member->exists()) {
                 //do nothing

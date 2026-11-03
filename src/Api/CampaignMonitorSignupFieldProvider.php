@@ -3,7 +3,6 @@
 namespace Sunnysideup\CampaignMonitor\Api;
 
 use SilverStripe\Core\Config\Configurable;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\CheckboxSetField;
@@ -175,7 +174,6 @@ class CampaignMonitorSignupFieldProvider
             $listPages = CampaignMonitorSignupPage::get_ready_ones();
             foreach ($listPages as $listPage) {
                 if (! empty($values[$listPage->ListID])) {
-                    Convert::raw2sql($values[$listPage->ListID]);
                     $this->member->addCampaignMonitorList($listPage->ListID, $customFieldsArray);
                     $typeOfAction = 'subscribe';
                 } else {
