@@ -5,6 +5,8 @@ namespace Sunnysideup\CampaignMonitor\Control;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\Security\Member;
 use Sunnysideup\CampaignMonitor\Api\CampaignMonitorAPIConnector;
 use Sunnysideup\CampaignMonitor\Model\CampaignMonitorCampaign;
@@ -59,11 +61,11 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     private static $url_segment = 'create-send-test';
 
     private static $allowed_actions = [
-        'index' => 'CMS_ACCESS_CMSMain',
-        'testall' => 'CMS_ACCESS_CMSMain',
-        'testlists' => 'CMS_ACCESS_CMSMain',
-        'testcampaigns' => 'CMS_ACCESS_CMSMain',
-        'testsubscribers' => 'CMS_ACCESS_CMSMain',
+        'index' => 'ADMIN',
+        'testall' => 'ADMIN',
+        'testlists' => 'ADMIN',
+        'testcampaigns' => 'ADMIN',
+        'testsubscribers' => 'ADMIN',
     ];
 
     /**
@@ -87,6 +89,9 @@ class CampaignMonitorAPIConnectorTestController extends Controller
      */
     public function testall()
     {
+        if (! $this->isConfirmed()) {
+            return $this->confirmForm('testall');
+        }
         $this->testlists();
         $this->testcampaigns();
         $this->testsubscribers();
@@ -96,20 +101,52 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
     public function index()
     {
+        // these tests create and delete lists, subscribers and campaigns - they must be confirmed (POST with security token).
         echo '
             <hr /><hr /><hr /><hr /><hr />
             <ul>
-                <li><a href="' . $this->Link('testlists') . '">test lists</a></li>
-                <li><a href="' . $this->Link('testcampaigns') . '">test campaigns</a></li>
-                <li><a href="' . $this->Link('testsubscribers') . '">test subscribers</a></li>
-                <li><a href="' . $this->Link('testall') . '">test all</a></li>
+                <li>' . $this->confirmFormHtml('testlists', 'test lists') . '</li>
+                <li>' . $this->confirmFormHtml('testcampaigns', 'test campaigns') . '</li>
+                <li>' . $this->confirmFormHtml('testsubscribers', 'test subscribers') . '</li>
+                <li>' . $this->confirmFormHtml('testall', 'test all') . '</li>
             </ul>
             <hr /><hr /><hr /><hr /><hr />
         ';
     }
 
+    /**
+     * the tests write to the Campaign Monitor account: only run them for a POST request with a valid security token.
+     */
+    protected function isConfirmed(): bool
+    {
+        $request = $this->getRequest();
+
+        return $request->isPOST() && SecurityToken::inst()->checkRequest($request);
+    }
+
+    protected function confirmFormHtml(string $action, string $title): string
+    {
+        $tokenField = SecurityToken::inst()->getName();
+
+        return '
+            <form method="post" action="' . Convert::raw2att($this->Link($action)) . '">
+                <input type="hidden" name="' . Convert::raw2att($tokenField) . '" value="' . Convert::raw2att(SecurityToken::inst()->getValue()) . '" />
+                <input type="submit" value="' . Convert::raw2att($title) . '" />
+            </form>';
+    }
+
+    protected function confirmForm(string $action): string
+    {
+        return '<h1>Please confirm</h1>
+            <p>This test creates and deletes lists, subscribers and campaigns in the connected Campaign Monitor account.</p>
+            ' . $this->confirmFormHtml($action, 'Run ' . $action);
+    }
+
     public function testlists()
     {
+        if (! $this->isConfirmed()) {
+            return $this->confirmForm('testlists');
+        }
         $this->setupTests();
 
         //create list
@@ -190,6 +227,9 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
     public function testcampaigns()
     {
+        if (! $this->isConfirmed()) {
+            return $this->confirmForm('testcampaigns');
+        }
         $this->setupTests();
 
         $this->api->getTemplates();
@@ -245,6 +285,9 @@ class CampaignMonitorAPIConnectorTestController extends Controller
 
     public function testsubscribers()
     {
+        if (! $this->isConfirmed()) {
+            return $this->confirmForm('testsubscribers');
+        }
         $this->setupTests();
 
         //create list
@@ -364,6 +407,10 @@ class CampaignMonitorAPIConnectorTestController extends Controller
     protected function init()
     {
         parent::init();
+        // never run against a live site: it creates and deletes lists and subscribers.
+        if (Director::isLive()) {
+            $this->httpError(404, 'Not found');
+        }
         if (! Config::inst()->get(CampaignMonitorAPIConnector::class, 'client_id')) {
             user_error('To use the campaign monitor module you must set the basic authentication credentials such as CampaignMonitorAPIConnector.client_id');
         }

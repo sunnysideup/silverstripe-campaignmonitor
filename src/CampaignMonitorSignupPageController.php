@@ -452,7 +452,8 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
+        // only published (sent and not hidden) campaigns are public
+        $this->campaign = CampaignMonitorCampaign::get()->filter(['ID' => $id, 'Hide' => 0, 'HasBeenSent' => 1])->first();
         if (!$this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
@@ -469,7 +470,8 @@ class CampaignMonitorSignupPageController extends PageController
     {
         $id = (int) $request->param('ID');
         // @var CampaignMonitorCampaign|null $this->campaign
-        $this->campaign = CampaignMonitorCampaign::get_by_id($id);
+        // only published (sent and not hidden) campaigns are public
+        $this->campaign = CampaignMonitorCampaign::get()->filter(['ID' => $id, 'Hide' => 0, 'HasBeenSent' => 1])->first();
         if (!$this->campaign) {
             return $this->httpError(404, _t('CAMPAIGNMONITORSIGNUPPAGE.CAMPAIGN_NOT_FOUND', 'Message not found.'));
         }
